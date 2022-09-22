@@ -1,7 +1,12 @@
 package tags
 
-type HtmlTagA struct {
-	download string
-	href     string
-	hrefLang string
+type HtmlTagScript struct {
+	async          bool
+	defer_         bool
+	noModule       bool
+	integrity      string
+	src            string
+	type_          string
+	crossOrigin    CrossOriginType
+	referrerPolicy ReferrerPolicyType
 }

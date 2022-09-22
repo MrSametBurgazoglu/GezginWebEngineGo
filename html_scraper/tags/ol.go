@@ -1,7 +1,7 @@
 package tags
 
-type HtmlTagA struct {
-	download string
-	href     string
-	hrefLang string
+type HtmlTagOl struct {
+	reversed bool
+	start    int
+	olType   OlType
 }

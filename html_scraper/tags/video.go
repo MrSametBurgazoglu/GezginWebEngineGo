@@ -1,7 +1,13 @@
 package tags
 
-type HtmlTagA struct {
-	download string
-	href     string
-	hrefLang string
+type HtmlTagVideo struct {
+	autoplay bool
+	controls bool
+	loop     bool
+	muted    bool
+	poster   string
+	src      string
+	height   int
+	width    int
+	preload  PreLoadOptionType
 }

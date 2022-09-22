@@ -1,7 +1,6 @@
 package tags
 
-type HtmlTagA struct {
-	download string
-	href     string
-	hrefLang string
+type HtmlTagOptGroup struct {
+	disabled bool
+	label    string
 }

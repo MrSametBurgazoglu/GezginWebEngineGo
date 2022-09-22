@@ -1,7 +1,7 @@
 package tags
 
-type HtmlTagA struct {
-	download string
-	href     string
-	hrefLang string
+type HtmlTagOutput struct {
+	for_ string
+	form string
+	name string
 }

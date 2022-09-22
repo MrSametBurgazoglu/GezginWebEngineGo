@@ -1,7 +1,13 @@
 package tags
 
-type HtmlTagA struct {
-	download string
-	href     string
-	hrefLang string
+type HtmlTagForm struct {
+	acceptCharset string
+	action        string
+	name          string
+	autoComplete  bool
+	noValidate    bool
+	formEnc       FormEncType
+	formMethod    FormMethodType
+	formRelType   FormRelType
+	formTarget    FormTargetType
 }

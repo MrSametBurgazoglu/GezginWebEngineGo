@@ -19,6 +19,7 @@ type OlType uint8
 type TextAreaWrap uint8
 type TableScope uint8
 type TrackKind uint8
+type HtmlDirectionType uint8
 
 const (
 	HTML_DOCUMENT HtmlTags = iota
@@ -297,4 +298,11 @@ const (
 	TRACK_KIND_DESCRIPTIONS
 	TRACK_KIND_METADATA
 	TRACK_KIND_SUBTITLES
+)
+
+const (
+	HTML_DIRECTION_LEFT HtmlDirectionType = iota
+	HTML_DIRECTION_RIGHT
+	HTML_DIRECTION_UP
+	HTML_DIRECTION_DOWN
 )

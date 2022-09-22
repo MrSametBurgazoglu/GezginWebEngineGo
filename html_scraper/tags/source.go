@@ -1,7 +1,9 @@
 package tags
 
-type HtmlTagA struct {
-	download string
-	href     string
-	hrefLang string
+type HtmlTagSource struct {
+	media  string
+	sizes  string
+	src    string
+	srcset string
+	type_  string
 }

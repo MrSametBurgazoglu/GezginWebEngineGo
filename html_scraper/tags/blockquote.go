@@ -1,7 +1,5 @@
 package tags
 
-type HtmlTagA struct {
-	download string
-	href     string
-	hrefLang string
+type HtmlTagBlockquote struct {
+	site string
 }

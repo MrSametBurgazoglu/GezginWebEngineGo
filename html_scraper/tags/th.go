@@ -1,7 +1,9 @@
 package tags
 
-type HtmlTagA struct {
-	download string
-	href     string
-	hrefLang string
+type HtmlTagTh struct {
+	abbr    string
+	headers string
+	colspan int
+	rowspan int
+	scope   TableScope
 }

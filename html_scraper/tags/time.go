@@ -1,7 +1,11 @@
 package tags
 
-type HtmlTagA struct {
-	download string
-	href     string
-	hrefLang string
+type HtmlTagTime struct {
+	year   string
+	month  string
+	week   string
+	day    int
+	hour   int
+	minute int
+	second int
 }

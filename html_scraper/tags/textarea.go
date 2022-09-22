@@ -1,7 +1,14 @@
 package tags
 
-type HtmlTagA struct {
-	download string
-	href     string
-	hrefLang string
+type HtmlTagTextArea struct {
+	autofocus   bool
+	disabled    bool
+	readonly    bool
+	required    bool
+	dirname     string
+	form        string
+	name        string
+	placeholder string
+	rows        int
+	wrap        TextAreaWrap
 }
