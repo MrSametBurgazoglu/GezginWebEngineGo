@@ -1,0 +1,53 @@
+package css_scraper
+
+type CssProperties struct {
+	accentColorInherit        bool
+	alignContentInherit       bool
+	alignItemsInherit         bool
+	alignSelfInherit          bool
+	animationInherit          bool
+	backdropfilterInherit     bool
+	backfaceVisibilityInherit bool
+	backgroundInherit         bool
+	borderInherit             bool
+	borderCollapseInherit     bool
+	borderImageInherit        bool
+	borderRadiusInherit       bool
+	borderSpacingInherit      bool
+	colorInherit              bool
+	fontInherit               bool
+	textAlignInherit          bool
+	textAlignLastInherit      bool
+	textDecorationInherit     bool
+	textIndentInherit         bool
+	textJustifyInherit        bool
+	textOverflowInherit       bool
+	textShadowInherit         bool
+	textTransformInherit      bool
+	columnCountInherit        bool
+	columnFillInherit         bool
+	columnGapInherit          bool
+	columnRuleInherit         bool
+	columnSpanInherit         bool
+	columnWidthInherit        bool
+	flexInherit               bool
+	flexFlowInherit           bool
+	positionInherit           bool
+	widthInherit              bool
+	minWidthInherit           bool
+	maxWidthInherit           bool
+	heightInherit             bool
+	minHeightInherit          bool
+	maxHeightInherit          bool
+	topInherit                bool
+	leftInherit               bool
+	rightInherit              bool
+	bottomInherit             bool
+	marginInherit             bool
+	outlineInherit            bool
+	overflowInherit           bool
+	paddingInherit            bool
+	visibilityInherit         bool
+	opacityInherit            bool
+	resizeInherit             bool
+}
