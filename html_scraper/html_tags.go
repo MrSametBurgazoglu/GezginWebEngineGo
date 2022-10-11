@@ -1,9 +1,5 @@
 package html_scraper
 
-import (
-	"gezgin_web_engine/widget"
-)
-
 const htmlTagCount = 105
 
 type HtmlTags uint8
@@ -121,7 +117,7 @@ const (
 
 type HtmlTagVariables struct {
 	tag                    HtmlTags
-	widgetPropertyFunction func(widget widget.Widget) //it's unique to html element some of them doesn't have this function
+	widgetPropertyFunction func(widget Widget) //it's unique to html element some of them doesn't have this function
 	//void (*widget_draw_function) (struct widget*, SDL_Renderer*);//for drawing rendered object
 	//void (*widget_render_function) (struct widget*, SDL_Renderer*);//render element
 	endTag bool
@@ -342,7 +338,7 @@ var tagHtmlVariables = [105]HtmlTagVariables{
 	{tag: HTML_WBR},
 }
 
-func (htmlTag *HtmlTags) setHtmlTag(tag string) {
+func (htmlTag *HtmlTags) setHtmlTag(tag string, widget *Widget) {
 
 }
 
