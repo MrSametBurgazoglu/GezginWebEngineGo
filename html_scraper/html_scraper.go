@@ -58,11 +58,10 @@ func ScrapeHtmlFromFile(fileUrl string) *Widget {
 				currentWidget.Children = append(currentWidget.Children, newWidget)
 				println("inside of tag", data[seek+result+1:seek+result2])
 				currentWidget = &newWidget
-				ScrapeInsideofTag(currentWidget, data[seek+result+1:seek+result2])
+				ScrapeInsideOfTag(currentWidget, data[seek+result+1:seek+result2])
 			}
-			seek = seek + result + result2 + 1
+			seek += result + result2 + 1
 		}
 	}
-	fmt.Println("heyyo")
 	return &documentWidget
 }

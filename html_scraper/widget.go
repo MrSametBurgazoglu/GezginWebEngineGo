@@ -10,10 +10,10 @@ type Widget struct {
 	HtmlTag               HtmlTags
 	WidgetProperties      any
 	StandardHtmlVariables StandardHtmlTagVariables
-	CssProperties         css_scraper.CssProperties
+	CssProperties         *css_scraper.CssProperties
 	//drawProperties
-	VarReaderFunc     func(Widget, string, string)
-	ContextReaderFunc func(Widget, string)
+	VarReaderFunc     func(*Widget, string, string)
+	ContextReaderFunc func(*Widget, string)
 	Children          []Widget
 	Parent            *Widget
 	Draw              bool

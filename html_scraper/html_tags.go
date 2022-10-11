@@ -1,5 +1,10 @@
 package html_scraper
 
+import (
+	"gezgin_web_engine/css_scraper"
+	"gezgin_web_engine/utils"
+)
+
 const htmlTagCount = 105
 
 type HtmlTags uint8
@@ -117,14 +122,14 @@ const (
 
 type HtmlTagVariables struct {
 	tag                    HtmlTags
-	widgetPropertyFunction func(widget Widget) //it's unique to html element some of them doesn't have this function
+	widgetPropertyFunction func(widget *Widget) //it's unique to html element some of them doesn't have this function
 	//void (*widget_draw_function) (struct widget*, SDL_Renderer*);//for drawing rendered object
 	//void (*widget_render_function) (struct widget*, SDL_Renderer*);//render element
 	endTag bool
 	draw   bool
 }
 
-var htmlTagList = [105]string{
+var htmlTagList = []string{
 	"!DOCTYPE",
 	"a",
 	"abbr",
@@ -338,10 +343,19 @@ var tagHtmlVariables = [105]HtmlTagVariables{
 	{tag: HTML_WBR},
 }
 
-func (htmlTag *HtmlTags) setHtmlTag(tag string, widget *Widget) {
-
+func (htmlTag *HtmlTags) setHtmlTag(tag string, widget *Widget) bool {
+	index := utils.IndexFounder(htmlTagList, tag, htmlTagCount)
+	widget.HtmlTag = tagHtmlVariables[index].tag
+	if tagHtmlVariables[index].widgetPropertyFunction != nil {
+		tagHtmlVariables[index].widgetPropertyFunction(widget)
+	}
+	if tagHtmlVariables[index].draw {
+		widget.CssProperties = new(css_scraper.CssProperties)
+		//set render and draw functions and draw properties
+	}
+	return tagHtmlVariables[index].endTag
 }
 
-func (htmlTag *HtmlTags) getString() {
-
+func (htmlTag *HtmlTags) getString() string {
+	return htmlTagList[*htmlTag]
 }
