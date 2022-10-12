@@ -2,7 +2,7 @@ package html_scraper
 
 import (
 	"fmt"
-	"gezgin_web_engine/html_scraper/tags"
+	"gezgin_web_engine/html_scraper/htmlVariables"
 	"os"
 	"strings"
 )
@@ -11,12 +11,12 @@ func FreeHtmlTree() {
 	fmt.Println("heyyo")
 }
 
-func ScrapeHtmlFromFile(fileUrl string) *Widget {
+func ScrapeHtmlFromFile(fileUrl string) *htmlVariables.Widget {
 	dat, err := os.ReadFile(fileUrl)
 	if err != nil {
 		panic(err)
 	}
-	documentWidget := Widget{ChildrenCount: 0, ChildrenIndex: 0, HtmlTag: HTML_DOCUMENT}
+	documentWidget := htmlVariables.Widget{ChildrenCount: 0, ChildrenIndex: 0, HtmlTag: htmlVariables.HTML_DOCUMENT}
 	currentWidget := &documentWidget
 	data := string(dat)
 	dataLength := len(data)
@@ -32,9 +32,9 @@ func ScrapeHtmlFromFile(fileUrl string) *Widget {
 			println("result:", result)
 			if result > 0 {
 				//make untagged text to strip
-				newWidget := Widget{
-					HtmlTag:          HTML_UNTAGGED_TEXT,
-					WidgetProperties: tags.UntaggedText{Value: data[seek : seek+result]},
+				newWidget := htmlVariables.Widget{
+					HtmlTag:          htmlVariables.HTML_UNTAGGED_TEXT,
+					WidgetProperties: UntaggedText{Value: data[seek : seek+result]},
 					Parent:           currentWidget,
 					ChildrenIndex:    currentWidget.ChildrenCount,
 					//draw and render function
@@ -49,7 +49,7 @@ func ScrapeHtmlFromFile(fileUrl string) *Widget {
 				println("tag ended", data[seek+1:seek+result+result2])
 				currentWidget = currentWidget.Parent
 			} else {
-				newWidget := Widget{
+				newWidget := htmlVariables.Widget{
 					Parent:        currentWidget,
 					ChildrenIndex: currentWidget.ChildrenCount,
 					//draw and render function

@@ -1,7 +1,7 @@
-package html_scraper
+package htmlVariables
 
 import (
-	"gezgin_web_engine/css_scraper"
+	"gezgin_web_engine/css_scraper/structs"
 	"gezgin_web_engine/utils"
 )
 
@@ -343,14 +343,14 @@ var tagHtmlVariables = [105]HtmlTagVariables{
 	{tag: HTML_WBR},
 }
 
-func (htmlTag *HtmlTags) setHtmlTag(tag string, widget *Widget) bool {
+func (htmlTag *HtmlTags) SetHtmlTag(tag string, widget *Widget) bool {
 	index := utils.IndexFounder(htmlTagList, tag, htmlTagCount)
 	widget.HtmlTag = tagHtmlVariables[index].tag
 	if tagHtmlVariables[index].widgetPropertyFunction != nil {
 		tagHtmlVariables[index].widgetPropertyFunction(widget)
 	}
 	if tagHtmlVariables[index].draw {
-		widget.CssProperties = new(css_scraper.CssProperties)
+		widget.CssProperties = new(structs.CssProperties)
 		//set render and draw functions and draw properties
 	}
 	return tagHtmlVariables[index].endTag

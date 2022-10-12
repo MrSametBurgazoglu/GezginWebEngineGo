@@ -1,7 +1,7 @@
-package html_scraper
+package htmlVariables
 
 import (
-	"gezgin_web_engine/css_scraper"
+	"gezgin_web_engine/css_scraper/structs"
 )
 
 type Widget struct {
@@ -10,7 +10,7 @@ type Widget struct {
 	HtmlTag               HtmlTags
 	WidgetProperties      any
 	StandardHtmlVariables StandardHtmlTagVariables
-	CssProperties         *css_scraper.CssProperties
+	CssProperties         *structs.CssProperties
 	//drawProperties
 	VarReaderFunc     func(*Widget, string, string)
 	ContextReaderFunc func(*Widget, string)
