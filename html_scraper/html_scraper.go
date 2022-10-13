@@ -23,13 +23,10 @@ func ScrapeHtmlFromFile(fileUrl string) *htmlVariables.Widget {
 	seek := 0
 	println(dataLength)
 	for seek < dataLength {
-		println("seek:", seek)
-		println(string(data[seek]))
 		if data[seek] == ' ' || data[seek] == '\n' {
 			seek += 1
 		} else {
 			result := strings.Index(data[seek:], "<")
-			println("result:", result)
 			if result > 0 {
 				//make untagged text to strip
 				newWidget := htmlVariables.Widget{
@@ -42,11 +39,10 @@ func ScrapeHtmlFromFile(fileUrl string) *htmlVariables.Widget {
 				currentWidget.ChildrenCount++
 				currentWidget.Children = append(currentWidget.Children, newWidget)
 				println("untagged text", data[seek:seek+result])
-				seek += result
 			}
 			result2 := strings.Index(data[seek+result:], ">")
-			if data[seek+1] == '/' {
-				println("tag ended", data[seek+1:seek+result+result2])
+			if data[seek+result+1] == '/' {
+				println("tag ended", data[seek+result+1:seek+result+result2])
 				currentWidget = currentWidget.Parent
 			} else {
 				newWidget := htmlVariables.Widget{
@@ -56,9 +52,9 @@ func ScrapeHtmlFromFile(fileUrl string) *htmlVariables.Widget {
 				}
 				currentWidget.ChildrenCount++
 				currentWidget.Children = append(currentWidget.Children, newWidget)
-				println("inside of tag", data[seek+result+1:seek+result2])
+				println("inside of tag", data[seek+result+1:seek+result+result2])
 				currentWidget = &newWidget
-				ScrapeInsideOfTag(currentWidget, data[seek+result+1:seek+result2])
+				ScrapeInsideOfTag(currentWidget, data[seek+result+1:seek+result+result2])
 			}
 			seek += result + result2 + 1
 		}

@@ -24,7 +24,16 @@ func ScrapeCssFromInlineStyle(properties structs.CssProperties, styleText string
 }
 
 func scrapeCssFromStyleTag(styleText string) {
-	strings.Split(styleText, ";")
+	seek := 0
+	index := 0
+	for index != -1 {
+		index = strings.Index(styleText[seek:], "{")
+		index2 := strings.Index(styleText[seek:], "}")
+		selectors := strings.Trim(styleText[seek:index], " \n")
+		cssText := strings.Trim(styleText[index:index2], " \n")
+		println(selectors)
+		println(cssText)
+	}
 }
 
 func CreateCssPropertiesFromStyleTags() {
