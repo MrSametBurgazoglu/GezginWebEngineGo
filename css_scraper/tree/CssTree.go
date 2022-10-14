@@ -14,35 +14,37 @@ type CssPropertyListItem struct {
 // CssPropertiesByIDList make this one binary tree
 var CssPropertiesByIDList []*CssPropertyListItem
 var CssPropertiesByClassList []*CssPropertyListItem
-var CssPropertiesByElementList []*CssPropertyListItem
+var CssPropertiesByElementList = make(map[string]*structs.CssProperties)
 var CssStyleTagList []*htmlVariables.Widget
 var CssStyleLinkList []string
 
-func (receiver CssPropertyListItem) CreateNewCssPropertiesByID(id string) (newCssProperties *structs.CssProperties) {
+func CreateNewCssPropertiesByID(id string) (newCssProperties *structs.CssProperties) {
+	newCssProperties = new(structs.CssProperties)
 	cssPropertyItem := &CssPropertyListItem{Identifier1: id, CssProperties: newCssProperties}
 	CssPropertiesByIDList = append(CssPropertiesByIDList, cssPropertyItem)
 	return
 }
 
-func (receiver CssPropertyListItem) CreateNewCssPropertiesByClass(id string) (newCssProperties *structs.CssProperties) {
+func CreateNewCssPropertiesByClass(id string) (newCssProperties *structs.CssProperties) {
+	newCssProperties = new(structs.CssProperties)
 	cssPropertyItem := &CssPropertyListItem{Identifier1: id, CssProperties: newCssProperties}
 	CssPropertiesByClassList = append(CssPropertiesByClassList, cssPropertyItem)
 	return
 }
 
-func (receiver CssPropertyListItem) CreateNewCssPropertiesByElement(id string) (newCssProperties *structs.CssProperties) {
-	cssPropertyItem := &CssPropertyListItem{Identifier1: id, CssProperties: newCssProperties}
-	CssPropertiesByElementList = append(CssPropertiesByElementList, cssPropertyItem)
+func CreateNewCssPropertiesByElement(element string) (newCssProperties *structs.CssProperties) {
+	newCssProperties = new(structs.CssProperties)
+	CssPropertiesByElementList[element] = newCssProperties
 	return
 }
 
-func (receiver CssPropertyListItem) CreateNewCssPropertiesByElementAndClass(id string) (newCssProperties *structs.CssProperties) {
+func CreateNewCssPropertiesByElementAndClass(id string) (newCssProperties *structs.CssProperties) {
 	cssPropertyItem := &CssPropertyListItem{Identifier1: id, CssProperties: newCssProperties}
 	CssPropertiesByIDList = append(CssPropertiesByIDList, cssPropertyItem)
 	return
 }
 
-func (receiver CssPropertyListItem) GetCssPropertiesByID(id string) *structs.CssProperties {
+func GetCssPropertiesByID(id string) *structs.CssProperties {
 	for _, item := range CssPropertiesByIDList {
 		if item.Identifier1 == id {
 			return item.CssProperties
@@ -51,7 +53,7 @@ func (receiver CssPropertyListItem) GetCssPropertiesByID(id string) *structs.Css
 	return nil
 }
 
-func (receiver CssPropertyListItem) GetCssPropertiesByClass(class string) *structs.CssProperties {
+func GetCssPropertiesByClass(class string) *structs.CssProperties {
 	for _, item := range CssPropertiesByIDList {
 		if item.Identifier1 == class {
 			return item.CssProperties
@@ -60,16 +62,15 @@ func (receiver CssPropertyListItem) GetCssPropertiesByClass(class string) *struc
 	return nil
 }
 
-func (receiver CssPropertyListItem) GetCssPropertiesByElement(element htmlVariables.HtmlTags) *structs.CssProperties {
-	for _, item := range CssPropertiesByIDList {
-		if item.Identifier2 == element {
-			return item.CssProperties
-		}
+func GetCssPropertiesByElement(element string) *structs.CssProperties {
+	value, ok := CssPropertiesByElementList[element]
+	if ok {
+		return value
 	}
 	return nil
 }
 
-func (receiver CssPropertyListItem) GetCssPropertiesByElementAndClass(class string, element htmlVariables.HtmlTags) *structs.CssProperties {
+func GetCssPropertiesByElementAndClass(class string, element htmlVariables.HtmlTags) *structs.CssProperties {
 	for _, item := range CssPropertiesByIDList {
 		if item.Identifier1 == class && item.Identifier2 == element {
 			return item.CssProperties

@@ -1,7 +1,5 @@
 package htmlVariables
 
-import "fmt"
-
 type StandardHtmlTagVariables struct {
 	ContentEditable bool
 	Draggable       bool
@@ -28,7 +26,6 @@ func (tag *StandardHtmlTagVariables) SetStandardVariables(name string, value str
 	default:
 		return false
 	}
-	fmt.Println("heyyo")
 	return true
 }
 

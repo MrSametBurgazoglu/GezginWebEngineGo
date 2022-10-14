@@ -75,7 +75,6 @@ const (
 	HTML_META
 	HTML_METER
 	HTML_NAV
-	HTML_NOSCRIPT
 	HTML_OL
 	HTML_OPTGROUP
 	HTML_OPTION
@@ -237,10 +236,11 @@ var htmlTagList = []string{
 	"wbr",
 }
 
-var tagHtmlVariables = [105]HtmlTagVariables{
+var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_DOCTYPE, endTag: true},
 	{tag: HTML_A, draw: true},
 	{tag: HTML_ABBR, draw: true},
+	{tag: HTML_ADDRESS},
 	{tag: HTML_AREA, endTag: true, draw: true},
 	{tag: HTML_ARTICLE, draw: true},
 	{tag: HTML_ASIDE, draw: true},
@@ -308,6 +308,7 @@ var tagHtmlVariables = [105]HtmlTagVariables{
 	{tag: HTML_P, draw: true},
 	{tag: HTML_PARAM, endTag: true},
 	{tag: HTML_PICTURE},
+	{tag: HTML_PRE},
 	{tag: HTML_PROGRESS},
 	{tag: HTML_Q, draw: true},
 	{tag: HTML_S, draw: true},
@@ -345,15 +346,18 @@ var tagHtmlVariables = [105]HtmlTagVariables{
 
 func (htmlTag *HtmlTags) SetHtmlTag(tag string, widget *Widget) bool {
 	index := utils.IndexFounder(htmlTagList, tag, htmlTagCount)
-	widget.HtmlTag = tagHtmlVariables[index].tag
-	if tagHtmlVariables[index].widgetPropertyFunction != nil {
-		tagHtmlVariables[index].widgetPropertyFunction(widget)
+	if index != -1 {
+		widget.HtmlTag = tagHtmlVariables[index].tag
+		if tagHtmlVariables[index].widgetPropertyFunction != nil {
+			tagHtmlVariables[index].widgetPropertyFunction(widget)
+		}
+		if tagHtmlVariables[index].draw {
+			widget.CssProperties = new(structs.CssProperties)
+			//set render and draw functions and draw properties
+		}
+		return tagHtmlVariables[index].endTag
 	}
-	if tagHtmlVariables[index].draw {
-		widget.CssProperties = new(structs.CssProperties)
-		//set render and draw functions and draw properties
-	}
-	return tagHtmlVariables[index].endTag
+	return false
 }
 
 func (htmlTag *HtmlTags) getString() string {

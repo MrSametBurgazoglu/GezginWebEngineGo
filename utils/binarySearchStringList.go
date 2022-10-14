@@ -5,7 +5,7 @@ import "strings"
 func IndexFounder(stringList []string, string string, listCount int) int {
 	var m, result int
 	l := 0
-	r := listCount
+	r := listCount - 1
 
 	for l <= r {
 		m = l + (r-l)/2
