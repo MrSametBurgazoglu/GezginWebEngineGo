@@ -102,6 +102,39 @@ func scrapeCssFromStyleTag(widget *htmlVariables.Widget) {
 	}
 }
 
+func ScrapeCssFromDocument(document *htmlVariables.Widget) {
+	widgetList := []*htmlVariables.Widget{document}
+	widgetIndexList := []int{0}
+	//initialize document
+	currentIndex := 0
+	widgetCount := 0
+	for widgetIndexList[0] != document.ChildrenCount {
+		if widgetIndexList[currentIndex] == widgetList[currentIndex].ChildrenCount {
+			currentIndex--
+			widgetCount--
+			widgetIndexList = widgetIndexList[:widgetCount]
+			widgetIndexList[currentIndex]++
+
+		} else {
+			if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].ChildrenCount > 0 {
+				widgetCount++
+				newWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
+				widgetList = append(widgetList, &newWidget)
+				widgetIndexList[widgetCount-1] = 0
+				currentIndex++
+				if widgetList[currentIndex].Draw {
+					//set css properties set_css_properties(widget_list[current_index], widget_list[current_index-1]);
+				}
+			} else {
+				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
+					//set css properties set_css_properties(widget_list[current_index]->children[widget_index_list[current_index]], widget_list[current_index]);
+				}
+				widgetIndexList[currentIndex]++
+			}
+		}
+	}
+}
+
 func CreateCssPropertiesFromStyleTags() {
 	for _, widget := range tree.CssStyleTagList {
 		scrapeCssFromStyleTag(widget) //maybe we can call this function as goroutine

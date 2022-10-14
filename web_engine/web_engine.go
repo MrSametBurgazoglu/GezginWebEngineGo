@@ -11,4 +11,5 @@ func OpenWebEngine(fileUrl string) {
 	document := html_scraper.ScrapeHtmlFromFile(fileUrl)
 	println(document)
 	css_scraper.ExecuteCssScraper()
+	css_scraper.ScrapeCssFromDocument(document)
 }
