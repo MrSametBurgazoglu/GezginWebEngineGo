@@ -9,6 +9,28 @@ import (
 	"strings"
 )
 
+func setCssProperties(currentWidget *htmlVariables.Widget) {
+	var currentCssProperties *structs.CssProperties
+	for _, class := range currentWidget.StandardHtmlVariables.Class {
+		if currentCssProperties = tree.GetCssPropertiesByClass(class); currentCssProperties != nil {
+			updateCssProperties(currentWidget.CssProperties, currentCssProperties)
+		}
+		if currentCssProperties = tree.GetCssPropertiesByElementAndClass(class, currentWidget.HtmlTag); currentCssProperties != nil {
+			updateCssProperties(currentWidget.CssProperties, currentCssProperties)
+		}
+	}
+	/* if currentCssProperties = tree.GetCssPropertiesByElement(); currentCssProperties != nil {
+		updateCssProperties(currentWidget.CssProperties, currentCssProperties)
+	} TODO change tree.CssPropertiesByElement string to html_Tag(index)
+	*/
+	if currentCssProperties = tree.GetCssPropertiesByID(currentWidget.StandardHtmlVariables.Id); currentCssProperties != nil {
+		updateCssProperties(currentWidget.CssProperties, currentCssProperties)
+	}
+	if currentWidget.StandardHtmlVariables.Style != "" {
+		ScrapeCssFromInlineStyle(currentWidget.CssProperties, currentWidget.StandardHtmlVariables.Style)
+	}
+}
+
 func scrapeCssParameters(cssWidgetList []*structs.CssProperties, cssText string) {
 	varName, varValue, found := strings.Cut(cssText, ":")
 	if found {
@@ -102,6 +124,40 @@ func scrapeCssFromStyleTag(widget *htmlVariables.Widget) {
 	}
 }
 
+func SetInheritCssProperties(document *htmlVariables.Widget) {
+	widgetList := []*htmlVariables.Widget{document}
+	widgetIndexList := []int{0}
+	//initialize document
+	currentIndex := 0
+	widgetCount := 0
+	for widgetIndexList[0] != document.ChildrenCount {
+		if widgetIndexList[currentIndex] == widgetList[currentIndex].ChildrenCount {
+			currentIndex--
+			widgetCount--
+			widgetIndexList = widgetIndexList[:widgetCount]
+			widgetIndexList[currentIndex]++
+
+		} else {
+			if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].ChildrenCount > 0 {
+				widgetCount++
+				widgetList = append(widgetList, &widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
+				widgetIndexList[widgetCount-1] = 0
+				currentIndex++
+				if widgetList[currentIndex].Draw {
+					computeInheritCssProperties(widgetList[currentIndex].CssProperties, widgetList[currentIndex-1].CssProperties)
+
+				}
+			} else {
+				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
+					computeInheritCssProperties(widgetList[currentIndex].Children[widgetIndexList[currentIndex]].CssProperties,
+						widgetList[currentIndex].CssProperties)
+				}
+				widgetIndexList[currentIndex]++
+			}
+		}
+	}
+}
+
 func ScrapeCssFromDocument(document *htmlVariables.Widget) {
 	widgetList := []*htmlVariables.Widget{document}
 	widgetIndexList := []int{0}
@@ -118,16 +174,15 @@ func ScrapeCssFromDocument(document *htmlVariables.Widget) {
 		} else {
 			if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].ChildrenCount > 0 {
 				widgetCount++
-				newWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-				widgetList = append(widgetList, &newWidget)
+				widgetList = append(widgetList, &widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
 				widgetIndexList[widgetCount-1] = 0
 				currentIndex++
 				if widgetList[currentIndex].Draw {
-					//set css properties set_css_properties(widget_list[current_index], widget_list[current_index-1]);
+					setCssProperties(widgetList[currentIndex])
 				}
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
-					//set css properties set_css_properties(widget_list[current_index]->children[widget_index_list[current_index]], widget_list[current_index]);
+					setCssProperties(&widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
 				}
 				widgetIndexList[currentIndex]++
 			}
