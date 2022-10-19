@@ -5,7 +5,7 @@ import (
 	"gezgin_web_engine/utils"
 )
 
-const htmlTagCount = 105
+const HtmlTagCount = 105
 
 type HtmlTags uint8
 
@@ -344,8 +344,12 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_WBR},
 }
 
+func GetElementIndex(tag string) int {
+	return utils.IndexFounder(htmlTagList, tag, HtmlTagCount)
+}
+
 func (htmlTag *HtmlTags) SetHtmlTag(tag string, widget *Widget) bool {
-	index := utils.IndexFounder(htmlTagList, tag, htmlTagCount)
+	index := utils.IndexFounder(htmlTagList, tag, HtmlTagCount)
 	if index != -1 {
 		widget.HtmlTag = tagHtmlVariables[index].tag
 		if tagHtmlVariables[index].widgetPropertyFunction != nil {

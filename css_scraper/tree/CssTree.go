@@ -14,7 +14,7 @@ type CssPropertyListItem struct {
 // CssPropertiesByIDList make this one binary tree
 var CssPropertiesByIDList []*CssPropertyListItem
 var CssPropertiesByClassList []*CssPropertyListItem
-var CssPropertiesByElementList = make(map[string]*structs.CssProperties)
+var CssPropertiesByElementList [htmlVariables.HtmlTagCount]*structs.CssProperties
 var CssStyleTagList []*htmlVariables.Widget
 var CssStyleLinkList []string
 
@@ -32,9 +32,9 @@ func CreateNewCssPropertiesByClass(id string) (newCssProperties *structs.CssProp
 	return
 }
 
-func CreateNewCssPropertiesByElement(element string) (newCssProperties *structs.CssProperties) {
+func CreateNewCssPropertiesByElement(tags htmlVariables.HtmlTags) (newCssProperties *structs.CssProperties) {
 	newCssProperties = new(structs.CssProperties)
-	CssPropertiesByElementList[element] = newCssProperties
+	CssPropertiesByElementList[tags] = newCssProperties
 	return
 }
 
@@ -62,12 +62,8 @@ func GetCssPropertiesByClass(class string) *structs.CssProperties {
 	return nil
 }
 
-func GetCssPropertiesByElement(element string) *structs.CssProperties {
-	value, ok := CssPropertiesByElementList[element]
-	if ok {
-		return value
-	}
-	return nil
+func GetCssPropertiesByElement(element htmlVariables.HtmlTags) *structs.CssProperties {
+	return CssPropertiesByElementList[element]
 }
 
 func GetCssPropertiesByElementAndClass(class string, element htmlVariables.HtmlTags) *structs.CssProperties {

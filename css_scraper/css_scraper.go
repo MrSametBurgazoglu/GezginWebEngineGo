@@ -70,9 +70,11 @@ func getCssWidget(selector string, channel chan *structs.CssProperties) {
 			cssWidget = tree.CreateNewCssPropertiesByClass(selector[0:])
 		}
 	default:
-		cssWidget = tree.GetCssPropertiesByElement(selector[0:])
+		//find index by string to element
+		index := htmlVariables.GetElementIndex(selector[0:])
+		cssWidget = tree.GetCssPropertiesByElement(htmlVariables.HtmlTags(index))
 		if cssWidget == nil {
-			cssWidget = tree.CreateNewCssPropertiesByElement(selector[0:])
+			cssWidget = tree.CreateNewCssPropertiesByElement(htmlVariables.HtmlTags(index))
 		}
 	}
 	channel <- cssWidget

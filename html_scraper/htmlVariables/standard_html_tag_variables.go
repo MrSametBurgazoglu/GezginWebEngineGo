@@ -1,14 +1,19 @@
 package htmlVariables
 
+import "strconv"
+
 type StandardHtmlTagVariables struct {
 	ContentEditable bool
 	Draggable       bool
 	Hidden          bool
+	Lang            string
 	AccessKey       string
 	//dir
-	Class []string
-	Id    string
-	Style string
+	Class    []string
+	Id       string
+	Style    string
+	Title    string
+	TabIndex int
 }
 
 func (tag *StandardHtmlTagVariables) SetStandardVariables(name string, value string) bool {
@@ -23,6 +28,17 @@ func (tag *StandardHtmlTagVariables) SetStandardVariables(name string, value str
 		tag.ContentEditable = value != "false"
 	case "draggable":
 		tag.Draggable = value != "false"
+	case "hidden":
+		tag.Hidden = value != "false"
+	case "lang":
+		tag.Lang = value
+	case "tabindex":
+		valueInt, err := strconv.Atoi(value)
+		if err != nil {
+			tag.TabIndex = valueInt
+		}
+	case "title":
+		tag.Title = value
 	default:
 		return false
 	}
