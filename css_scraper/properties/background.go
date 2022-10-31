@@ -6,47 +6,13 @@ import (
 	"gezgin_web_engine/utils"
 )
 
-type CssBackgroundSize struct {
-	backgroundSizeType1  enums.CssBackgroundSizeType
-	backgroundSizeType2  enums.CssBackgroundSizeType
-	backgroundSizeValue1 int
-	backgroundSizeValue2 int
-}
-
-type BackgroundImageColor struct {
-	Color   structs.ColorRGBA
-	Percent uint8
-}
-
-type Background struct {
-	BackgroundImageInherit      bool
-	BackgroundPositionInherit   bool
-	BackgroundColorInherit      bool
-	BackgroundRepeatInherit     bool
-	BackgroundOriginInherit     bool
-	BackgroundClipInherit       bool
-	BackgroundAttachmentInherit bool
-	BackgroundSizeInherit       bool
-
-	BackgroundColor          *structs.ColorRGBA
-	ImageList                []string
-	BackgroundImageColorList []*BackgroundImageColor
-	BackgroundType           enums.CssBackgroundType
-	BackgroundPositionType   enums.CssBackgroundPositionType
-	BackgroundSize           *CssBackgroundSize
-	BackgroundAttachment     enums.CssBackgroundAttachmentType
-	BackgroundBlendMode      enums.CssBackgroundBlendModeType
-	BackgroundClip           enums.CssBackgroundClipType
-	BackgroundOrigin         enums.CssBackgroundOriginType
-}
-
-const BACKGROUND_BLEND_MODE_COUNT = 10
-const BACKGROUND_REPEAT_TYPE_COUNT = 6
+const BackgroundBlendModeCount = 10
+const BackgroundRepeatTypeCount = 6
 const BACKGROUND_ORIGIN_TYPE_COUNT = 3
 const BACKGROUND_CLIP_TYPE_COUNT = 3
 const BACKGROUND_ATTACHMENT_TYPE_COUNT = 3
 
-var background_blend_mode_strings = []string{
+var backgroundBlendModeStrings = []string{
 	"color",
 	"color-dodge",
 	"darken",
@@ -59,7 +25,7 @@ var background_blend_mode_strings = []string{
 	"screen",
 }
 
-var background_repeat_strings = []string{
+var backgroundRepeatStrings = []string{
 	"no-repeat",
 	"repeat",
 	"repeat-x",
@@ -80,16 +46,102 @@ var background_attachment_strings = []string{
 	"scroll",
 }
 
-func setBackgroundBlendMode(background Background, value string) {
-	index := utils.IndexFounder(background_blend_mode_strings, value, BACKGROUND_BLEND_MODE_COUNT)
+func setBackgroundBlendMode(background *structs.Background, value string) {
+	index := utils.IndexFounder(backgroundBlendModeStrings, value, BackgroundBlendModeCount)
 	if index != -1 {
-		background.BackgroundBlendMode = enums.CssBackgroundBlendModeType(index)
+		background.BackgroundBlendModeType = enums.CssBackgroundBlendModeType(index)
 	} else {
-		background.BackgroundBlendMode = enums.CSS_BACKGROUND_BLEND_MODE_NORMAL
+		background.BackgroundBlendModeType = enums.CSS_BACKGROUND_BLEND_MODE_NORMAL
 	}
 }
 
-func setBackgroundColor(background Background, value string) {
+func setBackgroundRepeat(background *structs.Background, value string) {
+	index := utils.IndexFounder(backgroundRepeatStrings, value, BackgroundRepeatTypeCount)
+	if index != -1 {
+		background.BackgroundRepeatType = enums.CssBackgroundRepeatType(index)
+	} else {
+		background.BackgroundRepeatType = enums.CSS_BACKGROUND_REPEAT_TYPE_NO_REPEAT
+	}
+}
+
+func setBackgroundOrigin(background *structs.Background, value string) {
+	index := utils.IndexFounder(background_origin_strings, value, BACKGROUND_ORIGIN_TYPE_COUNT)
+	if index != -1 {
+		background.BackgroundOriginType = enums.CssBackgroundOriginType(index)
+	} else {
+		background.BackgroundOriginType = enums.CSS_BACKGROUND_ORIGIN_PADDING_BOX
+	}
+}
+
+func setBackgroundClip(background *structs.Background, value string) {
+	index := utils.IndexFounder(background_origin_strings, value, BACKGROUND_CLIP_TYPE_COUNT)
+	if index != -1 {
+		background.BackgroundClipType = enums.CssBackgroundClipType(index)
+	} else {
+		background.BackgroundClipType = enums.CSS_BACKGROUND_CLIP_BORDER_BOX
+	}
+}
+
+func setBackgroundAttachment(background *structs.Background, value string) {
+	index := utils.IndexFounder(background_attachment_strings, value, BACKGROUND_ATTACHMENT_TYPE_COUNT)
+	if index != -1 {
+		background.BackgroundAttachmentType = enums.CssBackgroundAttachmentType(index)
+	} else {
+		background.BackgroundAttachmentType = enums.CSS_BACKGROUND_ATTACHMENT_SCROLL
+	}
+}
+
+func setBackgroundColor(background *structs.Background, value string) {
 	background.BackgroundColor = new(structs.ColorRGBA)
 	background.BackgroundColor.SetColor(value)
+}
+
+/*
+func setBackgroundImageColor(background *structs.Background, values []string) {
+	for i, value := range values {
+		background.BackgroundImageColorList[i] =
+	}
+}
+*/
+
+func BackgroundColorPropertySetValue(properties *structs.CssProperties, value string) {
+	if value == "inherit" {
+		if !properties.BackgroundInherit {
+			if properties.Background == nil {
+				properties.Background = new(structs.Background)
+			}
+			properties.Background.BackgroundColorInherit = true
+		}
+	} else {
+		if properties.Background == nil {
+			properties.Background = new(structs.Background)
+		}
+		if properties.BackgroundInherit {
+			properties.Background.BackgroundSizeInherit = true
+			properties.Background.BackgroundPositionInherit = true
+			properties.Background.BackgroundOriginInherit = true
+			properties.Background.BackgroundImageInherit = true
+			properties.Background.BackgroundClipInherit = true
+			properties.Background.BackgroundAttachmentInherit = true
+			properties.Background.BackgroundRepeatInherit = true
+		}
+		properties.Background.BackgroundColorInherit = false
+		if properties.Background.BackgroundColor == nil {
+			properties.Background.BackgroundColor = new(structs.ColorRGBA)
+		}
+		if value == "initial" {
+			properties.Background.BackgroundColor.SetColorByRGBA(0, 0, 0, 0)
+		} else {
+			setBackgroundColor(properties.Background, value)
+		}
+	}
+}
+
+func UpdateBackground(properties *structs.CssProperties, source *structs.CssProperties) {
+	if source.BackgroundInherit {
+		properties.BackgroundInherit = true
+		properties.Background = nil
+	} else if source.Background != nil {
+		properties.Background = source.Background
+	}
 }

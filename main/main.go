@@ -3,30 +3,35 @@ package main
 import (
 	"gezgin_web_engine/web_engine"
 	"github.com/veandco/go-sdl2/sdl"
+	"github.com/veandco/go-sdl2/ttf"
 )
 
 func main() {
+	var err error
+	var font *ttf.Font
+
+	if err = ttf.Init(); err != nil {
+		panic(err)
+	}
+	defer ttf.Quit()
+
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
 		panic(err)
 	}
 	defer sdl.Quit()
+
+	if font, err = ttf.OpenFont("fonts/Sans.ttf", 14); err != nil {
+		panic(err)
+	}
+	defer font.Close()
+
 	web_engine.OpenWebEngine("exampleHtmlFiles/example.html")
-	window, err := sdl.CreateWindow("test", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
-		800, 600, sdl.WINDOW_SHOWN)
+
+	window, renderer, err := sdl.CreateWindowAndRenderer(800, 600, sdl.WINDOW_SHOWN)
 	if err != nil {
 		panic(err)
 	}
 	defer window.Destroy()
-
-	surface, err := window.GetSurface()
-	if err != nil {
-		panic(err)
-	}
-	surface.FillRect(nil, 0)
-
-	rect := sdl.Rect{0, 0, 200, 200}
-	surface.FillRect(&rect, 0xffff0000)
-	window.UpdateSurface()
 
 	running := true
 	for running {
@@ -38,5 +43,9 @@ func main() {
 				break
 			}
 		}
+		renderer.SetDrawColor(250, 250, 250, 0)
+		renderer.Clear()
+		web_engine.RenderPage(renderer)
+		renderer.Present()
 	}
 }

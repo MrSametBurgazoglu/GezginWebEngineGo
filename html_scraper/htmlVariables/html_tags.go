@@ -2,7 +2,9 @@ package htmlVariables
 
 import (
 	"gezgin_web_engine/css_scraper/structs"
+	"gezgin_web_engine/drawer/DrawProperties"
 	"gezgin_web_engine/utils"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 const HtmlTagCount = 105
@@ -123,9 +125,10 @@ type HtmlTagVariables struct {
 	tag                    HtmlTags
 	widgetPropertyFunction func(widget *Widget) //it's unique to html element some of them doesn't have this function
 	//void (*widget_draw_function) (struct widget*, SDL_Renderer*);//for drawing rendered object
-	//void (*widget_render_function) (struct widget*, SDL_Renderer*);//render element
-	endTag bool
-	draw   bool
+	renderFunction func(renderer *sdl.Renderer, widget *Widget)
+	drawFunction   func(renderer *sdl.Renderer, widget *Widget)
+	endTag         bool
+	draw           bool
 }
 
 var htmlTagList = []string{
@@ -250,7 +253,7 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_BDI},
 	{tag: HTML_BDO},
 	{tag: HTML_BLOCKQUOTE, draw: true},
-	{tag: HTML_BODY, draw: true},
+	{tag: HTML_BODY, draw: true, renderFunction: DrawProperties.RenderBodyFunction, drawFunction: DrawProperties.DrawBodyFunction},
 	{tag: HTML_BR, endTag: true, draw: true},
 	{tag: HTML_BUTTON, draw: true},
 	{tag: HTML_CANVAS, draw: true},
@@ -354,6 +357,9 @@ func (htmlTag *HtmlTags) SetHtmlTag(tag string, widget *Widget) bool {
 		widget.HtmlTag = tagHtmlVariables[index].tag
 		if tagHtmlVariables[index].widgetPropertyFunction != nil {
 			tagHtmlVariables[index].widgetPropertyFunction(widget)
+		}
+		if tagHtmlVariables[index].renderFunction != nil {
+			widget.RenderWidget = tagHtmlVariables[index].renderFunction
 		}
 		if tagHtmlVariables[index].draw {
 			widget.CssProperties = new(structs.CssProperties)

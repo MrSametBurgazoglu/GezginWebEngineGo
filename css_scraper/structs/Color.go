@@ -1,6 +1,7 @@
 package structs
 
 import (
+	"fmt"
 	"gezgin_web_engine/utils"
 	"strconv"
 )
@@ -10,6 +11,27 @@ type ColorRGBA struct {
 	red   uint8
 	green uint8
 	blue  uint8
+}
+
+func HueToRGB(v1 float32, v2 float32, vH float32) float32 {
+	if vH < 0 {
+		vH += 1
+	} else if vH > 1 {
+		vH -= 1
+	}
+	switch {
+	case 6*vH < 1:
+		return v1 + (v2-v1)*6*vH
+	case 2*vH < 1:
+		return v2
+	case 3*vH < 2:
+		return v1 + (v2-v1)*((2.0/3)-vH)*6
+	}
+	return v1
+}
+
+func (receiver *ColorRGBA) GetColorByRGBA() (uint8, uint8, uint8, uint8) {
+	return receiver.alpha, receiver.red, receiver.green, receiver.blue
 }
 
 func (receiver *ColorRGBA) SetColorByRGBA(red uint8, green uint8, blue uint8, alpha uint8) {
@@ -29,10 +51,10 @@ func (receiver *ColorRGBA) SetColorByRGB(red uint8, green uint8, blue uint8) {
 func (receiver *ColorRGBA) SetColorByHSL(h float32, s float32, l float32) {
 	receiver.alpha = 0
 	if s == 0 {
-		result := l * 255
-		receiver.red = uint8(result)
-		receiver.green = uint8(result)
-		receiver.blue = uint8(result)
+		result := uint8(l * 255)
+		receiver.red = result
+		receiver.green = result
+		receiver.blue = result
 	} else {
 		hue := h / 360
 		var v2 float32
@@ -42,23 +64,35 @@ func (receiver *ColorRGBA) SetColorByHSL(h float32, s float32, l float32) {
 			v2 = l + s - (l * s)
 		}
 		v1 := 2*l - v2
+		receiver.red = uint8(255 * HueToRGB(v1, v2, hue+(1.0/3)))
+		receiver.green = uint8(255 * HueToRGB(v1, v2, hue))
+		receiver.blue = uint8(255 * HueToRGB(v1, v2, hue-(1.0/3)))
 	}
 	receiver.alpha = 0
-	receiver.red = red
-	receiver.green = green
-	receiver.blue = blue
 }
 
-func (receiver *ColorRGBA) SetColorByHSLA(red float32, green float32, blue float32, alpha uint8) {
-	receiver.alpha = 0
-	receiver.red = red
-	receiver.green = green
-	receiver.blue = blue
+func (receiver *ColorRGBA) SetColorByHSLA(h float32, s float32, l float32, alpha uint8) {
+	receiver.alpha = alpha
+	receiver.SetColorByHSL(h, s, l)
+}
+
+func (receiver *ColorRGBA) SetColorByHex(value string) bool {
+	if value[0] == '#' {
+		var r, g, b float32
+		n, err := fmt.Sscanf(value, "#%02x%02x%02x", &r, &g, &b)
+		if err != nil && n == 3 {
+			return true
+		}
+	}
+	return false
 }
 
 func (receiver *ColorRGBA) SetColor(value string) bool {
-	println(value)
 	if receiver.SetColorByName(value) {
+		return true
+	} else if receiver.SetColorByFunction(value) {
+		return true
+	} else if receiver.SetColorByHex(value) {
 		return true
 	}
 	return false
@@ -153,4 +187,11 @@ func (receiver *ColorRGBA) SetColorByFunction(value string) bool {
 		}
 	}
 	return false
+}
+
+func SyncColor(source *ColorRGBA, dest *ColorRGBA) {
+	dest.alpha = source.alpha
+	dest.red = source.red
+	dest.green = source.green
+	dest.blue = source.blue
 }

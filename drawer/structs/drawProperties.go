@@ -8,8 +8,8 @@ import (
 //maybe we can make a struct for every widget
 
 type DrawProperties struct {
-	font              *ttf.Font
-	rect              sdl.Rect
-	texture           *sdl.Texture
-	backgroundTexture *sdl.Texture
+	Font              *ttf.Font
+	Rect              sdl.Rect
+	Texture           *sdl.Texture
+	BackgroundTexture *sdl.Texture
 }

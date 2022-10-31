@@ -51,5 +51,6 @@ type CssProperties struct {
 	OpacityInherit            bool
 	ResizeInherit             bool
 
-	Color CssColor
+	Background *Background
+	Color      *ColorRGBA
 }

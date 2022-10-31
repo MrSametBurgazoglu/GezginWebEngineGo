@@ -138,11 +138,10 @@ func SetInheritCssProperties(document *htmlVariables.Widget) {
 			widgetCount--
 			widgetIndexList = widgetIndexList[:widgetCount]
 			widgetIndexList[currentIndex]++
-
 		} else {
 			if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].ChildrenCount > 0 {
 				widgetCount++
-				widgetList = append(widgetList, &widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
+				widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
 				widgetIndexList[widgetCount-1] = 0
 				currentIndex++
 				if widgetList[currentIndex].Draw {
@@ -176,7 +175,7 @@ func ScrapeCssFromDocument(document *htmlVariables.Widget) {
 		} else {
 			if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].ChildrenCount > 0 {
 				widgetCount++
-				widgetList = append(widgetList, &widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
+				widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
 				widgetIndexList[widgetCount-1] = 0
 				currentIndex++
 				if widgetList[currentIndex].Draw {
@@ -184,7 +183,7 @@ func ScrapeCssFromDocument(document *htmlVariables.Widget) {
 				}
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
-					setCssProperties(&widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
+					setCssProperties(widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
 				}
 				widgetIndexList[currentIndex]++
 			}
