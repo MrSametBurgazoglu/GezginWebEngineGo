@@ -2,12 +2,14 @@ package tree
 
 import (
 	"gezgin_web_engine/css_scraper/structs"
+	"gezgin_web_engine/html_scraper/HtmlTags"
 	"gezgin_web_engine/html_scraper/htmlVariables"
+	"gezgin_web_engine/html_scraper/widget"
 )
 
 type CssPropertyListItem struct {
 	Identifier1   string
-	Identifier2   htmlVariables.HtmlTags
+	Identifier2   HtmlTags.HtmlTags
 	CssProperties *structs.CssProperties
 }
 
@@ -15,7 +17,7 @@ type CssPropertyListItem struct {
 var CssPropertiesByIDList []*CssPropertyListItem
 var CssPropertiesByClassList []*CssPropertyListItem
 var CssPropertiesByElementList [htmlVariables.HtmlTagCount]*structs.CssProperties
-var CssStyleTagList []*htmlVariables.Widget
+var CssStyleTagList []*widget.Widget
 var CssStyleLinkList []string
 
 func CreateNewCssPropertiesByID(id string) (newCssProperties *structs.CssProperties) {
@@ -32,7 +34,7 @@ func CreateNewCssPropertiesByClass(id string) (newCssProperties *structs.CssProp
 	return
 }
 
-func CreateNewCssPropertiesByElement(tags htmlVariables.HtmlTags) (newCssProperties *structs.CssProperties) {
+func CreateNewCssPropertiesByElement(tags HtmlTags.HtmlTags) (newCssProperties *structs.CssProperties) {
 	newCssProperties = new(structs.CssProperties)
 	CssPropertiesByElementList[tags] = newCssProperties
 	return
@@ -62,11 +64,11 @@ func GetCssPropertiesByClass(class string) *structs.CssProperties {
 	return nil
 }
 
-func GetCssPropertiesByElement(element htmlVariables.HtmlTags) *structs.CssProperties {
+func GetCssPropertiesByElement(element HtmlTags.HtmlTags) *structs.CssProperties {
 	return CssPropertiesByElementList[element]
 }
 
-func GetCssPropertiesByElementAndClass(class string, element htmlVariables.HtmlTags) *structs.CssProperties {
+func GetCssPropertiesByElementAndClass(class string, element HtmlTags.HtmlTags) *structs.CssProperties {
 	for _, item := range CssPropertiesByIDList {
 		if item.Identifier1 == class && item.Identifier2 == element {
 			return item.CssProperties

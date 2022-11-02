@@ -3,13 +3,15 @@ package css_scraper
 import (
 	"gezgin_web_engine/css_scraper/structs"
 	"gezgin_web_engine/css_scraper/tree"
-	"gezgin_web_engine/html_scraper"
+	"gezgin_web_engine/html_scraper/HtmlTags"
 	"gezgin_web_engine/html_scraper/htmlVariables"
+	"gezgin_web_engine/html_scraper/tags"
+	"gezgin_web_engine/html_scraper/widget"
 	"gezgin_web_engine/utils"
 	"strings"
 )
 
-func setCssProperties(currentWidget *htmlVariables.Widget) {
+func setCssProperties(currentWidget *widget.Widget) {
 	var currentCssProperties *structs.CssProperties
 	for _, class := range currentWidget.StandardHtmlVariables.Class {
 		if currentCssProperties = tree.GetCssPropertiesByClass(class); currentCssProperties != nil {
@@ -72,9 +74,9 @@ func getCssWidget(selector string, channel chan *structs.CssProperties) {
 	default:
 		//find index by string to element
 		index := htmlVariables.GetElementIndex(selector[0:])
-		cssWidget = tree.GetCssPropertiesByElement(htmlVariables.HtmlTags(index))
+		cssWidget = tree.GetCssPropertiesByElement(HtmlTags.HtmlTags(index))
 		if cssWidget == nil {
-			cssWidget = tree.CreateNewCssPropertiesByElement(htmlVariables.HtmlTags(index))
+			cssWidget = tree.CreateNewCssPropertiesByElement(HtmlTags.HtmlTags(index))
 		}
 	}
 	channel <- cssWidget
@@ -102,9 +104,9 @@ func ScrapeCssFromInlineStyle(properties *structs.CssProperties, styleText strin
 	}
 }
 
-func scrapeCssFromStyleTag(widget *htmlVariables.Widget) {
+func scrapeCssFromStyleTag(widget *widget.Widget) {
 	cssTextWidget := widget.Children[0]
-	styleWidget, ok := cssTextWidget.WidgetProperties.(html_scraper.UntaggedText)
+	styleWidget, ok := cssTextWidget.WidgetProperties.(tags.UntaggedText)
 	if !ok {
 		return
 	}
@@ -119,39 +121,36 @@ func scrapeCssFromStyleTag(widget *htmlVariables.Widget) {
 		seek += index2
 		cssWidgetList := getCssWidgetList(selectors)
 		scrapeCssProperties(cssWidgetList, cssText)
-		for _, properties := range cssWidgetList {
-			println(properties)
-		}
 		index = strings.Index(styleText[seek:], "{")
 	}
 }
 
-func SetInheritCssProperties(document *htmlVariables.Widget) {
-	widgetList := []*htmlVariables.Widget{document}
+func SetInheritCssProperties(document *widget.Widget) {
+	widgetList := []*widget.Widget{document}
 	widgetIndexList := []int{0}
 	//initialize document
 	currentIndex := 0
-	widgetCount := 0
 	for widgetIndexList[0] != document.ChildrenCount {
 		if widgetIndexList[currentIndex] == widgetList[currentIndex].ChildrenCount {
 			currentIndex--
-			widgetCount--
-			widgetIndexList = widgetIndexList[:widgetCount]
+			widgetIndexList = widgetIndexList[:currentIndex+1]
 			widgetIndexList[currentIndex]++
 		} else {
 			if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].ChildrenCount > 0 {
-				widgetCount++
-				widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
-				widgetIndexList[widgetCount-1] = 0
-				currentIndex++
-				if widgetList[currentIndex].Draw {
-					computeInheritCssProperties(widgetList[currentIndex].CssProperties, widgetList[currentIndex-1].CssProperties)
-
+				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
+					widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
+					widgetIndexList = append(widgetIndexList, 0)
+					computeInheritCssProperties(widgetList[currentIndex+1].CssProperties, widgetList[currentIndex].CssProperties)
+					currentIndex++
+				} else {
+					widgetIndexList[currentIndex]++
 				}
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
-					computeInheritCssProperties(widgetList[currentIndex].Children[widgetIndexList[currentIndex]].CssProperties,
-						widgetList[currentIndex].CssProperties)
+					if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].HtmlTag != htmlVariables.HTML_UNTAGGED_TEXT {
+						computeInheritCssProperties(widgetList[currentIndex].Children[widgetIndexList[currentIndex]].CssProperties,
+							widgetList[currentIndex].CssProperties)
+					}
 				}
 				widgetIndexList[currentIndex]++
 			}
@@ -159,27 +158,33 @@ func SetInheritCssProperties(document *htmlVariables.Widget) {
 	}
 }
 
-func ScrapeCssFromDocument(document *htmlVariables.Widget) {
-	widgetList := []*htmlVariables.Widget{document}
+func initializeCssDocument(document *widget.Widget) {
+	document.CssProperties = new(structs.CssProperties)
+	document.CssProperties.Color = new(structs.ColorRGBA)
+	document.CssProperties.Color.SetColorByRGB(0, 0, 0)
+}
+
+func ScrapeCssFromDocument(document *widget.Widget) {
+	widgetList := []*widget.Widget{document}
 	widgetIndexList := []int{0}
 	//initialize document
+	initializeCssDocument(document)
 	currentIndex := 0
 	widgetCount := 0
 	for widgetIndexList[0] != document.ChildrenCount {
 		if widgetIndexList[currentIndex] == widgetList[currentIndex].ChildrenCount {
 			currentIndex--
 			widgetCount--
-			widgetIndexList = widgetIndexList[:widgetCount]
+			widgetIndexList = widgetIndexList[:widgetCount+1]
 			widgetIndexList[currentIndex]++
-
 		} else {
 			if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].ChildrenCount > 0 {
 				widgetCount++
 				widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
-				widgetIndexList[widgetCount-1] = 0
+				widgetIndexList = append(widgetIndexList, 0)
 				currentIndex++
 				if widgetList[currentIndex].Draw {
-					setCssProperties(widgetList[currentIndex])
+					setCssProperties(widgetList[currentIndex-1])
 				}
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {

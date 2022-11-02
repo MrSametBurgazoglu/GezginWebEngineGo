@@ -16,3 +16,12 @@ func ColorPropertySetValue(properties *structs.CssProperties, value string) {
 		*/
 	}
 }
+
+func UpdateColor(properties *structs.CssProperties, source *structs.CssProperties) {
+	if source.ColorInherit {
+		properties.ColorInherit = true
+		properties.Color = nil
+	} else if source.Color != nil {
+		properties.Color = source.Color
+	}
+}

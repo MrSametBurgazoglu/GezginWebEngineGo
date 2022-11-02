@@ -1,4 +1,4 @@
-package htmlVariables
+package standardHtmlTagVariables
 
 import "strconv"
 

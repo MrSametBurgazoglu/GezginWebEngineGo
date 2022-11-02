@@ -1,4 +1,4 @@
-package html_scraper
+package tags
 
 type UntaggedText struct {
 	Value string

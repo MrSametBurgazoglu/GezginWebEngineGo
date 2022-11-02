@@ -26,6 +26,7 @@ func main() {
 	defer font.Close()
 
 	web_engine.OpenWebEngine("exampleHtmlFiles/example.html")
+	web_engine.InitDrawer()
 
 	window, renderer, err := sdl.CreateWindowAndRenderer(800, 600, sdl.WINDOW_SHOWN)
 	if err != nil {
@@ -46,6 +47,7 @@ func main() {
 		renderer.SetDrawColor(250, 250, 250, 0)
 		renderer.Clear()
 		web_engine.RenderPage(renderer)
+		web_engine.DrawPage(renderer)
 		renderer.Present()
 	}
 }

@@ -1,14 +1,15 @@
-package html_scraper
+package tagScraper
 
 import (
 	"gezgin_web_engine/css_scraper/tree"
 	"gezgin_web_engine/html_scraper/htmlVariables"
+	"gezgin_web_engine/html_scraper/widget"
 	"strings"
 )
 
-func ScrapeInsideOfTag(widget *htmlVariables.Widget, text string) bool {
+func ScrapeInsideOfTag(widget *widget.Widget, text string) bool {
 	parameters := strings.Split(text, " ")
-	result := widget.HtmlTag.SetHtmlTag(parameters[0], widget)
+	result := htmlVariables.SetHtmlTag(parameters[0], widget)
 	if widget.HtmlTag == htmlVariables.HTML_STYLE {
 		tree.CssStyleTagList = append(tree.CssStyleTagList, widget)
 	}

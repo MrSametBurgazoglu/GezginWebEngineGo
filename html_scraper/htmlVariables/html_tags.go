@@ -3,16 +3,19 @@ package htmlVariables
 import (
 	"gezgin_web_engine/css_scraper/structs"
 	"gezgin_web_engine/drawer/DrawProperties"
+	structs2 "gezgin_web_engine/drawer/structs"
+	"gezgin_web_engine/html_scraper/HtmlTags"
+	"gezgin_web_engine/html_scraper/widget"
 	"gezgin_web_engine/utils"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
 const HtmlTagCount = 105
 
-type HtmlTags uint8
+//type HtmlTags uint8
 
 const (
-	HTML_DOCUMENT HtmlTags = iota
+	HTML_DOCUMENT HtmlTags.HtmlTags = iota
 	HTML_DOCTYPE
 	HTML_A
 	HTML_ABBR
@@ -122,11 +125,11 @@ const (
 )
 
 type HtmlTagVariables struct {
-	tag                    HtmlTags
-	widgetPropertyFunction func(widget *Widget) //it's unique to html element some of them doesn't have this function
+	tag                    HtmlTags.HtmlTags
+	widgetPropertyFunction func(widget *widget.Widget) //it's unique to html element some of them doesn't have this function
 	//void (*widget_draw_function) (struct widget*, SDL_Renderer*);//for drawing rendered object
-	renderFunction func(renderer *sdl.Renderer, widget *Widget)
-	drawFunction   func(renderer *sdl.Renderer, widget *Widget)
+	renderFunction func(widget *widget.Widget, renderer *sdl.Renderer)
+	drawFunction   func(widget *widget.Widget, renderer *sdl.Renderer)
 	endTag         bool
 	draw           bool
 }
@@ -269,7 +272,7 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_DETAILS, draw: true},
 	{tag: HTML_DFN, draw: true},
 	{tag: HTML_DIALOG},
-	{tag: HTML_DIV, draw: true},
+	{tag: HTML_DIV, draw: true, renderFunction: DrawProperties.RenderDivFunction, drawFunction: DrawProperties.DrawDivFunction},
 	{tag: HTML_DL, draw: true},
 	{tag: HTML_DT, draw: true},
 	{tag: HTML_EM, draw: true},
@@ -287,7 +290,7 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_HEAD},
 	{tag: HTML_HEADER, draw: true},
 	{tag: HTML_HR, endTag: true},
-	{tag: HTML_HTML, draw: true},
+	{tag: HTML_HTML, draw: true, renderFunction: DrawProperties.RenderHtmlFunction, drawFunction: DrawProperties.DrawHtmlFunction},
 	{tag: HTML_I, draw: true},
 	{tag: HTML_IFRAME, draw: true},
 	{tag: HTML_IMG, endTag: true, draw: true},
@@ -351,7 +354,7 @@ func GetElementIndex(tag string) int {
 	return utils.IndexFounder(htmlTagList, tag, HtmlTagCount)
 }
 
-func (htmlTag *HtmlTags) SetHtmlTag(tag string, widget *Widget) bool {
+func SetHtmlTag(tag string, widget *widget.Widget) bool {
 	index := utils.IndexFounder(htmlTagList, tag, HtmlTagCount)
 	if index != -1 {
 		widget.HtmlTag = tagHtmlVariables[index].tag
@@ -360,9 +363,12 @@ func (htmlTag *HtmlTags) SetHtmlTag(tag string, widget *Widget) bool {
 		}
 		if tagHtmlVariables[index].renderFunction != nil {
 			widget.RenderWidget = tagHtmlVariables[index].renderFunction
+			widget.DrawWidget = tagHtmlVariables[index].drawFunction
 		}
 		if tagHtmlVariables[index].draw {
 			widget.CssProperties = new(structs.CssProperties)
+			widget.Draw = true
+			widget.DrawProperties = new(structs2.DrawProperties)
 			//set render and draw functions and draw properties
 		}
 		return tagHtmlVariables[index].endTag
@@ -370,6 +376,6 @@ func (htmlTag *HtmlTags) SetHtmlTag(tag string, widget *Widget) bool {
 	return false
 }
 
-func (htmlTag *HtmlTags) getString() string {
+func getString(htmlTag *HtmlTags.HtmlTags) string {
 	return htmlTagList[*htmlTag]
 }

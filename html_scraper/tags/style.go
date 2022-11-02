@@ -1,7 +1,7 @@
 package tags
 
 import (
-	"gezgin_web_engine/html_scraper/htmlVariables"
+	"gezgin_web_engine/html_scraper/widget"
 )
 
 type HtmlTagStyle struct {
@@ -9,7 +9,7 @@ type HtmlTagStyle struct {
 	Type  string
 }
 
-func ChooseVariableForStyleTag(widget *htmlVariables.Widget, varName string, varValue string) {
+func ChooseVariableForStyleTag(widget *widget.Widget, varName string, varValue string) {
 	styleTag, ok := widget.WidgetProperties.(HtmlTagStyle)
 	if ok {
 		switch varName {
@@ -21,7 +21,7 @@ func ChooseVariableForStyleTag(widget *htmlVariables.Widget, varName string, var
 	}
 }
 
-func SetWidgetPropertiesForStyleTag(widget *htmlVariables.Widget) {
+func SetWidgetPropertiesForStyleTag(widget *widget.Widget) {
 	widget.WidgetProperties = HtmlTagStyle{}
 	widget.VarReaderFunc = ChooseVariableForStyleTag
 }

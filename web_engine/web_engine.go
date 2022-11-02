@@ -4,11 +4,11 @@ import (
 	"gezgin_web_engine/css_scraper"
 	"gezgin_web_engine/drawer"
 	"gezgin_web_engine/html_scraper"
-	"gezgin_web_engine/html_scraper/htmlVariables"
+	"gezgin_web_engine/html_scraper/widget"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-var document *htmlVariables.Widget
+var document *widget.Widget
 
 func OpenWebEngine(fileUrl string) {
 	//initialize drawer
@@ -18,9 +18,12 @@ func OpenWebEngine(fileUrl string) {
 	css_scraper.SetInheritCssProperties(document)
 }
 
-func DrawPage() {
-	//draw document
-	//set draw properties
+func InitDrawer() {
+	drawer.LoadDefaultFont()
+}
+
+func DrawPage(renderer *sdl.Renderer) {
+	drawer.DrawDocument(document, renderer)
 
 }
 
