@@ -1,5 +1,7 @@
 package structs
 
+import "gezgin_web_engine/css_scraper/enums"
+
 type CssProperties struct {
 	AccentColorInherit        bool
 	AlignContentInherit       bool
@@ -53,4 +55,10 @@ type CssProperties struct {
 
 	Background *Background
 	Color      *ColorRGBA
+	Display    enums.CssDisplayType
+	Position   enums.CssPositionType
+	Top        uint
+	Bottom     uint
+	Left       uint
+	Right      uint8
 }

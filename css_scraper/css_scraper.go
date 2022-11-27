@@ -31,6 +31,7 @@ func setCssProperties(currentWidget *widget.Widget) {
 	if currentWidget.StandardHtmlVariables.Style != "" {
 		ScrapeCssFromInlineStyle(currentWidget.CssProperties, currentWidget.StandardHtmlVariables.Style)
 	}
+	println()
 }
 
 func scrapeCssParameters(cssWidgetList []*structs.CssProperties, cssText string) {
@@ -98,10 +99,8 @@ func getCssWidgetList(selectors string) (cssWidgetList []*structs.CssProperties)
 }
 
 func ScrapeCssFromInlineStyle(properties *structs.CssProperties, styleText string) {
-	if styleText != "" {
-		propertiesList := []*structs.CssProperties{properties}
-		scrapeCssProperties(propertiesList, styleText)
-	}
+	propertiesList := []*structs.CssProperties{properties}
+	scrapeCssProperties(propertiesList, styleText)
 }
 
 func scrapeCssFromStyleTag(widget *widget.Widget) {
@@ -170,21 +169,21 @@ func ScrapeCssFromDocument(document *widget.Widget) {
 	//initialize document
 	initializeCssDocument(document)
 	currentIndex := 0
-	widgetCount := 0
 	for widgetIndexList[0] != document.ChildrenCount {
+		println()
 		if widgetIndexList[currentIndex] == widgetList[currentIndex].ChildrenCount {
 			currentIndex--
-			widgetCount--
-			widgetIndexList = widgetIndexList[:widgetCount+1]
+			widgetIndexList = widgetIndexList[:len(widgetIndexList)-1]
 			widgetIndexList[currentIndex]++
 		} else {
 			if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].ChildrenCount > 0 {
-				widgetCount++
-				widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
-				widgetIndexList = append(widgetIndexList, 0)
-				currentIndex++
-				if widgetList[currentIndex].Draw {
-					setCssProperties(widgetList[currentIndex-1])
+				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
+					widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
+					widgetIndexList = append(widgetIndexList, 0)
+					setCssProperties(widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
+					currentIndex++
+				} else {
+					widgetIndexList[currentIndex]++
 				}
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {

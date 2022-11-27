@@ -23,7 +23,7 @@ func (tag *StandardHtmlTagVariables) SetStandardVariables(name string, value str
 	case "class":
 		tag.Class = append(tag.Class, value)
 	case "style":
-		tag.Style = value
+		tag.Style = value[1 : len(value)-1]
 	case "contenteditable":
 		tag.ContentEditable = value != "false"
 	case "draggable":

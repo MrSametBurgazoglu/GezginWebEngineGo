@@ -14,8 +14,10 @@ func ScrapeInsideOfTag(widget *widget.Widget, text string) bool {
 		tree.CssStyleTagList = append(tree.CssStyleTagList, widget)
 	}
 	for _, s := range parameters[0:] {
+		println(s)
 		varName, varValue, found := strings.Cut(s, "=")
 		if found {
+			println(varName, varValue, "asdad")
 			if isStandard := widget.StandardHtmlVariables.SetStandardVariables(varName, varValue); isStandard == false && widget.ContextReaderFunc != nil {
 				widget.VarReaderFunc(widget, varName, varValue)
 			}

@@ -20,11 +20,12 @@ func OpenWebEngine(fileUrl string) {
 
 func InitDrawer() {
 	drawer.LoadDefaultFont()
+	drawer.SetWindowSize(800, 600)
 }
 
 func DrawPage(renderer *sdl.Renderer) {
+	drawer.SetDrawPropertiesDocument(document, renderer)
 	drawer.DrawDocument(document, renderer)
-
 }
 
 func RenderPage(renderer *sdl.Renderer) {

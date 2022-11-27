@@ -180,7 +180,7 @@ var functionList = []cssPropertyFunction{
 	nil,
 	nil,
 	nil,
-	nil,
+	properties.BackgroundColorPropertySetValue,
 	nil,
 	nil,
 	nil,

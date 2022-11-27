@@ -22,11 +22,13 @@ func ScrapeHtmlFromFile(fileUrl string) *widget.Widget {
 		panic(err)
 	}
 	documentWidget := widget.Widget{ChildrenCount: 0, ChildrenIndex: 0, HtmlTag: htmlVariables.HTML_DOCUMENT, Draw: true}
+	documentWidget.DrawProperties = new(structs.DrawProperties)
+	documentWidget.DrawProperties.Rect.X = 0
+	documentWidget.DrawProperties.Rect.Y = 0
 	currentWidget := &documentWidget
 	data := string(dat)
 	dataLength := len(data)
 	seek := 0
-	println(dataLength)
 	for seek < dataLength {
 		if data[seek] == ' ' || data[seek] == '\n' {
 			seek += 1
