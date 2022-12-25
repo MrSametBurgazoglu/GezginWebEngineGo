@@ -1,6 +1,6 @@
 package tags
 
-import "fmt"
+import "gezgin_web_engine/html_scraper/widget"
 
 type HtmlTagA struct {
 	download string
@@ -9,5 +9,17 @@ type HtmlTagA struct {
 }
 
 func (*HtmlTagA) choose_variable_for_a_tag(variableName string, variableValue string) {
-	fmt.Println("heyyo")
+	//receiver
+	switch variableName {
+	case "download":
+	//	receiver.download = variableValue
+	case "href":
+	//	receiver.href = variableValue
+	case "hrefLang":
+		//	receiver.hrefLang = variableValue
+	}
+}
+
+func SetWidgetPropertiesForATag(widget *widget.Widget) {
+	println("hey")
 }

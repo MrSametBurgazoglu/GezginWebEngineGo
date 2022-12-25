@@ -27,4 +27,5 @@ type Widget struct {
 	Children              []*Widget
 	Parent                *Widget
 	Draw                  bool
+	Rendered              bool
 }

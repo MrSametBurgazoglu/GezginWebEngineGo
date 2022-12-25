@@ -5,6 +5,7 @@ import (
 	"gezgin_web_engine/drawer/DrawProperties"
 	structs2 "gezgin_web_engine/drawer/structs"
 	"gezgin_web_engine/html_scraper/HtmlTags"
+	"gezgin_web_engine/html_scraper/tags"
 	"gezgin_web_engine/html_scraper/widget"
 	"gezgin_web_engine/utils"
 	"github.com/veandco/go-sdl2/sdl"
@@ -244,7 +245,7 @@ var htmlTagList = []string{
 
 var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_DOCTYPE, endTag: true},
-	{tag: HTML_A, draw: true},
+	{tag: HTML_A, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForATag},
 	{tag: HTML_ABBR, draw: true},
 	{tag: HTML_ADDRESS},
 	{tag: HTML_AREA, endTag: true, draw: true},

@@ -9,7 +9,6 @@ import (
 func DrawDivFunction(widget *widget.Widget, renderer *sdl.Renderer) {
 	if widget.CssProperties.Background != nil {
 		drawerBackend.DrawBackground(widget, renderer)
-		println("div drawing background")
 	}
 }
 

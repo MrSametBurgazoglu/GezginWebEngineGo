@@ -4,6 +4,7 @@ import (
 	"gezgin_web_engine/web_engine"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
+	"runtime"
 )
 
 func main() {
@@ -24,6 +25,8 @@ func main() {
 		panic(err)
 	}
 	defer font.Close()
+
+	runtime.LockOSThread()
 
 	web_engine.OpenWebEngine("exampleHtmlFiles/example.html")
 	web_engine.InitDrawer()

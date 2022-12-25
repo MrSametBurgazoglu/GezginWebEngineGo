@@ -22,10 +22,6 @@ func RenderUntaggedTextFunction(widget *widget.Widget, renderer *sdl.Renderer) {
 			&widget.DrawProperties.Texture,
 			&widget.DrawProperties.Rect,
 		)
-		widget.DrawProperties.Rect.X = 0
-		widget.DrawProperties.Rect.Y = 0
-		//widget.DrawProperties.Rect.X = CalculateXPos(widget)
-		//widget.DrawProperties.Rect.Y = CalculateYPos(widget)
 	}
 
 }
