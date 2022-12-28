@@ -29,13 +29,15 @@ func main() {
 	runtime.LockOSThread()
 
 	web_engine.OpenWebEngine("exampleHtmlFiles/example.html")
-	web_engine.InitDrawer()
+	web_engine.InitDrawer(600, 800)
 
 	window, renderer, err := sdl.CreateWindowAndRenderer(800, 600, sdl.WINDOW_SHOWN)
 	if err != nil {
 		panic(err)
 	}
 	defer window.Destroy()
+
+	web_engine.RenderPage(renderer)
 
 	running := true
 	for running {
@@ -49,7 +51,6 @@ func main() {
 		}
 		renderer.SetDrawColor(250, 250, 250, 0)
 		renderer.Clear()
-		web_engine.RenderPage(renderer)
 		web_engine.DrawPage(renderer)
 		renderer.Present()
 	}

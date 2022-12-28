@@ -18,9 +18,9 @@ func OpenWebEngine(fileUrl string) {
 	css_scraper.SetInheritCssProperties(document)
 }
 
-func InitDrawer() {
+func InitDrawer(height, width int) {
 	drawer.LoadDefaultFont()
-	drawer.SetWindowSize(800, 600)
+	drawer.SetWindowSize(height, width)
 }
 
 func DrawPage(renderer *sdl.Renderer) {

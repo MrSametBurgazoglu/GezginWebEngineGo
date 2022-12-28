@@ -54,3 +54,15 @@ func (tag *StandardHtmlTagVariables) SetStandardContextVariables(context string)
 	}
 	return true
 }
+
+func (tag *StandardHtmlTagVariables) GetClass() []string {
+	return tag.Class
+}
+
+func (tag *StandardHtmlTagVariables) GetID() string {
+	return tag.Id
+}
+
+func (tag *StandardHtmlTagVariables) GetStyle() string {
+	return tag.Style
+}

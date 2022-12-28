@@ -2,28 +2,33 @@ package tagScraper
 
 import (
 	"gezgin_web_engine/css_scraper/tree"
+	"gezgin_web_engine/html_scraper/HtmlElementWidget"
 	"gezgin_web_engine/html_scraper/htmlVariables"
-	"gezgin_web_engine/html_scraper/widget"
 	"strings"
 )
 
-func ScrapeInsideOfTag(widget *widget.Widget, text string) bool {
+func ScrapeInsideOfTag(widget HtmlElementWidget.HtmlElementWidgetInterface, text string) bool {
 	parameters := strings.Split(text, " ")
 	result := htmlVariables.SetHtmlTag(parameters[0], widget)
-	if widget.HtmlTag == htmlVariables.HTML_STYLE {
+	if widget.GetHtmlTag() == htmlVariables.HTML_STYLE {
 		tree.CssStyleTagList = append(tree.CssStyleTagList, widget)
 	}
-	for _, s := range parameters[0:] {
+	for _, s := range parameters[1:] {
 		println(s)
 		varName, varValue, found := strings.Cut(s, "=")
 		if found {
-			println(varName, varValue, "asdad")
-			if isStandard := widget.StandardHtmlVariables.SetStandardVariables(varName, varValue); isStandard == false && widget.ContextReaderFunc != nil {
-				widget.VarReaderFunc(widget, varName, varValue)
+			if widget.SetStandardVariables(varName, varValue) == false {
+				VarReader, ok := widget.(VarReaderInterface)
+				if ok {
+					VarReader.VarReaderFunc(varName, varValue)
+				}
 			}
 		} else {
-			if isStandard := widget.StandardHtmlVariables.SetStandardContextVariables(s); isStandard == false && widget.ContextReaderFunc != nil {
-				widget.ContextReaderFunc(widget, s)
+			if widget.SetStandardContextVariables(s) == false { //remove later
+				ContextReader, ok := widget.(ContextReaderInterface)
+				if ok {
+					ContextReader.ContextReaderFunc(s)
+				}
 			}
 		}
 	}

@@ -2,9 +2,9 @@ package tree
 
 import (
 	"gezgin_web_engine/css_scraper/structs"
+	"gezgin_web_engine/html_scraper/HtmlElementWidget"
 	"gezgin_web_engine/html_scraper/HtmlTags"
 	"gezgin_web_engine/html_scraper/htmlVariables"
-	"gezgin_web_engine/html_scraper/widget"
 )
 
 type CssPropertyListItem struct {
@@ -17,7 +17,7 @@ type CssPropertyListItem struct {
 var CssPropertiesByIDList []*CssPropertyListItem
 var CssPropertiesByClassList []*CssPropertyListItem
 var CssPropertiesByElementList [htmlVariables.HtmlTagCount]*structs.CssProperties
-var CssStyleTagList []*widget.Widget
+var CssStyleTagList []HtmlElementWidget.HtmlElementWidgetInterface
 var CssStyleLinkList []string
 
 func CreateNewCssPropertiesByID(id string) (newCssProperties *structs.CssProperties) {

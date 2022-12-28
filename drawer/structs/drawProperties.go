@@ -13,3 +13,11 @@ type DrawProperties struct {
 	Texture           *sdl.Texture
 	BackgroundTexture *sdl.Texture
 }
+
+func (d *DrawProperties) GetRect() *sdl.Rect {
+	return &d.Rect
+}
+
+func (d *DrawProperties) GetFont() *ttf.Font {
+	return d.Font
+}

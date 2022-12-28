@@ -3,33 +3,33 @@ package css_scraper
 import (
 	"gezgin_web_engine/css_scraper/structs"
 	"gezgin_web_engine/css_scraper/tree"
+	"gezgin_web_engine/html_scraper/HtmlElementWidget"
 	"gezgin_web_engine/html_scraper/HtmlTags"
 	"gezgin_web_engine/html_scraper/htmlVariables"
 	"gezgin_web_engine/html_scraper/tags"
-	"gezgin_web_engine/html_scraper/widget"
 	"gezgin_web_engine/utils"
 	"strings"
 )
 
-func setCssProperties(currentWidget *widget.Widget) {
+func setCssProperties(currentWidget ICssProperties) {
 	var currentCssProperties *structs.CssProperties
-	for _, class := range currentWidget.StandardHtmlVariables.Class {
+	for _, class := range currentWidget.GetClass() {
 		if currentCssProperties = tree.GetCssPropertiesByClass(class); currentCssProperties != nil {
-			updateCssProperties(currentWidget.CssProperties, currentCssProperties)
+			updateCssProperties(currentWidget.GetCssProperties(), currentCssProperties)
 		}
-		if currentCssProperties = tree.GetCssPropertiesByElementAndClass(class, currentWidget.HtmlTag); currentCssProperties != nil {
-			updateCssProperties(currentWidget.CssProperties, currentCssProperties)
+		if currentCssProperties = tree.GetCssPropertiesByElementAndClass(class, currentWidget.GetHtmlTag()); currentCssProperties != nil {
+			updateCssProperties(currentWidget.GetCssProperties(), currentCssProperties)
 		}
 	}
 	/* if currentCssProperties = tree.GetCssPropertiesByElement(); currentCssProperties != nil {
 		updateCssProperties(currentWidget.CssProperties, currentCssProperties)
 	} TODO change tree.CssPropertiesByElement string to html_Tag(index)
 	*/
-	if currentCssProperties = tree.GetCssPropertiesByID(currentWidget.StandardHtmlVariables.Id); currentCssProperties != nil {
-		updateCssProperties(currentWidget.CssProperties, currentCssProperties)
+	if currentCssProperties = tree.GetCssPropertiesByID(currentWidget.GetID()); currentCssProperties != nil {
+		updateCssProperties(currentWidget.GetCssProperties(), currentCssProperties)
 	}
-	if currentWidget.StandardHtmlVariables.Style != "" {
-		ScrapeCssFromInlineStyle(currentWidget.CssProperties, currentWidget.StandardHtmlVariables.Style)
+	if currentWidget.GetStyle() != "" {
+		ScrapeCssFromInlineStyle(currentWidget.GetCssProperties(), currentWidget.GetStyle())
 	}
 }
 
@@ -102,9 +102,9 @@ func ScrapeCssFromInlineStyle(properties *structs.CssProperties, styleText strin
 	scrapeCssProperties(propertiesList, styleText)
 }
 
-func scrapeCssFromStyleTag(widget *widget.Widget) {
-	cssTextWidget := widget.Children[0]
-	styleWidget, ok := cssTextWidget.WidgetProperties.(tags.UntaggedText)
+func scrapeCssFromStyleTag(widget HtmlElementWidget.HtmlElementWidgetInterface) {
+	cssTextWidget := widget.GetChild(0)
+	styleWidget, ok := cssTextWidget.(*tags.HtmlUntaggedText)
 	if !ok {
 		return
 	}
@@ -123,80 +123,109 @@ func scrapeCssFromStyleTag(widget *widget.Widget) {
 	}
 }
 
-func SetInheritCssProperties(document *widget.Widget) {
-	widgetList := []*widget.Widget{document}
+func SetInheritCssProperties(document ICssProperties) {
+	widgetList := []ICssProperties{document}
 	widgetIndexList := []int{0}
 	//initialize document
 	currentIndex := 0
-	for widgetIndexList[0] != document.ChildrenCount {
-		if widgetIndexList[currentIndex] == widgetList[currentIndex].ChildrenCount {
+	for widgetIndexList[0] != document.GetChildrenCount() {
+		if widgetIndexList[currentIndex] == widgetList[currentIndex].GetChildrenCount() {
 			currentIndex--
 			widgetIndexList = widgetIndexList[:len(widgetIndexList)-1]
 			widgetList = widgetList[:len(widgetList)-1]
 			widgetIndexList[currentIndex]++
 		} else {
-			if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].ChildrenCount > 0 {
-				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
-					widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
+			child, ok := widgetList[currentIndex].GetChild(widgetIndexList[currentIndex]).(ICssProperties)
+			if ok {
+				if child.GetChildrenCount() > 0 {
+					widgetList = append(widgetList, child)
 					widgetIndexList = append(widgetIndexList, 0)
-					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					computeInheritCssProperties(currentWidget.CssProperties, currentWidget.Parent.CssProperties)
+					currentWidget := child
+					computeInheritCssProperties(currentWidget.GetCssProperties(), currentWidget.GetParent().GetCssProperties())
 					currentIndex++
 				} else {
-					widgetIndexList[currentIndex]++
+					currentWidget := widgetList[currentIndex].GetChild(widgetIndexList[currentIndex]).(ICssProperties)
+					computeInheritCssProperties(currentWidget.GetCssProperties(),
+						currentWidget.GetParent().GetCssProperties())
 				}
 			} else {
-				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
-					if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].HtmlTag != htmlVariables.HTML_UNTAGGED_TEXT {
-						currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-						computeInheritCssProperties(currentWidget.CssProperties,
-							currentWidget.Parent.CssProperties)
-					}
-				}
 				widgetIndexList[currentIndex]++
 			}
 		}
 	}
 }
 
-func initializeCssDocument(document *widget.Widget) {
-	document.CssProperties = new(structs.CssProperties)
-	document.CssProperties.Color = new(structs.ColorRGBA)
-	document.CssProperties.Color.SetColorByRGB(0, 0, 0)
+func initializeCssDocument(document ICssProperties) {
+	//document.GetCssProperties() = new(structs.CssProperties)
+	document.GetCssProperties().Color = new(structs.ColorRGBA)
+	document.GetCssProperties().Color.SetColorByRGB(0, 0, 0)
 }
 
-func ScrapeCssFromDocument(document *widget.Widget) {
-	widgetList := []*widget.Widget{document}
+func ScrapeCssFromDocument(document ICssProperties) {
+	widgetList := []ICssProperties{document}
 	widgetIndexList := []int{0}
-	//initialize document
 	initializeCssDocument(document)
+	//initialize document
 	currentIndex := 0
-	for widgetIndexList[0] != document.ChildrenCount {
-		if widgetIndexList[currentIndex] == widgetList[currentIndex].ChildrenCount {
+	for widgetIndexList[0] != document.GetChildrenCount() {
+		if widgetIndexList[currentIndex] == widgetList[currentIndex].GetChildrenCount() {
 			currentIndex--
 			widgetIndexList = widgetIndexList[:len(widgetIndexList)-1]
 			widgetList = widgetList[:len(widgetList)-1]
 			widgetIndexList[currentIndex]++
 		} else {
-			if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].ChildrenCount > 0 {
-				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
-					widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
+			child, ok := widgetList[currentIndex].GetChild(widgetIndexList[currentIndex]).(ICssProperties)
+			if ok {
+				if child.GetChildrenCount() > 0 {
+					widgetList = append(widgetList, child)
 					widgetIndexList = append(widgetIndexList, 0)
-					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
+					currentWidget := child
 					setCssProperties(currentWidget)
 					currentIndex++
 				} else {
-					widgetIndexList[currentIndex]++
-				}
-			} else {
-				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
-					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
+					currentWidget := widgetList[currentIndex].GetChild(widgetIndexList[currentIndex]).(ICssProperties)
 					setCssProperties(currentWidget)
 				}
+			} else {
 				widgetIndexList[currentIndex]++
 			}
 		}
 	}
+	/*
+		widgetList := []ICssProperties{document}
+		widgetIndexList := []int{0}
+		//initialize document
+		initializeCssDocument(document)
+		currentIndex := 0
+		for widgetIndexList[0] != document.ChildrenCount {
+			if widgetIndexList[currentIndex] == widgetList[currentIndex].ChildrenCount {
+				currentIndex--
+				widgetIndexList = widgetIndexList[:len(widgetIndexList)-1]
+				widgetList = widgetList[:len(widgetList)-1]
+				widgetIndexList[currentIndex]++
+			} else {
+				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].ChildrenCount > 0 {
+					if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
+						widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
+						widgetIndexList = append(widgetIndexList, 0)
+						currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
+						setCssProperties(currentWidget)
+						currentIndex++
+					} else {
+						widgetIndexList[currentIndex]++
+					}
+				} else {
+					if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
+						currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
+						setCssProperties(currentWidget)
+					}
+					widgetIndexList[currentIndex]++
+				}
+			}
+		}
+
+
+	*/
 }
 
 func CreateCssPropertiesFromStyleTags() {

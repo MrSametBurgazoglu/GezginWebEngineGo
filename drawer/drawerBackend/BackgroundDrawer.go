@@ -1,14 +1,15 @@
 package drawerBackend
 
 import (
-	"gezgin_web_engine/html_scraper/widget"
+	"gezgin_web_engine/css_scraper/structs"
+	structs2 "gezgin_web_engine/drawer/structs"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-func DrawBackground(widget *widget.Widget, renderer *sdl.Renderer) {
-	if widget.CssProperties.Background.BackgroundColor != nil {
-		alpha, red, green, blue := widget.CssProperties.Background.BackgroundColor.GetColorByRGBA()
+func DrawBackground(cssProperties *structs.CssProperties, drawProperties *structs2.DrawProperties, renderer *sdl.Renderer) {
+	if cssProperties.Background.BackgroundColor != nil {
+		alpha, red, green, blue := cssProperties.Background.BackgroundColor.GetColorByRGBA()
 		renderer.SetDrawColor(red, green, blue, alpha)
-		renderer.FillRect(&widget.DrawProperties.Rect)
+		renderer.FillRect(&drawProperties.Rect)
 	}
 }

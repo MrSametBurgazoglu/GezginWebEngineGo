@@ -1,14 +1,10 @@
 package htmlVariables
 
 import (
-	"gezgin_web_engine/css_scraper/structs"
-	"gezgin_web_engine/drawer/DrawProperties"
-	structs2 "gezgin_web_engine/drawer/structs"
+	"gezgin_web_engine/html_scraper/HtmlElementWidget"
 	"gezgin_web_engine/html_scraper/HtmlTags"
 	"gezgin_web_engine/html_scraper/tags"
-	"gezgin_web_engine/html_scraper/widget"
 	"gezgin_web_engine/utils"
-	"github.com/veandco/go-sdl2/sdl"
 )
 
 const HtmlTagCount = 105
@@ -127,12 +123,8 @@ const (
 
 type HtmlTagVariables struct {
 	tag                    HtmlTags.HtmlTags
-	widgetPropertyFunction func(widget *widget.Widget) //it's unique to html element some of them doesn't have this function
-	//void (*widget_draw_function) (struct widget*, SDL_Renderer*);//for drawing rendered object
-	renderFunction func(widget *widget.Widget, renderer *sdl.Renderer)
-	drawFunction   func(widget *widget.Widget, renderer *sdl.Renderer)
-	endTag         bool
-	draw           bool
+	widgetPropertyFunction func() HtmlElementWidget.HtmlElementWidgetInterface //it's unique to html element some of them doesn't have this function
+	endTag                 bool
 }
 
 var htmlTagList = []string{
@@ -245,109 +237,109 @@ var htmlTagList = []string{
 
 var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_DOCTYPE, endTag: true},
-	{tag: HTML_A, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForATag},
-	{tag: HTML_ABBR, draw: true},
+	{tag: HTML_A, widgetPropertyFunction: tags.SetWidgetPropertiesForATag},
+	{tag: HTML_ABBR, widgetPropertyFunction: tags.SetWidgetPropertiesForAbbrTag},
 	{tag: HTML_ADDRESS},
-	{tag: HTML_AREA, endTag: true, draw: true},
-	{tag: HTML_ARTICLE, draw: true},
-	{tag: HTML_ASIDE, draw: true},
-	{tag: HTML_AUDIO, draw: true},
-	{tag: HTML_B, draw: true},
+	{tag: HTML_AREA, endTag: true},
+	{tag: HTML_ARTICLE},
+	{tag: HTML_ASIDE},
+	{tag: HTML_AUDIO},
+	{tag: HTML_B},
 	{tag: HTML_BASE, endTag: true},
 	{tag: HTML_BDI},
 	{tag: HTML_BDO},
-	{tag: HTML_BLOCKQUOTE, draw: true},
-	{tag: HTML_BODY, draw: true, renderFunction: DrawProperties.RenderBodyFunction, drawFunction: DrawProperties.DrawBodyFunction},
-	{tag: HTML_BR, endTag: true, draw: true},
-	{tag: HTML_BUTTON, draw: true},
-	{tag: HTML_CANVAS, draw: true},
-	{tag: HTML_CAPTION, draw: true},
-	{tag: HTML_CITE, draw: true},
-	{tag: HTML_CODE, draw: true},
-	{tag: HTML_COL, endTag: true, draw: true},
-	{tag: HTML_COLGROUP, draw: true},
+	{tag: HTML_BLOCKQUOTE},
+	{tag: HTML_BODY, widgetPropertyFunction: tags.SetWidgetPropertiesForBodyTag},
+	{tag: HTML_BR, endTag: true},
+	{tag: HTML_BUTTON},
+	{tag: HTML_CANVAS},
+	{tag: HTML_CAPTION},
+	{tag: HTML_CITE},
+	{tag: HTML_CODE},
+	{tag: HTML_COL, endTag: true},
+	{tag: HTML_COLGROUP},
 	{tag: HTML_DATA},
-	{tag: HTML_DATALIST, draw: true},
-	{tag: HTML_DD, draw: true},
-	{tag: HTML_DEL, draw: true},
-	{tag: HTML_DETAILS, draw: true},
-	{tag: HTML_DFN, draw: true},
+	{tag: HTML_DATALIST},
+	{tag: HTML_DD},
+	{tag: HTML_DEL},
+	{tag: HTML_DETAILS},
+	{tag: HTML_DFN},
 	{tag: HTML_DIALOG},
-	{tag: HTML_DIV, draw: true, renderFunction: DrawProperties.RenderDivFunction, drawFunction: DrawProperties.DrawDivFunction},
-	{tag: HTML_DL, draw: true},
-	{tag: HTML_DT, draw: true},
-	{tag: HTML_EM, draw: true},
-	{tag: HTML_FIELDSET, draw: true},
-	{tag: HTML_FIGCAPTION, draw: true},
-	{tag: HTML_FIGURE, draw: true},
-	{tag: HTML_FOOTER, draw: true},
-	{tag: HTML_FORM, draw: true},
-	{tag: HTML_H1, draw: true},
-	{tag: HTML_H2, draw: true},
-	{tag: HTML_H3, draw: true},
-	{tag: HTML_H4, draw: true},
-	{tag: HTML_H5, draw: true},
-	{tag: HTML_H6, draw: true},
+	{tag: HTML_DIV, widgetPropertyFunction: tags.SetWidgetPropertiesForDivTag},
+	{tag: HTML_DL},
+	{tag: HTML_DT},
+	{tag: HTML_EM},
+	{tag: HTML_FIELDSET},
+	{tag: HTML_FIGCAPTION},
+	{tag: HTML_FIGURE},
+	{tag: HTML_FOOTER},
+	{tag: HTML_FORM},
+	{tag: HTML_H1},
+	{tag: HTML_H2},
+	{tag: HTML_H3},
+	{tag: HTML_H4},
+	{tag: HTML_H5},
+	{tag: HTML_H6},
 	{tag: HTML_HEAD},
-	{tag: HTML_HEADER, draw: true},
+	{tag: HTML_HEADER},
 	{tag: HTML_HR, endTag: true},
-	{tag: HTML_HTML, draw: true, renderFunction: DrawProperties.RenderHtmlFunction, drawFunction: DrawProperties.DrawHtmlFunction},
-	{tag: HTML_I, draw: true},
-	{tag: HTML_IFRAME, draw: true},
-	{tag: HTML_IMG, endTag: true, draw: true},
-	{tag: HTML_INPUT, endTag: true, draw: true},
-	{tag: HTML_INS, draw: true},
-	{tag: HTML_KBD, draw: true},
-	{tag: HTML_LABEL, draw: true},
-	{tag: HTML_LEGEND, draw: true},
-	{tag: HTML_LI, draw: true},
+	{tag: HTML_HTML, widgetPropertyFunction: tags.SetWidgetPropertiesForHtmlTag},
+	{tag: HTML_I},
+	{tag: HTML_IFRAME},
+	{tag: HTML_IMG, endTag: true},
+	{tag: HTML_INPUT, endTag: true},
+	{tag: HTML_INS},
+	{tag: HTML_KBD},
+	{tag: HTML_LABEL},
+	{tag: HTML_LEGEND},
+	{tag: HTML_LI},
 	{tag: HTML_LINK, endTag: true},
-	{tag: HTML_MAIN, draw: true},
-	{tag: HTML_MAP, draw: true},
-	{tag: HTML_MARK, draw: true},
+	{tag: HTML_MAIN},
+	{tag: HTML_MAP},
+	{tag: HTML_MARK},
 	{tag: HTML_META, endTag: true},
 	{tag: HTML_METER},
-	{tag: HTML_NAV, draw: true},
-	{tag: HTML_OL, draw: true},
+	{tag: HTML_NAV},
+	{tag: HTML_OL},
 	{tag: HTML_OPTGROUP},
 	{tag: HTML_OPTION},
-	{tag: HTML_OUTPUT, draw: true},
-	{tag: HTML_P, draw: true},
+	{tag: HTML_OUTPUT},
+	{tag: HTML_P},
 	{tag: HTML_PARAM, endTag: true},
 	{tag: HTML_PICTURE},
 	{tag: HTML_PRE},
 	{tag: HTML_PROGRESS},
-	{tag: HTML_Q, draw: true},
-	{tag: HTML_S, draw: true},
-	{tag: HTML_SAMP, draw: true},
+	{tag: HTML_Q},
+	{tag: HTML_S},
+	{tag: HTML_SAMP},
 	{tag: HTML_SCRIPT},
-	{tag: HTML_SECTION, draw: true},
+	{tag: HTML_SECTION},
 	{tag: HTML_SELECT},
-	{tag: HTML_SMALL, draw: true},
+	{tag: HTML_SMALL},
 	{tag: HTML_SOURCE, endTag: true},
 	{tag: HTML_SPAN},
-	{tag: HTML_STRONG, draw: true},
+	{tag: HTML_STRONG},
 	{tag: HTML_STYLE},
-	{tag: HTML_SUB, draw: true},
-	{tag: HTML_SUMMARY, draw: true},
-	{tag: HTML_SUP, draw: true},
+	{tag: HTML_SUB},
+	{tag: HTML_SUMMARY},
+	{tag: HTML_SUP},
 	{tag: HTML_SVG},
-	{tag: HTML_TABLE, draw: true},
-	{tag: HTML_TBODY, draw: true},
-	{tag: HTML_TD, draw: true},
+	{tag: HTML_TABLE},
+	{tag: HTML_TBODY},
+	{tag: HTML_TD},
 	{tag: HTML_TEMPLATE},
 	{tag: HTML_TEXTAREA},
-	{tag: HTML_TFOOT, draw: true},
-	{tag: HTML_TH, draw: true},
-	{tag: HTML_THEAD, draw: true},
+	{tag: HTML_TFOOT},
+	{tag: HTML_TH},
+	{tag: HTML_THEAD},
 	{tag: HTML_TIME},
 	{tag: HTML_TITLE},
-	{tag: HTML_TR, draw: true},
+	{tag: HTML_TR},
 	{tag: HTML_TRACK, endTag: true},
-	{tag: HTML_U, draw: true},
-	{tag: HTML_UL, draw: true},
-	{tag: HTML_VAR, draw: true},
-	{tag: HTML_VIDEO, draw: true},
+	{tag: HTML_U},
+	{tag: HTML_UL},
+	{tag: HTML_VAR},
+	{tag: HTML_VIDEO},
 	{tag: HTML_WBR},
 }
 
@@ -355,23 +347,11 @@ func GetElementIndex(tag string) int {
 	return utils.IndexFounder(htmlTagList, tag, HtmlTagCount)
 }
 
-func SetHtmlTag(tag string, widget *widget.Widget) bool {
+func SetHtmlTag(tag string, widget HtmlElementWidget.HtmlElementWidgetInterface) bool {
 	index := utils.IndexFounder(htmlTagList, tag, HtmlTagCount)
 	if index != -1 {
-		widget.HtmlTag = tagHtmlVariables[index].tag
-		if tagHtmlVariables[index].widgetPropertyFunction != nil {
-			tagHtmlVariables[index].widgetPropertyFunction(widget)
-		}
-		if tagHtmlVariables[index].renderFunction != nil {
-			widget.RenderWidget = tagHtmlVariables[index].renderFunction
-			widget.DrawWidget = tagHtmlVariables[index].drawFunction
-		}
-		if tagHtmlVariables[index].draw {
-			widget.CssProperties = new(structs.CssProperties)
-			widget.Draw = true
-			widget.DrawProperties = new(structs2.DrawProperties)
-			//set render and draw functions and draw properties
-		}
+		widget = tagHtmlVariables[index].widgetPropertyFunction()
+		widget.SetHtmlTag(tagHtmlVariables[index].tag)
 		return tagHtmlVariables[index].endTag
 	}
 	return false

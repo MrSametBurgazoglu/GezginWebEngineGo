@@ -4,14 +4,14 @@ import (
 	"gezgin_web_engine/drawer/Fonts"
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/drawer/calculator"
-	"gezgin_web_engine/html_scraper/widget"
+	"gezgin_web_engine/drawer/structs"
 	"github.com/veandco/go-sdl2/sdl"
 	"golang.org/x/exp/slices"
 )
 
-func allChildsRendered(widget *widget.Widget) bool {
-	for _, child := range widget.Children {
-		if child.Rendered == false {
+func allChildsRendered(widget structs.DrawableWidget) bool {
+	for _, child := range widget.GetChildren() {
+		if child.GetRendered() == false {
 			return false
 		}
 	}
@@ -26,19 +26,19 @@ func LoadDefaultFont() {
 	Fonts.InitializeFont()
 }
 
-func RenderDocument(document *widget.Widget, renderer *sdl.Renderer) {
-	widgetList := []*widget.Widget{document}
-	var edgeList []*widget.Widget
+func RenderDocument(document structs.DrawableWidget, renderer *sdl.Renderer) {
+	widgetList := []structs.DrawableWidget{document}
+	var edgeList []structs.DrawableWidget
 	length := len(widgetList)
 	keepGo := true
 	for keepGo {
 		keepGo = false
 		for _, w := range widgetList {
-			if w.ChildrenCount > 0 {
-				for _, child := range w.Children {
-					if child.Draw {
-						widgetList = append(widgetList, child)
-						child.Rendered = false
+			if w.GetChildrenCount() > 0 {
+				for _, child := range w.GetChildren() {
+					if child.IsDrawable() {
+						widgetList = append(widgetList, child.(structs.DrawableWidget))
+						child.SetRendered(false)
 					}
 					keepGo = true
 				}
@@ -52,18 +52,19 @@ func RenderDocument(document *widget.Widget, renderer *sdl.Renderer) {
 		}
 	}
 	widgetList = edgeList
+	length = len(widgetList)
 	keepGo = true
 	for keepGo {
 		keepGo = false
 		for _, w := range widgetList {
 			if allChildsRendered(w) {
-				w.RenderWidget(w, renderer)
-				w.Rendered = true
+				w.RenderWidget(renderer)
+				w.SetRendered(true)
 			}
 		}
 		for _, w := range widgetList {
-			if w.Parent != nil {
-				widgetList = append(widgetList, w.Parent)
+			if w.GetParent() != nil {
+				widgetList = append(widgetList, w.GetParent().(structs.DrawableWidget))
 				keepGo = true
 			}
 		}
@@ -74,8 +75,36 @@ func RenderDocument(document *widget.Widget, renderer *sdl.Renderer) {
 	}
 }
 
-func DrawDocument(document *widget.Widget, renderer *sdl.Renderer) {
-	widgetList := []*widget.Widget{document}
+func DrawDocument(document structs.DrawableWidget, renderer *sdl.Renderer) {
+	widgetList := []structs.DrawableWidget{document}
+	widgetIndexList := []int{0}
+	//initialize document
+	currentIndex := 0
+	for widgetIndexList[0] != document.GetChildrenCount() {
+		if widgetIndexList[currentIndex] == widgetList[currentIndex].GetChildrenCount() {
+			currentIndex--
+			widgetIndexList = widgetIndexList[:len(widgetIndexList)-1]
+			widgetList = widgetList[:len(widgetList)-1]
+			widgetIndexList[currentIndex]++
+		} else {
+			child, ok := widgetList[currentIndex].GetChild(widgetIndexList[currentIndex]).(structs.DrawableWidget)
+			if ok {
+				if child.GetChildrenCount() > 0 {
+					widgetList = append(widgetList, child)
+					widgetIndexList = append(widgetIndexList, 0)
+					currentWidget := child
+					currentWidget.DrawWidget(renderer)
+					currentIndex++
+				} else {
+					currentWidget := child
+					currentWidget.DrawWidget(renderer)
+				}
+			} else {
+				widgetIndexList[currentIndex]++
+			}
+		}
+	}
+	/*widgetList := []*widget.Widget{document}
 	widgetIndexList := []int{0}
 	currentIndex := 0
 	for widgetIndexList[0] != document.ChildrenCount {
@@ -89,48 +118,52 @@ func DrawDocument(document *widget.Widget, renderer *sdl.Renderer) {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
 					widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
 					widgetIndexList = append(widgetIndexList, 0)
-					widgetList[currentIndex].Children[widgetIndexList[currentIndex]].DrawWidget(widgetList[currentIndex].Children[widgetIndexList[currentIndex]], renderer)
+					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
+					currentWidget.WidgetElement.DrawWidget(currentWidget, renderer)
 					currentIndex++
 				} else {
 					widgetIndexList[currentIndex]++
 				}
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
-					widgetList[currentIndex].Children[widgetIndexList[currentIndex]].DrawWidget(widgetList[currentIndex].Children[widgetIndexList[currentIndex]], renderer)
+					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
+					currentWidget.WidgetElement.DrawWidget(currentWidget, renderer)
 				}
 				widgetIndexList[currentIndex]++
 			}
 		}
 	}
+
+	*/
 }
 
-func setWHForWidget(widget *widget.Widget) {
+func setWHForWidget(widget structs.DrawableWidget) {
 	width := calculator.CalculateWidthOfWidget(widget)
 	height := calculator.CalculateHeightOfWidget(widget)
-	widget.DrawProperties.Rect.W = int32(width)
-	widget.DrawProperties.Rect.H = int32(height)
+	widget.GetRect().W = int32(width)
+	widget.GetRect().H = int32(height)
 }
 
-func setXYForWidget(widget *widget.Widget) {
+func setXYForWidget(widget structs.DrawableWidget) {
 	posX := calculator.CalculateXPosOfWidget(widget)
 	posY := calculator.CalculateYPosOfWidget(widget)
-	widget.DrawProperties.Rect.X = posX
-	widget.DrawProperties.Rect.Y = posY
+	widget.GetRect().X = posX
+	widget.GetRect().Y = posY
 }
 
-func SetDrawPropertiesDocument(document *widget.Widget, renderer *sdl.Renderer) {
-	widgetList := []*widget.Widget{document}
-	var edgeList []*widget.Widget
+func SetDrawPropertiesDocument(document structs.DrawableWidget, renderer *sdl.Renderer) {
+	widgetList := []structs.DrawableWidget{document}
+	var edgeList []structs.DrawableWidget
 	length := len(widgetList)
 	keepGo := true
 	for keepGo {
 		keepGo = false
 		for _, w := range widgetList {
-			if w.ChildrenCount > 0 {
-				for _, child := range w.Children {
-					if child.Draw {
-						widgetList = append(widgetList, child)
-						child.Rendered = false
+			if w.GetChildrenCount() > 0 {
+				for _, child := range w.GetChildren() {
+					if child.IsDrawable() {
+						widgetList = append(widgetList, child.(structs.DrawableWidget))
+						child.SetRendered(false)
 					}
 					keepGo = true
 				}
@@ -144,18 +177,19 @@ func SetDrawPropertiesDocument(document *widget.Widget, renderer *sdl.Renderer) 
 		}
 	}
 	widgetList = edgeList
+	length = len(widgetList)
 	keepGo = true
 	for keepGo {
 		keepGo = false
 		for _, w := range widgetList {
 			if allChildsRendered(w) {
 				setWHForWidget(w)
-				w.Rendered = true
+				w.SetRendered(true)
 			}
 		}
 		for _, w := range widgetList {
-			if w.Parent != nil && slices.Contains(widgetList, w) {
-				widgetList = append(widgetList, w.Parent)
+			if w.GetParent() != nil && slices.Contains(widgetList, w) {
+				widgetList = append(widgetList, w.GetParent().(structs.DrawableWidget))
 				keepGo = true
 			}
 		}
@@ -164,33 +198,64 @@ func SetDrawPropertiesDocument(document *widget.Widget, renderer *sdl.Renderer) 
 			length = len(widgetList)
 		}
 	}
-	widgetList = []*widget.Widget{document}
+	widgetList = []structs.DrawableWidget{document}
 	widgetIndexList := []int{0}
+	//initialize document
 	currentIndex := 0
-	for widgetIndexList[0] != document.ChildrenCount {
-		if widgetIndexList[currentIndex] == widgetList[currentIndex].ChildrenCount {
+	for widgetIndexList[0] != document.GetChildrenCount() {
+		if widgetIndexList[currentIndex] == widgetList[currentIndex].GetChildrenCount() {
 			currentIndex--
 			widgetIndexList = widgetIndexList[:len(widgetIndexList)-1]
 			widgetList = widgetList[:len(widgetList)-1]
 			widgetIndexList[currentIndex]++
 		} else {
-			if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].ChildrenCount > 0 {
-				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
-					widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
+			child, ok := widgetList[currentIndex].GetChild(widgetIndexList[currentIndex]).(structs.DrawableWidget)
+			if ok {
+				if child.GetChildrenCount() > 0 {
+					widgetList = append(widgetList, child)
 					widgetIndexList = append(widgetIndexList, 0)
-					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
+					currentWidget := child
 					setXYForWidget(currentWidget)
 					currentIndex++
 				} else {
-					widgetIndexList[currentIndex]++
-				}
-			} else {
-				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
-					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
+					currentWidget := child
 					setXYForWidget(currentWidget)
 				}
+			} else {
 				widgetIndexList[currentIndex]++
 			}
 		}
 	}
+	/*
+		widgetList = []structs.DrawableWidget{document}
+		widgetIndexList := []int{0}
+		currentIndex := 0
+		for widgetIndexList[0] != document.GetChildrenCount() {
+			if widgetIndexList[currentIndex] == widgetList[currentIndex].GetChildrenCount() {
+				currentIndex--
+				widgetIndexList = widgetIndexList[:len(widgetIndexList)-1]
+				widgetList = widgetList[:len(widgetList)-1]
+				widgetIndexList[currentIndex]++
+			} else {
+				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].ChildrenCount > 0 {
+					if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
+						widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
+						widgetIndexList = append(widgetIndexList, 0)
+						currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
+						setXYForWidget(currentWidget)
+						currentIndex++
+					} else {
+						widgetIndexList[currentIndex]++
+					}
+				} else {
+					if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
+						currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
+						setXYForWidget(currentWidget)
+					}
+					widgetIndexList[currentIndex]++
+				}
+			}
+		}
+
+	*/
 }

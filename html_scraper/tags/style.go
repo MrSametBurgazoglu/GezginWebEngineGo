@@ -1,27 +1,33 @@
 package tags
 
-import (
-	"gezgin_web_engine/html_scraper/widget"
-)
-
+/*
 type HtmlTagStyle struct {
+	structs.DrawProperties
 	media string
 	Type  string
 }
 
-func ChooseVariableForStyleTag(widget *widget.Widget, varName string, varValue string) {
-	styleTag, ok := widget.WidgetProperties.(HtmlTagStyle)
-	if ok {
-		switch varName {
-		case "media":
-			styleTag.media = varValue
-		case "type":
-			styleTag.Type = varValue
-		}
+func (receiver *HtmlTagStyle) ReadParameters(found bool, items ...string) {
+	if found {
+		receiver.VarReaderFunc(items[0], items[1])
+	}
+}
+
+func (receiver *HtmlTagStyle) RenderWidget(widget *widget.Widget, renderer *sdl.Renderer) {
+}
+
+func (receiver *HtmlTagStyle) DrawWidget(widget *widget.Widget, renderer *sdl.Renderer) {
+}
+
+func (receiver *HtmlTagStyle) VarReaderFunc(variableName, variableValue string) {
+	switch variableName {
+	case "media":
+		receiver.media = variableValue
+	case "type":
+		receiver.Type = variableValue
 	}
 }
 
 func SetWidgetPropertiesForStyleTag(widget *widget.Widget) {
-	widget.WidgetProperties = HtmlTagStyle{}
-	widget.VarReaderFunc = ChooseVariableForStyleTag
-}
+	widget.WidgetElement = new(HtmlTagStyle)
+}*/

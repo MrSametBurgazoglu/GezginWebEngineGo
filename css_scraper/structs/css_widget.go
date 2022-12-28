@@ -62,3 +62,7 @@ type CssProperties struct {
 	Left       uint
 	Right      uint8
 }
+
+func (receiver *CssProperties) GetCssProperties() *CssProperties {
+	return receiver
+}

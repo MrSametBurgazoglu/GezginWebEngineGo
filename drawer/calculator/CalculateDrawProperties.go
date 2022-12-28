@@ -3,95 +3,102 @@ package calculator
 import (
 	"gezgin_web_engine/css_scraper/enums"
 	"gezgin_web_engine/drawer/ScreenProperties"
+	"gezgin_web_engine/drawer/structs"
 	"gezgin_web_engine/html_scraper/htmlVariables"
-	"gezgin_web_engine/html_scraper/widget"
 )
 
-func CalculateWidthOfWidget(widget *widget.Widget) int {
-	if widget.CssProperties != nil {
-		if widget.CssProperties.Display == enums.CSS_DISPLAY_TYPE_BLOCK {
+func CalculateWidthOfWidget(widget any) int {
+	switch w := widget.(type) {
+	case structs.UntaggedTextDrawableWidget:
+		return int(w.GetRect().W)
+	case structs.DrawableWidget:
+		if w.GetCssProperties().Display == enums.CSS_DISPLAY_TYPE_BLOCK {
 			return ScreenProperties.WindowWidth
 		}
-	} else if widget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT {
-		return int(widget.DrawProperties.Rect.W)
 	}
 	return ScreenProperties.WindowWidth
 }
 
-func CalculateHeightOfWidget(widget *widget.Widget) (totalHeight int) {
-	if widget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT {
-		return int(widget.DrawProperties.Rect.H)
+func CalculateHeightOfWidget(widget structs.DrawableWidget) (totalHeight int) {
+	if widget.GetHtmlTag() == htmlVariables.HTML_UNTAGGED_TEXT {
+		return int(widget.GetRect().H)
 	}
-	for i := 0; i < widget.ChildrenCount; i++ {
-		if widget.Children[i].Draw {
-			totalHeight += int(widget.Children[i].DrawProperties.Rect.H)
+	for _, widgetInterface := range widget.GetChildren() {
+		drawableWidget, ok := widgetInterface.(structs.DrawableWidget)
+		if ok {
+			totalHeight += int(drawableWidget.GetRect().H)
 		}
 	}
 	return totalHeight
 }
 
-func CalculateXPosOfWidget(widget *widget.Widget) int32 {
-	if widget.CssProperties != nil {
-		switch widget.CssProperties.Position {
+func CalculateXPosOfWidget(widget any) int32 {
+	var parent structs.DrawableWidget
+	switch w := widget.(type) {
+	case structs.UntaggedTextDrawableWidget:
+		return w.GetRect().W
+	case structs.DrawableWidget:
+		parent = w.GetParent().(structs.DrawableWidget)
+		switch w.GetCssProperties().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			return widget.Parent.DrawProperties.Rect.X
+			return parent.GetRect().X
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			return widget.Parent.DrawProperties.Rect.X
+			return parent.GetRect().X
 		case enums.CSS_POSITION_TYPE_STATIC:
-			return widget.Parent.DrawProperties.Rect.X
+			return parent.GetRect().X
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
 			break
 		case enums.CSS_POSITION_TYPE_FIXED:
 			break
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			if widget.CssProperties.Left != 0 {
-				return widget.Parent.DrawProperties.Rect.X + int32(widget.CssProperties.Left)
-			} else if widget.CssProperties.Right != 0 {
-				return widget.Parent.DrawProperties.Rect.W - int32(widget.CssProperties.Right)
+			if w.GetCssProperties().Left != 0 {
+				return parent.GetRect().X + int32(w.GetCssProperties().Left)
+			} else if w.GetCssProperties().Right != 0 {
+				return parent.GetRect().W - int32(w.GetCssProperties().Right)
 			} else {
-				return widget.Parent.DrawProperties.Rect.X
+				return parent.GetRect().X
 			}
 		}
-	} else {
-		return widget.Parent.DrawProperties.Rect.X
 	}
 	return 0
 }
 
-func CalculateYPosOfWidget(currentWidget *widget.Widget) int32 {
-	var beforeCurrentWidget *widget.Widget
-	if currentWidget.CssProperties != nil {
-		switch currentWidget.CssProperties.Position {
+func CalculateYPosOfWidget(widget any) int32 {
+	//TODO MAKE GET CHILD BY INDEX
+	var beforeCurrentWidget structs.DrawableWidget
+	var parent structs.DrawableWidget
+	switch w := widget.(type) {
+	case structs.UntaggedTextDrawableWidget:
+		beforeCurrentWidget = w.GetParent().GetChild(w.GetChildrenIndex() - 1).(structs.DrawableWidget)
+		if w.GetChildrenIndex() == 0 {
+			return beforeCurrentWidget.GetRect().Y
+		} else {
+			return beforeCurrentWidget.GetRect().Y + beforeCurrentWidget.GetRect().H
+		}
+	case structs.DrawableWidget:
+		parent = w.GetParent().(structs.DrawableWidget)
+		beforeCurrentWidget = w.GetParent().GetChild(w.GetChildrenIndex() - 1).(structs.DrawableWidget)
+		switch w.GetCssProperties().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			return currentWidget.Parent.DrawProperties.Rect.X
+			return beforeCurrentWidget.GetRect().X
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			if currentWidget.ChildrenIndex > 0 && (currentWidget.Parent.Children[currentWidget.ChildrenIndex-1].Draw || currentWidget.Parent.Children[currentWidget.ChildrenIndex-1].HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT) {
-				beforeCurrentWidget = currentWidget.Parent.Children[currentWidget.ChildrenIndex-1]
-				return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H
+			if w.GetChildrenIndex() > 0 && beforeCurrentWidget.GetHtmlTag() == htmlVariables.HTML_UNTAGGED_TEXT {
+				return beforeCurrentWidget.GetRect().Y + beforeCurrentWidget.GetRect().H
 			} else {
-				beforeCurrentWidget = currentWidget.Parent
-				return beforeCurrentWidget.DrawProperties.Rect.Y
+				return parent.GetRect().Y
 			}
 		case enums.CSS_POSITION_TYPE_STATIC:
-			if currentWidget.ChildrenIndex > 0 {
-				beforeCurrentWidget = currentWidget.Parent.Children[currentWidget.ChildrenIndex-1]
+			if w.GetChildrenIndex() > 0 {
+				return beforeCurrentWidget.GetRect().Y + beforeCurrentWidget.GetRect().H
 			} else {
-				beforeCurrentWidget = currentWidget.Parent
+				return parent.GetRect().Y + parent.GetRect().H
 			}
-			return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
 			break
 		case enums.CSS_POSITION_TYPE_FIXED:
 			break
 		case enums.CSS_POSITION_TYPE_RELATIVE:
 			break
-		}
-	} else {
-		beforeCurrentWidget = currentWidget.Parent
-		if currentWidget.ChildrenIndex == 0 {
-			return beforeCurrentWidget.DrawProperties.Rect.Y
-		} else {
-			return beforeCurrentWidget.Children[currentWidget.ChildrenIndex-1].DrawProperties.Rect.Y + beforeCurrentWidget.Children[currentWidget.ChildrenIndex-1].DrawProperties.Rect.H
 		}
 	}
 	return 0
