@@ -11,6 +11,10 @@ import (
 
 var document *widget.Widget
 
+func GetDocument() *widget.Widget {
+	return document
+}
+
 func OpenWebEngine(fileUrl string) {
 	//initialize drawer
 	document = html_scraper.ScrapeHtmlFromFile(fileUrl)
