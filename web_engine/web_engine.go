@@ -5,6 +5,7 @@ import (
 	"gezgin_web_engine/drawer"
 	"gezgin_web_engine/html_scraper"
 	"gezgin_web_engine/html_scraper/widget"
+	"gezgin_web_engine/javascript_interpreter"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -16,6 +17,7 @@ func OpenWebEngine(fileUrl string) {
 	css_scraper.ExecuteCssScraper()
 	css_scraper.ScrapeCssFromDocument(document)
 	css_scraper.SetInheritCssProperties(document)
+	javascript_interpreter.InitializeJSInterpreter(document)
 }
 
 func InitDrawer() {

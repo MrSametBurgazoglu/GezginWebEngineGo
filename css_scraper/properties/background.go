@@ -137,6 +137,23 @@ func BackgroundColorPropertySetValue(properties *structs.CssProperties, value st
 	}
 }
 
+func BackgroundPropertySetValue(properties *structs.CssProperties, value string) {
+	if value == "inherit" {
+		properties.BackgroundInherit = true
+		properties.Background = nil
+	} else {
+		properties.BackgroundInherit = false
+		if properties.Background == nil {
+			properties.Background = new(structs.Background)
+		}
+		if value == "initial" {
+			properties.Background.BackgroundColor.SetColorByRGBA(0, 0, 0, 0)
+		} else {
+			setBackgroundColor(properties.Background, value)
+		}
+	}
+}
+
 func UpdateBackground(properties *structs.CssProperties, source *structs.CssProperties) {
 	if source.BackgroundInherit {
 		properties.BackgroundInherit = true

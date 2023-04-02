@@ -19,7 +19,7 @@ type StandardHtmlTagVariables struct {
 func (tag *StandardHtmlTagVariables) SetStandardVariables(name string, value string) bool {
 	switch name {
 	case "id":
-		tag.Id = value
+		tag.Id = value[1 : len(value)-1]
 	case "class":
 		tag.Class = append(tag.Class, value)
 	case "style":

@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func setCssProperties(currentWidget *widget.Widget) {
+func SetCssProperties(currentWidget *widget.Widget) {
 	var currentCssProperties *structs.CssProperties
 	for _, class := range currentWidget.StandardHtmlVariables.Class {
 		if currentCssProperties = tree.GetCssPropertiesByClass(class); currentCssProperties != nil {
@@ -183,7 +183,7 @@ func ScrapeCssFromDocument(document *widget.Widget) {
 					widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
 					widgetIndexList = append(widgetIndexList, 0)
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					setCssProperties(currentWidget)
+					SetCssProperties(currentWidget)
 					currentIndex++
 				} else {
 					widgetIndexList[currentIndex]++
@@ -191,7 +191,7 @@ func ScrapeCssFromDocument(document *widget.Widget) {
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					setCssProperties(currentWidget)
+					SetCssProperties(currentWidget)
 				}
 				widgetIndexList[currentIndex]++
 			}

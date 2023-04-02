@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <script>
+        const colors = ["blue", "red", "green", "cyan", "darkblue"];
+        function change_div_background_color() {
+            let random = 0
+            random = Math.floor(Math.random() * colors.length);
+            document.getElementById("div1").setAttribute("style", "background-color:"+colors[random])
+            random = Math.floor(Math.random() * colors.length);
+            document.getElementById("div2").setAttribute("style", "background-color:"+colors[random])
+            random = Math.floor(Math.random() * colors.length);
+            document.getElementById("div3").setAttribute("style", "background-color:"+colors[random])
+            setTimeout(change_div_background_color, 3000);
+        }
+        //document.getElementById("div1").setAttribute("style", "background-color:blue")
+        setTimeout(change_div_background_color, 3000);
+    </script>
+</head>
+<body>
+<div id="div1" style="background-color:red">
+   Hello World
+</div>
+<div id="div2" style="background-color:blue">
+    This is new Hello World
+</div>
+<div id="div3" style="background-color:green">
+    This is 3rd div
+    <div style="background-color:red">
+        This is an inside div
+    </div>
+</div>
+</body>
+</html>
