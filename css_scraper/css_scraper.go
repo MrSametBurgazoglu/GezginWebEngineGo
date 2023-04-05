@@ -11,9 +11,9 @@ import (
 )
 
 func SetCssProperties(currentWidget *widget.Widget) {
-	if currentWidget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT {
-		return // untagged text don't have class or element css properties
-	}
+	//if currentWidget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT {
+	//	return // untagged text don't have class or element css properties
+	//}
 	var currentCssProperties *structs.CssProperties
 	for _, class := range currentWidget.StandardHtmlVariables.Class {
 		if currentCssProperties = tree.GetCssPropertiesByClass(class); currentCssProperties != nil {
@@ -185,7 +185,9 @@ func ScrapeCssFromDocument(document *widget.Widget) {
 					widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
 					widgetIndexList = append(widgetIndexList, 0)
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					SetCssProperties(currentWidget)
+					if currentWidget.HtmlTag != htmlVariables.HTML_UNTAGGED_TEXT {
+						SetCssProperties(currentWidget)
+					}
 					currentIndex++
 				} else {
 					widgetIndexList[currentIndex]++
@@ -193,7 +195,9 @@ func ScrapeCssFromDocument(document *widget.Widget) {
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					SetCssProperties(currentWidget)
+					if currentWidget.HtmlTag != htmlVariables.HTML_UNTAGGED_TEXT {
+						SetCssProperties(currentWidget)
+					}
 				}
 				widgetIndexList[currentIndex]++
 			}

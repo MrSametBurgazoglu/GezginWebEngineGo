@@ -67,15 +67,15 @@ func main() {
 				break
 			}
 		}
-		renderer.SetDrawColor(250, 250, 250, 0)
-		renderer.Clear()
 		if web_engine.GetDocument().Rendered == false {
+			renderer.SetDrawColor(250, 250, 250, 0)
+			renderer.Clear()
 			web_engine.RenderPage(renderer)
+			web_engine.DrawPage(renderer)
+			renderer.Present()
 			println("heyyo")
 			web_engine.GetDocument().Rendered = true
 		}
-		web_engine.DrawPage(renderer)
-		renderer.Present()
 	}
 
 	if *memprofile != "" {
