@@ -155,10 +155,10 @@ func BackgroundPropertySetValue(properties *structs.CssProperties, value string)
 }
 
 func UpdateBackground(properties *structs.CssProperties, source *structs.CssProperties) {
-	if source.BackgroundInherit {
+	if source.BackgroundInherit && properties.Background == nil {
 		properties.BackgroundInherit = true
 		properties.Background = nil
-	} else if source.Background != nil {
+	} else if source.Background != nil && properties.Background == nil {
 		properties.Background = source.Background
 	}
 }

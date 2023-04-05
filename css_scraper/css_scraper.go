@@ -3,7 +3,6 @@ package css_scraper
 import (
 	"gezgin_web_engine/css_scraper/structs"
 	"gezgin_web_engine/css_scraper/tree"
-	"gezgin_web_engine/html_scraper/HtmlTags"
 	"gezgin_web_engine/html_scraper/htmlVariables"
 	"gezgin_web_engine/html_scraper/tags"
 	"gezgin_web_engine/html_scraper/widget"
@@ -12,6 +11,9 @@ import (
 )
 
 func SetCssProperties(currentWidget *widget.Widget) {
+	if currentWidget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT {
+		return // untagged text don't have class or element css properties
+	}
 	var currentCssProperties *structs.CssProperties
 	for _, class := range currentWidget.StandardHtmlVariables.Class {
 		if currentCssProperties = tree.GetCssPropertiesByClass(class); currentCssProperties != nil {
@@ -21,10 +23,9 @@ func SetCssProperties(currentWidget *widget.Widget) {
 			updateCssProperties(currentWidget.CssProperties, currentCssProperties)
 		}
 	}
-	/* if currentCssProperties = tree.GetCssPropertiesByElement(); currentCssProperties != nil {
+	if currentCssProperties = tree.GetCssPropertiesByElement(currentWidget.HtmlTag); currentCssProperties != nil {
 		updateCssProperties(currentWidget.CssProperties, currentCssProperties)
-	} TODO change tree.CssPropertiesByElement string to html_Tag(index)
-	*/
+	}
 	if currentCssProperties = tree.GetCssPropertiesByID(currentWidget.StandardHtmlVariables.Id); currentCssProperties != nil {
 		updateCssProperties(currentWidget.CssProperties, currentCssProperties)
 	}
@@ -67,16 +68,16 @@ func getCssWidget(selector string, channel chan *structs.CssProperties) {
 			cssWidget = tree.CreateNewCssPropertiesByID(selector[0:])
 		}
 	case '.':
-		cssWidget = tree.GetCssPropertiesByClass(selector[0:])
+		cssWidget = tree.GetCssPropertiesByClass(selector[1:])
 		if cssWidget == nil {
-			cssWidget = tree.CreateNewCssPropertiesByClass(selector[0:])
+			cssWidget = tree.CreateNewCssPropertiesByClass(selector[1:])
 		}
 	default:
 		//find index by string to element
-		index := htmlVariables.GetElementIndex(selector[0:])
-		cssWidget = tree.GetCssPropertiesByElement(HtmlTags.HtmlTags(index))
+		tag := htmlVariables.GetElementTag(selector[0:])
+		cssWidget = tree.GetCssPropertiesByElement(tag)
 		if cssWidget == nil {
-			cssWidget = tree.CreateNewCssPropertiesByElement(HtmlTags.HtmlTags(index))
+			cssWidget = tree.CreateNewCssPropertiesByElement(tag)
 		}
 	}
 	channel <- cssWidget
@@ -109,14 +110,15 @@ func scrapeCssFromStyleTag(widget *widget.Widget) {
 		return
 	}
 	styleText := styleWidget.Value
+	styleText = utils.RemoveCharsFromString(styleText)
 	seek := 0
 	index := 0
 	index = strings.Index(styleText[seek:], "{")
 	for index != -1 {
 		index2 := strings.Index(styleText[seek:], "}")
-		selectors := strings.Trim(styleText[seek:index], " \n")
-		cssText := strings.Trim(styleText[seek+index+1:seek+index2], " \n")
-		seek += index2
+		selectors := styleText[seek : seek+index]
+		cssText := styleText[seek+index+1 : seek+index2]
+		seek += index2 + 1
 		cssWidgetList := getCssWidgetList(selectors)
 		scrapeCssProperties(cssWidgetList, cssText)
 		index = strings.Index(styleText[seek:], "{")

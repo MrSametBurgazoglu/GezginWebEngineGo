@@ -351,8 +351,9 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_WBR},
 }
 
-func GetElementIndex(tag string) int {
-	return utils.IndexFounder(htmlTagList, tag, HtmlTagCount)
+func GetElementTag(tag string) HtmlTags.HtmlTags {
+	index := utils.IndexFounder(htmlTagList, tag, HtmlTagCount)
+	return tagHtmlVariables[index].tag
 }
 
 func SetHtmlTag(tag string, widget *widget.Widget) bool {

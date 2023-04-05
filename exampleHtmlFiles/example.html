@@ -17,15 +17,19 @@
         //document.getElementById("div1").setAttribute("style", "background-color:blue")
         setTimeout(change_div_background_color, 3000);
     </script>
+    <style>
+        body {background-color: blue;}
+        .mydiv {background-color: red;}
+    </style>
 </head>
 <body>
-<div id="div1" style="background-color:red">
+<div id="div1">
    Hello World
 </div>
-<div id="div2" style="background-color:blue">
+<div id="div2" style="background-color:green">
     This is new Hello World
 </div>
-<div id="div3" style="background-color:green">
+<div id="div3" class="mydiv">
     This is 3rd div
     <div style="background-color:red">
         This is an inside div

@@ -56,7 +56,7 @@ func GetCssPropertiesByID(id string) *structs.CssProperties {
 }
 
 func GetCssPropertiesByClass(class string) *structs.CssProperties {
-	for _, item := range CssPropertiesByIDList {
+	for _, item := range CssPropertiesByClassList {
 		if item.Identifier1 == class {
 			return item.CssProperties
 		}
