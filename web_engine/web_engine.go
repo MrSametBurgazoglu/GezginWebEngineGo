@@ -26,7 +26,7 @@ func OpenWebEngine(fileUrl string) {
 
 func InitDrawer() {
 	drawer.LoadDefaultFont()
-	drawer.SetWindowSize(800, 600)
+	drawer.SetWindowSize(600, 800)
 }
 
 func DrawPage(renderer *sdl.Renderer) {

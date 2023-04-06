@@ -14,16 +14,15 @@
             document.getElementById("div3").setAttribute("style", "background-color:"+colors[random])
             setTimeout(change_div_background_color, 3000);
         }
-        //document.getElementById("div1").setAttribute("style", "background-color:blue")
         setTimeout(change_div_background_color, 3000);
     </script>
     <style>
-        body {background-color: blue;}
-        .mydiv {background-color: red;}
+        body {background-color: black;}
+        .mydiv {background-color: red; position: relative; left: 30px; top: 30px}
     </style>
 </head>
 <body>
-<div id="div1">
+<div id="div1" style="background-color:darkblue">
    Hello World
 </div>
 <div id="div2" style="background-color:green">

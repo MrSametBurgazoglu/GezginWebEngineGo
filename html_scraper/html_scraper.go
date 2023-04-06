@@ -3,6 +3,7 @@ package html_scraper
 import (
 	"fmt"
 	"gezgin_web_engine/drawer/DrawProperties"
+	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/drawer/structs"
 	"gezgin_web_engine/html_scraper/htmlVariables"
 	"gezgin_web_engine/html_scraper/tagScraper"
@@ -25,6 +26,7 @@ func ScrapeHtmlFromFile(fileUrl string) *widget.Widget {
 	documentWidget.DrawProperties = new(structs.DrawProperties)
 	documentWidget.DrawProperties.Rect.X = 0
 	documentWidget.DrawProperties.Rect.Y = 0
+	documentWidget.DrawProperties.Rect.W = int32(ScreenProperties.WindowWidth)
 	currentWidget := &documentWidget
 	data := string(dat)
 	dataLength := len(data)

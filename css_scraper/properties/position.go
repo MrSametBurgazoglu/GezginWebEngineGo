@@ -11,6 +11,7 @@ import (
 const PositionStringCount = 5
 
 var positionStrings = []string{
+	"",
 	"absolute",
 	"fixed",
 	"relative",
@@ -111,7 +112,7 @@ func setRight(cssProperties *structs.CssProperties, value string) {
 	}
 }
 
-func positionPropertySetValue(cssProperties *structs.CssProperties, value string) {
+func PositionPropertySetValue(cssProperties *structs.CssProperties, value string) {
 	if value == "inherit" {
 		cssProperties.PositionInherit = true
 	} else if value == "initial" {
@@ -121,7 +122,7 @@ func positionPropertySetValue(cssProperties *structs.CssProperties, value string
 	}
 }
 
-func topPropertySetValue(cssProperties *structs.CssProperties, value string) {
+func TopPropertySetValue(cssProperties *structs.CssProperties, value string) {
 	if value == "inherit" {
 		cssProperties.TopInherit = true
 	} else if value == "initial" {
@@ -131,7 +132,7 @@ func topPropertySetValue(cssProperties *structs.CssProperties, value string) {
 	}
 }
 
-func bottomPropertySetValue(cssProperties *structs.CssProperties, value string) {
+func BottomPropertySetValue(cssProperties *structs.CssProperties, value string) {
 	if value == "inherit" {
 		cssProperties.BottomInherit = true
 	} else if value == "initial" {
@@ -141,7 +142,7 @@ func bottomPropertySetValue(cssProperties *structs.CssProperties, value string) 
 	}
 }
 
-func leftPropertySetValue(cssProperties *structs.CssProperties, value string) {
+func LeftPropertySetValue(cssProperties *structs.CssProperties, value string) {
 	if value == "inherit" {
 		cssProperties.LeftInherit = true
 	} else if value == "initial" {
@@ -151,7 +152,7 @@ func leftPropertySetValue(cssProperties *structs.CssProperties, value string) {
 	}
 }
 
-func rightPropertySetValue(cssProperties *structs.CssProperties, value string) {
+func RightPropertySetValue(cssProperties *structs.CssProperties, value string) {
 	if value == "inherit" {
 		cssProperties.RightInherit = true
 	} else if value == "initial" {
@@ -179,7 +180,7 @@ func computeInheritPosition(dest, source *structs.CssProperties) {
 	}
 }
 
-func updatePosition(cssProperties, source *structs.CssProperties) {
+func UpdatePosition(cssProperties, source *structs.CssProperties) {
 	if source.PositionInherit {
 		cssProperties.PositionInherit = true
 	} else if source.Position != enums.CSS_POSITION_TYPE_EMPTY {
