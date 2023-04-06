@@ -1,6 +1,5 @@
 package enums
 
-type CssValueType uint8
 type CssAnimationTimingFunctionType uint8
 type CssAnimationDirectionType uint8
 type CssAnimationFillModeType uint8
@@ -65,16 +64,6 @@ type CssOutlineStyleType uint8
 type CssOverflowType uint8
 type CssOverflowWrapType uint8
 type CssResizeType uint8
-
-const (
-	CSS_NUMBER_VALUE CssValueType = iota
-	CSS_PIXEL_VALUE
-	CSS_REM_VALUE
-	CSS_PERCENT_VALUE
-	CSS_DEG_VALUE
-	CSS_TURN_VALUE
-	CSS_RAD_VALUE
-)
 
 const (
 	CSS_ANIMATION_TIMING_FUNCTION_LINEAR CssAnimationTimingFunctionType = iota

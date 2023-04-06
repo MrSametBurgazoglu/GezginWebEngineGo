@@ -8,7 +8,7 @@ type CssProperties struct {
 	AlignItemsInherit         bool
 	AlignSelfInherit          bool
 	AnimationInherit          bool
-	BackdropfilterInherit     bool
+	BackdropFilterInherit     bool
 	BackfaceVisibilityInherit bool
 	BackgroundInherit         bool
 	BorderInherit             bool
@@ -53,12 +53,33 @@ type CssProperties struct {
 	OpacityInherit            bool
 	ResizeInherit             bool
 
-	Background *Background
-	Color      *ColorRGBA
-	Display    enums.CssDisplayType
-	Position   enums.CssPositionType
-	Top        uint
-	Bottom     uint
-	Left       uint
-	Right      uint8
+	AccentColor        *ColorRGBA
+	AlignContent       enums.CssAlignType
+	AlignItems         enums.CssAlignType
+	AlignSelf          enums.CssAlignType
+	Animation          *Animation
+	Background         *Background
+	BackdropFilter     enums.CssFilterType
+	Color              *ColorRGBA
+	Display            enums.CssDisplayType
+	Margin             *Margin
+	Padding            *Padding
+	Height             uint
+	MinHeight          uint
+	MaxHeight          uint
+	HeightValueType    enums.CssPropertyValueType
+	MinHeightValueType enums.CssPropertyValueType
+	MaxHeightValueType enums.CssPropertyValueType
+	Width              uint
+	MinWidth           uint
+	MaxWidth           uint
+	WidthValueType     enums.CssPropertyValueType
+	MinWidthValueType  enums.CssPropertyValueType
+	MaxWidthValueType  enums.CssPropertyValueType
+	Position           enums.CssPositionType
+	Top                uint
+	Bottom             uint
+	Left               uint
+	Right              uint8
+	Visibility         enums.CssVisibilityType
 }
