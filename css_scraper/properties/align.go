@@ -6,6 +6,8 @@ import (
 	"gezgin_web_engine/utils"
 )
 
+const AlignStringCount = 8
+
 var alignStrings = []string{
 	"baseline",
 	"center",
@@ -18,7 +20,7 @@ var alignStrings = []string{
 }
 
 func setAlignContent(cssProperties *structs.CssProperties, value string) {
-	index := utils.IndexFounder(alignStrings, value, len(alignStrings))
+	index := utils.IndexFounder(alignStrings, value, AlignStringCount)
 	if index != -1 {
 		cssProperties.AlignContent = enums.CssAlignType(index)
 	} else {
@@ -27,7 +29,7 @@ func setAlignContent(cssProperties *structs.CssProperties, value string) {
 }
 
 func setAlignItems(cssProperties *structs.CssProperties, value string) {
-	index := utils.IndexFounder(alignStrings, value, len(alignStrings))
+	index := utils.IndexFounder(alignStrings, value, AlignStringCount)
 	if index != -1 {
 		cssProperties.AlignItems = enums.CssAlignType(index)
 	} else {
@@ -36,7 +38,7 @@ func setAlignItems(cssProperties *structs.CssProperties, value string) {
 }
 
 func setAlignSelf(cssProperties *structs.CssProperties, value string) {
-	index := utils.IndexFounder(alignStrings, value, len(alignStrings))
+	index := utils.IndexFounder(alignStrings, value, AlignStringCount)
 	if index != -1 {
 		cssProperties.AlignSelf = enums.CssAlignType(index)
 	} else {

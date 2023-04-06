@@ -78,8 +78,12 @@ type CssProperties struct {
 	MaxWidthValueType  enums.CssPropertyValueType
 	Position           enums.CssPositionType
 	Top                uint
+	TopValueType       enums.CssPropertyValueType
 	Bottom             uint
+	BottomValueType    enums.CssPropertyValueType
 	Left               uint
-	Right              uint8
+	LeftValueType      enums.CssPropertyValueType
+	Right              uint
+	RightValueType     enums.CssPropertyValueType
 	Visibility         enums.CssVisibilityType
 }
