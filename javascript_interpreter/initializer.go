@@ -1,34 +1,15 @@
 package javascript_interpreter
 
 import (
-	"gezgin_web_engine/html_scraper/htmlVariables"
 	"gezgin_web_engine/html_scraper/tags"
 	"gezgin_web_engine/html_scraper/widget"
 	v8 "rogchap.com/v8go"
 )
 
+var ScriptElements []*widget.Widget
+
 var currentIsolate *v8.Isolate
 var globalDocument *widget.Widget
-
-func getStyleElements(document *widget.Widget) []*widget.Widget {
-	var elementList []*widget.Widget
-	for _, child := range document.Children {
-		if child.HtmlTag == htmlVariables.HTML_HTML {
-			for _, htmlChild := range child.Children {
-				if htmlChild.HtmlTag == htmlVariables.HTML_HEAD {
-					for _, headChild := range htmlChild.Children {
-						if headChild.HtmlTag == htmlVariables.HTML_SCRIPT {
-							elementList = append(elementList, headChild)
-						}
-					}
-					break
-				}
-			}
-			break
-		}
-	}
-	return elementList
-}
 
 func scrapeScriptElements(context *v8.Context, element *widget.Widget) {
 	scriptWidget, ok := element.Children[0].WidgetProperties.(tags.UntaggedText)
@@ -53,8 +34,7 @@ func InitializeJSInterpreter(document *widget.Widget) {
 	documentObj, _ := documentTemplate.NewInstance(ctx)
 	ctx.Global().Set("document", documentObj)
 	CreateElementTemplate(iso)
-	styleList := getStyleElements(document)
-	for _, script := range styleList {
+	for _, script := range ScriptElements {
 		scrapeScriptElements(ctx, script)
 	}
 }
