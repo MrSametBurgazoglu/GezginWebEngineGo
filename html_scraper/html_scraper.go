@@ -11,6 +11,7 @@ import (
 	"gezgin_web_engine/html_scraper/widget"
 	"os"
 	"strings"
+	"sync"
 )
 
 func FreeHtmlTree() {
@@ -28,6 +29,9 @@ func ScrapeHtmlFromFile(fileUrl string) *widget.Widget {
 	documentWidget.DrawProperties.Rect.Y = 0
 	documentWidget.DrawProperties.Rect.W = int32(ScreenProperties.WindowWidth)
 	currentWidget := &documentWidget
+
+	var wg sync.WaitGroup
+
 	data := string(dat)
 	dataLength := len(data)
 	seek := 0
@@ -51,6 +55,7 @@ func ScrapeHtmlFromFile(fileUrl string) *widget.Widget {
 				}
 				currentWidget.ChildrenCount++
 				currentWidget.Children = append(currentWidget.Children, &newWidget)
+				tagScraper.UntaggedTextClosed(&newWidget)
 				println("untagged text", data[seek:seek+result])
 			}
 			result2 := strings.Index(data[seek+result:], ">")
@@ -67,12 +72,13 @@ func ScrapeHtmlFromFile(fileUrl string) *widget.Widget {
 				currentWidget.Children = append(currentWidget.Children, &newWidget)
 				println("inside of tag", data[seek+result+1:seek+result+result2])
 				currentWidget = &newWidget
-				if tagScraper.ScrapeInsideOfTag(currentWidget, data[seek+result+1:seek+result+result2]) {
+				if tagScraper.ScrapeInsideOfTag(currentWidget, data[seek+result+1:seek+result+result2], &wg) {
 					currentWidget = currentWidget.Parent
 				}
 			}
 			seek += result + result2 + 1
 		}
 	}
+	wg.Wait()
 	return &documentWidget
 }

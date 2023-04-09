@@ -189,9 +189,9 @@ func (receiver *ColorRGBA) SetColorByFunction(value string) bool {
 	return false
 }
 
-func SyncColor(source *ColorRGBA, dest *ColorRGBA) {
-	dest.alpha = source.alpha
-	dest.red = source.red
-	dest.green = source.green
-	dest.blue = source.blue
+func (receiver *ColorRGBA) SyncColor(source *ColorRGBA) {
+	receiver.alpha = source.alpha
+	receiver.red = source.red
+	receiver.green = source.green
+	receiver.blue = source.blue
 }

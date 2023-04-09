@@ -60,6 +60,8 @@ type CssProperties struct {
 	Animation          *Animation
 	Background         *Background
 	BackdropFilter     enums.CssFilterType
+	Border             *Border
+	BorderCollapseType enums.CssBorderCollapseType
 	Color              *ColorRGBA
 	Display            enums.CssDisplayType
 	Margin             *Margin

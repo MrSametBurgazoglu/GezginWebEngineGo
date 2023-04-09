@@ -1,21 +1,24 @@
 package tagScraper
 
 import (
-	"gezgin_web_engine/css_scraper/tree"
+	"gezgin_web_engine/css_scraper"
 	"gezgin_web_engine/html_scraper/htmlVariables"
 	"gezgin_web_engine/html_scraper/widget"
 	"gezgin_web_engine/javascript_interpreter"
 	"strings"
+	"sync"
 )
 
-func ScrapeInsideOfTag(widget *widget.Widget, text string) bool {
-	parameters := strings.Split(text, " ")
-	result := htmlVariables.SetHtmlTag(parameters[0], widget)
-	if widget.HtmlTag == htmlVariables.HTML_STYLE {
-		tree.CssStyleTagList = append(tree.CssStyleTagList, widget)
-	} else if widget.HtmlTag == htmlVariables.HTML_SCRIPT {
-		javascript_interpreter.ScriptElements = append(javascript_interpreter.ScriptElements, widget)
+func UntaggedTextClosed(widget *widget.Widget) {
+	if widget.Parent.HtmlTag == htmlVariables.HTML_STYLE {
+		css_scraper.CreateCssPropertiesFromStyleTag(widget.Parent)
+	} else if widget.Parent.HtmlTag == htmlVariables.HTML_SCRIPT {
+		javascript_interpreter.ScriptElements = append(javascript_interpreter.ScriptElements, widget.Parent)
 	}
+
+}
+
+func ScrapeParameters(widget *widget.Widget, parameters []string, group *sync.WaitGroup) {
 	for _, s := range parameters[0:] {
 		println(s)
 		varName, varValue, found := strings.Cut(s, "=")
@@ -30,5 +33,14 @@ func ScrapeInsideOfTag(widget *widget.Widget, text string) bool {
 			}
 		}
 	}
+	group.Done()
+	println("scraping parameters finished", widget)
+}
+
+func ScrapeInsideOfTag(widget *widget.Widget, text string, group *sync.WaitGroup) bool {
+	parameters := strings.Split(text, " ")
+	result := htmlVariables.SetHtmlTag(parameters[0], widget)
+	group.Add(1)
+	go ScrapeParameters(widget, parameters, group)
 	return result
 }

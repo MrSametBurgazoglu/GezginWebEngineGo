@@ -19,6 +19,7 @@ func OpenWebEngine(fileUrl string) {
 	//initialize drawer
 	document = html_scraper.ScrapeHtmlFromFile(fileUrl)
 	css_scraper.ExecuteCssScraper()
+	css_scraper.WaitCssScrapingOperations()
 	css_scraper.ScrapeCssFromDocument(document)
 	css_scraper.SetInheritCssProperties(document)
 	javascript_interpreter.InitializeJSInterpreter(document)

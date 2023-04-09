@@ -6,7 +6,6 @@ import (
 	"gezgin_web_engine/drawer/calculator"
 	"gezgin_web_engine/html_scraper/widget"
 	"github.com/veandco/go-sdl2/sdl"
-	"golang.org/x/exp/slices"
 )
 
 func allChildsRendered(widget *widget.Widget) bool {
@@ -104,11 +103,22 @@ func DrawDocument(document *widget.Widget, renderer *sdl.Renderer) {
 	}
 }
 
-func setWHForWidget(widget *widget.Widget) {
+func setWHForWidget(widget *widget.Widget, channel chan *widget.Widget) {
 	width := calculator.CalculateWidthOfWidget(widget)
 	height := calculator.CalculateHeightOfWidget(widget)
 	widget.DrawProperties.Rect.W = int32(width)
 	widget.DrawProperties.Rect.H = int32(height)
+	contentWidth := calculator.CalculateContentWidthOfWidget(widget)
+	contentHeight := calculator.CalculateContentHeightOfWidget(widget)
+	widget.DrawProperties.ContentRect.W = int32(contentWidth)
+	widget.DrawProperties.ContentRect.H = int32(contentHeight)
+	layoutWidth := calculator.CalculateLayoutWidthOfWidget(widget)
+	layoutHeight := calculator.CalculateLayoutHeightOfWidget(widget)
+	widget.DrawProperties.LayoutRect.W = int32(layoutWidth)
+	widget.DrawProperties.LayoutRect.H = int32(layoutHeight)
+	widget.Rendered = true
+	println("rendered", widget)
+	channel <- widget
 }
 
 func setXYForWidget(widget *widget.Widget) {
@@ -145,19 +155,24 @@ func SetDrawPropertiesDocument(document *widget.Widget, renderer *sdl.Renderer) 
 	}
 	widgetList = edgeList
 	keepGo = true
+	channel := make(chan *widget.Widget)
 	for keepGo {
 		keepGo = false
+		widgetCount := 0
 		for _, w := range widgetList {
 			if allChildsRendered(w) {
-				setWHForWidget(w)
-				w.Rendered = true
+				widgetCount += 1
+				go setWHForWidget(w, channel)
+				//setWHForWidget(w)
 			}
 		}
-		for _, w := range widgetList {
-			if w.Parent != nil && slices.Contains(widgetList, w) {
-				widgetList = append(widgetList, w.Parent)
+		for widgetCount > 0 {
+			currentWidget := <-channel
+			if currentWidget.Parent != nil {
+				widgetList = append(widgetList, currentWidget.Parent)
 				keepGo = true
 			}
+			widgetCount--
 		}
 		if keepGo {
 			widgetList = widgetList[length:]

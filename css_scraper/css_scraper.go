@@ -8,7 +8,10 @@ import (
 	"gezgin_web_engine/html_scraper/widget"
 	"gezgin_web_engine/utils"
 	"strings"
+	"sync"
 )
+
+var wg sync.WaitGroup
 
 func SetCssProperties(currentWidget *widget.Widget) {
 	//if currentWidget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT {
@@ -103,7 +106,7 @@ func ScrapeCssFromInlineStyle(properties *structs.CssProperties, styleText strin
 	scrapeCssProperties(propertiesList, styleText)
 }
 
-func scrapeCssFromStyleTag(widget *widget.Widget) {
+func ScrapeCssFromStyleTag(widget *widget.Widget) {
 	cssTextWidget := widget.Children[0]
 	styleWidget, ok := cssTextWidget.WidgetProperties.(tags.UntaggedText)
 	if !ok {
@@ -123,6 +126,7 @@ func scrapeCssFromStyleTag(widget *widget.Widget) {
 		scrapeCssProperties(cssWidgetList, cssText)
 		index = strings.Index(styleText[seek:], "{")
 	}
+	wg.Done()
 }
 
 func SetInheritCssProperties(document *widget.Widget) {
@@ -205,10 +209,10 @@ func ScrapeCssFromDocument(document *widget.Widget) {
 	}
 }
 
-func CreateCssPropertiesFromStyleTags() {
-	for _, widget := range tree.CssStyleTagList {
-		scrapeCssFromStyleTag(widget) //maybe we can call this function as goroutine
-	}
+func CreateCssPropertiesFromStyleTag(widget *widget.Widget) {
+	wg.Add(1)
+	tree.CssStyleTagList = append(tree.CssStyleTagList, widget)
+	go ScrapeCssFromStyleTag(widget) //maybe we can call this function as goroutine
 }
 
 func CreateCssPropertiesFromStyleFiles() {
@@ -218,6 +222,9 @@ func CreateCssPropertiesFromStyleFiles() {
 }
 
 func ExecuteCssScraper() {
-	CreateCssPropertiesFromStyleTags()
 	CreateCssPropertiesFromStyleFiles()
+}
+
+func WaitCssScrapingOperations() {
+	wg.Wait()
 }
