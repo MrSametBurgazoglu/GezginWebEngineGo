@@ -8,18 +8,19 @@ type HtmlTagA struct {
 	hrefLang string
 }
 
-func (*HtmlTagA) choose_variable_for_a_tag(variableName string, variableValue string) {
+func (receiver *HtmlTagA) VarReaderFunc(variableName string, variableValue string) {
 	//receiver
 	switch variableName {
 	case "download":
-	//	receiver.download = variableValue
+		receiver.download = variableValue
 	case "href":
-	//	receiver.href = variableValue
+		receiver.href = variableValue
 	case "hrefLang":
-		//	receiver.hrefLang = variableValue
+		receiver.hrefLang = variableValue
 	}
 }
 
 func SetWidgetPropertiesForATag(widget *widget.Widget) {
-	println("hey")
+	widget.WidgetProperties = new(HtmlTagA)
+	widget.HaveAttrAsVar = true
 }

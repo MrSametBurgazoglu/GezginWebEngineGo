@@ -194,3 +194,15 @@ const (
 	HTML_DIRECTION_UP
 	HTML_DIRECTION_DOWN
 )
+
+const referrerPolicyStringCount = 6
+
+var referrerPolicyStrings = []string{
+	"no-referrer",
+	"no-referrer-when-downgrade",
+	"origin",
+	"same-origin",
+	"origin-when-cross-origin",
+	"strict-origin-when-cross-origin",
+	"unsafe-url",
+}

@@ -9,19 +9,16 @@ type HtmlTagStyle struct {
 	Type  string
 }
 
-func ChooseVariableForStyleTag(widget *widget.Widget, varName string, varValue string) {
-	styleTag, ok := widget.WidgetProperties.(HtmlTagStyle)
-	if ok {
-		switch varName {
-		case "media":
-			styleTag.media = varValue
-		case "type":
-			styleTag.Type = varValue
-		}
+func (receiver *HtmlTagStyle) VarReaderFunc(variableName string, variableValue string) {
+	switch variableName {
+	case "media":
+		receiver.media = variableValue
+	case "type":
+		receiver.Type = variableValue
 	}
 }
 
 func SetWidgetPropertiesForStyleTag(widget *widget.Widget) {
-	widget.WidgetProperties = HtmlTagStyle{}
-	widget.VarReaderFunc = ChooseVariableForStyleTag
+	widget.WidgetProperties = new(HtmlTagStyle)
+	widget.HaveAttrAsVar = true
 }

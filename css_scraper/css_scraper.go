@@ -117,7 +117,7 @@ func ScrapeCssFromStyleTag(widget *widget.Widget) {
 	seek := 0
 	index := 0
 	index = strings.Index(styleText[seek:], "{")
-	for index != -1 {
+	for index != -1 { //maybe go routine for every cssText
 		index2 := strings.Index(styleText[seek:], "}")
 		selectors := styleText[seek : seek+index]
 		cssText := styleText[seek+index+1 : seek+index2]

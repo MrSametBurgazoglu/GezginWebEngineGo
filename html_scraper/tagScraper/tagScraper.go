@@ -9,6 +9,14 @@ import (
 	"sync"
 )
 
+type VarReaderInterface interface {
+	VarReaderFunc(string, string)
+}
+
+type ContextReaderInterface interface {
+	ContextReaderFunc(string)
+}
+
 func UntaggedTextClosed(widget *widget.Widget) {
 	if widget.Parent.HtmlTag == htmlVariables.HTML_STYLE {
 		css_scraper.CreateCssPropertiesFromStyleTag(widget.Parent)
@@ -24,12 +32,16 @@ func ScrapeParameters(widget *widget.Widget, parameters []string, group *sync.Wa
 		varName, varValue, found := strings.Cut(s, "=")
 		if found {
 			println(varName, varValue, "asdad")
-			if isStandard := widget.StandardHtmlVariables.SetStandardVariables(varName, varValue); isStandard == false && widget.ContextReaderFunc != nil {
-				widget.VarReaderFunc(widget, varName, varValue)
+			if isStandard := widget.StandardHtmlVariables.SetStandardVariables(varName, varValue); isStandard == false && widget.HaveAttrAsVar {
+				//widget.VarReaderFunc(widget, varName, varValue)
+				var varReader = widget.WidgetProperties.(VarReaderInterface)
+				varReader.VarReaderFunc(varName, varValue)
 			}
 		} else {
-			if isStandard := widget.StandardHtmlVariables.SetStandardContextVariables(s); isStandard == false && widget.ContextReaderFunc != nil {
-				widget.ContextReaderFunc(widget, s)
+			if isStandard := widget.StandardHtmlVariables.SetStandardContextVariables(s); isStandard == false && widget.HaveAttrAsContext {
+				var contextReader = widget.WidgetProperties.(ContextReaderInterface)
+				contextReader.ContextReaderFunc(s)
+				//widget.ContextReaderFunc(widget, s)
 			}
 		}
 	}

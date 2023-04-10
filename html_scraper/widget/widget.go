@@ -28,4 +28,6 @@ type Widget struct {
 	Parent                *Widget
 	Draw                  bool
 	Rendered              bool
+	HaveAttrAsVar         bool
+	HaveAttrAsContext     bool
 }
