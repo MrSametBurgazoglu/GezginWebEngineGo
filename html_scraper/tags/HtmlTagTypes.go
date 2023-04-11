@@ -1,5 +1,9 @@
 package tags
 
+import (
+	"gezgin_web_engine/utils"
+)
+
 type InputType uint8
 type ButtonType uint8
 type FormEncType uint8
@@ -196,6 +200,7 @@ const (
 )
 
 const referrerPolicyStringCount = 6
+const formRelStringCount = 15
 
 var referrerPolicyStrings = []string{
 	"no-referrer",
@@ -205,4 +210,101 @@ var referrerPolicyStrings = []string{
 	"origin-when-cross-origin",
 	"strict-origin-when-cross-origin",
 	"unsafe-url",
+}
+
+var formRelStrings = []string{
+	"alternate",
+	"author",
+	"dns-prefetch",
+	"help",
+	"icon",
+	"license",
+	"next",
+	"pingback",
+	"preconnect",
+	"prefetch",
+	"preload",
+	"prerender",
+	"prev",
+	"search",
+	"stylesheet",
+}
+
+func (r *ReferrerPolicyType) Set(value string) {
+	index := utils.IndexFounder(referrerPolicyStrings, value, referrerPolicyStringCount)
+	*r = ReferrerPolicyType(index)
+}
+func (r *FormRelType) Set(value string) {
+	index := utils.IndexFounder(formRelStrings, value, formRelStringCount)
+	*r = FormRelType(index)
+}
+
+func (c *CrossOriginType) Set(value string) {
+	if value == "anonymous" {
+		*c = CROSS_ORIGIN_ANONYMOUS
+	} else if value == "use-credentials" {
+		*c = CROSS_ORIGIN_USE_CREDENTIALS
+	}
+}
+
+func (t *FormMethodType) Set(value string) {
+	switch value {
+	case "get":
+		*t = FORM_METHOD_GET
+	case "post":
+		*t = FORM_METHOD_POST
+	}
+}
+
+func (e *FormEncType) Set(value string) {
+	switch value {
+	case "text/plain":
+		*e = FORM_ENC_TYPE_TEXT
+	case "multipart/form-data":
+		*e = FORM_ENC_TYPE_MULTIPART
+	case "application/x-www-form-urlencoded":
+		*e = FORM_ENC_TYPE_APPLICATION
+	}
+}
+
+func (t *FormTargetType) Set(value string) {
+	switch value {
+	case "_blank":
+		*t = FORM_TARGET_BLANK
+	case "_self":
+		*t = FORM_TARGET_SELF
+	case "_parent":
+		*t = FORM_TARGET_PARENT
+	case "_top":
+		*t = FORM_TARGET_TOP
+	default:
+		*t = FORM_TARGET_CUSTOM
+	}
+}
+
+func (b *ButtonType) Set(value string) {
+	switch value {
+	case "button":
+		*b = BUTTON_TYPE_BUTTON
+	case "reset":
+		*b = BUTTON_TYPE_RESET
+	case "submit":
+		*b = BUTTON_TYPE_SUBMIT
+	}
+}
+
+func (l *LoadingType) Set(value string) {
+	if value == "eager" {
+		*l = LOADING_TYPE_EAGER
+	} else if value == "lazy" {
+		*l = LOADING_TYPE_LAZY
+	}
+}
+
+func (t *TextAreaWrap) Set(value string) {
+	if value == "hard" {
+		*t = TEXTAREA_WRAP_HARD
+	} else if value == "soft" {
+		*t = TEXTAREA_WRAP_SOFT
+	}
 }
