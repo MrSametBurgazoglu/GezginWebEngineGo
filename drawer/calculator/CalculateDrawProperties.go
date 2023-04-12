@@ -88,10 +88,11 @@ func CalculateYPosOfWidget(currentWidget *widget.Widget) int32 {
 		case enums.CSS_POSITION_TYPE_RELATIVE:
 			if currentWidget.ChildrenIndex > 0 {
 				beforeCurrentWidget = currentWidget.Parent.Children[currentWidget.ChildrenIndex-1]
+				return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H + int32(currentWidget.CssProperties.Top)
 			} else {
 				beforeCurrentWidget = currentWidget.Parent
+				return beforeCurrentWidget.DrawProperties.Rect.Y + int32(currentWidget.CssProperties.Top)
 			}
-			return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H + int32(currentWidget.CssProperties.Top)
 		}
 	} else {
 		beforeCurrentWidget = currentWidget.Parent

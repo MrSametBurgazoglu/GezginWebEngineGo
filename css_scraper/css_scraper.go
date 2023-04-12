@@ -1,6 +1,7 @@
 package css_scraper
 
 import (
+	"gezgin_web_engine/css_scraper/enums"
 	"gezgin_web_engine/css_scraper/structs"
 	"gezgin_web_engine/css_scraper/tree"
 	"gezgin_web_engine/html_scraper/htmlVariables"
@@ -167,6 +168,7 @@ func SetInheritCssProperties(document *widget.Widget) {
 
 func initializeCssDocument(document *widget.Widget) {
 	document.CssProperties = new(structs.CssProperties)
+	document.CssProperties.Display = enums.CSS_DISPLAY_TYPE_BLOCK
 	document.CssProperties.Color = new(structs.ColorRGBA)
 	document.CssProperties.Color.SetColorByRGB(0, 0, 0)
 }

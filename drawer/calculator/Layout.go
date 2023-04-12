@@ -7,6 +7,7 @@ import (
 	"gezgin_web_engine/html_scraper/widget"
 )
 
+// Calculate position and size from top and bottom with go routines simultaneously
 func CalculateLayoutWidthOfWidget(widget *widget.Widget) int {
 	if widget.CssProperties != nil {
 		if widget.CssProperties.Display == enums.CSS_DISPLAY_TYPE_BLOCK {

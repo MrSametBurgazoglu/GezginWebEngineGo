@@ -5,6 +5,7 @@ import (
 	"gezgin_web_engine/html_scraper/htmlVariables"
 	"gezgin_web_engine/html_scraper/widget"
 	"gezgin_web_engine/javascript_interpreter"
+	"gezgin_web_engine/utils"
 	"strings"
 	"sync"
 )
@@ -27,6 +28,9 @@ func UntaggedTextClosed(widget *widget.Widget) {
 }
 
 func ScrapeParameters(widget *widget.Widget, parameters []string, group *sync.WaitGroup) {
+	if len(parameters) > 1 {
+		parameters = utils.MergeAttributes(parameters)
+	}
 	for _, s := range parameters[0:] {
 		println(s)
 		varName, varValue, found := strings.Cut(s, "=")
