@@ -32,8 +32,6 @@ func CalculateHeightOfWidget(widget *widget.Widget) (totalHeight int) {
 
 func CalculateXPosOfWidget(widget *widget.Widget) int32 {
 	if widget.CssProperties != nil {
-		a := widget.CssProperties.Position
-		println(a, enums.CSS_POSITION_TYPE_RELATIVE)
 		switch widget.CssProperties.Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
 			return widget.Parent.DrawProperties.Rect.X

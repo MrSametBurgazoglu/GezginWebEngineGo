@@ -15,9 +15,6 @@ import (
 var wg sync.WaitGroup
 
 func SetCssProperties(currentWidget *widget.Widget) {
-	//if currentWidget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT {
-	//	return // untagged text don't have class or element css properties
-	//}
 	var currentCssProperties *structs.CssProperties
 	for _, class := range currentWidget.StandardHtmlVariables.Class {
 		if currentCssProperties = tree.GetCssPropertiesByClass(class); currentCssProperties != nil {
@@ -77,7 +74,6 @@ func getCssWidget(selector string, channel chan *structs.CssProperties) {
 			cssWidget = tree.CreateNewCssPropertiesByClass(selector[1:])
 		}
 	default:
-		//find index by string to element
 		tag := htmlVariables.GetElementTag(selector[0:])
 		cssWidget = tree.GetCssPropertiesByElement(tag)
 		if cssWidget == nil {
@@ -133,7 +129,6 @@ func ScrapeCssFromStyleTag(widget *widget.Widget) {
 func SetInheritCssProperties(document *widget.Widget) {
 	widgetList := []*widget.Widget{document}
 	widgetIndexList := []int{0}
-	//initialize document
 	currentIndex := 0
 	for widgetIndexList[0] != document.ChildrenCount {
 		if widgetIndexList[currentIndex] == widgetList[currentIndex].ChildrenCount {
@@ -176,7 +171,6 @@ func initializeCssDocument(document *widget.Widget) {
 func ScrapeCssFromDocument(document *widget.Widget) {
 	widgetList := []*widget.Widget{document}
 	widgetIndexList := []int{0}
-	//initialize document
 	initializeCssDocument(document)
 	currentIndex := 0
 	for widgetIndexList[0] != document.ChildrenCount {
@@ -214,18 +208,20 @@ func ScrapeCssFromDocument(document *widget.Widget) {
 func CreateCssPropertiesFromStyleTag(widget *widget.Widget) {
 	wg.Add(1)
 	tree.CssStyleTagList = append(tree.CssStyleTagList, widget)
-	go ScrapeCssFromStyleTag(widget) //maybe we can call this function as goroutine
+	go ScrapeCssFromStyleTag(widget)
 }
 
-func CreateCssPropertiesFromStyleFiles() {
-	for _, s := range tree.CssStyleLinkList {
-		println("file name:", s)
+/*
+	func CreateCssPropertiesFromStyleFiles() {
+		for _, s := range tree.CssStyleLinkList {
+			println("file name:", s)
+		}
 	}
-}
 
 func ExecuteCssScraper() {
 	CreateCssPropertiesFromStyleFiles()
 }
+*/
 
 func WaitCssScrapingOperations() {
 	wg.Wait()

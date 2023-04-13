@@ -32,25 +32,24 @@ func ScrapeParameters(widget *widget.Widget, parameters []string, group *sync.Wa
 		parameters = utils.MergeAttributes(parameters)
 	}
 	for _, s := range parameters[0:] {
-		println(s)
 		varName, varValue, found := strings.Cut(s, "=")
 		if found {
-			println(varName, varValue, "asdad")
-			if isStandard := widget.StandardHtmlVariables.SetStandardVariables(varName, varValue); isStandard == false && widget.HaveAttrAsVar {
-				//widget.VarReaderFunc(widget, varName, varValue)
-				var varReader = widget.WidgetProperties.(VarReaderInterface)
-				varReader.VarReaderFunc(varName, varValue)
+			if isStandard := widget.StandardHtmlVariables.SetStandardVariables(varName, varValue); isStandard == false {
+				var varReader, ok = widget.WidgetProperties.(VarReaderInterface)
+				if ok {
+					varReader.VarReaderFunc(varName, varValue)
+				}
 			}
 		} else {
-			if isStandard := widget.StandardHtmlVariables.SetStandardContextVariables(s); isStandard == false && widget.HaveAttrAsContext {
-				var contextReader = widget.WidgetProperties.(ContextReaderInterface)
-				contextReader.ContextReaderFunc(s)
-				//widget.ContextReaderFunc(widget, s)
+			if isStandard := widget.StandardHtmlVariables.SetStandardContextVariables(s); isStandard == false {
+				var contextReader, ok = widget.WidgetProperties.(ContextReaderInterface)
+				if ok {
+					contextReader.ContextReaderFunc(s)
+				}
 			}
 		}
 	}
 	group.Done()
-	println("scraping parameters finished", widget)
 }
 
 func ScrapeInsideOfTag(widget *widget.Widget, text string, group *sync.WaitGroup) bool {

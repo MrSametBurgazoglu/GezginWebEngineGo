@@ -3,6 +3,7 @@ package structs
 import "gezgin_web_engine/css_scraper/enums"
 
 type CssProperties struct {
+	//this could be bit field
 	AccentColorInherit        bool
 	AlignContentInherit       bool
 	AlignItemsInherit         bool
@@ -67,25 +68,25 @@ type CssProperties struct {
 	Margin             *Margin
 	Padding            *Padding
 	Height             uint
+	Width              uint
 	MinHeight          uint
 	MaxHeight          uint
+	MinWidth           uint
+	MaxWidth           uint
+	Top                uint
+	Bottom             uint
+	Left               uint
+	Right              uint
 	HeightValueType    enums.CssPropertyValueType
 	MinHeightValueType enums.CssPropertyValueType
 	MaxHeightValueType enums.CssPropertyValueType
-	Width              uint
-	MinWidth           uint
-	MaxWidth           uint
 	WidthValueType     enums.CssPropertyValueType
 	MinWidthValueType  enums.CssPropertyValueType
 	MaxWidthValueType  enums.CssPropertyValueType
 	Position           enums.CssPositionType
-	Top                uint
 	TopValueType       enums.CssPropertyValueType
-	Bottom             uint
 	BottomValueType    enums.CssPropertyValueType
-	Left               uint
 	LeftValueType      enums.CssPropertyValueType
-	Right              uint
 	RightValueType     enums.CssPropertyValueType
 	Visibility         enums.CssVisibilityType
 }

@@ -20,14 +20,10 @@ type Widget struct {
 	StandardHtmlVariables standardHtmlTagVariables.StandardHtmlTagVariables
 	CssProperties         *structs.CssProperties
 	DrawProperties        *structs2.DrawProperties
-	VarReaderFunc         func(*Widget, string, string)
-	ContextReaderFunc     func(*Widget, string)
 	RenderWidget          func(*Widget, *sdl.Renderer)
 	DrawWidget            func(*Widget, *sdl.Renderer)
 	Children              []*Widget
 	Parent                *Widget
 	Draw                  bool
 	Rendered              bool
-	HaveAttrAsVar         bool
-	HaveAttrAsContext     bool
 }

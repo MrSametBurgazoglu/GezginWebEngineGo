@@ -47,5 +47,4 @@ func (receiver *HtmlTagScript) VarReaderFunc(variableName string, variableValue 
 
 func SetWidgetPropertiesForScriptTag(widget *widget.Widget) {
 	widget.WidgetProperties = new(HtmlTagLink)
-	widget.HaveAttrAsVar = true
 }

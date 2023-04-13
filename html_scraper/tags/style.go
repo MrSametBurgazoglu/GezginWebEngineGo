@@ -20,5 +20,4 @@ func (receiver *HtmlTagStyle) VarReaderFunc(variableName string, variableValue s
 
 func SetWidgetPropertiesForStyleTag(widget *widget.Widget) {
 	widget.WidgetProperties = new(HtmlTagStyle)
-	widget.HaveAttrAsVar = true
 }

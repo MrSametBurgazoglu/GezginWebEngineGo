@@ -27,10 +27,10 @@ type Background struct {
 	BackgroundColor          *ColorRGBA
 	ImageList                []string
 	BackgroundImageColorList [3]*BackgroundImageColor
+	BackgroundSize           *CssBackgroundSize
 	BackgroundType           enums.CssBackgroundType
 	BackgroundPositionType   enums.CssBackgroundPositionType
 	BackgroundRepeatType     enums.CssBackgroundRepeatType
-	BackgroundSize           *CssBackgroundSize
 	BackgroundAttachmentType enums.CssBackgroundAttachmentType
 	BackgroundBlendModeType  enums.CssBackgroundBlendModeType
 	BackgroundClipType       enums.CssBackgroundClipType

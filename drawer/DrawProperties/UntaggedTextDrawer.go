@@ -23,5 +23,4 @@ func RenderUntaggedTextFunction(widget *widget.Widget, renderer *sdl.Renderer) {
 			&widget.DrawProperties.Rect,
 		)
 	}
-
 }

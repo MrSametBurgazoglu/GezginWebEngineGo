@@ -22,5 +22,4 @@ func (receiver *HtmlTagCanvas) VarReaderFunc(variableName string, variableValue 
 
 func SetWidgetPropertiesForCanvasTag(widget *widget.Widget) {
 	widget.WidgetProperties = new(HtmlTagCanvas)
-	widget.HaveAttrAsVar = true
 }

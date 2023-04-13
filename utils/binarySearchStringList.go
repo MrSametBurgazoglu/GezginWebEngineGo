@@ -2,7 +2,6 @@ package utils
 
 import "strings"
 
-// IndexFounder TODO THIS CAN BE ARRAY NOT SLICE
 func IndexFounder(stringList []string, string string, listCount int) int {
 	var m, result int
 	l := 0

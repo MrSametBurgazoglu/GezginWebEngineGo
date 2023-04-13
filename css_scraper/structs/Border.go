@@ -12,10 +12,11 @@ type BorderWidth struct {
 	BorderWidthLeftInherit   bool
 	BorderWidthRightInherit  bool
 	BorderWidthBottomInherit bool
-	TopBorder                *BorderLineWidth
-	LeftBorder               *BorderLineWidth
-	RightBorder              *BorderLineWidth
-	BottomBorder             *BorderLineWidth
+
+	TopBorder    *BorderLineWidth
+	LeftBorder   *BorderLineWidth
+	RightBorder  *BorderLineWidth
+	BottomBorder *BorderLineWidth
 }
 
 type BorderStyle struct {
@@ -23,10 +24,11 @@ type BorderStyle struct {
 	BorderStyleLeftInherit   bool
 	BorderStyleRightInherit  bool
 	BorderStyleBottomInherit bool
-	BorderStyleTypeTop       enums.CssBorderStyleType
-	BorderStyleTypeBottom    enums.CssBorderStyleType
-	BorderStyleTypeLeft      enums.CssBorderStyleType
-	BorderStyleTypeRight     enums.CssBorderStyleType
+
+	BorderStyleTypeTop    enums.CssBorderStyleType
+	BorderStyleTypeBottom enums.CssBorderStyleType
+	BorderStyleTypeLeft   enums.CssBorderStyleType
+	BorderStyleTypeRight  enums.CssBorderStyleType
 }
 
 type BorderColor struct {
@@ -34,10 +36,11 @@ type BorderColor struct {
 	BorderColorLeftInherit   bool
 	BorderColorRightInherit  bool
 	BorderColorBottomInherit bool
-	TopBorderColor           *ColorRGBA
-	BottomBorderColor        *ColorRGBA
-	RightBorderColor         *ColorRGBA
-	LeftBorderColor          *ColorRGBA
+
+	TopBorderColor    *ColorRGBA
+	BottomBorderColor *ColorRGBA
+	RightBorderColor  *ColorRGBA
+	LeftBorderColor   *ColorRGBA
 }
 
 type BorderRadius struct {
@@ -45,14 +48,16 @@ type BorderRadius struct {
 	BorderTopRightRadiusInherit    bool
 	BorderBottomLeftRadiusInherit  bool
 	BorderBottomRightRadiusInherit bool
-	BorderTopLeftRadiusType        enums.CssBorderRadiusType
-	BorderTopRightRadiusType       enums.CssBorderRadiusType
-	BorderBottomLeftRadiusType     enums.CssBorderRadiusType
-	BorderBottomRightRadiusType    enums.CssBorderRadiusType
-	BorderTopLeftRadiusValue       int
-	BorderTopRightRadiusValue      int
-	BorderBottomLeftRadiusValue    int
-	BorderBottomRightRadiusValue   int
+
+	BorderTopLeftRadiusValue     int
+	BorderTopRightRadiusValue    int
+	BorderBottomLeftRadiusValue  int
+	BorderBottomRightRadiusValue int
+
+	BorderTopLeftRadiusType     enums.CssBorderRadiusType
+	BorderTopRightRadiusType    enums.CssBorderRadiusType
+	BorderBottomLeftRadiusType  enums.CssBorderRadiusType
+	BorderBottomRightRadiusType enums.CssBorderRadiusType
 }
 
 type BorderSpacing struct {

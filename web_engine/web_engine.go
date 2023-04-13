@@ -18,7 +18,6 @@ func GetDocument() *widget.Widget {
 func OpenWebEngine(fileUrl string) {
 	//initialize drawer
 	document = html_scraper.ScrapeHtmlFromFile(fileUrl)
-	css_scraper.ExecuteCssScraper()
 	css_scraper.WaitCssScrapingOperations()
 	css_scraper.ScrapeCssFromDocument(document)
 	css_scraper.SetInheritCssProperties(document)
@@ -31,7 +30,7 @@ func InitDrawer() {
 }
 
 func DrawPage(renderer *sdl.Renderer) {
-	drawer.SetDrawPropertiesDocument(document, renderer)
+	drawer.SetDrawPropertiesDocument(document)
 	drawer.DrawDocument(document, renderer)
 }
 
