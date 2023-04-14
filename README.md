@@ -5,21 +5,21 @@ It's and Experimental Browser Engine
 
 Supported Html Elements for Parsing
 
-<a>
-<button>
-<canvas>
-<details>
-<img>
-<label>
-<link>
-<script>
-<style>
-<textarea>
+a
+button
+canvas
+details
+img
+label
+link
+script
+style
+textarea
 
 Supported Html Elements for Drawing
-<html>
-<body>
-<div>
+html
+body
+div
 
 Supported Css Properties
 accent-color
