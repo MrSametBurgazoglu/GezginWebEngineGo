@@ -48,6 +48,14 @@ Html File Showed Above As Screenshot
 </html>
 ```
 
+### Run
+```
+git clone https://github.com/MrSametBurgazoglu/GezginWebEngineGo.git
+cd GezginWebEngineGo
+go get .
+go run main/main.go
+```
+
 
 # Supported Html Elements for Parsing
 
