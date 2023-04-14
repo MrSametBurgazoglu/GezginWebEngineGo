@@ -31,9 +31,9 @@ type Animation struct {
 	AnimationDelay                 int
 	AnimationDuration              int
 	AnimationIterationCount        int
+	WhichAnimationTimingPartActive int // 0, 1, 2
 	AnimationDirection             enums.CssAnimationDirectionType
 	AnimationFillMode              enums.CssAnimationFillModeType
 	AnimationPlayState             enums.CssAnimationPlayStateType
 	AnimationTimingFunction        cssAnimationTimingFunction
-	WhichAnimationTimingPartActive int // 0, 1, 2
 }

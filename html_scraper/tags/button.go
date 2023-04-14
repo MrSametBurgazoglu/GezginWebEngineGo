@@ -52,6 +52,4 @@ func (receiver *HtmlTagButton) VarReaderFunc(variableName string, variableValue 
 
 func SetWidgetPropertiesForButtonTag(widget *widget.Widget) {
 	widget.WidgetProperties = new(HtmlTagButton)
-	widget.HaveAttrAsVar = true
-	widget.HaveAttrAsContext = true
 }

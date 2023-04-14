@@ -8,7 +8,6 @@ import (
 
 var ScriptElements []*widget.Widget
 
-var currentIsolate *v8.Isolate
 var globalDocument *widget.Widget
 
 func scrapeScriptElements(context *v8.Context, element *widget.Widget) {

@@ -7,7 +7,6 @@ import (
 
 const cssPropertyCount = 147
 
-// TODO WILL "ALL" ADDED
 var cssPropertiesNameList = []string{
 	"accent-color",
 	"align-content",

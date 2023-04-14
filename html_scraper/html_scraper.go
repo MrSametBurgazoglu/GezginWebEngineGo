@@ -1,7 +1,6 @@
 package html_scraper
 
 import (
-	"fmt"
 	"gezgin_web_engine/drawer/DrawProperties"
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/drawer/structs"
@@ -13,10 +12,6 @@ import (
 	"strings"
 	"sync"
 )
-
-func FreeHtmlTree() {
-	fmt.Println("heyyo")
-}
 
 func ScrapeHtmlFromFile(fileUrl string) *widget.Widget {
 	dat, err := os.ReadFile(fileUrl)
@@ -56,11 +51,9 @@ func ScrapeHtmlFromFile(fileUrl string) *widget.Widget {
 				currentWidget.ChildrenCount++
 				currentWidget.Children = append(currentWidget.Children, &newWidget)
 				tagScraper.UntaggedTextClosed(&newWidget)
-				println("untagged text", data[seek:seek+result])
 			}
 			result2 := strings.Index(data[seek+result:], ">")
 			if data[seek+result+1] == '/' {
-				println("tag ended", data[seek+result+1:seek+result+result2])
 				currentWidget = currentWidget.Parent
 			} else {
 				newWidget := widget.Widget{
@@ -70,7 +63,6 @@ func ScrapeHtmlFromFile(fileUrl string) *widget.Widget {
 				}
 				currentWidget.ChildrenCount++
 				currentWidget.Children = append(currentWidget.Children, &newWidget)
-				println("inside of tag", data[seek+result+1:seek+result+result2])
 				currentWidget = &newWidget
 				if tagScraper.ScrapeInsideOfTag(currentWidget, data[seek+result+1:seek+result+result2], &wg) {
 					currentWidget = currentWidget.Parent

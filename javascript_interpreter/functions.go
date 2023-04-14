@@ -14,7 +14,6 @@ func executeAfter(functionName string, timeMs int, ctx *v8.Context) {
 		println("script error", err.Error())
 		return
 	}
-	println("function ended")
 }
 
 func createTimeoutFunc(iso *v8.Isolate, global *v8.ObjectTemplate) {
@@ -28,6 +27,6 @@ func createTimeoutFunc(iso *v8.Isolate, global *v8.ObjectTemplate) {
 	})
 	err := global.Set("setTimeout", setTimeout)
 	if err != nil {
-		println(err.Error(), "setTimeout")
+		println(err.Error(), "setTimeout not implemted")
 	}
 }

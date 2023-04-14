@@ -40,5 +40,4 @@ func (receiver *HtmlTagLink) VarReaderFunc(variableName string, variableValue st
 
 func SetWidgetPropertiesForLinkTag(widget *widget.Widget) {
 	widget.WidgetProperties = new(HtmlTagLink)
-	widget.HaveAttrAsVar = true
 }

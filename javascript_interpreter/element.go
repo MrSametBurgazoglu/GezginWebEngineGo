@@ -40,11 +40,9 @@ func setAttributeByID(elementId, attribute, value string) {
 	}
 	switch attribute {
 	case "style":
-		println("set style attribute", value)
 		element.StandardHtmlVariables.Style = value
 		css_scraper.SetCssProperties(element)
 		globalDocument.Rendered = false
-		println(element.CssProperties.Background.BackgroundColor)
 	}
 }
 

@@ -9,11 +9,9 @@ func ColorPropertySetValue(properties *structs.CssProperties, value string) {
 		properties.ColorInherit = true
 	} else {
 		properties.ColorInherit = false
-		/*
-			if properties.Color == nil {
-				properties.Color = new()
-			}
-		*/
+		if properties.Color == nil {
+			properties.Color = new(structs.ColorRGBA)
+		}
 	}
 }
 

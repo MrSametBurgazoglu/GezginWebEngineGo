@@ -2,8 +2,6 @@ package javascript_interpreter
 
 import v8 "rogchap.com/v8go"
 
-var DocumentTemplate *v8.ObjectTemplate
-
 func setDocumentTemplate(iso *v8.Isolate, context *v8.Context, template *v8.ObjectTemplate) {
 	getElementByID := v8.NewFunctionTemplate(iso, func(info *v8.FunctionCallbackInfo) *v8.Value {
 		elementObj, _ := Element.NewInstance(context)
@@ -12,9 +10,4 @@ func setDocumentTemplate(iso *v8.Isolate, context *v8.Context, template *v8.Obje
 		return elementObj.Value
 	})
 	template.Set("getElementById", getElementByID)
-}
-
-func createDocumentObject(context *v8.Context) *v8.Object {
-	documentObj, _ := DocumentTemplate.NewInstance(context)
-	return documentObj
 }

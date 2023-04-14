@@ -57,6 +57,4 @@ func (receiver *HtmlTagImg) VarReaderFunc(variableName string, variableValue str
 
 func SetWidgetPropertiesForImgTag(widget *widget.Widget) {
 	widget.WidgetProperties = new(HtmlTagImg)
-	widget.HaveAttrAsVar = true
-	widget.HaveAttrAsContext = true
 }

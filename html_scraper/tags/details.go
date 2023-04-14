@@ -15,5 +15,4 @@ func (receiver *HtmlTagDetails) ContextReaderFunc(context string) {
 
 func SetWidgetPropertiesForDetailsTag(widget *widget.Widget) {
 	widget.WidgetProperties = new(HtmlTagDetails)
-	widget.HaveAttrAsContext = true
 }

@@ -58,6 +58,4 @@ func (receiver *HtmlTagTextArea) VarReaderFunc(variableName string, variableValu
 
 func SetWidgetPropertiesForTextAreaTag(widget *widget.Widget) {
 	widget.WidgetProperties = new(HtmlTagTextArea)
-	widget.HaveAttrAsVar = true
-	widget.HaveAttrAsContext = true
 }

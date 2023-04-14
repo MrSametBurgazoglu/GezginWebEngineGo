@@ -18,5 +18,4 @@ func (receiver *HtmlTagLabel) VarReaderFunc(variableName string, variableValue s
 
 func SetWidgetPropertiesForLabelTag(widget *widget.Widget) {
 	widget.WidgetProperties = new(HtmlTagLabel)
-	widget.HaveAttrAsVar = true
 }

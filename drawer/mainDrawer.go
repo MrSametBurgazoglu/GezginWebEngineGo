@@ -8,7 +8,7 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-func allChildsRendered(widget *widget.Widget) bool {
+func allChildrenRendered(widget *widget.Widget) bool {
 	for _, child := range widget.Children {
 		if child.Rendered == false {
 			return false
@@ -55,7 +55,7 @@ func RenderDocument(document *widget.Widget, renderer *sdl.Renderer) {
 	for keepGo {
 		keepGo = false
 		for _, w := range widgetList {
-			if allChildsRendered(w) {
+			if allChildrenRendered(w) {
 				w.RenderWidget(w, renderer)
 				w.Rendered = true
 			}
@@ -108,16 +108,7 @@ func setWHForWidget(widget *widget.Widget, channel chan *widget.Widget) {
 	height := calculator.CalculateHeightOfWidget(widget)
 	widget.DrawProperties.Rect.W = int32(width)
 	widget.DrawProperties.Rect.H = int32(height)
-	contentWidth := calculator.CalculateContentWidthOfWidget(widget)
-	contentHeight := calculator.CalculateContentHeightOfWidget(widget)
-	widget.DrawProperties.ContentRect.W = int32(contentWidth)
-	widget.DrawProperties.ContentRect.H = int32(contentHeight)
-	layoutWidth := calculator.CalculateLayoutWidthOfWidget(widget)
-	layoutHeight := calculator.CalculateLayoutHeightOfWidget(widget)
-	widget.DrawProperties.LayoutRect.W = int32(layoutWidth)
-	widget.DrawProperties.LayoutRect.H = int32(layoutHeight)
 	widget.Rendered = true
-	println("rendered", widget)
 	channel <- widget
 }
 
@@ -128,7 +119,7 @@ func setXYForWidget(widget *widget.Widget) {
 	widget.DrawProperties.Rect.Y = posY
 }
 
-func SetDrawPropertiesDocument(document *widget.Widget, renderer *sdl.Renderer) {
+func SetDrawPropertiesDocument(document *widget.Widget) {
 	widgetList := []*widget.Widget{document}
 	var edgeList []*widget.Widget
 	length := len(widgetList)
@@ -160,10 +151,9 @@ func SetDrawPropertiesDocument(document *widget.Widget, renderer *sdl.Renderer) 
 		keepGo = false
 		widgetCount := 0
 		for _, w := range widgetList {
-			if allChildsRendered(w) {
+			if allChildrenRendered(w) {
 				widgetCount += 1
 				go setWHForWidget(w, channel)
-				//setWHForWidget(w)
 			}
 		}
 		for widgetCount > 0 {
