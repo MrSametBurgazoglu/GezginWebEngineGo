@@ -57,59 +57,62 @@ go run main/main.go
 ```
 
 
-# Supported Html Elements for Parsing
+# Supported Html Elements
 
-a  
-button  
-canvas  
-details  
-img  
-label  
-link  
-script  
-style  
-textarea  
-
-# Supported Html Elements for Drawing
-html  
-body  
-div  
+| Html Elements    | Parsing | Drawing |
+|------------------|---------|---------|
+| ```<a>```        | &#9745; |         |
+| ```<body>```     | &#9745; | &#9745; |
+| ```<button>```   | &#9745; |         |
+| ```<canvas>```   | &#9745; |         |
+| ```<details>```  | &#9745; |         |
+| ```<div>```      | &#9745; | &#9745; |
+| ```<html>```     | &#9745; | &#9745; |
+| ```<img>```      | &#9745; |         |
+| ```<label>```    | &#9745; |         |
+| ```<link>```     | &#9745; |         |
+| ```<script>```   | &#9745; |         |
+| ```<style>```    | &#9745; |         |
+| ```<textarea>``` | &#9745; |         |
 
 # Supported Css Properties
-accent-color  
-align-content  
-align-items  
-align-self  
-background-blend-mode  
-background-repeat  
-background-origin  
-background-clip  
-background-attachment  
-background-color  
-border  
-color  
-height  
-min-height  
-max-height  
-width  
-min-width  
-max-width  
-margin-top  
-margin-bottom  
-margin-left  
-margin-right  
-margin  
-padding-top  
-padding-bottom  
-padding-left  
-padding-right  
-padding  
-position  
-top  
-bottom  
-left  
-right  
-visibility  
+
+| Css Properties               | Parsing | In-Use  |
+|------------------------------|---------|---------|
+| ```accent-color```           | &#9745; |
+| ```align-content```          | &#9745; |
+| ```align-items ```           | &#9745; |
+| ```align-self```             | &#9745; |
+| ```background-blend-mode ``` | &#9745; |
+| ```background-repeat```      | &#9745; |
+| ```background-origin```      | &#9745; |
+| ```background-clip```        | &#9745; |
+| ```background-attachment```  | &#9745; |
+| ```background-color```       | &#9745; | &#9745; |
+| ```border```                 | &#9745; |
+| ```color```                  | &#9745; | &#9745; |
+| ```height```                 | &#9745; |
+| ```min-height```             | &#9745; |
+| ```max-height```             | &#9745; |
+| ```width```                  | &#9745; |
+| ```min-width```              | &#9745; |
+| ```max-width```              | &#9745; |
+| ```margin-top```             | &#9745; |
+| ```margin-bottom```          | &#9745; |
+| ```margin-left```            | &#9745; |
+| ```margin-right```           | &#9745; |
+| ```margin```                 | &#9745; |
+| ```padding-top```            | &#9745; |
+| ```padding-bottom```         | &#9745; |
+| ```padding-left```           | &#9745; |
+| ```padding-right```          | &#9745; |
+| ```padding```                | &#9745; |
+| ```position```               | &#9745; | &#9745; |
+| ```top```                    | &#9745; |
+| ```bottom```                 | &#9745; |
+| ```left```                   | &#9745; |
+| ```right```                  | &#9745; |
+| ```visibility```             | &#9745; |
 
 ### It uses SDL 2.0 for drawing(It will be replaced by OpenGL or Skia)
 ### It uses v8 js-engine for executing javascript code

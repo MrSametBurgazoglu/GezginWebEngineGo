@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"gezgin_web_engine/web_engine"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
@@ -9,6 +10,7 @@ import (
 	"os"
 	"runtime"
 	"runtime/pprof"
+	"time"
 )
 
 var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to `file`")
@@ -27,7 +29,6 @@ func main() {
 		}
 		defer pprof.StopCPUProfile()
 	}
-
 	var err error
 	var font *ttf.Font
 
@@ -46,9 +47,10 @@ func main() {
 	}
 	defer font.Close()
 
-	//runtime.LockOSThread()
-
+	startTime := time.Now()
 	web_engine.OpenWebEngine("exampleHtmlFiles/example.html")
+	fmt.Println("Total time taken ", time.Since(startTime).Milliseconds())
+
 	web_engine.InitDrawer()
 	window, renderer, err := sdl.CreateWindowAndRenderer(800, 600, sdl.WINDOW_SHOWN)
 	if err != nil {
