@@ -1,10 +1,10 @@
 package web_engine
 
 import (
-	"gezgin_web_engine/css_scraper"
+	"gezgin_web_engine/cssParser"
 	"gezgin_web_engine/drawer"
-	"gezgin_web_engine/html_scraper"
-	"gezgin_web_engine/html_scraper/widget"
+	"gezgin_web_engine/htmlParser"
+	"gezgin_web_engine/htmlParser/widget"
 	"gezgin_web_engine/javascript_interpreter"
 	"github.com/veandco/go-sdl2/sdl"
 )
@@ -17,10 +17,10 @@ func GetDocument() *widget.Widget {
 
 func OpenWebEngine(fileUrl string) {
 	//initialize drawer
-	document = html_scraper.ScrapeHtmlFromFile(fileUrl)
-	css_scraper.WaitCssScrapingOperations()
-	css_scraper.ScrapeCssFromDocument(document)
-	css_scraper.SetInheritCssProperties(document)
+	document = htmlParser.ParseHtmlFromFile(fileUrl)
+	cssParser.WaitCssScrapingOperations()
+	cssParser.ParseCssFromDocument(document)
+	cssParser.SetInheritCssProperties(document)
 	javascript_interpreter.InitializeJSInterpreter(document)
 }
 

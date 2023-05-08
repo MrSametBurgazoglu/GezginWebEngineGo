@@ -1,10 +1,10 @@
 package calculator
 
 import (
-	"gezgin_web_engine/css_scraper/enums"
+	"gezgin_web_engine/cssParser/enums"
 	"gezgin_web_engine/drawer/ScreenProperties"
-	"gezgin_web_engine/html_scraper/htmlVariables"
-	"gezgin_web_engine/html_scraper/widget"
+	"gezgin_web_engine/htmlParser/htmlVariables"
+	"gezgin_web_engine/htmlParser/widget"
 )
 
 func CalculateWidthOfWidget(widget *widget.Widget) int {
