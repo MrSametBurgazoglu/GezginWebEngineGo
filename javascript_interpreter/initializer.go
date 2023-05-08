@@ -1,8 +1,8 @@
 package javascript_interpreter
 
 import (
-	"gezgin_web_engine/html_scraper/tags"
-	"gezgin_web_engine/html_scraper/widget"
+	"gezgin_web_engine/htmlParser/tags"
+	"gezgin_web_engine/htmlParser/widget"
 	v8 "rogchap.com/v8go"
 )
 
@@ -10,7 +10,7 @@ var ScriptElements []*widget.Widget
 
 var globalDocument *widget.Widget
 
-func scrapeScriptElements(context *v8.Context, element *widget.Widget) {
+func parseScriptElements(context *v8.Context, element *widget.Widget) {
 	scriptWidget, ok := element.Children[0].WidgetProperties.(tags.UntaggedText)
 	if ok {
 		_, err := context.RunScript(scriptWidget.Value, "script.js")
@@ -34,6 +34,6 @@ func InitializeJSInterpreter(document *widget.Widget) {
 	ctx.Global().Set("document", documentObj)
 	CreateElementTemplate(iso)
 	for _, script := range ScriptElements {
-		scrapeScriptElements(ctx, script)
+		parseScriptElements(ctx, script)
 	}
 }

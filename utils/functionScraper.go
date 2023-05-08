@@ -2,7 +2,7 @@ package utils
 
 import "strings"
 
-func ScrapeFunction(value string) (functionName string, functionParameters []string, ok bool) {
+func ParseFunction(value string) (functionName string, functionParameters []string, ok bool) {
 	cleanString := strings.TrimSpace(value)
 	index1 := strings.Index(cleanString, "(")
 	if index1 != -1 {

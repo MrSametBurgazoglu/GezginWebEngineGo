@@ -4,7 +4,7 @@ import (
 	"gezgin_web_engine/drawer/Fonts"
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/drawer/calculator"
-	"gezgin_web_engine/html_scraper/widget"
+	"gezgin_web_engine/htmlParser/widget"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

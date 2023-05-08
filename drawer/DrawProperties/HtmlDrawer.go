@@ -2,7 +2,7 @@ package DrawProperties
 
 import (
 	"gezgin_web_engine/drawer/drawerBackend"
-	"gezgin_web_engine/html_scraper/widget"
+	"gezgin_web_engine/htmlParser/widget"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

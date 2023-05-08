@@ -1,7 +1,7 @@
 package drawerBackend
 
 import (
-	"gezgin_web_engine/css_scraper/structs"
+	"gezgin_web_engine/cssParser/structs"
 	"gezgin_web_engine/drawer/Fonts"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"

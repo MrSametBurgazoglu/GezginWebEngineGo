@@ -1,8 +1,8 @@
 package javascript_interpreter
 
 import (
-	"gezgin_web_engine/css_scraper"
-	"gezgin_web_engine/html_scraper/widget"
+	"gezgin_web_engine/cssParser"
+	"gezgin_web_engine/htmlParser/widget"
 	v8 "rogchap.com/v8go"
 )
 
@@ -41,7 +41,7 @@ func setAttributeByID(elementId, attribute, value string) {
 	switch attribute {
 	case "style":
 		element.StandardHtmlVariables.Style = value
-		css_scraper.SetCssProperties(element)
+		cssParser.SetCssProperties(element)
 		globalDocument.Rendered = false
 	}
 }
