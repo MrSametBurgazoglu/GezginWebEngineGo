@@ -16,7 +16,6 @@ func GetDocument() *widget.Widget {
 }
 
 func OpenWebEngine(fileUrl string) {
-	//initialize drawer
 	document = htmlParser.ParseHtmlFromFile(fileUrl)
 	cssParser.WaitCssScrapingOperations()
 	cssParser.ParseCssFromDocument(document)

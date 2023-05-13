@@ -9,7 +9,7 @@ type HtmlTagImg struct {
 	isMap          bool
 	alt            string
 	sizes          string
-	src            string
+	Src            string
 	srcSet         string
 	useMap         string
 	longDesc       string
@@ -47,7 +47,7 @@ func (receiver *HtmlTagImg) VarReaderFunc(variableName string, variableValue str
 	case "sizes":
 		receiver.sizes = variableValue
 	case "src":
-		receiver.src = variableValue
+		receiver.Src = variableValue[1 : len(variableValue)-1]
 	case "srcset":
 		receiver.srcSet = variableValue
 	case "usemap":

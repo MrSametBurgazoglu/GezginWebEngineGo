@@ -8,18 +8,22 @@ import (
 )
 
 func CalculateWidthOfWidget(widget *widget.Widget) int {
-	if widget.CssProperties != nil {
+	if widget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT {
+		return int(widget.DrawProperties.Rect.W)
+	} else if widget.HtmlTag == htmlVariables.HTML_IMG {
+		return int(widget.DrawProperties.Rect.W)
+	} else if widget.CssProperties != nil {
 		if widget.CssProperties.Display == enums.CSS_DISPLAY_TYPE_BLOCK {
 			return ScreenProperties.WindowWidth
 		}
-	} else if widget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT {
-		return int(widget.DrawProperties.Rect.W)
 	}
 	return ScreenProperties.WindowWidth
 }
 
 func CalculateHeightOfWidget(widget *widget.Widget) (totalHeight int) {
 	if widget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT {
+		return int(widget.DrawProperties.Rect.H)
+	} else if widget.HtmlTag == htmlVariables.HTML_IMG {
 		return int(widget.DrawProperties.Rect.H)
 	}
 	for i := 0; i < widget.ChildrenCount; i++ {

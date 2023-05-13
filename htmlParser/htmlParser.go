@@ -41,12 +41,13 @@ func ParseHtmlFromFile(fileUrl string) *widget.Widget {
 		if data[seek] == ' ' || data[seek] == '\n' {
 			seek += 1
 		} else {
-			result := strings.Index(data[seek:], "<")
-			if result > 0 {
+			start := strings.Index(data[seek:], "<")
+			end := strings.Index(data[seek+start:], ">")
+			if start > 0 {
 				//make untagged text to strip
 				newWidget := widget.Widget{
 					HtmlTag:          htmlVariables.HTML_UNTAGGED_TEXT,
-					WidgetProperties: tags.UntaggedText{Value: data[seek : seek+result]},
+					WidgetProperties: tags.UntaggedText{Value: data[seek : seek+start]},
 					Parent:           currentWidget,
 					ChildrenIndex:    currentWidget.ChildrenCount,
 					RenderWidget:     DrawProperties.RenderUntaggedTextFunction,
@@ -59,8 +60,7 @@ func ParseHtmlFromFile(fileUrl string) *widget.Widget {
 				currentWidget.Children = append(currentWidget.Children, &newWidget)
 				tagParser.UntaggedTextClosed(&newWidget)
 			}
-			result2 := strings.Index(data[seek+result:], ">")
-			if data[seek+result+1] == '/' {
+			if data[seek+start+1] == '/' {
 				currentWidget = currentWidget.Parent
 			} else {
 				newWidget := widget.Widget{
@@ -71,11 +71,11 @@ func ParseHtmlFromFile(fileUrl string) *widget.Widget {
 				currentWidget.ChildrenCount++
 				currentWidget.Children = append(currentWidget.Children, &newWidget)
 				currentWidget = &newWidget
-				if tagParser.ParseInsideOfTag(currentWidget, data[seek+result+1:seek+result+result2], &wg) {
+				if tagParser.ParseInsideOfTag(currentWidget, data[seek+start+1:seek+start+end], &wg) {
 					currentWidget = currentWidget.Parent
 				}
 			}
-			seek += result + result2 + 1
+			seek += start + end + 1
 		}
 	}
 	wg.Wait()

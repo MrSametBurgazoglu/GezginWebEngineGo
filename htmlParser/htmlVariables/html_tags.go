@@ -294,7 +294,7 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_HTML, draw: true, renderFunction: DrawProperties.RenderHtmlFunction, drawFunction: DrawProperties.DrawHtmlFunction},
 	{tag: HTML_I, draw: true},
 	{tag: HTML_IFRAME, draw: true},
-	{tag: HTML_IMG, endTag: true, draw: true},
+	{tag: HTML_IMG, endTag: true, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForImgTag, renderFunction: DrawProperties.RenderImgFunction, drawFunction: DrawProperties.DrawImgFunction},
 	{tag: HTML_INPUT, endTag: true, draw: true},
 	{tag: HTML_INS, draw: true},
 	{tag: HTML_KBD, draw: true},
