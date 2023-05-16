@@ -3,47 +3,36 @@ Gezgin Web Engine written in Go Completely From Scratch
 
 # It's and Experimental Browser Engine
 
-![image](https://user-images.githubusercontent.com/16630690/232159321-510a4fcf-b080-4835-b453-dcf45abb2408.png)
+![Screenshot from 2023-05-16 22:22:19](https://github.com/MrSametBurgazoglu/GezginWebEngineGo/assets/16630690/54615d1e-d1e2-403d-99e5-da99c9538410)
 
 Html File Showed Above As Screenshot
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Title</title>
-    <script>
-        const colors = ["blue", "red", "green", "cyan", "darkblue"];
-        function change_div_background_color() {
-            let random = 0
-            random = Math.floor(Math.random() * colors.length);
-            document.getElementById("div1").setAttribute("style", "background-color:"+colors[random])
-            random = Math.floor(Math.random() * colors.length);
-            document.getElementById("div2").setAttribute("style", "background-color:"+colors[random])
-            random = Math.floor(Math.random() * colors.length);
-            document.getElementById("div3").setAttribute("style", "background-color:"+colors[random])
-            setTimeout(change_div_background_color, 3000);
-        }
-        setTimeout(change_div_background_color, 3000);
-    </script>
-    <style>
-        .mydiv {background-color: red; position: relative; left: 30px; top: 30px}
-    </style>
-</head>
-<body>
-    <div style = "position:relative; left:20px; top:20px; background-color: black">
-        <div id="div1" style ="background-color:darkblue">
-            Hello World
-        </div>
-        <div id="div2" style=" background-color:green">
-            This is new Hello World
-        </div>
-        <div id="div3 " class="mydiv">
-            This is 3rd div
-            <div style=" background-color:red ">
-                This is an inside div
-            </div>
-        </div>
-    </div>
+<body style="background-color:rgb(33, 37, 41); color: white">
+<div style="position:relative;left:300px">
+<h1>What is browser engine and how does it work?</h1>
+</div>
+
+<div style="position: absolute; left:20px; top:50px">
+<img alt="What is browser engine and how does it work?" width="413" height="373" src="browser-diagram.png">
+</div>
+
+<div style="position: absolute; left:470px; top:50px; width: 800px">
+<h2>Name and scope</h2>
+<p>A browser engine is not a stand-alone computer program but a critical piece of a more extensive program, such as a web browser, from which the term is derived. The word "engine" is an analogy to the engine of a car.</p>
+
+<p>Besides "browser engine", two other terms are in everyday use regarding related concepts: "layout engine" and "rendering engine".In theory, layout and rendering (or "painting") could be handled by different engines. In practice, however, they are tightly coupled and rarely considered separately.<p>
+
+<p>In addition to layout and rendering, a browser engine enforces the security policy between documents, handles navigation through hyperlinks and data submitted through forms, and implements the Document Object Model (DOM) data structure exposed to page scripts</p>
+
+<p>Executing JavaScript (JS) code is a separate matter, however, as every significant web browser uses a dedicated engine for this. The JS language was initially created for use in browsers, but it is now used elsewhere, too, so the implementation of JS engines is decoupled from browser engines. The two engines work in concert via the shared DOM data structure in a web browser.</p>
+
+<h2>Layout and rendering</h2>
+
+<p>The layout of a web page is typically specified by Cascading Style Sheets (CSS). Each style sheet is a series of rules which the browser engine interprets. For example, some rules specify typography details, such as font, color, and text size. The engine combines all relevant CSS rules to calculate precise graphical coordinates for the visual representation it will paint on the screen.</p>
+
+</div>
 </body>
 </html>
 ```
@@ -76,6 +65,7 @@ go run main/main.go
 | ```<textarea>``` | &#9745; |         |
 
 # Supported Css Properties
+
 
 | Css Properties               | Parsing | In-Use  |
 |------------------------------|---------|---------|
