@@ -24,7 +24,6 @@ func OpenWebEngine(fileUrl string) {
 }
 
 func InitDrawer(height, width int) {
-	drawer.LoadDefaultFont()
 	drawer.SetWindowSize(height, width)
 }
 

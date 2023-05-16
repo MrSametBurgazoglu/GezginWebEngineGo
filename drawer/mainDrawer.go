@@ -1,7 +1,6 @@
 package drawer
 
 import (
-	"gezgin_web_engine/drawer/Fonts"
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/drawer/calculator"
 	"gezgin_web_engine/htmlParser/htmlVariables"
@@ -20,10 +19,6 @@ func allChildrenRendered(widget *widget.Widget) bool {
 
 func SetWindowSize(height int, width int) {
 	ScreenProperties.SetWindowSize(height, width)
-}
-
-func LoadDefaultFont() {
-	Fonts.InitializeFont()
 }
 
 func RenderDocument(document *widget.Widget, renderer *sdl.Renderer) {

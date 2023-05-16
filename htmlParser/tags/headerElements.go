@@ -7,12 +7,12 @@ import (
 
 func SetWidgetPropertiesForH1Tag(widget *widget.Widget) {
 	widget.CssProperties.Font = new(structs.Font)
-	widget.CssProperties.Font.FontSizeValue = 16
+	widget.CssProperties.Font.FontSizeValue = 24
 }
 
 func SetWidgetPropertiesForH2Tag(widget *widget.Widget) {
 	widget.CssProperties.Font = new(structs.Font)
-	widget.CssProperties.Font.FontSizeValue = 14
+	widget.CssProperties.Font.FontSizeValue = 20
 }
 
 func SetWidgetPropertiesForH3Tag(widget *widget.Widget) {

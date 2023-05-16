@@ -312,7 +312,7 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_OPTGROUP},
 	{tag: HTML_OPTION},
 	{tag: HTML_OUTPUT, draw: true},
-	{tag: HTML_P, draw: true, renderFunction: DrawProperties.RenderPFunction, drawFunction: DrawProperties.DrawPFunction},
+	{tag: HTML_P, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForPTag, renderFunction: DrawProperties.RenderPFunction, drawFunction: DrawProperties.DrawPFunction},
 	{tag: HTML_PARAM, endTag: true},
 	{tag: HTML_PICTURE},
 	{tag: HTML_PRE},

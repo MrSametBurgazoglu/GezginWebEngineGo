@@ -20,9 +20,6 @@ func findLastSpace(text string, last int) int {
 }
 
 func splitTextAndRenderByLines(text string, renderer *sdl.Renderer, font *ttf.Font, maxWidth int) string {
-	if font == nil {
-		font = Fonts.DefaultFont
-	}
 	println(text)
 	var Lines []string
 	var err error
@@ -30,7 +27,7 @@ func splitTextAndRenderByLines(text string, renderer *sdl.Renderer, font *ttf.Fo
 	length := len(text)
 	start = 0
 	end = length
-	for start != length {
+	for start < length {
 		currentWidth, _, err = font.SizeUTF8(text[start:end])
 		for currentWidth > maxWidth {
 			end = findLastSpace(text, end)
@@ -40,7 +37,7 @@ func splitTextAndRenderByLines(text string, renderer *sdl.Renderer, font *ttf.Fo
 			}
 		}
 		Lines = append(Lines, text[start:end])
-		start = end
+		start = end + 1
 		end = length
 	}
 	return strings.Join(Lines, "\n")
@@ -53,7 +50,11 @@ func DrawUntaggedTextFunction(widget *widget.Widget, renderer *sdl.Renderer) {
 func RenderUntaggedTextFunction(widget *widget.Widget, renderer *sdl.Renderer) {
 	drawText, ok := widget.WidgetProperties.(tags.UntaggedText)
 	if widget.Parent.DrawProperties.Font == nil {
-		widget.Parent.DrawProperties.Font = Fonts.DefaultFont
+		if widget.Parent.CssProperties.Font != nil {
+			widget.Parent.DrawProperties.Font = Fonts.GetFont(widget.Parent.CssProperties.Font.FontSizeValue)
+		} else {
+			widget.Parent.DrawProperties.Font = Fonts.GetFont(14)
+		}
 	}
 	if ok {
 		if currentWidth, _, _ := widget.Parent.DrawProperties.Font.SizeUTF8(drawText.Value); currentWidth > int(widget.Parent.DrawProperties.Rect.W) {

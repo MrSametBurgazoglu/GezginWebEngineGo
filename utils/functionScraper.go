@@ -9,7 +9,7 @@ func ParseFunction(value string) (functionName string, functionParameters []stri
 		index2 := strings.Index(cleanString, ")")
 		if index2 != -1 && index2 > index1 {
 			functionName = cleanString[:index1]
-			functionParameters = strings.Split(cleanString[index1:index2], ",")
+			functionParameters = strings.Split(cleanString[index1+1:index2], ",")
 			ok = true
 			return
 		}

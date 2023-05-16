@@ -81,10 +81,18 @@ func CalculateYPosOfWidget(currentWidget *widget.Widget) int32 {
 		case enums.CSS_POSITION_TYPE_EMPTY:
 			if currentWidget.ChildrenIndex > 0 && (currentWidget.Parent.Children[currentWidget.ChildrenIndex-1].Draw || currentWidget.Parent.Children[currentWidget.ChildrenIndex-1].HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT) {
 				beforeCurrentWidget = currentWidget.Parent.Children[currentWidget.ChildrenIndex-1]
-				return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H
+				marginTop := 0
+				if currentWidget.CssProperties.Margin != nil {
+					marginTop = currentWidget.CssProperties.Margin.MarginTop
+				}
+				return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H + int32(marginTop)
 			} else {
 				beforeCurrentWidget = currentWidget.Parent
-				return beforeCurrentWidget.DrawProperties.Rect.Y
+				marginTop := 0
+				if currentWidget.CssProperties.Margin != nil {
+					marginTop = currentWidget.CssProperties.Margin.MarginTop
+				}
+				return beforeCurrentWidget.DrawProperties.Rect.Y + int32(marginTop)
 			}
 		case enums.CSS_POSITION_TYPE_STATIC:
 			if currentWidget.ChildrenIndex > 0 {
@@ -92,7 +100,11 @@ func CalculateYPosOfWidget(currentWidget *widget.Widget) int32 {
 			} else {
 				beforeCurrentWidget = currentWidget.Parent
 			}
-			return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H
+			marginTop := 0
+			if currentWidget.CssProperties.Margin != nil {
+				marginTop = currentWidget.CssProperties.Margin.MarginTop
+			}
+			return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H + int32(marginTop)
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
 			if currentWidget.CssProperties.Top != 0 {
 				beforeCurrentWidget = currentWidget.Parent
