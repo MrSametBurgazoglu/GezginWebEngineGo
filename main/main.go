@@ -48,11 +48,11 @@ func main() {
 	defer font.Close()
 
 	startTime := time.Now()
-	web_engine.OpenWebEngine("exampleHtmlFiles/example.html")
+	web_engine.OpenWebEngine("exampleHtmlFiles/newExa.html")
 	fmt.Println("Total time taken ", time.Since(startTime).Milliseconds())
 
-	web_engine.InitDrawer()
-	window, renderer, err := sdl.CreateWindowAndRenderer(800, 600, sdl.WINDOW_SHOWN)
+	web_engine.InitDrawer(700, 1300)
+	window, renderer, err := sdl.CreateWindowAndRenderer(1300, 700, sdl.WINDOW_SHOWN)
 	if err != nil {
 		panic(err)
 	}

@@ -2,7 +2,6 @@ package properties
 
 import (
 	"gezgin_web_engine/cssParser/structs"
-	"strings"
 )
 
 func ColorPropertySetValue(properties *structs.CssProperties, value string) {
@@ -13,7 +12,7 @@ func ColorPropertySetValue(properties *structs.CssProperties, value string) {
 		if properties.Color == nil {
 			properties.Color = new(structs.ColorRGBA)
 		}
-		if strings.Compare(value, "auto") == 0 || strings.Compare(value, "initial") == 0 {
+		if value == "auto" || value == "initial" {
 			properties.Color.SetColorByRGB(0, 0, 0)
 		} else {
 			properties.Color.SetColor(value)

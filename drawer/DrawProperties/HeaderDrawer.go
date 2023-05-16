@@ -6,11 +6,11 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-func DrawBodyFunction(widget *widget.Widget, renderer *sdl.Renderer) {
+func DrawHeaderFunction(widget *widget.Widget, renderer *sdl.Renderer) {
 	if widget.CssProperties.Background != nil {
-		drawerBackend.DrawBody(widget, renderer)
+		drawerBackend.DrawBackground(widget, renderer)
 	}
 }
 
-func RenderBodyFunction(widget *widget.Widget, renderer *sdl.Renderer) {
+func RenderHeaderFunction(widget *widget.Widget, renderer *sdl.Renderer) {
 }

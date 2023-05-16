@@ -2,18 +2,17 @@ package properties
 
 import (
 	"gezgin_web_engine/cssParser/structs"
-	"strings"
 )
 
 func accentColorPropertySetValue(currentWidget *structs.CssProperties, value string) {
-	if strings.Compare(value, "inherit") == 0 {
+	if value == "inherit" {
 		currentWidget.AccentColorInherit = true
 	} else {
 		currentWidget.AccentColorInherit = false
 		if currentWidget.AccentColor == nil || currentWidget.AccentColorInherit {
 			currentWidget.AccentColor = new(structs.ColorRGBA)
 		}
-		if strings.Compare(value, "auto") == 0 || strings.Compare(value, "initial") == 0 {
+		if value == "auto" || value == "initial" {
 			currentWidget.AccentColor.SetColorByRGB(0, 0, 0)
 		} else {
 			currentWidget.AccentColor.SetColor(value)

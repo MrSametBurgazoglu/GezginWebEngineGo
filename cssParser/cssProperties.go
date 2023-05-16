@@ -263,7 +263,7 @@ var functionList = []cssPropertyFunction{
 	nil,
 	nil,
 	nil,
-	nil,
+	properties.HeightPropertySetValue,
 	properties.LeftPropertySetValue,
 	nil,
 	nil,
@@ -306,5 +306,5 @@ var functionList = []cssPropertyFunction{
 	nil,
 	properties.TopPropertySetValue,
 	nil,
-	nil,
+	properties.WidthPropertySetValue,
 }

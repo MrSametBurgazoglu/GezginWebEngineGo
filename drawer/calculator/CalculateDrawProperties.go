@@ -14,7 +14,11 @@ func CalculateWidthOfWidget(widget *widget.Widget) int {
 		return int(widget.DrawProperties.Rect.W)
 	} else if widget.CssProperties != nil {
 		if widget.CssProperties.Display == enums.CSS_DISPLAY_TYPE_BLOCK {
-			return ScreenProperties.WindowWidth
+			if widget.CssProperties.Width != 0 {
+				return int(widget.CssProperties.Width)
+			} else if widget.Parent != nil {
+				return int(widget.Parent.DrawProperties.Rect.W)
+			}
 		}
 	}
 	return ScreenProperties.WindowWidth
@@ -34,30 +38,36 @@ func CalculateHeightOfWidget(widget *widget.Widget) (totalHeight int) {
 	return totalHeight
 }
 
-func CalculateXPosOfWidget(widget *widget.Widget) int32 {
-	if widget.CssProperties != nil {
-		switch widget.CssProperties.Position {
+func CalculateXPosOfWidget(currentWidget *widget.Widget) int32 {
+	if currentWidget.CssProperties != nil {
+		switch currentWidget.CssProperties.Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			return widget.Parent.DrawProperties.Rect.X
+			return currentWidget.Parent.DrawProperties.Rect.X
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			return widget.Parent.DrawProperties.Rect.X
+			return currentWidget.Parent.DrawProperties.Rect.X
 		case enums.CSS_POSITION_TYPE_STATIC:
-			return widget.Parent.DrawProperties.Rect.X
+			return currentWidget.Parent.DrawProperties.Rect.X
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			break
+			if currentWidget.CssProperties.Left != 0 {
+				return currentWidget.Parent.DrawProperties.Rect.X + int32(currentWidget.CssProperties.Left)
+			} else if currentWidget.CssProperties.Right != 0 {
+				return currentWidget.Parent.DrawProperties.Rect.W - int32(currentWidget.CssProperties.Right)
+			} else {
+				return currentWidget.Parent.DrawProperties.Rect.X
+			}
 		case enums.CSS_POSITION_TYPE_FIXED:
 			break
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			if widget.CssProperties.Left != 0 {
-				return widget.Parent.DrawProperties.Rect.X + int32(widget.CssProperties.Left)
-			} else if widget.CssProperties.Right != 0 {
-				return widget.Parent.DrawProperties.Rect.W - int32(widget.CssProperties.Right)
+			if currentWidget.CssProperties.Left != 0 {
+				return currentWidget.Parent.DrawProperties.Rect.X + int32(currentWidget.CssProperties.Left)
+			} else if currentWidget.CssProperties.Right != 0 {
+				return currentWidget.Parent.DrawProperties.Rect.W - int32(currentWidget.CssProperties.Right)
 			} else {
-				return widget.Parent.DrawProperties.Rect.X
+				return currentWidget.Parent.DrawProperties.Rect.X
 			}
 		}
 	} else {
-		return widget.Parent.DrawProperties.Rect.X
+		return currentWidget.Parent.DrawProperties.Rect.X
 	}
 	return 0
 }
@@ -84,7 +94,16 @@ func CalculateYPosOfWidget(currentWidget *widget.Widget) int32 {
 			}
 			return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			break
+			if currentWidget.CssProperties.Top != 0 {
+				beforeCurrentWidget = currentWidget.Parent
+				return beforeCurrentWidget.DrawProperties.Rect.Y + int32(currentWidget.CssProperties.Top)
+			} else if currentWidget.CssProperties.Bottom != 0 {
+				beforeCurrentWidget = currentWidget.Parent
+				return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H - int32(currentWidget.CssProperties.Bottom)
+			} else {
+				beforeCurrentWidget = currentWidget.Parent.Children[currentWidget.ChildrenIndex-1]
+				return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H
+			}
 		case enums.CSS_POSITION_TYPE_FIXED:
 			break
 		case enums.CSS_POSITION_TYPE_RELATIVE:

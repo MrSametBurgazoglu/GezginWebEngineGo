@@ -282,12 +282,12 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_FIGURE, draw: true},
 	{tag: HTML_FOOTER, draw: true},
 	{tag: HTML_FORM, draw: true},
-	{tag: HTML_H1, draw: true},
-	{tag: HTML_H2, draw: true},
-	{tag: HTML_H3, draw: true},
-	{tag: HTML_H4, draw: true},
-	{tag: HTML_H5, draw: true},
-	{tag: HTML_H6, draw: true},
+	{tag: HTML_H1, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH1Tag, renderFunction: DrawProperties.RenderHeaderFunction, drawFunction: DrawProperties.DrawHeaderFunction},
+	{tag: HTML_H2, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH2Tag, renderFunction: DrawProperties.RenderHeaderFunction, drawFunction: DrawProperties.DrawHeaderFunction},
+	{tag: HTML_H3, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH3Tag, renderFunction: DrawProperties.RenderHeaderFunction, drawFunction: DrawProperties.DrawHeaderFunction},
+	{tag: HTML_H4, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH4Tag, renderFunction: DrawProperties.RenderHeaderFunction, drawFunction: DrawProperties.DrawHeaderFunction},
+	{tag: HTML_H5, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH5Tag, renderFunction: DrawProperties.RenderHeaderFunction, drawFunction: DrawProperties.DrawHeaderFunction},
+	{tag: HTML_H6, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH6Tag, renderFunction: DrawProperties.RenderHeaderFunction, drawFunction: DrawProperties.DrawHeaderFunction},
 	{tag: HTML_HEAD},
 	{tag: HTML_HEADER, draw: true},
 	{tag: HTML_HR, endTag: true},
@@ -312,7 +312,7 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_OPTGROUP},
 	{tag: HTML_OPTION},
 	{tag: HTML_OUTPUT, draw: true},
-	{tag: HTML_P, draw: true},
+	{tag: HTML_P, draw: true, renderFunction: DrawProperties.RenderPFunction, drawFunction: DrawProperties.DrawPFunction},
 	{tag: HTML_PARAM, endTag: true},
 	{tag: HTML_PICTURE},
 	{tag: HTML_PRE},
@@ -360,18 +360,18 @@ func SetHtmlTag(tag string, widget *widget.Widget) bool {
 	index := utils.IndexFounder(htmlTagList, tag, HtmlTagCount)
 	if index != -1 {
 		widget.HtmlTag = tagHtmlVariables[index].tag
+		if tagHtmlVariables[index].draw {
+			widget.CssProperties = new(structs.CssProperties)
+			widget.Draw = true
+			widget.DrawProperties = new(structs2.DrawProperties)
+			//set render and draw functions and draw properties
+		}
 		if tagHtmlVariables[index].widgetPropertyFunction != nil {
 			tagHtmlVariables[index].widgetPropertyFunction(widget)
 		}
 		if tagHtmlVariables[index].renderFunction != nil {
 			widget.RenderWidget = tagHtmlVariables[index].renderFunction
 			widget.DrawWidget = tagHtmlVariables[index].drawFunction
-		}
-		if tagHtmlVariables[index].draw {
-			widget.CssProperties = new(structs.CssProperties)
-			widget.Draw = true
-			widget.DrawProperties = new(structs2.DrawProperties)
-			//set render and draw functions and draw properties
 		}
 		return tagHtmlVariables[index].endTag
 	}
