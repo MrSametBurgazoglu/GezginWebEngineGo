@@ -16,7 +16,6 @@ func GetDocument() *widget.Widget {
 }
 
 func OpenWebEngine(fileUrl string) {
-	//initialize drawer
 	document = htmlParser.ParseHtmlFromFile(fileUrl)
 	cssParser.WaitCssScrapingOperations()
 	cssParser.ParseCssFromDocument(document)
@@ -24,19 +23,16 @@ func OpenWebEngine(fileUrl string) {
 	javascript_interpreter.InitializeJSInterpreter(document)
 }
 
-func InitDrawer() {
-	drawer.LoadDefaultFont()
-	drawer.SetWindowSize(600, 800)
+func InitDrawer(height, width int) {
+	drawer.SetWindowSize(height, width)
 }
 
 func DrawPage(renderer *sdl.Renderer) {
-	drawer.SetDrawPropertiesDocument(document)
 	drawer.DrawDocument(document, renderer)
 }
 
 func RenderPage(renderer *sdl.Renderer) {
-	drawer.RenderDocument(document, renderer)
-
+	drawer.SetDrawPropertiesForWidgets(document, renderer)
 }
 
 func SendInput() {

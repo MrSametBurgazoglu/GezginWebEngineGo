@@ -2,7 +2,6 @@ package drawerBackend
 
 import (
 	"gezgin_web_engine/cssParser/structs"
-	"gezgin_web_engine/drawer/Fonts"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
 )
@@ -10,10 +9,7 @@ import (
 func GetTextTexture(renderer *sdl.Renderer, text string, color *structs.ColorRGBA, font *ttf.Font, texture **sdl.Texture, rect *sdl.Rect) {
 	alpha, red, green, blue := color.GetColorByRGBA()
 	textColor := sdl.Color{R: red, G: green, B: blue, A: alpha}
-	if font == nil {
-		font = Fonts.DefaultFont
-	}
-	surface, err := font.RenderUTF8Solid(text, textColor)
+	surface, err := font.RenderUTF8BlendedWrapped(text, textColor, 0)
 	if err != nil {
 		return
 	}
@@ -25,6 +21,6 @@ func GetTextTexture(renderer *sdl.Renderer, text string, color *structs.ColorRGB
 	surface.Free()
 	rect.X = 0
 	rect.Y = 0
-	rect.W = width + 10
-	rect.H = height + 10
+	rect.W = width
+	rect.H = height
 }

@@ -11,4 +11,5 @@ func computeInheritCssProperties(dest *structs.CssProperties, source *structs.Cs
 func updateCssProperties(dest *structs.CssProperties, source *structs.CssProperties) {
 	properties.UpdateBackground(dest, source)
 	properties.UpdatePosition(dest, source)
+	properties.UpdateColor(dest, source)
 }

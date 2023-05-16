@@ -116,15 +116,15 @@ func (receiver *ColorRGBA) SetColorByFunction(value string) bool {
 			switch functionName {
 			case "rgb":
 				value1, err := strconv.Atoi(functionParameters[0])
-				if err == nil {
+				if err != nil {
 					value1 = 0
 				}
 				value2, err2 := strconv.Atoi(functionParameters[1])
-				if err2 == nil {
+				if err2 != nil {
 					value2 = 0
 				}
 				value3, err3 := strconv.Atoi(functionParameters[2])
-				if err3 == nil {
+				if err3 != nil {
 					value3 = 0
 				}
 				receiver.SetColorByRGB(uint8(value1), uint8(value2), uint8(value3))

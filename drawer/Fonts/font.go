@@ -2,12 +2,18 @@ package Fonts
 
 import "github.com/veandco/go-sdl2/ttf"
 
-var DefaultFont *ttf.Font
+var FontMap = make(map[int]*ttf.Font)
 
-func InitializeFont() {
-	if font, err := ttf.OpenFont("fonts/Sans.ttf", 14); err != nil {
-		panic(err)
+func GetFont(size int) *ttf.Font {
+	if font, ok := FontMap[size]; ok {
+		return font
 	} else {
-		DefaultFont = font
+		if font, err := ttf.OpenFont("fonts/Sans.ttf", size); err != nil {
+			panic(err)
+		} else {
+			FontMap[size] = font
+			return font
+		}
 	}
+	return nil
 }

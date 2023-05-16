@@ -65,6 +65,7 @@ type CssProperties struct {
 	BorderCollapseType enums.CssBorderCollapseType
 	Color              *ColorRGBA
 	Display            enums.CssDisplayType
+	Font               *Font
 	Margin             *Margin
 	Padding            *Padding
 	Height             uint
