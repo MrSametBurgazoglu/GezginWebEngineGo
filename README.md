@@ -1,7 +1,7 @@
 # GezginWebEngineGo
 Gezgin Web Engine written in Go Completely From Scratch
 
-# It's and Experimental Browser Engine
+# It's an Experimental Browser Engine
 
 ![Screenshot from 2023-05-16 22:22:19](https://github.com/MrSametBurgazoglu/GezginWebEngineGo/assets/16630690/54615d1e-d1e2-403d-99e5-da99c9538410)
 
