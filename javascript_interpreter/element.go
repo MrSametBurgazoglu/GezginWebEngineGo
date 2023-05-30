@@ -21,7 +21,7 @@ func searchElementById(elementId string) *widget.Widget {
 					keepGo = true
 				}
 			}
-			if w.StandardHtmlVariables.Id == elementId {
+			if w.Id == elementId {
 				return w
 			}
 		}
@@ -40,7 +40,7 @@ func setAttributeByID(elementId, attribute, value string) {
 	}
 	switch attribute {
 	case "style":
-		element.StandardHtmlVariables.Style = value
+		element.Style = value
 		cssParser.SetCssProperties(element)
 		globalDocument.Rendered = false
 	}

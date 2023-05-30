@@ -1,6 +1,9 @@
 package standardHtmlTagVariables
 
-import "strconv"
+import (
+	"gezgin_web_engine/eventSystem"
+	"strconv"
+)
 
 type StandardHtmlTagVariables struct {
 	ContentEditable bool
@@ -13,10 +16,11 @@ type StandardHtmlTagVariables struct {
 	Id       string
 	Style    string
 	Title    string
+	OnClick  string
 	TabIndex int
 }
 
-func (tag *StandardHtmlTagVariables) SetStandardVariables(name string, value string) bool {
+func (tag *StandardHtmlTagVariables) SetStandardVariables(name string, value string, inputWidget eventSystem.InputWidget) bool {
 	switch name {
 	case "id":
 		tag.Id = value[1 : len(value)-1]
@@ -39,6 +43,9 @@ func (tag *StandardHtmlTagVariables) SetStandardVariables(name string, value str
 		}
 	case "title":
 		tag.Title = value
+	case "onclick":
+		tag.OnClick = value[1 : len(value)-1]
+		eventSystem.SetInput("onclick", inputWidget)
 	default:
 		return false
 	}
@@ -53,4 +60,8 @@ func (tag *StandardHtmlTagVariables) SetStandardContextVariables(context string)
 		return false
 	}
 	return true
+}
+
+func (tag *StandardHtmlTagVariables) GetOnclick() string {
+	return tag.OnClick
 }

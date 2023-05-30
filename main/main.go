@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"gezgin_web_engine/eventSystem"
 	"gezgin_web_engine/web_engine"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
@@ -67,6 +68,8 @@ func main() {
 				println("Quit")
 				running = false
 				break
+			default:
+				eventSystem.TakeInputFromSdl(event)
 			}
 		}
 		if web_engine.GetDocument().Rendered == false {

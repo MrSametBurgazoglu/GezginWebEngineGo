@@ -16,7 +16,7 @@ var wg sync.WaitGroup
 
 func SetCssProperties(currentWidget *widget.Widget) {
 	var currentCssProperties *structs.CssProperties
-	for _, class := range currentWidget.StandardHtmlVariables.Class {
+	for _, class := range currentWidget.Class {
 		if currentCssProperties = tree.GetCssPropertiesByClass(class); currentCssProperties != nil {
 			updateCssProperties(currentWidget.CssProperties, currentCssProperties)
 		}
@@ -27,11 +27,11 @@ func SetCssProperties(currentWidget *widget.Widget) {
 	if currentCssProperties = tree.GetCssPropertiesByElement(currentWidget.HtmlTag); currentCssProperties != nil {
 		updateCssProperties(currentWidget.CssProperties, currentCssProperties)
 	}
-	if currentCssProperties = tree.GetCssPropertiesByID(currentWidget.StandardHtmlVariables.Id); currentCssProperties != nil {
+	if currentCssProperties = tree.GetCssPropertiesByID(currentWidget.Id); currentCssProperties != nil {
 		updateCssProperties(currentWidget.CssProperties, currentCssProperties)
 	}
-	if currentWidget.StandardHtmlVariables.Style != "" {
-		ParseCssFromInlineStyle(currentWidget.CssProperties, currentWidget.StandardHtmlVariables.Style)
+	if currentWidget.Style != "" {
+		ParseCssFromInlineStyle(currentWidget.CssProperties, currentWidget.Style)
 	}
 }
 

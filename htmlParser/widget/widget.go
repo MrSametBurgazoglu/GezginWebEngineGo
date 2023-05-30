@@ -13,17 +13,21 @@ type HtmlTagsInterface interface {
 }
 
 type Widget struct {
-	ChildrenCount         int
-	ChildrenIndex         int
-	HtmlTag               HtmlTags.HtmlTags
-	WidgetProperties      any
-	StandardHtmlVariables standardHtmlTagVariables.StandardHtmlTagVariables
-	CssProperties         *structs.CssProperties
-	DrawProperties        *structs2.DrawProperties
-	RenderWidget          func(*Widget, *sdl.Renderer)
-	DrawWidget            func(*Widget, *sdl.Renderer)
-	Children              []*Widget
-	Parent                *Widget
-	Draw                  bool
-	Rendered              bool
+	ChildrenCount    int
+	ChildrenIndex    int
+	HtmlTag          HtmlTags.HtmlTags
+	WidgetProperties any
+	standardHtmlTagVariables.StandardHtmlTagVariables
+	CssProperties  *structs.CssProperties
+	DrawProperties *structs2.DrawProperties
+	RenderWidget   func(*Widget, *sdl.Renderer)
+	DrawWidget     func(*Widget, *sdl.Renderer)
+	Children       []*Widget
+	Parent         *Widget
+	Draw           bool
+	Rendered       bool
+}
+
+func (receiver *Widget) GetRect() *sdl.Rect {
+	return &receiver.DrawProperties.Rect
 }

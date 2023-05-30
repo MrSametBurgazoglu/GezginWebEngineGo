@@ -34,14 +34,14 @@ func ParseParameters(widget *widget.Widget, parameters []string, group *sync.Wai
 	for _, s := range parameters[0:] {
 		varName, varValue, found := strings.Cut(s, "=")
 		if found {
-			if isStandard := widget.StandardHtmlVariables.SetStandardVariables(varName, varValue); isStandard == false {
+			if isStandard := widget.SetStandardVariables(varName, varValue, widget); isStandard == false {
 				var varReader, ok = widget.WidgetProperties.(VarReaderInterface)
 				if ok {
 					varReader.VarReaderFunc(varName, varValue)
 				}
 			}
 		} else {
-			if isStandard := widget.StandardHtmlVariables.SetStandardContextVariables(s); isStandard == false {
+			if isStandard := widget.SetStandardContextVariables(s); isStandard == false {
 				var contextReader, ok = widget.WidgetProperties.(ContextReaderInterface)
 				if ok {
 					contextReader.ContextReaderFunc(s)
