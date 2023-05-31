@@ -49,6 +49,8 @@ func main() {
 	defer font.Close()
 
 	startTime := time.Now()
+	newTab := web_engine.NewTab()
+	newTab.OpenWebPageFromFile("exampleHtmlFiles/newExa.html")
 	web_engine.OpenWebEngine("exampleHtmlFiles/newExa.html")
 	fmt.Println("Total time taken ", time.Since(startTime).Milliseconds())
 
