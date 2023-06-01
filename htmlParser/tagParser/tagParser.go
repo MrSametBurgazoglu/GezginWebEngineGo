@@ -24,7 +24,6 @@ func UntaggedTextClosed(widget *widget.Widget) {
 	} else if widget.Parent.HtmlTag == htmlVariables.HTML_SCRIPT {
 		javascript_interpreter.ScriptElements = append(javascript_interpreter.ScriptElements, widget.Parent)
 	}
-
 }
 
 func ParseParameters(widget *widget.Widget, parameters []string, group *sync.WaitGroup) {

@@ -27,11 +27,7 @@ type HtmlParser struct {
 	javascriptInterpreter JavascriptInterpreter
 }
 
-func (receiver *HtmlParser) ParseHtmlFromFile(documentWidget *widget.Widget, fileUrl string) {
-	dat, err := os.ReadFile(fileUrl)
-	if err != nil {
-		panic(err)
-	}
+func (receiver *HtmlParser) ParseHtmlFromFile(documentWidget *widget.Widget, dat []byte, nodes chan *widget.Widget) {
 	currentWidget := documentWidget
 
 	var wg sync.WaitGroup
@@ -61,6 +57,7 @@ func (receiver *HtmlParser) ParseHtmlFromFile(documentWidget *widget.Widget, fil
 				currentWidget.ChildrenCount++
 				currentWidget.Children = append(currentWidget.Children, &newWidget)
 				tagParser.UntaggedTextClosed(&newWidget)
+				nodes <- &newWidget
 			}
 			if data[seek+start+1] == '/' {
 				currentWidget = currentWidget.Parent
@@ -73,6 +70,7 @@ func (receiver *HtmlParser) ParseHtmlFromFile(documentWidget *widget.Widget, fil
 				currentWidget.ChildrenCount++
 				currentWidget.Children = append(currentWidget.Children, &newWidget)
 				currentWidget = &newWidget
+				nodes <- &newWidget
 				if tagParser.ParseInsideOfTag(currentWidget, data[seek+start+1:seek+start+end], &wg) {
 					currentWidget = currentWidget.Parent
 				}
