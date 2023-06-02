@@ -123,7 +123,7 @@ func ParseCssFromStyleTag(widget *widget.Widget) {
 		parseCssParameters(cssWidgetList, cssText)
 		index = strings.Index(styleText[seek:], "{")
 	}
-	wg.Done()
+	wg.Done() //this worker finished
 }
 
 func SetInheritCssProperties(document *widget.Widget) {
