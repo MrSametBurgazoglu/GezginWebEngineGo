@@ -3,7 +3,7 @@ package drawer
 import (
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/drawer/calculator"
-	"gezgin_web_engine/htmlParser/htmlVariables"
+	"gezgin_web_engine/htmlParser"
 	"gezgin_web_engine/htmlParser/widget"
 	"github.com/veandco/go-sdl2/sdl"
 )
@@ -132,7 +132,7 @@ func setWidthForBlockElements(document *widget.Widget) {
 					widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
 					widgetIndexList = append(widgetIndexList, 0)
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					if currentWidget.HtmlTag != htmlVariables.HTML_UNTAGGED_TEXT && currentWidget.HtmlTag != htmlVariables.HTML_IMG {
+					if currentWidget.HtmlTag != htmlParser.HTML_UNTAGGED_TEXT && currentWidget.HtmlTag != htmlParser.HTML_IMG {
 						setWidthForWidget(currentWidget)
 					}
 					currentIndex++
@@ -142,7 +142,7 @@ func setWidthForBlockElements(document *widget.Widget) {
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					if currentWidget.HtmlTag != htmlVariables.HTML_UNTAGGED_TEXT && currentWidget.HtmlTag != htmlVariables.HTML_IMG {
+					if currentWidget.HtmlTag != htmlParser.HTML_UNTAGGED_TEXT && currentWidget.HtmlTag != htmlParser.HTML_IMG {
 						setWidthForWidget(currentWidget)
 					}
 				}
@@ -168,7 +168,7 @@ func setWidthForInlineElements(document *widget.Widget) {
 					widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
 					widgetIndexList = append(widgetIndexList, 0)
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					if currentWidget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT || currentWidget.HtmlTag == htmlVariables.HTML_IMG {
+					if currentWidget.HtmlTag == htmlParser.HTML_UNTAGGED_TEXT || currentWidget.HtmlTag == htmlParser.HTML_IMG {
 						setWidthForWidget(currentWidget)
 					}
 					currentIndex++
@@ -178,7 +178,7 @@ func setWidthForInlineElements(document *widget.Widget) {
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					if currentWidget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT || currentWidget.HtmlTag == htmlVariables.HTML_IMG {
+					if currentWidget.HtmlTag == htmlParser.HTML_UNTAGGED_TEXT || currentWidget.HtmlTag == htmlParser.HTML_IMG {
 						setWidthForWidget(currentWidget)
 					}
 				}
@@ -204,7 +204,7 @@ func setHeightForInlineElements(document *widget.Widget) {
 					widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
 					widgetIndexList = append(widgetIndexList, 0)
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					if currentWidget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT || currentWidget.HtmlTag == htmlVariables.HTML_IMG {
+					if currentWidget.HtmlTag == htmlParser.HTML_UNTAGGED_TEXT || currentWidget.HtmlTag == htmlParser.HTML_IMG {
 						setHeightForInlineElements(currentWidget)
 					}
 					currentIndex++
@@ -214,7 +214,7 @@ func setHeightForInlineElements(document *widget.Widget) {
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					if currentWidget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT || currentWidget.HtmlTag == htmlVariables.HTML_IMG {
+					if currentWidget.HtmlTag == htmlParser.HTML_UNTAGGED_TEXT || currentWidget.HtmlTag == htmlParser.HTML_IMG {
 						setHeightForInlineElements(currentWidget)
 					}
 				}
@@ -240,7 +240,7 @@ func setHeightForBlockElements(document *widget.Widget) {
 					widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
 					widgetIndexList = append(widgetIndexList, 0)
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					if currentWidget.HtmlTag != htmlVariables.HTML_UNTAGGED_TEXT && currentWidget.HtmlTag != htmlVariables.HTML_IMG {
+					if currentWidget.HtmlTag != htmlParser.HTML_UNTAGGED_TEXT && currentWidget.HtmlTag != htmlParser.HTML_IMG {
 						setHeightForWidget(currentWidget)
 					}
 					currentIndex++
@@ -250,7 +250,7 @@ func setHeightForBlockElements(document *widget.Widget) {
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					if currentWidget.HtmlTag != htmlVariables.HTML_UNTAGGED_TEXT && currentWidget.HtmlTag != htmlVariables.HTML_IMG {
+					if currentWidget.HtmlTag != htmlParser.HTML_UNTAGGED_TEXT && currentWidget.HtmlTag != htmlParser.HTML_IMG {
 						setHeightForWidget(currentWidget)
 					}
 				}

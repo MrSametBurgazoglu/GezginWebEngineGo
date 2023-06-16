@@ -1,22 +1,17 @@
-package htmlVariables
+package htmlParser
 
 import (
-	"gezgin_web_engine/cssParser/structs"
-	"gezgin_web_engine/drawer/DrawProperties"
-	structs2 "gezgin_web_engine/drawer/structs"
-	"gezgin_web_engine/htmlParser/HtmlTags"
 	"gezgin_web_engine/htmlParser/tags"
 	"gezgin_web_engine/htmlParser/widget"
 	"gezgin_web_engine/utils"
-	"github.com/veandco/go-sdl2/sdl"
 )
 
 const HtmlTagCount = 105
 
-//type HtmlTags uint8
+type HtmlTags uint8
 
 const (
-	HTML_DOCUMENT HtmlTags.HtmlTags = iota
+	HTML_DOCUMENT HtmlTags = iota
 	HTML_DOCTYPE
 	HTML_A
 	HTML_ABBR
@@ -126,13 +121,10 @@ const (
 )
 
 type HtmlTagVariables struct {
-	tag                    HtmlTags.HtmlTags
+	tag                    HtmlTags
 	widgetPropertyFunction func(widget *widget.Widget) //it's unique to html element some of them doesn't have this function
-	//void (*widget_draw_function) (struct widget*, SDL_Renderer*);//for drawing rendered object
-	renderFunction func(widget *widget.Widget, renderer *sdl.Renderer)
-	drawFunction   func(widget *widget.Widget, renderer *sdl.Renderer)
-	endTag         bool
-	draw           bool
+	endTag                 bool
+	draw                   bool
 }
 
 var htmlTagList = []string{
@@ -257,7 +249,7 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_BDI},
 	{tag: HTML_BDO},
 	{tag: HTML_BLOCKQUOTE, draw: true},
-	{tag: HTML_BODY, draw: true, renderFunction: DrawProperties.RenderBodyFunction, drawFunction: DrawProperties.DrawBodyFunction},
+	{tag: HTML_BODY, draw: true},
 	{tag: HTML_BR, endTag: true, draw: true},
 	{tag: HTML_BUTTON, draw: true},
 	{tag: HTML_CANVAS, draw: true},
@@ -273,7 +265,7 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_DETAILS, draw: true},
 	{tag: HTML_DFN, draw: true},
 	{tag: HTML_DIALOG},
-	{tag: HTML_DIV, draw: true, renderFunction: DrawProperties.RenderDivFunction, drawFunction: DrawProperties.DrawDivFunction},
+	{tag: HTML_DIV, draw: true},
 	{tag: HTML_DL, draw: true},
 	{tag: HTML_DT, draw: true},
 	{tag: HTML_EM, draw: true},
@@ -282,19 +274,19 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_FIGURE, draw: true},
 	{tag: HTML_FOOTER, draw: true},
 	{tag: HTML_FORM, draw: true},
-	{tag: HTML_H1, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH1Tag, renderFunction: DrawProperties.RenderHeaderFunction, drawFunction: DrawProperties.DrawHeaderFunction},
-	{tag: HTML_H2, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH2Tag, renderFunction: DrawProperties.RenderHeaderFunction, drawFunction: DrawProperties.DrawHeaderFunction},
-	{tag: HTML_H3, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH3Tag, renderFunction: DrawProperties.RenderHeaderFunction, drawFunction: DrawProperties.DrawHeaderFunction},
-	{tag: HTML_H4, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH4Tag, renderFunction: DrawProperties.RenderHeaderFunction, drawFunction: DrawProperties.DrawHeaderFunction},
-	{tag: HTML_H5, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH5Tag, renderFunction: DrawProperties.RenderHeaderFunction, drawFunction: DrawProperties.DrawHeaderFunction},
-	{tag: HTML_H6, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH6Tag, renderFunction: DrawProperties.RenderHeaderFunction, drawFunction: DrawProperties.DrawHeaderFunction},
+	{tag: HTML_H1, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH1Tag},
+	{tag: HTML_H2, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH2Tag},
+	{tag: HTML_H3, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH3Tag},
+	{tag: HTML_H4, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH4Tag},
+	{tag: HTML_H5, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH5Tag},
+	{tag: HTML_H6, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH6Tag},
 	{tag: HTML_HEAD},
 	{tag: HTML_HEADER, draw: true},
 	{tag: HTML_HR, endTag: true},
-	{tag: HTML_HTML, draw: true, renderFunction: DrawProperties.RenderHtmlFunction, drawFunction: DrawProperties.DrawHtmlFunction},
+	{tag: HTML_HTML, draw: true},
 	{tag: HTML_I, draw: true},
 	{tag: HTML_IFRAME, draw: true},
-	{tag: HTML_IMG, endTag: true, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForImgTag, renderFunction: DrawProperties.RenderImgFunction, drawFunction: DrawProperties.DrawImgFunction},
+	{tag: HTML_IMG, endTag: true, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForImgTag},
 	{tag: HTML_INPUT, endTag: true, draw: true},
 	{tag: HTML_INS, draw: true},
 	{tag: HTML_KBD, draw: true},
@@ -312,7 +304,7 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_OPTGROUP},
 	{tag: HTML_OPTION},
 	{tag: HTML_OUTPUT, draw: true},
-	{tag: HTML_P, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForPTag, renderFunction: DrawProperties.RenderPFunction, drawFunction: DrawProperties.DrawPFunction},
+	{tag: HTML_P, draw: true},
 	{tag: HTML_PARAM, endTag: true},
 	{tag: HTML_PICTURE},
 	{tag: HTML_PRE},
@@ -351,33 +343,19 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_WBR},
 }
 
-func GetElementTag(tag string) HtmlTags.HtmlTags {
+func GetElementTag(tag string) HtmlTags {
 	index := utils.IndexFounder(htmlTagList, tag, HtmlTagCount)
 	return tagHtmlVariables[index].tag
 }
 
-func SetHtmlTag(tag string, widget *widget.Widget) bool {
+func FindHtmlTag(tag string) (HtmlTags, bool) {
 	index := utils.IndexFounder(htmlTagList, tag, HtmlTagCount)
 	if index != -1 {
-		widget.HtmlTag = tagHtmlVariables[index].tag
-		if tagHtmlVariables[index].draw {
-			widget.CssProperties = new(structs.CssProperties)
-			widget.Draw = true
-			widget.DrawProperties = new(structs2.DrawProperties)
-			//set render and draw functions and draw properties
-		}
-		if tagHtmlVariables[index].widgetPropertyFunction != nil {
-			tagHtmlVariables[index].widgetPropertyFunction(widget)
-		}
-		if tagHtmlVariables[index].renderFunction != nil {
-			widget.RenderWidget = tagHtmlVariables[index].renderFunction
-			widget.DrawWidget = tagHtmlVariables[index].drawFunction
-		}
-		return tagHtmlVariables[index].endTag
+		return tagHtmlVariables[index].tag, tagHtmlVariables[index].endTag
 	}
-	return false
+	return HTML_DOCUMENT, false //not document it must be unknown
 }
 
-func getString(htmlTag *HtmlTags.HtmlTags) string {
+func getString(htmlTag *HtmlTags) string {
 	return htmlTagList[*htmlTag]
 }

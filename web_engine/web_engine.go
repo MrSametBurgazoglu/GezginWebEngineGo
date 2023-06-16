@@ -11,20 +11,21 @@ import (
 )
 
 type WebTab struct {
-	TaskManager.TaskManager
+	taskManager *TaskManager.TaskManager
 }
 
 func (receiver *WebTab) OpenWebPageFromFile(fileUrl string) {
-	receiver.CreateFromFile(fileUrl)
+	receiver.taskManager.CreateFromFile(fileUrl)
 }
 
 func (receiver *WebTab) DrawPage(renderer *sdl.Renderer) {
-	drawer.DrawDocument(receiver.Document, renderer)
+	drawer.DrawDocument(receiver.taskManager.Document, renderer)
 }
 
 func NewTab() *WebTab {
 	newWebTab := new(WebTab)
-	newWebTab.Initialize()
+	newWebTab.taskManager = new(TaskManager.TaskManager)
+	newWebTab.taskManager.Initialize()
 	return newWebTab
 }
 

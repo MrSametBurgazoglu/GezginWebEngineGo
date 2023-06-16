@@ -3,7 +3,7 @@ package widget
 import (
 	"gezgin_web_engine/cssParser/structs"
 	structs2 "gezgin_web_engine/drawer/structs"
-	"gezgin_web_engine/htmlParser/HtmlTags"
+	"gezgin_web_engine/htmlParser"
 	"gezgin_web_engine/htmlParser/htmlVariables/standardHtmlTagVariables"
 	"github.com/veandco/go-sdl2/sdl"
 )
@@ -12,10 +12,17 @@ type HtmlTagsInterface interface {
 	SetHtmlTag() int
 }
 
+/*Widget
+htmlElement
+StyleProperty
+DrawProperties
+Events
+*/
+
 type Widget struct {
 	ChildrenCount    int
 	ChildrenIndex    int
-	HtmlTag          HtmlTags.HtmlTags
+	HtmlTag          htmlParser.HtmlTags
 	WidgetProperties any
 	standardHtmlTagVariables.StandardHtmlTagVariables
 	CssProperties  *structs.CssProperties

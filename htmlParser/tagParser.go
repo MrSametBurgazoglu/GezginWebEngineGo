@@ -1,10 +1,6 @@
-package tagParser
+package htmlParser
 
 import (
-	"gezgin_web_engine/cssParser"
-	"gezgin_web_engine/htmlParser/htmlVariables"
-	"gezgin_web_engine/htmlParser/widget"
-	"gezgin_web_engine/javascript_interpreter"
 	"gezgin_web_engine/utils"
 	"strings"
 	"sync"
@@ -18,15 +14,23 @@ type ContextReaderInterface interface {
 	ContextReaderFunc(string)
 }
 
-func UntaggedTextClosed(widget *widget.Widget) {
-	if widget.Parent.HtmlTag == htmlVariables.HTML_STYLE {
-		cssParser.CreateCssPropertiesFromStyleTag(widget.Parent)
-	} else if widget.Parent.HtmlTag == htmlVariables.HTML_SCRIPT {
-		javascript_interpreter.ScriptElements = append(javascript_interpreter.ScriptElements, widget.Parent)
+func ParseParameters(element *HtmlElement, parameters []string, group *sync.WaitGroup) {
+	if len(parameters) > 1 {
+		parameters = utils.MergeAttributes(parameters)
 	}
+	for _, s := range parameters[0:] {
+		varName, varValue, found := strings.Cut(s, "=")
+		if found {
+			element.Attributes[varName] = varValue
+		} else {
+			element.Attributes[varName] = ""
+		}
+	}
+	group.Done()
 }
 
-func ParseParameters(widget *widget.Widget, parameters []string, group *sync.WaitGroup) {
+/* WE CAN USE THIS IN WIDGET BUT I DON'T THINK WE CAN USE THIS FOR HTML ELEMENT
+func ParseParameters(element *HtmlElement, parameters []string, group *sync.WaitGroup) {
 	if len(parameters) > 1 {
 		parameters = utils.MergeAttributes(parameters)
 	}
@@ -50,11 +54,13 @@ func ParseParameters(widget *widget.Widget, parameters []string, group *sync.Wai
 	}
 	group.Done()
 }
+*/
 
-func ParseInsideOfTag(widget *widget.Widget, text string, group *sync.WaitGroup) bool {
+func ParseInsideOfTag(element *HtmlElement, text string, group *sync.WaitGroup) bool {
 	parameters := strings.Split(text, " ")
-	result := htmlVariables.SetHtmlTag(parameters[0], widget)
+	htmlTag, endTag := FindHtmlTag(parameters[0])
+	element.HtmlTag = htmlTag
 	group.Add(1)
-	go ParseParameters(widget, parameters, group)
-	return result
+	go ParseParameters(element, parameters, group)
+	return endTag
 }

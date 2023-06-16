@@ -4,7 +4,7 @@ import (
 	"gezgin_web_engine/cssParser/enums"
 	"gezgin_web_engine/cssParser/structs"
 	"gezgin_web_engine/cssParser/tree"
-	"gezgin_web_engine/htmlParser/htmlVariables"
+	"gezgin_web_engine/htmlParser"
 	"gezgin_web_engine/htmlParser/tags"
 	"gezgin_web_engine/htmlParser/widget"
 	"gezgin_web_engine/utils"
@@ -12,6 +12,64 @@ import (
 	"sync"
 )
 
+type StyleElement interface {
+}
+
+type CssParser struct {
+	wg sync.WaitGroup
+}
+
+func (receiver *CssParser) parserCssParameters(cssWidgetList []*structs.CssProperties, cssText string) {
+	varName, varValue, found := strings.Cut(cssText, ":")
+	if found {
+		index := utils.IndexFounder(cssPropertiesNameList, varName, cssPropertyCount)
+		if index != -1 {
+			function := functionList[index]
+			for _, properties := range cssWidgetList {
+				if function != nil {
+					function(properties, varValue)
+				}
+			}
+		}
+	}
+
+}
+
+func (receiver *CssParser) parseCssParameters(cssWidgetList []*structs.CssProperties, cssText string) { //fix the Split function empty string problem
+	cssProperties := strings.Split(cssText, ";")
+	for _, property := range cssProperties {
+		if len(property) > 0 {
+			parserCssParameters(cssWidgetList, property)
+		}
+	}
+}
+
+/*
+	BU style_engine'e gidicek
+
+	func getCssWidget(selector string, channel chan *structs.CssProperties) {
+		var cssWidget *structs.CssProperties
+		switch selector[0] {
+		case '#':
+			cssWidget = tree.GetCssPropertiesByID(selector[0:])
+			if cssWidget == nil {
+				cssWidget = tree.CreateNewCssPropertiesByID(selector[0:])
+			}
+		case '.':
+			cssWidget = tree.GetCssPropertiesByClass(selector[1:])
+			if cssWidget == nil {
+				cssWidget = tree.CreateNewCssPropertiesByClass(selector[1:])
+			}
+		default:
+			tag := htmlParser.GetElementTag(selector[0:])
+			cssWidget = tree.GetCssPropertiesByElement(tag)
+			if cssWidget == nil {
+				cssWidget = tree.CreateNewCssPropertiesByElement(tag)
+			}
+		}
+		channel <- cssWidget
+	}
+*/
 var wg sync.WaitGroup
 
 func SetCssProperties(currentWidget *widget.Widget) {
@@ -74,7 +132,7 @@ func getCssWidget(selector string, channel chan *structs.CssProperties) {
 			cssWidget = tree.CreateNewCssPropertiesByClass(selector[1:])
 		}
 	default:
-		tag := htmlVariables.GetElementTag(selector[0:])
+		tag := htmlParser.GetElementTag(selector[0:])
 		cssWidget = tree.GetCssPropertiesByElement(tag)
 		if cssWidget == nil {
 			cssWidget = tree.CreateNewCssPropertiesByElement(tag)
@@ -149,7 +207,7 @@ func SetInheritCssProperties(document *widget.Widget) {
 				}
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
-					if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].HtmlTag != htmlVariables.HTML_UNTAGGED_TEXT {
+					if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].HtmlTag != htmlParser.HTML_UNTAGGED_TEXT {
 						currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
 						computeInheritCssProperties(currentWidget.CssProperties,
 							currentWidget.Parent.CssProperties)
@@ -185,7 +243,7 @@ func ParseCssFromDocument(document *widget.Widget) {
 					widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
 					widgetIndexList = append(widgetIndexList, 0)
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					if currentWidget.HtmlTag != htmlVariables.HTML_UNTAGGED_TEXT {
+					if currentWidget.HtmlTag != htmlParser.HTML_UNTAGGED_TEXT {
 						SetCssProperties(currentWidget)
 					}
 					currentIndex++
@@ -195,7 +253,7 @@ func ParseCssFromDocument(document *widget.Widget) {
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					if currentWidget.HtmlTag != htmlVariables.HTML_UNTAGGED_TEXT {
+					if currentWidget.HtmlTag != htmlParser.HTML_UNTAGGED_TEXT {
 						SetCssProperties(currentWidget)
 					}
 				}
@@ -205,7 +263,7 @@ func ParseCssFromDocument(document *widget.Widget) {
 	}
 }
 
-func CreateCssPropertiesFromStyleTag(widget *widget.Widget) {
+func CreateCssPropertiesFromStyleTag(styleElement StyleElement) {
 	wg.Add(1)
 	tree.CssStyleTagList = append(tree.CssStyleTagList, widget)
 	go ParseCssFromStyleTag(widget)

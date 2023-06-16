@@ -3,14 +3,14 @@ package calculator
 import (
 	"gezgin_web_engine/cssParser/enums"
 	"gezgin_web_engine/drawer/ScreenProperties"
-	"gezgin_web_engine/htmlParser/htmlVariables"
+	"gezgin_web_engine/htmlParser"
 	"gezgin_web_engine/htmlParser/widget"
 )
 
 func CalculateWidthOfWidget(widget *widget.Widget) int {
-	if widget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT {
+	if widget.HtmlTag == htmlParser.HTML_UNTAGGED_TEXT {
 		return int(widget.DrawProperties.Rect.W)
-	} else if widget.HtmlTag == htmlVariables.HTML_IMG {
+	} else if widget.HtmlTag == htmlParser.HTML_IMG {
 		return int(widget.DrawProperties.Rect.W)
 	} else if widget.CssProperties != nil {
 		if widget.CssProperties.Display == enums.CSS_DISPLAY_TYPE_BLOCK {
@@ -25,9 +25,9 @@ func CalculateWidthOfWidget(widget *widget.Widget) int {
 }
 
 func CalculateHeightOfWidget(widget *widget.Widget) (totalHeight int) {
-	if widget.HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT {
+	if widget.HtmlTag == htmlParser.HTML_UNTAGGED_TEXT {
 		return int(widget.DrawProperties.Rect.H)
-	} else if widget.HtmlTag == htmlVariables.HTML_IMG {
+	} else if widget.HtmlTag == htmlParser.HTML_IMG {
 		return int(widget.DrawProperties.Rect.H)
 	}
 	for i := 0; i < widget.ChildrenCount; i++ {
@@ -79,7 +79,7 @@ func CalculateYPosOfWidget(currentWidget *widget.Widget) int32 {
 		case enums.CSS_POSITION_TYPE_STICKY:
 			return currentWidget.Parent.DrawProperties.Rect.X
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			if currentWidget.ChildrenIndex > 0 && (currentWidget.Parent.Children[currentWidget.ChildrenIndex-1].Draw || currentWidget.Parent.Children[currentWidget.ChildrenIndex-1].HtmlTag == htmlVariables.HTML_UNTAGGED_TEXT) {
+			if currentWidget.ChildrenIndex > 0 && (currentWidget.Parent.Children[currentWidget.ChildrenIndex-1].Draw || currentWidget.Parent.Children[currentWidget.ChildrenIndex-1].HtmlTag == htmlParser.HTML_UNTAGGED_TEXT) {
 				beforeCurrentWidget = currentWidget.Parent.Children[currentWidget.ChildrenIndex-1]
 				marginTop := 0
 				if currentWidget.CssProperties.Margin != nil {
