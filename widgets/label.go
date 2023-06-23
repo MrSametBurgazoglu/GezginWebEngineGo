@@ -1,8 +1,7 @@
-package tags
-
-import "gezgin_web_engine/htmlParser/widget"
+package widgets
 
 type HtmlTagLabel struct {
+	*Widget
 	for_ string
 	form string
 }
@@ -16,6 +15,15 @@ func (receiver *HtmlTagLabel) VarReaderFunc(variableName string, variableValue s
 	}
 }
 
-func SetWidgetPropertiesForLabelTag(widget *widget.Widget) {
-	widget.WidgetProperties = new(HtmlTagLabel)
+func (receiver *HtmlTagLabel) Draw() {
+
+}
+
+func (receiver *HtmlTagLabel) Render() {
+
+}
+
+func SetWidgetPropertiesForLabelTag() WidgetInterface {
+	widget := new(HtmlTagLabel)
+	return widget
 }

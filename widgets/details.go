@@ -1,8 +1,7 @@
-package tags
-
-import "gezgin_web_engine/htmlParser/widget"
+package widgets
 
 type HtmlTagDetails struct {
+	*Widget
 	open bool
 }
 
@@ -13,6 +12,15 @@ func (receiver *HtmlTagDetails) ContextReaderFunc(context string) {
 	}
 }
 
-func SetWidgetPropertiesForDetailsTag(widget *widget.Widget) {
-	widget.WidgetProperties = new(HtmlTagDetails)
+func (receiver *HtmlTagDetails) Draw() {
+
+}
+
+func (receiver *HtmlTagDetails) Render() {
+
+}
+
+func SetWidgetPropertiesForDetailsTag() WidgetInterface {
+	widget := new(HtmlTagDetails)
+	return widget
 }

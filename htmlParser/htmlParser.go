@@ -1,7 +1,6 @@
 package htmlParser
 
 import (
-	"gezgin_web_engine/htmlParser/tags"
 	"strings"
 	"sync"
 )
@@ -27,10 +26,10 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 			if start > 0 {
 				//make untagged text to strip
 				newHtmlElement := HtmlElement{
-					HtmlTag:          HTML_UNTAGGED_TEXT,
-					WidgetProperties: tags.UntaggedText{Value: data[seek : seek+start]},
-					Parent:           currentElement,
-					ChildrenIndex:    currentElement.ChildrenCount,
+					HtmlTag:       HTML_UNTAGGED_TEXT,
+					Text:          data[seek : seek+start],
+					Parent:        currentElement,
+					ChildrenIndex: currentElement.ChildrenCount,
 					//draw and render function
 				}
 				currentElement.ChildrenCount++
@@ -57,6 +56,7 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 		}
 	}
 	wg.Wait()
+	close(nodes)
 }
 
 func CreateDocumentWidget() (document *HtmlElement) {

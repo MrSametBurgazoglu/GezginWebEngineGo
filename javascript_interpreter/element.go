@@ -2,14 +2,13 @@ package javascript_interpreter
 
 import (
 	"gezgin_web_engine/cssParser"
-	"gezgin_web_engine/htmlParser/widget"
 	v8 "rogchap.com/v8go"
 )
 
 var Element *v8.ObjectTemplate
 
-func searchElementById(elementId string) *widget.Widget {
-	widgetList := []*widget.Widget{globalDocument}
+func searchElementById(elementId string) *tags.Widget {
+	widgetList := []*tags.Widget{globalDocument}
 	length := len(widgetList)
 	keepGo := true
 	for keepGo {

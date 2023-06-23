@@ -1,4 +1,4 @@
-package tags
+package widgets
 
 import (
 	"gezgin_web_engine/utils"

@@ -1,6 +1,4 @@
-package tags
-
-import "gezgin_web_engine/htmlParser/widget"
+package widgets
 
 type HtmlTagScript struct {
 	async          bool
@@ -45,6 +43,6 @@ func (receiver *HtmlTagScript) VarReaderFunc(variableName string, variableValue 
 	}
 }
 
-func SetWidgetPropertiesForScriptTag(widget *widget.Widget) {
+func SetWidgetPropertiesForScriptTag(widget *Widget) {
 	widget.WidgetProperties = new(HtmlTagLink)
 }

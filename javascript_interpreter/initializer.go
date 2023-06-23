@@ -2,15 +2,15 @@ package javascript_interpreter
 
 import (
 	"gezgin_web_engine/htmlParser/tags"
-	"gezgin_web_engine/htmlParser/widget"
+	tags2 "gezgin_web_engine/widgets"
 	v8 "rogchap.com/v8go"
 )
 
-var ScriptElements []*widget.Widget
+var ScriptElements []*tags2.Widget
 
-var globalDocument *widget.Widget
+var globalDocument *tags2.Widget
 
-func parseScriptElements(context *v8.Context, element *widget.Widget) {
+func parseScriptElements(context *v8.Context, element *tags2.Widget) {
 	scriptWidget, ok := element.Children[0].WidgetProperties.(tags.UntaggedText)
 	if ok {
 		_, err := context.RunScript(scriptWidget.Value, "script.js")
@@ -21,7 +21,7 @@ func parseScriptElements(context *v8.Context, element *widget.Widget) {
 	}
 }
 
-func InitializeJSInterpreter(document *widget.Widget) {
+func InitializeJSInterpreter(document *tags2.Widget) {
 	globalDocument = document
 	iso := v8.NewIsolate()
 	//defer iso.Dispose()

@@ -1,7 +1,6 @@
-package tags
+package widgets
 
 import (
-	"gezgin_web_engine/htmlParser/widget"
 	"strconv"
 )
 
@@ -56,6 +55,6 @@ func (receiver *HtmlTagTextArea) VarReaderFunc(variableName string, variableValu
 	}
 }
 
-func SetWidgetPropertiesForTextAreaTag(widget *widget.Widget) {
+func SetWidgetPropertiesForTextAreaTag(widget *Widget) {
 	widget.WidgetProperties = new(HtmlTagTextArea)
 }

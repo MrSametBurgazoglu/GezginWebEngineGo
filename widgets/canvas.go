@@ -1,11 +1,11 @@
-package tags
+package widgets
 
 import (
-	"gezgin_web_engine/htmlParser/widget"
 	"strconv"
 )
 
 type HtmlTagCanvas struct {
+	*Widget
 	width  int
 	height int
 }
@@ -20,6 +20,15 @@ func (receiver *HtmlTagCanvas) VarReaderFunc(variableName string, variableValue 
 	}
 }
 
-func SetWidgetPropertiesForCanvasTag(widget *widget.Widget) {
-	widget.WidgetProperties = new(HtmlTagCanvas)
+func (receiver *HtmlTagCanvas) Draw() {
+
+}
+
+func (receiver *HtmlTagCanvas) Render() {
+
+}
+
+func SetWidgetPropertiesForCanvasTag() WidgetInterface {
+	widget := new(HtmlTagCanvas)
+	return widget
 }

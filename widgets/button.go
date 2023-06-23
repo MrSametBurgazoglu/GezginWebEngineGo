@@ -1,8 +1,7 @@
-package tags
-
-import "gezgin_web_engine/htmlParser/widget"
+package widgets
 
 type HtmlTagButton struct {
+	*Widget
 	autoFocus      bool
 	disabled       bool
 	formNovalidate bool
@@ -50,6 +49,15 @@ func (receiver *HtmlTagButton) VarReaderFunc(variableName string, variableValue 
 	}
 }
 
-func SetWidgetPropertiesForButtonTag(widget *widget.Widget) {
-	widget.WidgetProperties = new(HtmlTagButton)
+func (receiver *HtmlTagButton) Draw() {
+
+}
+
+func (receiver *HtmlTagButton) Render() {
+
+}
+
+func SetWidgetPropertiesForButtonTag() WidgetInterface {
+	widget := new(HtmlTagButton)
+	return widget
 }

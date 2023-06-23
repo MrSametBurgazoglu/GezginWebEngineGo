@@ -1,8 +1,7 @@
-package tags
-
-import "gezgin_web_engine/htmlParser/widget"
+package widgets
 
 type HtmlTagA struct {
+	*Widget
 	download string
 	href     string
 	hrefLang string
@@ -20,6 +19,15 @@ func (receiver *HtmlTagA) VarReaderFunc(variableName string, variableValue strin
 	}
 }
 
-func SetWidgetPropertiesForATag(widget *widget.Widget) {
-	widget.WidgetProperties = new(HtmlTagA)
+func (receiver *HtmlTagA) Draw() {
+
+}
+
+func (receiver *HtmlTagA) Render() {
+
+}
+
+func SetWidgetPropertiesForATag() WidgetInterface {
+	widget := new(HtmlTagA)
+	return widget
 }

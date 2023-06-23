@@ -1,0 +1,43 @@
+package properties
+
+import (
+	"gezgin_web_engine/StyleEngine"
+	"gezgin_web_engine/StyleEngine/enums"
+)
+
+func setVisibility(cssProperties *StyleEngine.StyleProperty, value string) {
+	if value == "hidden" {
+		cssProperties.Visibility = enums.CSS_VISIBILITY_HIDDEN
+	} else if value == "collapse" {
+		cssProperties.Visibility = enums.CSS_VISIBILITY_COLLAPSE
+	} else {
+		cssProperties.Visibility = enums.CSS_VISIBILITY_VISIBLE
+	}
+}
+
+func VisibilityPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+	if value == "inherit" {
+		cssProperties.VisibilityInherit = true
+	} else {
+		cssProperties.VisibilityInherit = false
+		if value == "initial" {
+			cssProperties.Visibility = enums.CSS_VISIBILITY_VISIBLE
+		} else {
+			setVisibility(cssProperties, value)
+		}
+	}
+}
+
+func computeInheritVisibility(dest, source *StyleEngine.StyleProperty) {
+	if dest.Visibility == enums.CSS_VISIBILITY_EMPTY {
+		dest.Visibility = source.Visibility
+	}
+}
+
+func updateVisibility(cssProperties, source *StyleEngine.StyleProperty) {
+	if source.VisibilityInherit {
+		cssProperties.VisibilityInherit = true
+	} else if source.Visibility != enums.CSS_VISIBILITY_EMPTY {
+		cssProperties.Visibility = source.Visibility
+	}
+}

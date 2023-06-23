@@ -4,11 +4,10 @@ import (
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/drawer/calculator"
 	"gezgin_web_engine/htmlParser"
-	"gezgin_web_engine/htmlParser/widget"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-func allChildrenRendered(widget *widget.Widget) bool {
+func allChildrenRendered(widget *tags.Widget) bool {
 	for _, child := range widget.Children {
 		if child.Rendered == false {
 			return false
@@ -21,9 +20,9 @@ func SetWindowSize(height int, width int) {
 	ScreenProperties.SetWindowSize(height, width)
 }
 
-func RenderDocument(document *widget.Widget, renderer *sdl.Renderer) {
-	widgetList := []*widget.Widget{document}
-	var edgeList []*widget.Widget
+func RenderDocument(document *tags.Widget, renderer *sdl.Renderer) {
+	widgetList := []*tags.Widget{document}
+	var edgeList []*tags.Widget
 	length := len(widgetList)
 	keepGo := true
 	for keepGo {
@@ -69,8 +68,8 @@ func RenderDocument(document *widget.Widget, renderer *sdl.Renderer) {
 	}
 }
 
-func DrawDocument(document *widget.Widget, renderer *sdl.Renderer) {
-	widgetList := []*widget.Widget{document}
+func DrawDocument(document *tags.Widget, renderer *sdl.Renderer) {
+	widgetList := []*tags.Widget{document}
 	widgetIndexList := []int{0}
 	currentIndex := 0
 	for widgetIndexList[0] != document.ChildrenCount {
@@ -100,24 +99,24 @@ func DrawDocument(document *widget.Widget, renderer *sdl.Renderer) {
 }
 
 // TEMPORARY WIDTH AND HEIGHT FUNCTIONS FOR MAKING TEXT RESPONSIVE
-func setWidthForWidget(widget *widget.Widget) {
+func setWidthForWidget(widget *tags.Widget) {
 	width := calculator.CalculateWidthOfWidget(widget)
 	widget.DrawProperties.Rect.W = int32(width)
 }
-func setHeightForWidget(widget *widget.Widget) {
+func setHeightForWidget(widget *tags.Widget) {
 	height := calculator.CalculateHeightOfWidget(widget)
 	widget.DrawProperties.Rect.H = int32(height)
 }
 
-func setXYForWidget(widget *widget.Widget) {
+func setXYForWidget(widget *tags.Widget) {
 	posX := calculator.CalculateXPosOfWidget(widget)
 	posY := calculator.CalculateYPosOfWidget(widget)
 	widget.DrawProperties.Rect.X = posX
 	widget.DrawProperties.Rect.Y = posY
 }
 
-func setWidthForBlockElements(document *widget.Widget) {
-	widgetList := []*widget.Widget{document}
+func setWidthForBlockElements(document *tags.Widget) {
+	widgetList := []*tags.Widget{document}
 	widgetIndexList := []int{0}
 	currentIndex := 0
 	for widgetIndexList[0] != document.ChildrenCount {
@@ -152,8 +151,8 @@ func setWidthForBlockElements(document *widget.Widget) {
 	}
 }
 
-func setWidthForInlineElements(document *widget.Widget) {
-	widgetList := []*widget.Widget{document}
+func setWidthForInlineElements(document *tags.Widget) {
+	widgetList := []*tags.Widget{document}
 	widgetIndexList := []int{0}
 	currentIndex := 0
 	for widgetIndexList[0] != document.ChildrenCount {
@@ -188,8 +187,8 @@ func setWidthForInlineElements(document *widget.Widget) {
 	}
 }
 
-func setHeightForInlineElements(document *widget.Widget) {
-	widgetList := []*widget.Widget{document}
+func setHeightForInlineElements(document *tags.Widget) {
+	widgetList := []*tags.Widget{document}
 	widgetIndexList := []int{0}
 	currentIndex := 0
 	for widgetIndexList[0] != document.ChildrenCount {
@@ -224,8 +223,8 @@ func setHeightForInlineElements(document *widget.Widget) {
 	}
 }
 
-func setHeightForBlockElements(document *widget.Widget) {
-	widgetList := []*widget.Widget{document}
+func setHeightForBlockElements(document *tags.Widget) {
+	widgetList := []*tags.Widget{document}
 	widgetIndexList := []int{0}
 	currentIndex := 0
 	for widgetIndexList[0] != document.ChildrenCount {
@@ -260,7 +259,7 @@ func setHeightForBlockElements(document *widget.Widget) {
 	}
 }
 
-func SetDrawPropertiesForWidgets(document *widget.Widget, renderer *sdl.Renderer) {
+func SetDrawPropertiesForWidgets(document *tags.Widget, renderer *sdl.Renderer) {
 	document.DrawProperties.Rect.W = int32(ScreenProperties.WindowWidth)
 	document.DrawProperties.Rect.H = int32(ScreenProperties.WindowHeight)
 	setWidthForBlockElements(document)
@@ -271,8 +270,8 @@ func SetDrawPropertiesForWidgets(document *widget.Widget, renderer *sdl.Renderer
 	SetPositionOfElements(document)
 }
 
-func SetPositionOfElements(document *widget.Widget) {
-	widgetList := []*widget.Widget{document}
+func SetPositionOfElements(document *tags.Widget) {
+	widgetList := []*tags.Widget{document}
 	widgetIndexList := []int{0}
 	currentIndex := 0
 	for widgetIndexList[0] != document.ChildrenCount {

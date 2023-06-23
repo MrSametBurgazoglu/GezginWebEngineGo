@@ -1,13 +1,12 @@
 package calculator
 
 import (
-	"gezgin_web_engine/cssParser/enums"
+	"gezgin_web_engine/StyleEngine/enums"
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/htmlParser"
-	"gezgin_web_engine/htmlParser/widget"
 )
 
-func CalculateWidthOfWidget(widget *widget.Widget) int {
+func CalculateWidthOfWidget(widget *tags.Widget) int {
 	if widget.HtmlTag == htmlParser.HTML_UNTAGGED_TEXT {
 		return int(widget.DrawProperties.Rect.W)
 	} else if widget.HtmlTag == htmlParser.HTML_IMG {
@@ -24,7 +23,7 @@ func CalculateWidthOfWidget(widget *widget.Widget) int {
 	return ScreenProperties.WindowWidth
 }
 
-func CalculateHeightOfWidget(widget *widget.Widget) (totalHeight int) {
+func CalculateHeightOfWidget(widget *tags.Widget) (totalHeight int) {
 	if widget.HtmlTag == htmlParser.HTML_UNTAGGED_TEXT {
 		return int(widget.DrawProperties.Rect.H)
 	} else if widget.HtmlTag == htmlParser.HTML_IMG {
@@ -38,7 +37,7 @@ func CalculateHeightOfWidget(widget *widget.Widget) (totalHeight int) {
 	return totalHeight
 }
 
-func CalculateXPosOfWidget(currentWidget *widget.Widget) int32 {
+func CalculateXPosOfWidget(currentWidget *tags.Widget) int32 {
 	if currentWidget.CssProperties != nil {
 		switch currentWidget.CssProperties.Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
@@ -72,8 +71,8 @@ func CalculateXPosOfWidget(currentWidget *widget.Widget) int32 {
 	return 0
 }
 
-func CalculateYPosOfWidget(currentWidget *widget.Widget) int32 {
-	var beforeCurrentWidget *widget.Widget
+func CalculateYPosOfWidget(currentWidget *tags.Widget) int32 {
+	var beforeCurrentWidget *tags.Widget
 	if currentWidget.CssProperties != nil {
 		switch currentWidget.CssProperties.Position {
 		case enums.CSS_POSITION_TYPE_STICKY:

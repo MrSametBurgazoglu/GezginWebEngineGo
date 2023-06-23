@@ -2,8 +2,8 @@ package htmlParser
 
 import (
 	"gezgin_web_engine/htmlParser/tags"
-	"gezgin_web_engine/htmlParser/widget"
 	"gezgin_web_engine/utils"
+	tags2 "gezgin_web_engine/widgets"
 )
 
 const HtmlTagCount = 105
@@ -122,7 +122,7 @@ const (
 
 type HtmlTagVariables struct {
 	tag                    HtmlTags
-	widgetPropertyFunction func(widget *widget.Widget) //it's unique to html element some of them doesn't have this function
+	widgetPropertyFunction func(widget *tags2.Widget) //it's unique to html element some of them doesn't have this function
 	endTag                 bool
 	draw                   bool
 }

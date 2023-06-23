@@ -1,8 +1,4 @@
-package tags
-
-import (
-	"gezgin_web_engine/htmlParser/widget"
-)
+package widgets
 
 type HtmlTagStyle struct {
 	media string
@@ -18,6 +14,6 @@ func (receiver *HtmlTagStyle) VarReaderFunc(variableName string, variableValue s
 	}
 }
 
-func SetWidgetPropertiesForStyleTag(widget *widget.Widget) {
+func SetWidgetPropertiesForStyleTag(widget *Widget) {
 	widget.WidgetProperties = new(HtmlTagStyle)
 }

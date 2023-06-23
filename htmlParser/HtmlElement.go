@@ -1,16 +1,19 @@
 package htmlParser
 
-import (
-	"gezgin_web_engine/htmlParser/htmlVariables/standardHtmlTagVariables"
-)
-
 type HtmlElement struct {
-	ChildrenCount    int
-	ChildrenIndex    int
-	HtmlTag          HtmlTags
-	WidgetProperties any
-	Attributes       map[string]string
-	standardHtmlTagVariables.StandardHtmlTagVariables
-	Children []*HtmlElement
-	Parent   *HtmlElement
+	ChildrenCount int
+	ChildrenIndex int
+	HtmlTag       HtmlTags
+	Attributes    map[string]string
+	Children      []*HtmlElement
+	Parent        *HtmlElement
+	Text          string
+}
+
+func (receiver *HtmlElement) GetChildren(index int) *HtmlElement {
+	return receiver.Children[index]
+}
+
+func (receiver *HtmlElement) GetText() string {
+	return receiver.Text
 }

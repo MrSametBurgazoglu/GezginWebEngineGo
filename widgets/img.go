@@ -1,11 +1,11 @@
-package tags
+package widgets
 
 import (
-	"gezgin_web_engine/htmlParser/widget"
 	"strconv"
 )
 
 type HtmlTagImg struct {
+	*Widget
 	isMap          bool
 	alt            string
 	sizes          string
@@ -55,6 +55,15 @@ func (receiver *HtmlTagImg) VarReaderFunc(variableName string, variableValue str
 	}
 }
 
-func SetWidgetPropertiesForImgTag(widget *widget.Widget) {
-	widget.WidgetProperties = new(HtmlTagImg)
+func (receiver *HtmlTagImg) Draw() {
+
+}
+
+func (receiver *HtmlTagImg) Render() {
+
+}
+
+func SetWidgetPropertiesForImgTag() WidgetInterface {
+	widget := new(HtmlTagImg)
+	return widget
 }

@@ -1,6 +1,4 @@
-package tags
-
-import "gezgin_web_engine/htmlParser/widget"
+package widgets
 
 type HtmlTagLink struct {
 	href           string
@@ -38,6 +36,6 @@ func (receiver *HtmlTagLink) VarReaderFunc(variableName string, variableValue st
 	}
 }
 
-func SetWidgetPropertiesForLinkTag(widget *widget.Widget) {
+func SetWidgetPropertiesForLinkTag(widget *Widget) {
 	widget.WidgetProperties = new(HtmlTagLink)
 }

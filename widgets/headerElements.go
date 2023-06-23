@@ -1,36 +1,59 @@
-package tags
+package widgets
 
 import (
-	"gezgin_web_engine/cssParser/structs"
-	"gezgin_web_engine/htmlParser/widget"
+	"gezgin_web_engine/StyleEngine/structs"
 )
 
-func SetWidgetPropertiesForH1Tag(widget *widget.Widget) {
-	widget.CssProperties.Font = new(structs.Font)
-	widget.CssProperties.Font.FontSizeValue = 24
+type HtmlTagHeader struct {
+	*Widget
 }
 
-func SetWidgetPropertiesForH2Tag(widget *widget.Widget) {
-	widget.CssProperties.Font = new(structs.Font)
-	widget.CssProperties.Font.FontSizeValue = 20
+func (receiver *HtmlTagHeader) Draw() {
+
 }
 
-func SetWidgetPropertiesForH3Tag(widget *widget.Widget) {
-	widget.CssProperties.Font = new(structs.Font)
-	widget.CssProperties.Font.FontSizeValue = 12
+func (receiver *HtmlTagHeader) Render() {
+
 }
 
-func SetWidgetPropertiesForH4Tag(widget *widget.Widget) {
-	widget.CssProperties.Font = new(structs.Font)
-	widget.CssProperties.Font.FontSizeValue = 10
+func SetWidgetPropertiesForH1Tag() WidgetInterface {
+	widget := new(HtmlTagHeader)
+	widget.StyleProperty.Font = new(structs.Font)
+	widget.StyleProperty.Font.FontSizeValue = 24
+	return widget
 }
 
-func SetWidgetPropertiesForH5Tag(widget *widget.Widget) {
-	widget.CssProperties.Font = new(structs.Font)
-	widget.CssProperties.Font.FontSizeValue = 8
+func SetWidgetPropertiesForH2Tag() WidgetInterface {
+	widget := new(HtmlTagHeader)
+	widget.StyleProperty.Font = new(structs.Font)
+	widget.StyleProperty.Font.FontSizeValue = 20
+	return widget
 }
 
-func SetWidgetPropertiesForH6Tag(widget *widget.Widget) {
-	widget.CssProperties.Font = new(structs.Font)
-	widget.CssProperties.Font.FontSizeValue = 6
+func SetWidgetPropertiesForH3Tag() WidgetInterface {
+	widget := new(HtmlTagHeader)
+	widget.StyleProperty.Font = new(structs.Font)
+	widget.StyleProperty.Font.FontSizeValue = 12
+	return widget
+}
+
+func SetWidgetPropertiesForH4Tag() WidgetInterface {
+	widget := new(HtmlTagHeader)
+	widget.StyleProperty.Font = new(structs.Font)
+	widget.StyleProperty.Font.FontSizeValue = 10
+	return widget
+}
+
+func SetWidgetPropertiesForH5Tag() WidgetInterface {
+	widget := new(HtmlTagHeader)
+	widget.StyleProperty.Font = new(structs.Font)
+	widget.StyleProperty.Font.FontSizeValue = 8
+	return widget
+}
+
+func SetWidgetPropertiesForH6Tag() WidgetInterface {
+	widget := new(HtmlTagHeader)
+	widget.StyleProperty.Font = new(structs.Font)
+	widget.StyleProperty.Font.FontSizeValue = 6
+	return widget
 }
