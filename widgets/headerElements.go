@@ -2,17 +2,21 @@ package widgets
 
 import (
 	"gezgin_web_engine/StyleEngine/structs"
+	"gezgin_web_engine/drawer/drawerBackend"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 type HtmlTagHeader struct {
 	*Widget
 }
 
-func (receiver *HtmlTagHeader) Draw() {
-
+func (receiver *HtmlTagHeader) Draw(renderer *sdl.Renderer) {
+	if receiver.GetStyleProperty().Background != nil {
+		drawerBackend.DrawBackground(receiver, renderer)
+	}
 }
 
-func (receiver *HtmlTagHeader) Render() {
+func (receiver *HtmlTagHeader) Render(renderer *sdl.Renderer) {
 
 }
 

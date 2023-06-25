@@ -1,4 +1,4 @@
-package cssParser
+package CssParser
 
 import (
 	"gezgin_web_engine/GlobalTypes"

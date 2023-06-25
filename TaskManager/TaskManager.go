@@ -1,11 +1,12 @@
 package TaskManager
 
 import (
+	"gezgin_web_engine/CssParser"
 	"gezgin_web_engine/FileManager"
+	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/JavascriptHandler"
 	"gezgin_web_engine/StyleEngine"
-	"gezgin_web_engine/cssParser"
 	"gezgin_web_engine/eventSystem"
-	"gezgin_web_engine/htmlParser"
 	"gezgin_web_engine/widgets"
 	"github.com/gammazero/workerpool"
 	"github.com/veandco/go-sdl2/sdl"
@@ -20,30 +21,35 @@ type Task interface {
 }
 
 type TaskManager struct {
-	WorkerPool     *workerpool.WorkerPool
-	HtmlDocument   *htmlParser.HtmlElement
-	EventMap       map[string][]eventSystem.InputWidget
-	htmlParser     *htmlParser.HtmlParser
-	cssParser      *cssParser.CssParser
-	styleEngine    *StyleEngine.StyleEngine
-	DocumentWidget *widgets.DocumentWidget
+	WorkerPool       *workerpool.WorkerPool
+	HtmlDocument     *HtmlParser.HtmlElement
+	EventMap         map[string][]eventSystem.InputWidget
+	htmlParser       *HtmlParser.HtmlParser
+	cssParser        *CssParser.CssParser
+	styleEngine      *StyleEngine.StyleEngine
+	javascriptEngine *JavascriptHandler.JavascriptEngine
+	DocumentWidget   *widgets.DocumentWidget
 }
 
 func (receiver *TaskManager) Initialize() {
 	receiver.WorkerPool = workerpool.New(runtime.NumCPU() - 1)
+	receiver.htmlParser = new(HtmlParser.HtmlParser)
+	receiver.cssParser = new(CssParser.CssParser)
+	receiver.styleEngine = new(StyleEngine.StyleEngine)
 	receiver.styleEngine.WorkerPool = workerpool.New(runtime.NumCPU() - 1)
+	receiver.javascriptEngine = new(JavascriptHandler.JavascriptEngine)
 	//receiver.styleEngine.Run()
 }
 
 func (receiver *TaskManager) CreateFromFile(fileUrl string) {
 	dat := FileManager.LoadFile(fileUrl)
-	receiver.HtmlDocument = htmlParser.CreateDocumentWidget()
-	nodes := make(chan *htmlParser.HtmlElement)
+	receiver.HtmlDocument = HtmlParser.CreateDocumentElement()
+	nodes := make(chan *HtmlParser.HtmlElement)
 	receiver.htmlParser.ParseHtmlFromFile(receiver.HtmlDocument, dat, nodes)
 	for node := range nodes {
-		if node.HtmlTag == htmlParser.HTML_SCRIPT {
-			//to js interpreter
-		} else if node.HtmlTag == htmlParser.HTML_STYLE {
+		if node.HtmlTag == HtmlParser.HTML_SCRIPT {
+			receiver.HandleScriptTag(node)
+		} else if node.HtmlTag == HtmlParser.HTML_STYLE {
 			styleSheet := receiver.styleEngine.CreateCssSheet(false)
 			receiver.styleEngine.WorkerPool.Submit(func() { receiver.HandleStyleTag(node, styleSheet) }) //maybe worker pool
 		}
@@ -53,19 +59,25 @@ func (receiver *TaskManager) CreateFromFile(fileUrl string) {
 	receiver.SetStylePropertiesOfDocument()
 	receiver.SetInheritStylePropertiesOfDocument()
 	/*
-		cssParser.ParseCssFromDocument(receiver.Document)
-		cssParser.SetInheritCssProperties(receiver.Document)
-		javascript_interpreter.InitializeJSInterpreter(receiver.Document)
+		CssParser.ParseCssFromDocument(receiver.Document)
+		CssParser.SetInheritCssProperties(receiver.Document)
+		JavascriptHandler.InitializeJSInterpreter(receiver.Document)
 	*/
 }
 
-func (receiver *TaskManager) HandleStyleTag(htmlElement *htmlParser.HtmlElement, styleSheet *StyleEngine.StyleSheet) {
+func (receiver *TaskManager) HandleStyleTag(htmlElement *HtmlParser.HtmlElement, styleSheet *StyleEngine.StyleSheet) {
 	result := receiver.cssParser.ParseCssFromStyleTag(htmlElement, htmlElement.Children[0].GetText())
 	receiver.styleEngine.CreateStyleRules(styleSheet, result)
 }
 
-func (receiver *TaskManager) HandleScriptTag(styleElement *htmlParser.HtmlElement) {
+func (receiver *TaskManager) HandleScriptTag(scriptElement *HtmlParser.HtmlElement) {
 	//give style element to v8 engine
+	receiver.javascriptEngine.AppendScript(scriptElement.Children[0].GetText())
+}
+
+func (receiver *TaskManager) ExecuteScripts(scriptElement *HtmlParser.HtmlElement) {
+	//give style element to v8 engine
+	receiver.javascriptEngine.ExecuteScripts()
 }
 
 func (receiver *TaskManager) CreateWidgetTree() {
@@ -77,7 +89,7 @@ func (receiver *TaskManager) CreateWidgetTree() {
 	wg.Wait()
 }
 
-func (receiver *TaskManager) CreateWidgetForTree(parentWidget widgets.WidgetInterface, parentHtmlElement *htmlParser.HtmlElement, group *sync.WaitGroup) {
+func (receiver *TaskManager) CreateWidgetForTree(parentWidget widgets.WidgetInterface, parentHtmlElement *HtmlParser.HtmlElement, group *sync.WaitGroup) {
 	for _, child := range parentHtmlElement.Children {
 		newWidget := widgets.WidgetFunctions[child.HtmlTag]()
 		newWidget.CopyFromHtmlElement(child)
@@ -89,14 +101,14 @@ func (receiver *TaskManager) CreateWidgetForTree(parentWidget widgets.WidgetInte
 	group.Done()
 }
 
-func (receiver *TaskManager) FindBody() *htmlParser.HtmlElement {
-	elementList := []*htmlParser.HtmlElement{receiver.HtmlDocument}
+func (receiver *TaskManager) FindBody() *HtmlParser.HtmlElement {
+	elementList := []*HtmlParser.HtmlElement{receiver.HtmlDocument}
 	length := len(elementList)
 	keepGo := true
 	for keepGo {
 		keepGo = false
 		for _, w := range elementList {
-			if w.HtmlTag == htmlParser.HTML_BODY {
+			if w.HtmlTag == HtmlParser.HTML_BODY {
 				return w
 			} else if w.ChildrenCount > 0 {
 				for _, child := range w.Children {
@@ -147,9 +159,18 @@ func (receiver *TaskManager) SetInheritStylePropertiesOfWidget(widget widgets.Wi
 }
 
 func (receiver *TaskManager) Draw(renderer *sdl.Renderer) {
+	receiver.DocumentWidget.Draw(renderer)
 
 }
 
 func (receiver *TaskManager) Render(renderer *sdl.Renderer) {
+	receiver.DocumentWidget.Render(renderer)
+}
 
+func (receiver *TaskManager) IsRendered() bool {
+	return receiver.DocumentWidget.Rendered
+}
+
+func (receiver *TaskManager) SetRendered(rendered bool) {
+	receiver.DocumentWidget.Rendered = rendered
 }

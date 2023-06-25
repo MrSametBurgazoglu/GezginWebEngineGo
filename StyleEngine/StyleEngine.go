@@ -2,7 +2,7 @@ package StyleEngine
 
 import (
 	"gezgin_web_engine/GlobalTypes"
-	"gezgin_web_engine/htmlParser"
+	"gezgin_web_engine/HtmlParser"
 	"github.com/gammazero/workerpool"
 	"strings"
 )
@@ -83,7 +83,7 @@ func (receiver *StyleEngine) GetCssRulesByClass(class string, external bool) (ru
 func (receiver *StyleEngine) GetCssRulesByTag(htmlTag int, external bool) (ruleList []*CssRuleListItem) {
 	for _, sheet := range receiver.CssStyleSheetList {
 		if sheet.external == external {
-			rules := sheet.cssRuleList.GetCssRulesByElement(htmlParser.HtmlTags(htmlTag))
+			rules := sheet.cssRuleList.GetCssRulesByElement(HtmlParser.HtmlTags(htmlTag))
 			ruleList = append(ruleList, rules)
 		}
 	}
@@ -123,7 +123,7 @@ func (receiver *StyleSheet) GetCssRuleItem(selector string) *CssRuleListItem {
 			cssRuleList = receiver.cssRuleList.CreateNewCssRulesByClass(selector[1:])
 		}
 	default:
-		tag := htmlParser.GetElementTag(selector[0:])
+		tag := HtmlParser.GetElementTag(selector[0:])
 		cssRuleList = receiver.cssRuleList.GetCssRulesByElement(tag)
 		if cssRuleList == nil {
 			cssRuleList = receiver.cssRuleList.CreateNewCssPropertiesByElement(tag)

@@ -1,6 +1,8 @@
 package widgets
 
 import (
+	"gezgin_web_engine/drawer/drawerBackend"
+	"github.com/veandco/go-sdl2/sdl"
 	"strconv"
 )
 
@@ -55,11 +57,17 @@ func (receiver *HtmlTagImg) VarReaderFunc(variableName string, variableValue str
 	}
 }
 
-func (receiver *HtmlTagImg) Draw() {
-
+func (receiver *HtmlTagImg) Draw(renderer *sdl.Renderer) {
+	renderer.Copy(receiver.DrawProperties.Texture, nil, &receiver.DrawProperties.Rect)
 }
 
-func (receiver *HtmlTagImg) Render() {
+func (receiver *HtmlTagImg) Render(renderer *sdl.Renderer) {
+	drawerBackend.GetImageTexture(
+		renderer,
+		receiver.Src,
+		&receiver.DrawProperties.Texture,
+		&receiver.DrawProperties.Rect,
+	)
 
 }
 

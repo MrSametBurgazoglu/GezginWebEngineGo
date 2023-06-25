@@ -1,4 +1,4 @@
-package cssParser
+package CssParser
 
 import (
 	"gezgin_web_engine/GlobalTypes"
@@ -75,7 +75,7 @@ BU style_engine'e gidicek
 				cssWidget = tree.CreateNewCssPropertiesByClass(selector[1:])
 			}
 		default:
-			tag := htmlParser.GetElementTag(selector[0:])
+			tag := HtmlParser.GetElementTag(selector[0:])
 			cssWidget = tree.GetCssRulesByElement(tag)
 			if cssWidget == nil {
 				cssWidget = tree.CreateNewCssPropertiesByElement(tag)
@@ -149,7 +149,7 @@ func getCssWidget(selector string, channel chan *StyleEngine.StyleProperty) {
 			cssWidget = StyleEngine.CreateNewCssPropertiesByClass(selector[1:])
 		}
 	default:
-		tag := htmlParser.GetElementTag(selector[0:])
+		tag := HtmlParser.GetElementTag(selector[0:])
 		cssWidget = StyleEngine.GetCssPropertiesByElement(tag)
 		if cssWidget == nil {
 			cssWidget = StyleEngine.CreateNewCssPropertiesByElement(tag)
@@ -226,7 +226,7 @@ func SetInheritCssProperties(document *tags.Widget) {
 				}
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
-					if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].HtmlTag != htmlParser.HTML_UNTAGGED_TEXT {
+					if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].HtmlTag != HtmlParser.HTML_UNTAGGED_TEXT {
 						currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
 						StyleEngine.computeInheritCssProperties(currentWidget.CssProperties,
 							currentWidget.Parent.CssProperties)
@@ -262,7 +262,7 @@ func ParseCssFromDocument(document *tags.Widget) {
 					widgetList = append(widgetList, widgetList[currentIndex].Children[widgetIndexList[currentIndex]])
 					widgetIndexList = append(widgetIndexList, 0)
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					if currentWidget.HtmlTag != htmlParser.HTML_UNTAGGED_TEXT {
+					if currentWidget.HtmlTag != HtmlParser.HTML_UNTAGGED_TEXT {
 						SetCssProperties(currentWidget)
 					}
 					currentIndex++
@@ -272,7 +272,7 @@ func ParseCssFromDocument(document *tags.Widget) {
 			} else {
 				if widgetList[currentIndex].Children[widgetIndexList[currentIndex]].Draw {
 					currentWidget := widgetList[currentIndex].Children[widgetIndexList[currentIndex]]
-					if currentWidget.HtmlTag != htmlParser.HTML_UNTAGGED_TEXT {
+					if currentWidget.HtmlTag != HtmlParser.HTML_UNTAGGED_TEXT {
 						SetCssProperties(currentWidget)
 					}
 				}

@@ -1,7 +1,6 @@
-package htmlParser
+package HtmlParser
 
 import (
-	"gezgin_web_engine/htmlParser/tags"
 	"gezgin_web_engine/utils"
 	tags2 "gezgin_web_engine/widgets"
 )
@@ -237,7 +236,7 @@ var htmlTagList = []string{
 
 var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_DOCTYPE, endTag: true},
-	{tag: HTML_A, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForATag},
+	{tag: HTML_A, draw: true},
 	{tag: HTML_ABBR, draw: true},
 	{tag: HTML_ADDRESS},
 	{tag: HTML_AREA, endTag: true, draw: true},
@@ -274,19 +273,19 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_FIGURE, draw: true},
 	{tag: HTML_FOOTER, draw: true},
 	{tag: HTML_FORM, draw: true},
-	{tag: HTML_H1, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH1Tag},
-	{tag: HTML_H2, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH2Tag},
-	{tag: HTML_H3, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH3Tag},
-	{tag: HTML_H4, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH4Tag},
-	{tag: HTML_H5, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH5Tag},
-	{tag: HTML_H6, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForH6Tag},
+	{tag: HTML_H1, draw: true},
+	{tag: HTML_H2, draw: true},
+	{tag: HTML_H3, draw: true},
+	{tag: HTML_H4, draw: true},
+	{tag: HTML_H5, draw: true},
+	{tag: HTML_H6, draw: true},
 	{tag: HTML_HEAD},
 	{tag: HTML_HEADER, draw: true},
 	{tag: HTML_HR, endTag: true},
 	{tag: HTML_HTML, draw: true},
 	{tag: HTML_I, draw: true},
 	{tag: HTML_IFRAME, draw: true},
-	{tag: HTML_IMG, endTag: true, draw: true, widgetPropertyFunction: tags.SetWidgetPropertiesForImgTag},
+	{tag: HTML_IMG, endTag: true, draw: true},
 	{tag: HTML_INPUT, endTag: true, draw: true},
 	{tag: HTML_INS, draw: true},
 	{tag: HTML_KBD, draw: true},

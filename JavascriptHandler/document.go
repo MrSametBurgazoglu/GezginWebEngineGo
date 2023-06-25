@@ -1,4 +1,4 @@
-package javascript_interpreter
+package JavascriptHandler
 
 import v8 "rogchap.com/v8go"
 

@@ -1,4 +1,4 @@
-package htmlParser
+package HtmlParser
 
 type HtmlElement struct {
 	ChildrenCount int

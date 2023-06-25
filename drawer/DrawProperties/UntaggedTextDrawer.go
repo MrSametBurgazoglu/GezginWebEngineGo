@@ -1,9 +1,9 @@
 package DrawProperties
 
 import (
+	"gezgin_web_engine/HtmlParser/tags"
 	"gezgin_web_engine/drawer/Fonts"
 	"gezgin_web_engine/drawer/drawerBackend"
-	"gezgin_web_engine/htmlParser/tags"
 	tags2 "gezgin_web_engine/widgets"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"

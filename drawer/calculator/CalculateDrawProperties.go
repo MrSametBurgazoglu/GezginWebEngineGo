@@ -1,137 +1,138 @@
 package calculator
 
 import (
+	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/StyleEngine/enums"
 	"gezgin_web_engine/drawer/ScreenProperties"
-	"gezgin_web_engine/htmlParser"
+	"gezgin_web_engine/widgets"
 )
 
-func CalculateWidthOfWidget(widget *tags.Widget) int {
-	if widget.HtmlTag == htmlParser.HTML_UNTAGGED_TEXT {
-		return int(widget.DrawProperties.Rect.W)
-	} else if widget.HtmlTag == htmlParser.HTML_IMG {
-		return int(widget.DrawProperties.Rect.W)
-	} else if widget.CssProperties != nil {
-		if widget.CssProperties.Display == enums.CSS_DISPLAY_TYPE_BLOCK {
-			if widget.CssProperties.Width != 0 {
-				return int(widget.CssProperties.Width)
-			} else if widget.Parent != nil {
-				return int(widget.Parent.DrawProperties.Rect.W)
+func CalculateWidthOfWidget(widget widgets.WidgetInterface) int {
+	if HtmlParser.HtmlTags(widget.GetHtmlTag()) == HtmlParser.HTML_UNTAGGED_TEXT {
+		return int(widget.GetDrawProperties().Rect.W)
+	} else if HtmlParser.HtmlTags(widget.GetHtmlTag()) == HtmlParser.HTML_IMG {
+		return int(widget.GetDrawProperties().Rect.W)
+	} else if widget.GetStyleProperty() != nil {
+		if widget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_BLOCK {
+			if widget.GetStyleProperty().Width != 0 {
+				return int(widget.GetStyleProperty().Width)
+			} else if widget.GetParent() != nil {
+				return int(widget.GetParent().GetDrawProperties().Rect.W)
 			}
 		}
 	}
 	return ScreenProperties.WindowWidth
 }
 
-func CalculateHeightOfWidget(widget *tags.Widget) (totalHeight int) {
-	if widget.HtmlTag == htmlParser.HTML_UNTAGGED_TEXT {
-		return int(widget.DrawProperties.Rect.H)
-	} else if widget.HtmlTag == htmlParser.HTML_IMG {
-		return int(widget.DrawProperties.Rect.H)
+func CalculateHeightOfWidget(widget widgets.WidgetInterface) (totalHeight int) {
+	if HtmlParser.HtmlTags(widget.GetHtmlTag()) == HtmlParser.HTML_UNTAGGED_TEXT {
+		return int(widget.GetDrawProperties().Rect.H)
+	} else if HtmlParser.HtmlTags(widget.GetHtmlTag()) == HtmlParser.HTML_IMG {
+		return int(widget.GetDrawProperties().Rect.H)
 	}
-	for i := 0; i < widget.ChildrenCount; i++ {
-		if widget.Children[i].Draw {
-			totalHeight += int(widget.Children[i].DrawProperties.Rect.H)
+	for i := 0; i < widget.GetChildrenCount(); i++ {
+		if widget.GetChildrenByIndex(i).IsDraw() {
+			totalHeight += int(widget.GetChildrenByIndex(i).GetDrawProperties().Rect.H)
 		}
 	}
 	return totalHeight
 }
 
-func CalculateXPosOfWidget(currentWidget *tags.Widget) int32 {
-	if currentWidget.CssProperties != nil {
-		switch currentWidget.CssProperties.Position {
+func CalculateXPosOfWidget(currentWidget widgets.WidgetInterface) int32 {
+	if currentWidget.GetStyleProperty() != nil {
+		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			return currentWidget.Parent.DrawProperties.Rect.X
+			return currentWidget.GetParent().GetDrawProperties().Rect.X
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			return currentWidget.Parent.DrawProperties.Rect.X
+			return currentWidget.GetParent().GetDrawProperties().Rect.X
 		case enums.CSS_POSITION_TYPE_STATIC:
-			return currentWidget.Parent.DrawProperties.Rect.X
+			return currentWidget.GetParent().GetDrawProperties().Rect.X
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			if currentWidget.CssProperties.Left != 0 {
-				return currentWidget.Parent.DrawProperties.Rect.X + int32(currentWidget.CssProperties.Left)
-			} else if currentWidget.CssProperties.Right != 0 {
-				return currentWidget.Parent.DrawProperties.Rect.W - int32(currentWidget.CssProperties.Right)
+			if currentWidget.GetStyleProperty().Left != 0 {
+				return currentWidget.GetParent().GetDrawProperties().Rect.X + int32(currentWidget.GetStyleProperty().Left)
+			} else if currentWidget.GetStyleProperty().Right != 0 {
+				return currentWidget.GetParent().GetDrawProperties().Rect.W - int32(currentWidget.GetStyleProperty().Right)
 			} else {
-				return currentWidget.Parent.DrawProperties.Rect.X
+				return currentWidget.GetParent().GetDrawProperties().Rect.X
 			}
 		case enums.CSS_POSITION_TYPE_FIXED:
 			break
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			if currentWidget.CssProperties.Left != 0 {
-				return currentWidget.Parent.DrawProperties.Rect.X + int32(currentWidget.CssProperties.Left)
-			} else if currentWidget.CssProperties.Right != 0 {
-				return currentWidget.Parent.DrawProperties.Rect.W - int32(currentWidget.CssProperties.Right)
+			if currentWidget.GetStyleProperty().Left != 0 {
+				return currentWidget.GetParent().GetDrawProperties().Rect.X + int32(currentWidget.GetStyleProperty().Left)
+			} else if currentWidget.GetStyleProperty().Right != 0 {
+				return currentWidget.GetParent().GetDrawProperties().Rect.W - int32(currentWidget.GetStyleProperty().Right)
 			} else {
-				return currentWidget.Parent.DrawProperties.Rect.X
+				return currentWidget.GetParent().GetDrawProperties().Rect.X
 			}
 		}
 	} else {
-		return currentWidget.Parent.DrawProperties.Rect.X
+		return currentWidget.GetParent().GetDrawProperties().Rect.X
 	}
 	return 0
 }
 
-func CalculateYPosOfWidget(currentWidget *tags.Widget) int32 {
-	var beforeCurrentWidget *tags.Widget
-	if currentWidget.CssProperties != nil {
-		switch currentWidget.CssProperties.Position {
+func CalculateYPosOfWidget(currentWidget widgets.WidgetInterface) int32 {
+	var beforeCurrentWidget widgets.WidgetInterface
+	if currentWidget.GetStyleProperty() != nil {
+		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			return currentWidget.Parent.DrawProperties.Rect.X
+			return currentWidget.GetParent().GetDrawProperties().Rect.X
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			if currentWidget.ChildrenIndex > 0 && (currentWidget.Parent.Children[currentWidget.ChildrenIndex-1].Draw || currentWidget.Parent.Children[currentWidget.ChildrenIndex-1].HtmlTag == htmlParser.HTML_UNTAGGED_TEXT) {
-				beforeCurrentWidget = currentWidget.Parent.Children[currentWidget.ChildrenIndex-1]
+			if currentWidget.GetChildrenIndex() > 0 && (currentWidget.GetParent().GetChildrenByIndex(currentWidget.GetChildrenIndex()-1).IsDraw() || HtmlParser.HtmlTags(currentWidget.GetParent().GetChildrenByIndex(currentWidget.GetChildrenIndex()-1).GetHtmlTag()) == HtmlParser.HTML_UNTAGGED_TEXT) {
+				beforeCurrentWidget = currentWidget.GetParent().GetChildrenByIndex(currentWidget.GetChildrenIndex() - 1)
 				marginTop := 0
-				if currentWidget.CssProperties.Margin != nil {
-					marginTop = currentWidget.CssProperties.Margin.MarginTop
+				if currentWidget.GetStyleProperty().Margin != nil {
+					marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
 				}
-				return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H + int32(marginTop)
+				return beforeCurrentWidget.GetDrawProperties().Rect.Y + beforeCurrentWidget.GetDrawProperties().Rect.H + int32(marginTop)
 			} else {
-				beforeCurrentWidget = currentWidget.Parent
+				beforeCurrentWidget = currentWidget.GetParent()
 				marginTop := 0
-				if currentWidget.CssProperties.Margin != nil {
-					marginTop = currentWidget.CssProperties.Margin.MarginTop
+				if currentWidget.GetStyleProperty().Margin != nil {
+					marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
 				}
-				return beforeCurrentWidget.DrawProperties.Rect.Y + int32(marginTop)
+				return beforeCurrentWidget.GetDrawProperties().Rect.Y + int32(marginTop)
 			}
 		case enums.CSS_POSITION_TYPE_STATIC:
-			if currentWidget.ChildrenIndex > 0 {
-				beforeCurrentWidget = currentWidget.Parent.Children[currentWidget.ChildrenIndex-1]
+			if currentWidget.GetChildrenIndex() > 0 {
+				beforeCurrentWidget = currentWidget.GetParent().GetChildrenByIndex(currentWidget.GetChildrenIndex() - 1)
 			} else {
-				beforeCurrentWidget = currentWidget.Parent
+				beforeCurrentWidget = currentWidget.GetParent()
 			}
 			marginTop := 0
-			if currentWidget.CssProperties.Margin != nil {
-				marginTop = currentWidget.CssProperties.Margin.MarginTop
+			if currentWidget.GetStyleProperty().Margin != nil {
+				marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
 			}
-			return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H + int32(marginTop)
+			return beforeCurrentWidget.GetDrawProperties().Rect.Y + beforeCurrentWidget.GetDrawProperties().Rect.H + int32(marginTop)
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			if currentWidget.CssProperties.Top != 0 {
-				beforeCurrentWidget = currentWidget.Parent
-				return beforeCurrentWidget.DrawProperties.Rect.Y + int32(currentWidget.CssProperties.Top)
-			} else if currentWidget.CssProperties.Bottom != 0 {
-				beforeCurrentWidget = currentWidget.Parent
-				return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H - int32(currentWidget.CssProperties.Bottom)
+			if currentWidget.GetStyleProperty().Top != 0 {
+				beforeCurrentWidget = currentWidget.GetParent()
+				return beforeCurrentWidget.GetDrawProperties().Rect.Y + int32(currentWidget.GetStyleProperty().Top)
+			} else if currentWidget.GetStyleProperty().Bottom != 0 {
+				beforeCurrentWidget = currentWidget.GetParent()
+				return beforeCurrentWidget.GetDrawProperties().Rect.Y + beforeCurrentWidget.GetDrawProperties().Rect.H - int32(currentWidget.GetStyleProperty().Bottom)
 			} else {
-				beforeCurrentWidget = currentWidget.Parent.Children[currentWidget.ChildrenIndex-1]
-				return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H
+				beforeCurrentWidget = currentWidget.GetParent().GetChildrenByIndex(currentWidget.GetChildrenIndex() - 1)
+				return beforeCurrentWidget.GetDrawProperties().Rect.Y + beforeCurrentWidget.GetDrawProperties().Rect.H
 			}
 		case enums.CSS_POSITION_TYPE_FIXED:
 			break
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			if currentWidget.ChildrenIndex > 0 {
-				beforeCurrentWidget = currentWidget.Parent.Children[currentWidget.ChildrenIndex-1]
-				return beforeCurrentWidget.DrawProperties.Rect.Y + beforeCurrentWidget.DrawProperties.Rect.H + int32(currentWidget.CssProperties.Top)
+			if currentWidget.GetChildrenIndex() > 0 {
+				beforeCurrentWidget = currentWidget.GetParent().GetChildrenByIndex(currentWidget.GetChildrenIndex() - 1)
+				return beforeCurrentWidget.GetDrawProperties().Rect.Y + beforeCurrentWidget.GetDrawProperties().Rect.H + int32(currentWidget.GetStyleProperty().Top)
 			} else {
-				beforeCurrentWidget = currentWidget.Parent
-				return beforeCurrentWidget.DrawProperties.Rect.Y + int32(currentWidget.CssProperties.Top)
+				beforeCurrentWidget = currentWidget.GetParent()
+				return beforeCurrentWidget.GetDrawProperties().Rect.Y + int32(currentWidget.GetStyleProperty().Top)
 			}
 		}
 	} else {
-		beforeCurrentWidget = currentWidget.Parent
-		if currentWidget.ChildrenIndex == 0 {
-			return beforeCurrentWidget.DrawProperties.Rect.Y
+		beforeCurrentWidget = currentWidget.GetParent()
+		if currentWidget.GetChildrenIndex() == 0 {
+			return beforeCurrentWidget.GetDrawProperties().Rect.Y
 		} else {
-			return beforeCurrentWidget.Children[currentWidget.ChildrenIndex-1].DrawProperties.Rect.Y + beforeCurrentWidget.Children[currentWidget.ChildrenIndex-1].DrawProperties.Rect.H
+			return beforeCurrentWidget.GetChildrenByIndex(currentWidget.GetChildrenIndex()-1).GetDrawProperties().Rect.Y + beforeCurrentWidget.GetChildrenByIndex(currentWidget.GetChildrenIndex()-1).GetDrawProperties().Rect.H
 		}
 	}
 	return 0

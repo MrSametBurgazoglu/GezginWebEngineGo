@@ -1,4 +1,4 @@
-package htmlParser
+package HtmlParser
 
 import (
 	"strings"
@@ -59,7 +59,7 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 	close(nodes)
 }
 
-func CreateDocumentWidget() (document *HtmlElement) {
+func CreateDocumentElement() (document *HtmlElement) {
 	document = new(HtmlElement)
 	document.HtmlTag = HTML_DOCUMENT
 	return

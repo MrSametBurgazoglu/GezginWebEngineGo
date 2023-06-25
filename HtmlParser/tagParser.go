@@ -1,4 +1,4 @@
-package htmlParser
+package HtmlParser
 
 import (
 	"gezgin_web_engine/utils"

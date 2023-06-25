@@ -1,4 +1,4 @@
-package cssParser
+package CssParser
 
 type CssStyleSheet struct {
 	cssRules *[]CssRule

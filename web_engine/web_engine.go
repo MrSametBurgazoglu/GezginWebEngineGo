@@ -22,6 +22,14 @@ func (receiver *WebTab) RenderPage(renderer *sdl.Renderer) {
 	receiver.taskManager.Render(renderer)
 }
 
+func (receiver *WebTab) IsRendered() bool {
+	return receiver.taskManager.IsRendered()
+}
+
+func (receiver *WebTab) SetRendered(rendered bool) {
+	receiver.taskManager.SetRendered(rendered)
+}
+
 func NewTab() *WebTab {
 	newWebTab := new(WebTab)
 	newWebTab.taskManager = new(TaskManager.TaskManager)
@@ -41,11 +49,11 @@ var document *tags.Widget
 	}
 
 	func OpenWebEngine(fileUrl string) {
-		document = htmlParser.ParseHtmlFromFile(fileUrl)
-		cssParser.WaitCssScrapingOperations()
-		cssParser.ParseCssFromDocument(document)
-		cssParser.SetInheritCssProperties(document)
-		javascript_interpreter.InitializeJSInterpreter(document)
+		document = HtmlParser.ParseHtmlFromFile(fileUrl)
+		CssParser.WaitCssScrapingOperations()
+		CssParser.ParseCssFromDocument(document)
+		CssParser.SetInheritCssProperties(document)
+		JavascriptHandler.InitializeJSInterpreter(document)
 	}
 
 	func InitDrawer(height, width int) {

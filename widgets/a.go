@@ -1,5 +1,7 @@
 package widgets
 
+import "github.com/veandco/go-sdl2/sdl"
+
 type HtmlTagA struct {
 	*Widget
 	download string
@@ -19,11 +21,11 @@ func (receiver *HtmlTagA) VarReaderFunc(variableName string, variableValue strin
 	}
 }
 
-func (receiver *HtmlTagA) Draw() {
+func (receiver *HtmlTagA) Draw(renderer *sdl.Renderer) {
 
 }
 
-func (receiver *HtmlTagA) Render() {
+func (receiver *HtmlTagA) Render(renderer *sdl.Renderer) {
 
 }
 

@@ -1,4 +1,4 @@
-package javascript_interpreter
+package JavascriptHandler
 
 import (
 	v8 "rogchap.com/v8go"
@@ -8,7 +8,6 @@ import (
 
 func executeAfter(functionName string, timeMs int, ctx *v8.Context) {
 	time.Sleep(time.Duration(timeMs) * time.Millisecond)
-	//time.Sleep(10000 * time.Millisecond)
 	_, err := ctx.RunScript(functionName+"()", "script.js")
 	if err != nil {
 		println("script error", err.Error())

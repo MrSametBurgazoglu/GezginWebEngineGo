@@ -1,11 +1,12 @@
 package widgets
 
 import (
+	"gezgin_web_engine/CssParser"
+	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/HtmlParser/htmlVariables/standardHtmlTagVariables"
+	"gezgin_web_engine/LayoutEngine"
 	"gezgin_web_engine/StyleEngine"
-	"gezgin_web_engine/cssParser"
 	structs2 "gezgin_web_engine/drawer/structs"
-	"gezgin_web_engine/htmlParser"
-	"gezgin_web_engine/htmlParser/htmlVariables/standardHtmlTagVariables"
 	"github.com/veandco/go-sdl2/sdl"
 	"strings"
 )
@@ -31,6 +32,7 @@ type WidgetInterface interface {
 	SetChildrenIndex(int)
 	GetChildrenIndex() int
 	GetChildren() []WidgetInterface
+	GetChildrenByIndex(int) WidgetInterface
 	AppendChild(WidgetInterface)
 	GetParent() WidgetInterface
 	SetParent(WidgetInterface)
@@ -38,19 +40,21 @@ type WidgetInterface interface {
 	SetDraw(draw bool)
 	IsRender() bool
 	SetRender(render bool)
-	CopyFromHtmlElement(htmlElement *htmlParser.HtmlElement)
+	CopyFromHtmlElement(htmlElement *HtmlParser.HtmlElement)
 	GetStyleProperty() *StyleEngine.StyleProperty
-	Draw()
-	Render()
+	GetDrawProperties() *structs2.DrawProperties
+	Draw(renderer *sdl.Renderer)
+	Render(renderer *sdl.Renderer)
 }
 
 type Widget struct {
-	ID            string
-	Classes       []string
-	ChildrenCount int
-	ChildrenIndex int
-	HtmlElement   *htmlParser.HtmlElement
-	StyleProperty *StyleEngine.StyleProperty
+	ID             string
+	Classes        []string
+	ChildrenCount  int
+	ChildrenIndex  int
+	HtmlElement    *HtmlParser.HtmlElement
+	StyleProperty  *StyleEngine.StyleProperty
+	LayoutProperty *LayoutEngine.LayoutProperty
 	standardHtmlTagVariables.StandardHtmlTagVariables
 	StyleRules     map[string]string
 	DrawProperties *structs2.DrawProperties
@@ -76,6 +80,10 @@ func (receiver *Widget) SetChildrenIndex(index int) {
 
 func (receiver *Widget) GetChildrenIndex() int {
 	return receiver.ChildrenIndex
+}
+
+func (receiver *Widget) GetChildrenByIndex(index int) WidgetInterface {
+	return receiver.Children[index]
 }
 
 func (receiver *Widget) GetChildren() []WidgetInterface {
@@ -114,12 +122,12 @@ func (receiver *Widget) SetRender(render bool) {
 	receiver.Rendered = render
 }
 
-func (receiver *Widget) CopyFromHtmlElement(htmlElement *htmlParser.HtmlElement) {
+func (receiver *Widget) CopyFromHtmlElement(htmlElement *HtmlParser.HtmlElement) {
 	receiver.ChildrenCount = htmlElement.ChildrenCount
 	receiver.ChildrenIndex = htmlElement.ChildrenIndex
 	receiver.ID = htmlElement.Attributes["id"]
 	receiver.Classes = strings.Split(htmlElement.Attributes["class"], " ")
-	receiver.StyleRules = cssParser.ParseCssFromInlineStyle(htmlElement.Attributes["style"])
+	receiver.StyleRules = CssParser.ParseCssFromInlineStyle(htmlElement.Attributes["style"])
 }
 
 func (receiver *Widget) GetStyleProperty() *StyleEngine.StyleProperty {
@@ -140,4 +148,8 @@ func (receiver *Widget) GetHtmlTag() int {
 
 func (receiver *Widget) GetStyleRules() map[string]string {
 	return receiver.StyleRules
+}
+
+func (receiver *Widget) GetDrawProperties() *structs2.DrawProperties {
+	return receiver.DrawProperties
 }

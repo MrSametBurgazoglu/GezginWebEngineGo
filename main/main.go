@@ -74,13 +74,13 @@ func main() {
 				eventSystem.TakeInputFromSdl(event)
 			}
 		}
-		if web_engine.GetDocument().Rendered == false {
+		if newTab.IsRendered() == false {
 			renderer.SetDrawColor(250, 250, 250, 0)
 			renderer.Clear()
-			web_engine.RenderPage(renderer)
-			web_engine.DrawPage(renderer)
+			newTab.RenderPage(renderer)
+			newTab.DrawPage(renderer)
 			renderer.Present()
-			web_engine.GetDocument().Rendered = true
+			newTab.SetRendered(true)
 		}
 	}
 

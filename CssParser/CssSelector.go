@@ -1,4 +1,4 @@
-package cssParser
+package CssParser
 
 type CssSelector struct {
 	selector string
