@@ -10,8 +10,9 @@ type HtmlTagBody struct {
 }
 
 func (receiver *HtmlTagBody) Draw(renderer *sdl.Renderer) {
-	if receiver.StyleProperty.Background != nil {
-		drawerBackend.DrawBody(receiver, renderer)
+	if receiver.GetStyleProperty().Background != nil {
+		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
+		drawerBackend.DrawBackground(red, green, blue, alpha, &receiver.DrawProperties.Rect, renderer)
 	}
 }
 

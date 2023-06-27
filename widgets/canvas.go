@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"github.com/veandco/go-sdl2/sdl"
 	"strconv"
 )
 
@@ -20,11 +21,11 @@ func (receiver *HtmlTagCanvas) VarReaderFunc(variableName string, variableValue 
 	}
 }
 
-func (receiver *HtmlTagCanvas) Draw() {
+func (receiver *HtmlTagCanvas) Draw(renderer *sdl.Renderer) {
 
 }
 
-func (receiver *HtmlTagCanvas) Render() {
+func (receiver *HtmlTagCanvas) Render(renderer *sdl.Renderer) {
 
 }
 

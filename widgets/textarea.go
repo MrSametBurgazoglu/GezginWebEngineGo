@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"github.com/veandco/go-sdl2/sdl"
 	"strconv"
 )
 
@@ -55,6 +56,15 @@ func (receiver *HtmlTagTextArea) VarReaderFunc(variableName string, variableValu
 	}
 }
 
-func SetWidgetPropertiesForTextAreaTag(widget *Widget) {
-	widget.WidgetProperties = new(HtmlTagTextArea)
+func (receiver *HtmlTagTextArea) Draw(renderer *sdl.Renderer) {
+
+}
+
+func (receiver *HtmlTagTextArea) Render(renderer *sdl.Renderer) {
+
+}
+
+func SetWidgetPropertiesForTextAreaTag() *HtmlTagTextArea {
+	widget := new(HtmlTagTextArea)
+	return widget
 }

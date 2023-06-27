@@ -1,5 +1,7 @@
 package widgets
 
+import "github.com/veandco/go-sdl2/sdl"
+
 type HtmlTagLabel struct {
 	*Widget
 	for_ string
@@ -15,11 +17,11 @@ func (receiver *HtmlTagLabel) VarReaderFunc(variableName string, variableValue s
 	}
 }
 
-func (receiver *HtmlTagLabel) Draw() {
+func (receiver *HtmlTagLabel) Draw(renderer *sdl.Renderer) {
 
 }
 
-func (receiver *HtmlTagLabel) Render() {
+func (receiver *HtmlTagLabel) Render(renderer *sdl.Renderer) {
 
 }
 

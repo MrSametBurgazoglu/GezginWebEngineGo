@@ -1,13 +1,12 @@
-package calculator
+package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/StyleEngine/enums"
 	"gezgin_web_engine/drawer/ScreenProperties"
-	"gezgin_web_engine/widgets"
 )
 
-func CalculateWidthOfWidget(widget widgets.WidgetInterface) int {
+func CalculateWidthOfWidget(widget WidgetInterface) int {
 	if HtmlParser.HtmlTags(widget.GetHtmlTag()) == HtmlParser.HTML_UNTAGGED_TEXT {
 		return int(widget.GetDrawProperties().Rect.W)
 	} else if HtmlParser.HtmlTags(widget.GetHtmlTag()) == HtmlParser.HTML_IMG {
@@ -24,7 +23,7 @@ func CalculateWidthOfWidget(widget widgets.WidgetInterface) int {
 	return ScreenProperties.WindowWidth
 }
 
-func CalculateHeightOfWidget(widget widgets.WidgetInterface) (totalHeight int) {
+func CalculateHeightOfWidget(widget WidgetInterface) (totalHeight int) {
 	if HtmlParser.HtmlTags(widget.GetHtmlTag()) == HtmlParser.HTML_UNTAGGED_TEXT {
 		return int(widget.GetDrawProperties().Rect.H)
 	} else if HtmlParser.HtmlTags(widget.GetHtmlTag()) == HtmlParser.HTML_IMG {
@@ -38,7 +37,7 @@ func CalculateHeightOfWidget(widget widgets.WidgetInterface) (totalHeight int) {
 	return totalHeight
 }
 
-func CalculateXPosOfWidget(currentWidget widgets.WidgetInterface) int32 {
+func CalculateXPosOfWidget(currentWidget WidgetInterface) int32 {
 	if currentWidget.GetStyleProperty() != nil {
 		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
@@ -72,8 +71,8 @@ func CalculateXPosOfWidget(currentWidget widgets.WidgetInterface) int32 {
 	return 0
 }
 
-func CalculateYPosOfWidget(currentWidget widgets.WidgetInterface) int32 {
-	var beforeCurrentWidget widgets.WidgetInterface
+func CalculateYPosOfWidget(currentWidget WidgetInterface) int32 {
+	var beforeCurrentWidget WidgetInterface
 	if currentWidget.GetStyleProperty() != nil {
 		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:

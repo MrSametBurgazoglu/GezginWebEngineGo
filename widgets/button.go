@@ -1,5 +1,7 @@
 package widgets
 
+import "github.com/veandco/go-sdl2/sdl"
+
 type HtmlTagButton struct {
 	*Widget
 	autoFocus      bool
@@ -49,11 +51,11 @@ func (receiver *HtmlTagButton) VarReaderFunc(variableName string, variableValue 
 	}
 }
 
-func (receiver *HtmlTagButton) Draw() {
+func (receiver *HtmlTagButton) Draw(renderer *sdl.Renderer) {
 
 }
 
-func (receiver *HtmlTagButton) Render() {
+func (receiver *HtmlTagButton) Render(renderer *sdl.Renderer) {
 
 }
 

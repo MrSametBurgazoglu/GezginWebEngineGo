@@ -1,14 +1,10 @@
 package drawerBackend
 
 import (
-	"gezgin_web_engine/widgets"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-func DrawBackground(widget widgets.WidgetInterface, renderer *sdl.Renderer) {
-	if widget.GetStyleProperty().Background.BackgroundColor != nil {
-		alpha, red, green, blue := widget.GetStyleProperty().Background.BackgroundColor.GetColorByRGBA()
-		renderer.SetDrawColor(red, green, blue, alpha)
-		renderer.FillRect(&widget.GetDrawProperties().Rect)
-	}
+func DrawBackground(red uint8, green uint8, blue uint8, alpha uint8, rect *sdl.Rect, renderer *sdl.Renderer) {
+	renderer.SetDrawColor(red, green, blue, alpha)
+	renderer.FillRect(rect)
 }

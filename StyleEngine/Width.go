@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func SetWidth(cssProperties *StyleEngine.StyleProperty, value string) {
+func SetWidth(cssProperties *StyleProperty, value string) {
 	if strings.HasSuffix(value, "px") {
 		width, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err != nil {
@@ -27,7 +27,7 @@ func SetWidth(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func SetMinWidth(cssProperties *StyleEngine.StyleProperty, value string) {
+func SetMinWidth(cssProperties *StyleProperty, value string) {
 	if strings.HasSuffix(value, "px") {
 		width, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err != nil {
@@ -48,7 +48,7 @@ func SetMinWidth(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func SetMaxWidth(cssProperties *StyleEngine.StyleProperty, value string) {
+func SetMaxWidth(cssProperties *StyleProperty, value string) {
 	if strings.HasSuffix(value, "px") {
 		width, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err != nil {
@@ -69,7 +69,7 @@ func SetMaxWidth(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func WidthPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func WidthPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.WidthInherit = true
 	} else {
@@ -82,7 +82,7 @@ func WidthPropertySetValue(cssProperties *StyleEngine.StyleProperty, value strin
 	}
 }
 
-func MinWidthPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func MinWidthPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.MinWidthInherit = true
 	} else {
@@ -96,7 +96,7 @@ func MinWidthPropertySetValue(cssProperties *StyleEngine.StyleProperty, value st
 	}
 }
 
-func MaxWidthPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func MaxWidthPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.MaxWidthInherit = true
 	} else {
@@ -110,7 +110,7 @@ func MaxWidthPropertySetValue(cssProperties *StyleEngine.StyleProperty, value st
 	}
 }
 
-func ComputeInheritWidth(dest, source *StyleEngine.StyleProperty) {
+func ComputeInheritWidth(dest, source *StyleProperty) {
 	if dest.WidthInherit {
 		dest.Width = source.Width
 		dest.WidthValueType = source.WidthValueType
@@ -125,7 +125,7 @@ func ComputeInheritWidth(dest, source *StyleEngine.StyleProperty) {
 	}
 }
 
-func UpdateWidth(cssProperties, source *StyleEngine.StyleProperty) {
+func UpdateWidth(cssProperties, source *StyleProperty) {
 	if source.WidthInherit {
 		cssProperties.WidthInherit = true
 	} else if cssProperties.WidthValueType != enums.CSS_PROPERTY_VALUE_TYPE_EMPTY {

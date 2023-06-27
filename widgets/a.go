@@ -1,6 +1,8 @@
 package widgets
 
-import "github.com/veandco/go-sdl2/sdl"
+import (
+	"github.com/veandco/go-sdl2/sdl"
+)
 
 type HtmlTagA struct {
 	*Widget

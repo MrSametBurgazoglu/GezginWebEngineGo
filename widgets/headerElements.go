@@ -12,7 +12,8 @@ type HtmlTagHeader struct {
 
 func (receiver *HtmlTagHeader) Draw(renderer *sdl.Renderer) {
 	if receiver.GetStyleProperty().Background != nil {
-		drawerBackend.DrawBackground(receiver, renderer)
+		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
+		drawerBackend.DrawBackground(red, green, blue, alpha, &receiver.DrawProperties.Rect, renderer)
 	}
 }
 

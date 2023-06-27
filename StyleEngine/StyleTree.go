@@ -15,7 +15,7 @@ type CssRuleListItem struct {
 type CssRuleList struct {
 	CssPropertiesByIDList      []*CssRuleListItem
 	CssPropertiesByClassList   []*CssRuleListItem
-	CssPropertiesByElementList [HtmlTagCount]CssRuleListItem //it can be only map
+	CssPropertiesByElementList map[string]*CssRuleListItem //it can be only map
 }
 
 func (receiver *CssRuleList) CreateNewCssRulesByID(id string) (cssRuleListItem *CssRuleListItem) {
@@ -30,8 +30,9 @@ func (receiver *CssRuleList) CreateNewCssRulesByClass(class string) (cssRuleList
 	return
 }
 
-func (receiver *CssRuleList) CreateNewCssPropertiesByElement(tags HtmlParser.HtmlTags) (cssRuleListItem *CssRuleListItem) {
-	return &receiver.CssPropertiesByElementList[tags]
+func (receiver *CssRuleList) CreateNewCssPropertiesByElement(tag string) (cssRuleListItem *CssRuleListItem) {
+	receiver.CssPropertiesByElementList[tag] = new(CssRuleListItem)
+	return receiver.CssPropertiesByElementList[tag]
 }
 
 func (receiver *CssRuleList) CreateNewCssPropertiesByElementAndClass(id string) (cssRuleListItem *CssRuleListItem) {
@@ -58,8 +59,8 @@ func (receiver *CssRuleList) GetCssRulesByClass(class string) *CssRuleListItem {
 	return nil
 }
 
-func (receiver *CssRuleList) GetCssRulesByElement(element HtmlParser.HtmlTags) *CssRuleListItem {
-	return &receiver.CssPropertiesByElementList[element]
+func (receiver *CssRuleList) GetCssRulesByElement(element string) *CssRuleListItem {
+	return receiver.CssPropertiesByElementList[element]
 }
 
 func (receiver *CssRuleList) GetRulesByElementAndClass(class string, element HtmlParser.HtmlTags) *CssRuleListItem {

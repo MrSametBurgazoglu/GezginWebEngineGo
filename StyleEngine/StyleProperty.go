@@ -96,7 +96,7 @@ type StyleProperty struct {
 	Visibility         enums.CssVisibilityType
 }
 
-func (receiver *StyleProperty) ApplyCssRules(styleEngine *StyleEngine.StyleEngine, id string, classes []string, htmlTag int, styleMap map[string]string) {
+func (receiver *StyleProperty) ApplyCssRules(styleEngine *StyleEngine, id string, classes []string, htmlTag int, styleMap map[string]string) {
 	externalTagRules := styleEngine.GetCssRulesByTag(htmlTag, false)
 	for _, rule := range externalTagRules {
 		receiver.ApplyRules(rule)
@@ -124,7 +124,7 @@ func (receiver *StyleProperty) ApplyCssRules(styleEngine *StyleEngine.StyleEngin
 	receiver.ApplyInlineRules(styleMap)
 }
 
-func (receiver *StyleProperty) ApplyRules(rule *StyleEngine.CssRuleListItem) {
+func (receiver *StyleProperty) ApplyRules(rule *CssRuleListItem) {
 	for property, value := range rule.declarations {
 		receiver.ApplyDeclaration(property, value)
 	}

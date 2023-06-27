@@ -22,31 +22,6 @@ DrawProperties
 Events
 */
 
-type WidgetInterface interface {
-	GetID() string
-	GetClasses() []string
-	GetHtmlTag() int
-	GetStyleRules() map[string]string
-	SetChildrenCount(int)
-	GetChildrenCount() int
-	SetChildrenIndex(int)
-	GetChildrenIndex() int
-	GetChildren() []WidgetInterface
-	GetChildrenByIndex(int) WidgetInterface
-	AppendChild(WidgetInterface)
-	GetParent() WidgetInterface
-	SetParent(WidgetInterface)
-	IsDraw() bool
-	SetDraw(draw bool)
-	IsRender() bool
-	SetRender(render bool)
-	CopyFromHtmlElement(htmlElement *HtmlParser.HtmlElement)
-	GetStyleProperty() *StyleEngine.StyleProperty
-	GetDrawProperties() *structs2.DrawProperties
-	Draw(renderer *sdl.Renderer)
-	Render(renderer *sdl.Renderer)
-}
-
 type Widget struct {
 	ID             string
 	Classes        []string

@@ -1,5 +1,7 @@
 package widgets
 
+import "github.com/veandco/go-sdl2/sdl"
+
 type HtmlTagDetails struct {
 	*Widget
 	open bool
@@ -12,11 +14,11 @@ func (receiver *HtmlTagDetails) ContextReaderFunc(context string) {
 	}
 }
 
-func (receiver *HtmlTagDetails) Draw() {
+func (receiver *HtmlTagDetails) Draw(renderer *sdl.Renderer) {
 
 }
 
-func (receiver *HtmlTagDetails) Render() {
+func (receiver *HtmlTagDetails) Render(renderer *sdl.Renderer) {
 
 }
 
