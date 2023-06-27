@@ -1,7 +1,6 @@
-package properties
+package StyleEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/StyleEngine/enums"
 	"gezgin_web_engine/utils"
 )
@@ -19,7 +18,7 @@ var alignStrings = []string{
 	"stretch",
 }
 
-func setAlignContent(cssProperties *StyleEngine.StyleProperty, value string) {
+func setAlignContent(cssProperties *StyleProperty, value string) {
 	index := utils.IndexFounder(alignStrings, value, AlignStringCount)
 	if index != -1 {
 		cssProperties.AlignContent = enums.CssAlignType(index)
@@ -28,7 +27,7 @@ func setAlignContent(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func setAlignItems(cssProperties *StyleEngine.StyleProperty, value string) {
+func setAlignItems(cssProperties *StyleProperty, value string) {
 	index := utils.IndexFounder(alignStrings, value, AlignStringCount)
 	if index != -1 {
 		cssProperties.AlignItems = enums.CssAlignType(index)
@@ -37,7 +36,7 @@ func setAlignItems(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func setAlignSelf(cssProperties *StyleEngine.StyleProperty, value string) {
+func setAlignSelf(cssProperties *StyleProperty, value string) {
 	index := utils.IndexFounder(alignStrings, value, AlignStringCount)
 	if index != -1 {
 		cssProperties.AlignSelf = enums.CssAlignType(index)
@@ -46,7 +45,7 @@ func setAlignSelf(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func AlignContentPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func AlignContentPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.AlignContentInherit = true
 	} else if value == "initial" {
@@ -56,7 +55,7 @@ func AlignContentPropertySetValue(cssProperties *StyleEngine.StyleProperty, valu
 	}
 }
 
-func AlignItemsPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func AlignItemsPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.AlignItemsInherit = true
 	} else if value == "initial" {
@@ -66,7 +65,7 @@ func AlignItemsPropertySetValue(cssProperties *StyleEngine.StyleProperty, value 
 	}
 }
 
-func AlignSelfPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func AlignSelfPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.AlignSelfInherit = true
 	} else if value == "initial" {
@@ -76,7 +75,7 @@ func AlignSelfPropertySetValue(cssProperties *StyleEngine.StyleProperty, value s
 	}
 }
 
-func ComputeInheritAlign(properties *StyleEngine.StyleProperty, source *StyleEngine.StyleProperty) {
+func ComputeInheritAlign(properties *StyleProperty, source *StyleProperty) {
 	if properties.AlignContentInherit {
 		properties.AlignContent = source.AlignContent
 	}
@@ -88,7 +87,7 @@ func ComputeInheritAlign(properties *StyleEngine.StyleProperty, source *StyleEng
 	}
 }
 
-func updateAlign(properties *StyleEngine.StyleProperty, source *StyleEngine.StyleProperty) {
+func updateAlign(properties *StyleProperty, source *StyleProperty) {
 	if source.AlignContentInherit {
 		properties.AlignContentInherit = true
 	} else if source.AlignContent != enums.CSS_ALIGN_EMPTY {

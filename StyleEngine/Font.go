@@ -1,7 +1,6 @@
-package properties
+package StyleEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/StyleEngine/enums"
 	"gezgin_web_engine/StyleEngine/structs"
 	"gezgin_web_engine/utils"
@@ -43,7 +42,7 @@ func setFontSize(font *structs.Font, value string) {
 	}
 }
 
-func FontSizePropertySetValue(properties *StyleEngine.StyleProperty, value string) {
+func FontSizePropertySetValue(properties *StyleProperty, value string) {
 	if value == "inherit" {
 		if !properties.FontInherit {
 			if properties.Font == nil {

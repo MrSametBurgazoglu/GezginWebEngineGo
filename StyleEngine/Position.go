@@ -1,7 +1,6 @@
-package properties
+package StyleEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/StyleEngine/enums"
 	"gezgin_web_engine/utils"
 	"strconv"
@@ -19,7 +18,7 @@ var positionStrings = []string{
 	"sticky",
 }
 
-func setPosition(cssProperties *StyleEngine.StyleProperty, value string) {
+func setPosition(cssProperties *StyleProperty, value string) {
 	index := utils.IndexFounder(positionStrings, value, PositionStringCount)
 	if index != -1 {
 		cssProperties.Position = enums.CssPositionType(index)
@@ -28,7 +27,7 @@ func setPosition(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func setTop(cssProperties *StyleEngine.StyleProperty, value string) {
+func setTop(cssProperties *StyleProperty, value string) {
 	if strings.HasSuffix(value, "px") {
 		top, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err != nil {
@@ -49,7 +48,7 @@ func setTop(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func setBottom(cssProperties *StyleEngine.StyleProperty, value string) {
+func setBottom(cssProperties *StyleProperty, value string) {
 	if strings.HasSuffix(value, "px") {
 		bottom, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err != nil {
@@ -70,7 +69,7 @@ func setBottom(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func setLeft(cssProperties *StyleEngine.StyleProperty, value string) {
+func setLeft(cssProperties *StyleProperty, value string) {
 	if strings.HasSuffix(value, "px") {
 		left, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err != nil {
@@ -91,7 +90,7 @@ func setLeft(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func setRight(cssProperties *StyleEngine.StyleProperty, value string) {
+func setRight(cssProperties *StyleProperty, value string) {
 	if strings.HasSuffix(value, "px") {
 		right, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err != nil {
@@ -112,7 +111,7 @@ func setRight(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func PositionPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func PositionPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.PositionInherit = true
 	} else if value == "initial" {
@@ -122,7 +121,7 @@ func PositionPropertySetValue(cssProperties *StyleEngine.StyleProperty, value st
 	}
 }
 
-func TopPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func TopPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.TopInherit = true
 	} else if value == "initial" {
@@ -132,7 +131,7 @@ func TopPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string)
 	}
 }
 
-func BottomPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func BottomPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.BottomInherit = true
 	} else if value == "initial" {
@@ -142,7 +141,7 @@ func BottomPropertySetValue(cssProperties *StyleEngine.StyleProperty, value stri
 	}
 }
 
-func LeftPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func LeftPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.LeftInherit = true
 	} else if value == "initial" {
@@ -152,7 +151,7 @@ func LeftPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string
 	}
 }
 
-func RightPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func RightPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.RightInherit = true
 	} else if value == "initial" {
@@ -162,7 +161,7 @@ func RightPropertySetValue(cssProperties *StyleEngine.StyleProperty, value strin
 	}
 }
 
-func computeInheritPosition(dest, source *StyleEngine.StyleProperty) {
+func computeInheritPosition(dest, source *StyleProperty) {
 	if dest.PositionInherit {
 		dest.Position = source.Position
 	}
@@ -180,7 +179,7 @@ func computeInheritPosition(dest, source *StyleEngine.StyleProperty) {
 	}
 }
 
-func UpdatePosition(cssProperties, source *StyleEngine.StyleProperty) {
+func UpdatePosition(cssProperties, source *StyleProperty) {
 	if source.PositionInherit {
 		cssProperties.PositionInherit = true
 	} else if source.Position != enums.CSS_POSITION_TYPE_EMPTY {

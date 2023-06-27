@@ -1,9 +1,5 @@
 package StyleEngine
 
-import (
-	properties2 "gezgin_web_engine/StyleEngine/properties"
-)
-
 const cssPropertyCount = 147
 
 var cssPropertiesNameList = []string{
@@ -178,7 +174,7 @@ var functionList = []cssPropertyFunction{
 	nil,
 	nil,
 	nil,
-	properties2.BackgroundColorPropertySetValue,
+	BackgroundColorPropertySetValue,
 	nil,
 	nil,
 	nil,
@@ -218,7 +214,7 @@ var functionList = []cssPropertyFunction{
 	nil,
 	nil,
 	nil,
-	properties2.ColorPropertySetValue,
+	ColorPropertySetValue,
 	nil,
 	nil,
 	nil,
@@ -262,8 +258,8 @@ var functionList = []cssPropertyFunction{
 	nil,
 	nil,
 	nil,
-	properties2.HeightPropertySetValue,
-	properties2.LeftPropertySetValue,
+	HeightPropertySetValue,
+	LeftPropertySetValue,
 	nil,
 	nil,
 	nil,
@@ -288,7 +284,7 @@ var functionList = []cssPropertyFunction{
 	nil,
 	nil,
 	nil,
-	properties2.PositionPropertySetValue,
+	PositionPropertySetValue,
 	nil,
 	nil,
 	nil,
@@ -303,7 +299,7 @@ var functionList = []cssPropertyFunction{
 	nil,
 	nil,
 	nil,
-	properties2.TopPropertySetValue,
+	TopPropertySetValue,
 	nil,
-	properties2.WidthPropertySetValue,
+	WidthPropertySetValue,
 }

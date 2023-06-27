@@ -1,7 +1,6 @@
-package properties
+package StyleEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/StyleEngine/enums"
 	"gezgin_web_engine/StyleEngine/structs"
 	"strconv"
@@ -108,7 +107,7 @@ func setMargin(margin *structs.Margin, value string) {
 	}
 }
 
-func MarginTopPropertySetValue(currentWidget *StyleEngine.StyleProperty, value string) {
+func MarginTopPropertySetValue(currentWidget *StyleProperty, value string) {
 	if value == "inherit" {
 		if !currentWidget.MarginInherit {
 			if currentWidget.Margin == nil {
@@ -135,7 +134,7 @@ func MarginTopPropertySetValue(currentWidget *StyleEngine.StyleProperty, value s
 	}
 }
 
-func MarginBottomPropertySetValue(currentWidget *StyleEngine.StyleProperty, value string) {
+func MarginBottomPropertySetValue(currentWidget *StyleProperty, value string) {
 	if value == "inherit" {
 		if !currentWidget.MarginInherit {
 			if currentWidget.Margin == nil {
@@ -162,7 +161,7 @@ func MarginBottomPropertySetValue(currentWidget *StyleEngine.StyleProperty, valu
 	}
 }
 
-func MarginLeftPropertyValue(currentWidget *StyleEngine.StyleProperty, value string) {
+func MarginLeftPropertyValue(currentWidget *StyleProperty, value string) {
 	if value == "inherit" {
 		if !currentWidget.MarginInherit {
 			if currentWidget.Margin == nil {
@@ -189,7 +188,7 @@ func MarginLeftPropertyValue(currentWidget *StyleEngine.StyleProperty, value str
 	}
 }
 
-func MarginRightPropertySetValue(currentWidget *StyleEngine.StyleProperty, value string) {
+func MarginRightPropertySetValue(currentWidget *StyleProperty, value string) {
 	if value == "inherit" {
 		if !currentWidget.MarginInherit {
 			if currentWidget.Margin == nil {
@@ -216,7 +215,7 @@ func MarginRightPropertySetValue(currentWidget *StyleEngine.StyleProperty, value
 	}
 }
 
-func MarginPropertySetValue(currentWidget *StyleEngine.StyleProperty, value string) {
+func MarginPropertySetValue(currentWidget *StyleProperty, value string) {
 	if value == "inherit" {
 		currentWidget.MarginInherit = true
 	} else {

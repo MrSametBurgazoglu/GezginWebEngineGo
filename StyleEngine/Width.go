@@ -1,7 +1,6 @@
-package properties
+package StyleEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/StyleEngine/enums"
 	"strconv"
 	"strings"

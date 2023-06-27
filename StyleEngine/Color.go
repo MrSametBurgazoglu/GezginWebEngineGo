@@ -1,11 +1,10 @@
-package properties
+package StyleEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/StyleEngine/structs"
 )
 
-func ColorPropertySetValue(properties *StyleEngine.StyleProperty, value string) {
+func ColorPropertySetValue(properties *StyleProperty, value string) {
 	if value == "inherit" {
 		properties.ColorInherit = true
 	} else {
@@ -21,7 +20,7 @@ func ColorPropertySetValue(properties *StyleEngine.StyleProperty, value string) 
 	}
 }
 
-func UpdateColor(properties *StyleEngine.StyleProperty, source *StyleEngine.StyleProperty) {
+func UpdateColor(properties *StyleProperty, source *StyleProperty) {
 	if source.ColorInherit && properties.Color == nil {
 		properties.ColorInherit = true
 		properties.Color = nil

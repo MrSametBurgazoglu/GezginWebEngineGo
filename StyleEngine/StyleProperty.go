@@ -2,8 +2,7 @@ package StyleEngine
 
 import (
 	"gezgin_web_engine/StyleEngine/enums"
-	"gezgin_web_engine/StyleEngine/properties"
-	structs2 "gezgin_web_engine/StyleEngine/structs"
+	"gezgin_web_engine/StyleEngine/structs"
 	"gezgin_web_engine/utils"
 )
 
@@ -59,20 +58,20 @@ type StyleProperty struct {
 	OpacityInherit            bool
 	ResizeInherit             bool
 
-	AccentColor        *structs2.ColorRGBA
+	AccentColor        *structs.ColorRGBA
 	AlignContent       enums.CssAlignType
 	AlignItems         enums.CssAlignType
 	AlignSelf          enums.CssAlignType
-	Animation          *structs2.Animation
-	Background         *structs2.Background
+	Animation          *structs.Animation
+	Background         *structs.Background
 	BackdropFilter     enums.CssFilterType
-	Border             *structs2.Border
+	Border             *structs.Border
 	BorderCollapseType enums.CssBorderCollapseType
-	Color              *structs2.ColorRGBA
+	Color              *structs.ColorRGBA
 	Display            enums.CssDisplayType
-	Font               *structs2.Font
-	Margin             *structs2.Margin
-	Padding            *structs2.Padding
+	Font               *structs.Font
+	Margin             *structs.Margin
+	Padding            *structs.Padding
 	Height             uint
 	Width              uint
 	MinHeight          uint
@@ -97,7 +96,7 @@ type StyleProperty struct {
 	Visibility         enums.CssVisibilityType
 }
 
-func (receiver *StyleProperty) ApplyCssRules(styleEngine *StyleEngine, id string, classes []string, htmlTag int, styleMap map[string]string) {
+func (receiver *StyleProperty) ApplyCssRules(styleEngine *StyleEngine.StyleEngine, id string, classes []string, htmlTag int, styleMap map[string]string) {
 	externalTagRules := styleEngine.GetCssRulesByTag(htmlTag, false)
 	for _, rule := range externalTagRules {
 		receiver.ApplyRules(rule)
@@ -125,7 +124,7 @@ func (receiver *StyleProperty) ApplyCssRules(styleEngine *StyleEngine, id string
 	receiver.ApplyInlineRules(styleMap)
 }
 
-func (receiver *StyleProperty) ApplyRules(rule *CssRuleListItem) {
+func (receiver *StyleProperty) ApplyRules(rule *StyleEngine.CssRuleListItem) {
 	for property, value := range rule.declarations {
 		receiver.ApplyDeclaration(property, value)
 	}
@@ -146,6 +145,6 @@ func (receiver *StyleProperty) ApplyDeclaration(property string, value string) {
 }
 
 func (receiver *StyleProperty) SetInheritStyleProperties(source *StyleProperty) {
-	properties.UpdateBackground(receiver, source)
-	properties.UpdateColor(receiver, source)
+	UpdateBackground(receiver, source)
+	UpdateColor(receiver, source)
 }

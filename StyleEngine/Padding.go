@@ -1,7 +1,6 @@
-package properties
+package StyleEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/StyleEngine/enums"
 	"gezgin_web_engine/StyleEngine/structs"
 	"strconv"
@@ -113,7 +112,7 @@ func setPadding(padding *structs.Padding, value string) {
 	}
 }
 
-func PaddingTopPropertySetValue(currentWidget *StyleEngine.StyleProperty, value string) {
+func PaddingTopPropertySetValue(currentWidget *StyleProperty, value string) {
 	if value == "inherit" {
 		if !currentWidget.PaddingInherit {
 			if currentWidget.Padding == nil {
@@ -140,7 +139,7 @@ func PaddingTopPropertySetValue(currentWidget *StyleEngine.StyleProperty, value 
 	}
 }
 
-func PaddingBottomPropertySetValue(currentWidget *StyleEngine.StyleProperty, value string) {
+func PaddingBottomPropertySetValue(currentWidget *StyleProperty, value string) {
 	if value == "inherit" {
 		if !currentWidget.PaddingInherit {
 			if currentWidget.Padding == nil {
@@ -167,7 +166,7 @@ func PaddingBottomPropertySetValue(currentWidget *StyleEngine.StyleProperty, val
 	}
 }
 
-func PaddingLeftPropertyValue(currentWidget *StyleEngine.StyleProperty, value string) {
+func PaddingLeftPropertyValue(currentWidget *StyleProperty, value string) {
 	if value == "inherit" {
 		if !currentWidget.PaddingInherit {
 			if currentWidget.Padding == nil {
@@ -194,7 +193,7 @@ func PaddingLeftPropertyValue(currentWidget *StyleEngine.StyleProperty, value st
 	}
 }
 
-func PaddingRightPropertySetValue(currentWidget *StyleEngine.StyleProperty, value string) {
+func PaddingRightPropertySetValue(currentWidget *StyleProperty, value string) {
 	if value == "inherit" {
 		if !currentWidget.PaddingInherit {
 			if currentWidget.Padding == nil {
@@ -221,7 +220,7 @@ func PaddingRightPropertySetValue(currentWidget *StyleEngine.StyleProperty, valu
 	}
 }
 
-func PaddingPropertySetValue(currentWidget *StyleEngine.StyleProperty, value string) {
+func PaddingPropertySetValue(currentWidget *StyleProperty, value string) {
 	if value == "inherit" {
 		currentWidget.PaddingInherit = true
 	} else {

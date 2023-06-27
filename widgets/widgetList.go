@@ -115,5 +115,5 @@ var WidgetFunctions = []func() WidgetInterface{
 	nil,
 	nil,
 	nil,
-	nil,
+	SetWidgetPropertiesForUntaggedText,
 }

@@ -1,13 +1,12 @@
-package properties
+package StyleEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/StyleEngine/enums"
 	"strconv"
 	"strings"
 )
 
-func SetHeight(cssProperties *StyleEngine.StyleProperty, value string) {
+func SetHeight(cssProperties *StyleProperty, value string) {
 	if strings.HasSuffix(value, "px") {
 		width, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err != nil {
@@ -28,7 +27,7 @@ func SetHeight(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func SetMinHeight(cssProperties *StyleEngine.StyleProperty, value string) {
+func SetMinHeight(cssProperties *StyleProperty, value string) {
 	if strings.HasSuffix(value, "px") {
 		width, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err != nil {
@@ -49,7 +48,7 @@ func SetMinHeight(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func SetMaxHeight(cssProperties *StyleEngine.StyleProperty, value string) {
+func SetMaxHeight(cssProperties *StyleProperty, value string) {
 	if strings.HasSuffix(value, "px") {
 		width, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err != nil {
@@ -70,7 +69,7 @@ func SetMaxHeight(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func HeightPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func HeightPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.HeightInherit = true
 	} else {
@@ -83,7 +82,7 @@ func HeightPropertySetValue(cssProperties *StyleEngine.StyleProperty, value stri
 	}
 }
 
-func MinHeightPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func MinHeightPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.MinHeightInherit = true
 	} else {
@@ -97,7 +96,7 @@ func MinHeightPropertySetValue(cssProperties *StyleEngine.StyleProperty, value s
 	}
 }
 
-func MaxHeightPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func MaxHeightPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.MaxHeightInherit = true
 	} else {
@@ -111,7 +110,7 @@ func MaxHeightPropertySetValue(cssProperties *StyleEngine.StyleProperty, value s
 	}
 }
 
-func ComputeInheritHeight(dest, source *StyleEngine.StyleProperty) {
+func ComputeInheritHeight(dest, source *StyleProperty) {
 	if dest.HeightInherit {
 		dest.Height = source.Height
 		dest.HeightValueType = source.HeightValueType
@@ -126,7 +125,7 @@ func ComputeInheritHeight(dest, source *StyleEngine.StyleProperty) {
 	}
 }
 
-func UpdateHeight(cssProperties, source *StyleEngine.StyleProperty) {
+func UpdateHeight(cssProperties, source *StyleProperty) {
 	if source.HeightInherit {
 		cssProperties.HeightInherit = true
 	} else if cssProperties.HeightValueType != enums.CSS_PROPERTY_VALUE_TYPE_EMPTY {

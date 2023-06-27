@@ -1,8 +1,8 @@
 package StyleEngine
 
-import (
-	"gezgin_web_engine/HtmlParser"
-)
+import "gezgin_web_engine/HtmlParser"
+
+const HtmlTagCount = 105
 
 type CssRuleListItem struct {
 	Identifier1  string
@@ -15,7 +15,7 @@ type CssRuleListItem struct {
 type CssRuleList struct {
 	CssPropertiesByIDList      []*CssRuleListItem
 	CssPropertiesByClassList   []*CssRuleListItem
-	CssPropertiesByElementList [HtmlParser.HtmlTagCount]CssRuleListItem //it can be only map
+	CssPropertiesByElementList [HtmlTagCount]CssRuleListItem //it can be only map
 }
 
 func (receiver *CssRuleList) CreateNewCssRulesByID(id string) (cssRuleListItem *CssRuleListItem) {

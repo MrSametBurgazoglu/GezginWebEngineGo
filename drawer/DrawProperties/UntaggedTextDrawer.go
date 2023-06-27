@@ -1,15 +1,6 @@
 package DrawProperties
 
-import (
-	"gezgin_web_engine/HtmlParser/tags"
-	"gezgin_web_engine/drawer/Fonts"
-	"gezgin_web_engine/drawer/drawerBackend"
-	tags2 "gezgin_web_engine/widgets"
-	"github.com/veandco/go-sdl2/sdl"
-	"github.com/veandco/go-sdl2/ttf"
-	"strings"
-)
-
+/*
 func findLastSpace(text string, last int) int {
 	for i := last - 1; i > 0; i-- {
 		if text[i] == ' ' {
@@ -85,3 +76,4 @@ func RenderUntaggedTextFunction(widget *tags2.Widget, renderer *sdl.Renderer) {
 		println(Lines)
 	}
 }
+*/

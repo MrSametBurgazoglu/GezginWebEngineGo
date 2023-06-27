@@ -1,4 +1,4 @@
-package properties
+package StyleEngine
 
 import (
 	"gezgin_web_engine/StyleEngine/enums"

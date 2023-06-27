@@ -1,7 +1,6 @@
-package properties
+package StyleEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/StyleEngine/enums"
 	structs2 "gezgin_web_engine/StyleEngine/structs"
 	"gezgin_web_engine/utils"
@@ -105,7 +104,7 @@ func setBackgroundImageColor(background *structs.Background, values []string) {
 }
 */
 
-func BackgroundColorPropertySetValue(properties *StyleEngine.StyleProperty, value string) {
+func BackgroundColorPropertySetValue(properties *StyleProperty, value string) {
 	if value == "inherit" {
 		if !properties.BackgroundInherit {
 			if properties.Background == nil {
@@ -138,7 +137,7 @@ func BackgroundColorPropertySetValue(properties *StyleEngine.StyleProperty, valu
 	}
 }
 
-func BackgroundPropertySetValue(properties *StyleEngine.StyleProperty, value string) {
+func BackgroundPropertySetValue(properties *StyleProperty, value string) {
 	if value == "inherit" {
 		properties.BackgroundInherit = true
 		properties.Background = nil
@@ -155,7 +154,7 @@ func BackgroundPropertySetValue(properties *StyleEngine.StyleProperty, value str
 	}
 }
 
-func UpdateBackground(properties *StyleEngine.StyleProperty, source *StyleEngine.StyleProperty) {
+func UpdateBackground(properties *StyleProperty, source *StyleProperty) {
 	if source.BackgroundInherit && properties.Background == nil {
 		properties.BackgroundInherit = true
 		properties.Background = nil

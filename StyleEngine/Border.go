@@ -1,7 +1,6 @@
-package properties
+package StyleEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/StyleEngine/enums"
 	structs2 "gezgin_web_engine/StyleEngine/structs"
 	"gezgin_web_engine/utils"
@@ -447,7 +446,7 @@ func setBorderRight(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderCollapse(cssProperties *StyleEngine.StyleProperty, value string) {
+func setBorderCollapse(cssProperties *StyleProperty, value string) {
 	if value == "collapse" {
 		cssProperties.BorderCollapseType = enums.CSS_BORDER_COLLAPSE_TYPE_COLLAPSE
 	} else {
@@ -455,7 +454,7 @@ func setBorderCollapse(cssProperties *StyleEngine.StyleProperty, value string) {
 	}
 }
 
-func BorderPropertySetValue(cssProperties *StyleEngine.StyleProperty, value string) {
+func BorderPropertySetValue(cssProperties *StyleProperty, value string) {
 	if value == "inherit" {
 		cssProperties.BorderInherit = true
 	} else {
