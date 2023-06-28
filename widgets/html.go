@@ -6,7 +6,7 @@ import (
 )
 
 type HtmlTagHtml struct {
-	*Widget
+	Widget
 }
 
 func (receiver *HtmlTagHtml) Draw(renderer *sdl.Renderer) {

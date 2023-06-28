@@ -50,6 +50,7 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 }
 
 func ParseCssFromInlineStyle(cssText string) (m map[string]string) {
+	m = make(map[string]string)
 	declarations := strings.Split(cssText, ";")
 	for _, declaration := range declarations {
 		list := strings.Split(declaration, ":")

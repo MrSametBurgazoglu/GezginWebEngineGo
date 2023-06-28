@@ -3,7 +3,7 @@ package widgets
 import "github.com/veandco/go-sdl2/sdl"
 
 type HtmlTagButton struct {
-	*Widget
+	Widget
 	autoFocus      bool
 	disabled       bool
 	formNovalidate bool

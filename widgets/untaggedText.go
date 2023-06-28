@@ -9,7 +9,7 @@ import (
 )
 
 type UntaggedText struct {
-	*Widget
+	Widget
 	Value string
 }
 

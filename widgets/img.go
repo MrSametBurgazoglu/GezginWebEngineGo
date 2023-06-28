@@ -7,7 +7,7 @@ import (
 )
 
 type HtmlTagImg struct {
-	*Widget
+	Widget
 	isMap          bool
 	alt            string
 	sizes          string

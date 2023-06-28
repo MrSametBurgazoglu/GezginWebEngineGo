@@ -5,7 +5,7 @@ import (
 )
 
 type HtmlTagA struct {
-	*Widget
+	Widget
 	download string
 	href     string
 	hrefLang string

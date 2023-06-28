@@ -41,6 +41,10 @@ type Widget struct {
 	Rendered       bool
 }
 
+func (receiver *Widget) Initialize() {
+	receiver.StyleProperty = new(StyleEngine.StyleProperty)
+}
+
 func (receiver *Widget) SetChildrenCount(count int) {
 	receiver.ChildrenCount = count
 }
@@ -102,7 +106,10 @@ func (receiver *Widget) CopyFromHtmlElement(htmlElement *HtmlParser.HtmlElement)
 	receiver.ChildrenIndex = htmlElement.ChildrenIndex
 	receiver.ID = htmlElement.Attributes["id"]
 	receiver.Classes = strings.Split(htmlElement.Attributes["class"], " ")
-	receiver.StyleRules = CssParser.ParseCssFromInlineStyle(htmlElement.Attributes["style"])
+	styleText, found := htmlElement.Attributes["style"]
+	if found {
+		receiver.StyleRules = CssParser.ParseCssFromInlineStyle(styleText)
+	}
 }
 
 func (receiver *Widget) GetStyleProperty() *StyleEngine.StyleProperty {

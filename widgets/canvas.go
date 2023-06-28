@@ -6,7 +6,7 @@ import (
 )
 
 type HtmlTagCanvas struct {
-	*Widget
+	Widget
 	width  int
 	height int
 }

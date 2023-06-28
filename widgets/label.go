@@ -3,7 +3,7 @@ package widgets
 import "github.com/veandco/go-sdl2/sdl"
 
 type HtmlTagLabel struct {
-	*Widget
+	Widget
 	for_ string
 	form string
 }

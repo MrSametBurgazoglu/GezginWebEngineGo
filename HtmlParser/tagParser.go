@@ -18,7 +18,7 @@ func ParseParameters(element *HtmlElement, parameters []string, group *sync.Wait
 	if len(parameters) > 1 {
 		parameters = utils.MergeAttributes(parameters)
 	}
-	for _, s := range parameters[0:] {
+	for _, s := range parameters[1:] {
 		varName, varValue, found := strings.Cut(s, "=")
 		if found {
 			element.Attributes[varName] = varValue

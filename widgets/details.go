@@ -3,7 +3,7 @@ package widgets
 import "github.com/veandco/go-sdl2/sdl"
 
 type HtmlTagDetails struct {
-	*Widget
+	Widget
 	open bool
 }
 

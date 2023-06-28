@@ -1,13 +1,14 @@
 package widgets
 
 import (
+	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/StyleEngine/structs"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
 type HtmlTagHeader struct {
-	*Widget
+	Widget
 }
 
 func (receiver *HtmlTagHeader) Draw(renderer *sdl.Renderer) {
@@ -37,6 +38,7 @@ func SetWidgetPropertiesForH2Tag() WidgetInterface {
 
 func SetWidgetPropertiesForH3Tag() WidgetInterface {
 	widget := new(HtmlTagHeader)
+	widget.StyleProperty = new(StyleEngine.StyleProperty)
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 12
 	return widget
@@ -44,6 +46,7 @@ func SetWidgetPropertiesForH3Tag() WidgetInterface {
 
 func SetWidgetPropertiesForH4Tag() WidgetInterface {
 	widget := new(HtmlTagHeader)
+	widget.Initialize()
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 10
 	return widget

@@ -45,7 +45,7 @@ func (receiver *TaskManager) CreateFromFile(fileUrl string) {
 	dat := FileManager.LoadFile(fileUrl)
 	receiver.HtmlDocument = HtmlParser.CreateDocumentElement()
 	nodes := make(chan *HtmlParser.HtmlElement)
-	receiver.htmlParser.ParseHtmlFromFile(receiver.HtmlDocument, dat, nodes)
+	go receiver.htmlParser.ParseHtmlFromFile(receiver.HtmlDocument, dat, nodes)
 	for node := range nodes {
 		if node.HtmlTag == HtmlParser.HTML_SCRIPT {
 			receiver.HandleScriptTag(node)
@@ -83,15 +83,18 @@ func (receiver *TaskManager) ExecuteScripts(scriptElement *HtmlParser.HtmlElemen
 func (receiver *TaskManager) CreateWidgetTree() {
 	receiver.DocumentWidget = new(widgets.DocumentWidget)
 	element := receiver.FindBody()
-	var wg *sync.WaitGroup
+	receiver.DocumentWidget.Initialize()
+	receiver.DocumentWidget.HtmlElement = element
+	var wg sync.WaitGroup
 	wg.Add(1)
-	receiver.CreateWidgetForTree(receiver.DocumentWidget, element, wg)
+	receiver.CreateWidgetForTree(receiver.DocumentWidget, element, &wg)
 	wg.Wait()
 }
 
 func (receiver *TaskManager) CreateWidgetForTree(parentWidget widgets.WidgetInterface, parentHtmlElement *HtmlParser.HtmlElement, group *sync.WaitGroup) {
 	for _, child := range parentHtmlElement.Children {
-		newWidget := widgets.WidgetFunctions[child.HtmlTag]()
+		function := widgets.WidgetFunctions[child.HtmlTag]
+		newWidget := function()
 		newWidget.CopyFromHtmlElement(child)
 		newWidget.SetParent(parentWidget)
 		parentWidget.AppendChild(newWidget)
@@ -126,9 +129,9 @@ func (receiver *TaskManager) FindBody() *HtmlParser.HtmlElement {
 }
 
 func (receiver *TaskManager) SetStylePropertiesOfDocument() {
-	var wg *sync.WaitGroup
+	var wg sync.WaitGroup
 	wg.Add(1)
-	receiver.SetStylePropertiesOfWidget(receiver.DocumentWidget, wg)
+	receiver.SetStylePropertiesOfWidget(receiver.DocumentWidget, &wg)
 	wg.Wait()
 }
 

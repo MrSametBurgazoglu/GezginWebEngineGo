@@ -6,7 +6,7 @@ import (
 )
 
 type HtmlTagDiv struct {
-	*Widget
+	Widget
 }
 
 func (receiver *HtmlTagDiv) Draw(renderer *sdl.Renderer) {
@@ -22,5 +22,6 @@ func (receiver *HtmlTagDiv) Render(renderer *sdl.Renderer) {
 
 func SetWidgetPropertiesForDivTag() WidgetInterface {
 	widget := new(HtmlTagDiv)
+	widget.Initialize()
 	return widget
 }
