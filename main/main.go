@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"gezgin_web_engine/eventSystem"
 	"gezgin_web_engine/web_engine"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
@@ -48,7 +49,8 @@ func main() {
 	defer font.Close()
 
 	startTime := time.Now()
-	web_engine.OpenWebEngine("exampleHtmlFiles/newExa.html")
+	newTab := web_engine.NewTab()
+	newTab.OpenWebPageFromFile("exampleHtmlFiles/newExa.html")
 	fmt.Println("Total time taken ", time.Since(startTime).Milliseconds())
 
 	web_engine.InitDrawer(700, 1300)
@@ -59,7 +61,7 @@ func main() {
 	defer window.Destroy()
 
 	running := true
-	web_engine.RenderPage(renderer)
+
 	for running {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch event.(type) {
@@ -67,15 +69,17 @@ func main() {
 				println("Quit")
 				running = false
 				break
+			default:
+				eventSystem.TakeInputFromSdl(event)
 			}
 		}
-		if web_engine.GetDocument().Rendered == false {
+		if newTab.IsRendered() == false {
 			renderer.SetDrawColor(250, 250, 250, 0)
 			renderer.Clear()
-			web_engine.RenderPage(renderer)
-			web_engine.DrawPage(renderer)
+			newTab.RenderPage(renderer)
+			newTab.DrawPage(renderer)
 			renderer.Present()
-			web_engine.GetDocument().Rendered = true
+			newTab.SetRendered(true)
 		}
 	}
 
