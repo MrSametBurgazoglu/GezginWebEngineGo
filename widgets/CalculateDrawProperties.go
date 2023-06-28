@@ -30,9 +30,7 @@ func CalculateHeightOfWidget(widget WidgetInterface) (totalHeight int) {
 		return int(widget.GetDrawProperties().Rect.H)
 	}
 	for i := 0; i < widget.GetChildrenCount(); i++ {
-		if widget.GetChildrenByIndex(i).IsDraw() {
-			totalHeight += int(widget.GetChildrenByIndex(i).GetDrawProperties().Rect.H)
-		}
+		totalHeight += int(widget.GetChildrenByIndex(i).GetDrawProperties().Rect.H)
 	}
 	return totalHeight
 }

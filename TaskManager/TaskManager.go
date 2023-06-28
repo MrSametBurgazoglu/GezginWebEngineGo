@@ -163,7 +163,7 @@ func (receiver *TaskManager) SetInheritStylePropertiesOfWidget(widget widgets.Wi
 }
 
 func (receiver *TaskManager) Draw(renderer *sdl.Renderer) {
-	receiver.DocumentWidget.Draw(renderer)
+	receiver.DocumentWidget.DrawPage(renderer)
 
 }
 

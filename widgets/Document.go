@@ -3,6 +3,7 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/drawer/ScreenProperties"
+	"gezgin_web_engine/drawer/drawerBackend"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -19,7 +20,8 @@ func allChildrenRendered(widget WidgetInterface) bool {
 	return true
 }
 
-func (receiver *DocumentWidget) Draw(renderer *sdl.Renderer) {
+func (receiver *DocumentWidget) DrawPage(renderer *sdl.Renderer) {
+	receiver.Draw(renderer)
 	widgetList := []WidgetInterface{receiver}
 	widgetIndexList := []int{0}
 	currentIndex := 0
@@ -101,51 +103,14 @@ func (receiver *DocumentWidget) RenderPage(renderer *sdl.Renderer) {
 }
 
 func (receiver *DocumentWidget) Render(renderer *sdl.Renderer) {
+	//render body
+}
 
-	/*
-		widgetList := []WidgetInterface{receiver}
-		var edgeList []WidgetInterface
-		length := len(widgetList)
-		keepGo := true
-		for keepGo {
-			keepGo = false
-			for _, w := range widgetList {
-				if w.GetChildrenCount() > 0 {
-					for _, child := range w.GetChildren() {
-						widgetList = append(widgetList, child)
-						child.SetRender(false)
-						keepGo = true
-					}
-				} else {
-					edgeList = append(edgeList, w)
-				}
-			}
-			if keepGo {
-				widgetList = widgetList[length:]
-				length = len(widgetList)
-			}
-		}
-		widgetList = edgeList
-		keepGo = true
-		for keepGo {
-			keepGo = false
-			for _, w := range widgetList {
-				if allChildrenRendered(w) {
-					w.Render(renderer)
-					w.SetRender(true)
-				}
-			}
-			for _, w := range widgetList {
-				if w.GetParent() != nil {
-					widgetList = append(widgetList, w.GetParent())
-					keepGo = true
-				}
-			}
-			if keepGo {
-				widgetList = widgetList[length:]
-				length = len(widgetList)
-			}
-		}*/
+func (receiver *DocumentWidget) Draw(renderer *sdl.Renderer) {
+	if receiver.GetStyleProperty().Background != nil {
+		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
+		drawerBackend.DrawBackground(red, green, blue, alpha, &receiver.DrawProperties.Rect, renderer)
+	}
 }
 
 func SetWidthForWidget(widget WidgetInterface) {
@@ -176,23 +141,18 @@ func SetWidthForBlockElements(document WidgetInterface) {
 			widgetIndexList[currentIndex]++
 		} else {
 			if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).GetChildrenCount() > 0 {
-				if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).IsDraw() {
-					widgetList = append(widgetList, widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]))
-					widgetIndexList = append(widgetIndexList, 0)
-					currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
-					if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_UNTAGGED_TEXT && HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_IMG {
-						SetWidthForWidget(currentWidget)
-					}
-					currentIndex++
-				} else {
-					widgetIndexList[currentIndex]++
+				widgetList = append(widgetList, widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]))
+				widgetIndexList = append(widgetIndexList, 0)
+				currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
+				if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_UNTAGGED_TEXT && HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_IMG {
+					SetWidthForWidget(currentWidget)
 				}
+				currentIndex++
+
 			} else {
-				if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).IsDraw() {
-					currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
-					if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_UNTAGGED_TEXT && HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_IMG {
-						SetWidthForWidget(currentWidget)
-					}
+				currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
+				if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_UNTAGGED_TEXT && HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_IMG {
+					SetWidthForWidget(currentWidget)
 				}
 				widgetIndexList[currentIndex]++
 			}
@@ -212,24 +172,22 @@ func SetWidthForInlineElements(document WidgetInterface) {
 			widgetIndexList[currentIndex]++
 		} else {
 			if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).GetChildrenCount() > 0 {
-				if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).IsDraw() {
-					widgetList = append(widgetList, widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]))
-					widgetIndexList = append(widgetIndexList, 0)
-					currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
-					if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_UNTAGGED_TEXT || HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_IMG {
-						SetWidthForWidget(currentWidget)
-					}
-					currentIndex++
-				} else {
-					widgetIndexList[currentIndex]++
+
+				widgetList = append(widgetList, widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]))
+				widgetIndexList = append(widgetIndexList, 0)
+				currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
+				if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_UNTAGGED_TEXT || HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_IMG {
+					SetWidthForWidget(currentWidget)
 				}
+				currentIndex++
+
 			} else {
-				if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).IsDraw() {
-					currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
-					if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_UNTAGGED_TEXT || HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_IMG {
-						SetWidthForWidget(currentWidget)
-					}
+
+				currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
+				if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_UNTAGGED_TEXT || HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_IMG {
+					SetWidthForWidget(currentWidget)
 				}
+
 				widgetIndexList[currentIndex]++
 			}
 		}
@@ -248,24 +206,20 @@ func SetHeightForInlineElements(document WidgetInterface) {
 			widgetIndexList[currentIndex]++
 		} else {
 			if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).GetChildrenCount() > 0 {
-				if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).IsDraw() {
-					widgetList = append(widgetList, widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]))
-					widgetIndexList = append(widgetIndexList, 0)
-					currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
-					if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_UNTAGGED_TEXT || HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_IMG {
-						SetHeightForInlineElements(currentWidget)
-					}
-					currentIndex++
-				} else {
-					widgetIndexList[currentIndex]++
+				widgetList = append(widgetList, widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]))
+				widgetIndexList = append(widgetIndexList, 0)
+				currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
+				if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_UNTAGGED_TEXT || HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_IMG {
+					SetHeightForWidget(currentWidget)
 				}
+				currentIndex++
+
 			} else {
-				if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).IsDraw() {
-					currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
-					if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_UNTAGGED_TEXT || HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_IMG {
-						SetHeightForInlineElements(currentWidget)
-					}
+				currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
+				if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_UNTAGGED_TEXT || HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_IMG {
+					SetHeightForWidget(currentWidget)
 				}
+
 				widgetIndexList[currentIndex]++
 			}
 		}
@@ -284,24 +238,19 @@ func SetHeightForBlockElements(document WidgetInterface) {
 			widgetIndexList[currentIndex]++
 		} else {
 			if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).GetChildrenCount() > 0 {
-				if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).IsDraw() {
-					widgetList = append(widgetList, widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]))
-					widgetIndexList = append(widgetIndexList, 0)
-					currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
-					if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_UNTAGGED_TEXT && HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_IMG {
-						SetHeightForWidget(currentWidget)
-					}
-					currentIndex++
-				} else {
-					widgetIndexList[currentIndex]++
+				widgetList = append(widgetList, widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]))
+				widgetIndexList = append(widgetIndexList, 0)
+				currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
+				if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_UNTAGGED_TEXT && HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_IMG {
+					SetHeightForWidget(currentWidget)
 				}
+				currentIndex++
 			} else {
-				if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).IsDraw() {
-					currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
-					if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_UNTAGGED_TEXT && HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_IMG {
-						SetHeightForWidget(currentWidget)
-					}
+				currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
+				if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_UNTAGGED_TEXT && HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) != HtmlParser.HTML_IMG {
+					SetHeightForWidget(currentWidget)
 				}
+
 				widgetIndexList[currentIndex]++
 			}
 		}
@@ -320,20 +269,14 @@ func SetPositionOfElements(document WidgetInterface) {
 			widgetIndexList[currentIndex]++
 		} else {
 			if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).GetChildrenCount() > 0 {
-				if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).IsDraw() {
-					widgetList = append(widgetList, widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]))
-					widgetIndexList = append(widgetIndexList, 0)
-					currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
-					SetXYForWidget(currentWidget)
-					currentIndex++
-				} else {
-					widgetIndexList[currentIndex]++
-				}
+				widgetList = append(widgetList, widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]))
+				widgetIndexList = append(widgetIndexList, 0)
+				currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
+				SetXYForWidget(currentWidget)
+				currentIndex++
 			} else {
-				if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).IsDraw() {
-					currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
-					SetXYForWidget(currentWidget)
-				}
+				currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
+				SetXYForWidget(currentWidget)
 				widgetIndexList[currentIndex]++
 			}
 		}

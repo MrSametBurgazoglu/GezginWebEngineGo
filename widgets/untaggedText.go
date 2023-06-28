@@ -60,6 +60,7 @@ func SetWidgetPropertiesForUntaggedText(element *HtmlParser.HtmlElement) WidgetI
 	widget := new(UntaggedText)
 	widget.HtmlElement = element
 	widget.DrawProperties = new(structs.DrawProperties)
+	widget.Value = element.Text
 	return widget
 }
 
