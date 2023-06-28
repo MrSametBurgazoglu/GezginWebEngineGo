@@ -76,7 +76,7 @@ func CalculateYPosOfWidget(currentWidget WidgetInterface) int32 {
 		case enums.CSS_POSITION_TYPE_STICKY:
 			return currentWidget.GetParent().GetDrawProperties().Rect.X
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			if currentWidget.GetChildrenIndex() > 0 && (currentWidget.GetParent().GetChildrenByIndex(currentWidget.GetChildrenIndex()-1).IsDraw() || HtmlParser.HtmlTags(currentWidget.GetParent().GetChildrenByIndex(currentWidget.GetChildrenIndex()-1).GetHtmlTag()) == HtmlParser.HTML_UNTAGGED_TEXT) {
+			if currentWidget.GetChildrenIndex() > 0 {
 				beforeCurrentWidget = currentWidget.GetParent().GetChildrenByIndex(currentWidget.GetChildrenIndex() - 1)
 				marginTop := 0
 				if currentWidget.GetStyleProperty().Margin != nil {
