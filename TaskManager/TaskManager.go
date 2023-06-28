@@ -38,7 +38,6 @@ func (receiver *TaskManager) Initialize() {
 	receiver.styleEngine = new(StyleEngine.StyleEngine)
 	receiver.styleEngine.WorkerPool = workerpool.New(runtime.NumCPU() - 1)
 	receiver.javascriptEngine = new(JavascriptHandler.JavascriptEngine)
-	//receiver.styleEngine.Run()
 }
 
 func (receiver *TaskManager) CreateFromFile(fileUrl string) {
@@ -58,11 +57,6 @@ func (receiver *TaskManager) CreateFromFile(fileUrl string) {
 	receiver.CreateWidgetTree()
 	receiver.SetStylePropertiesOfDocument()
 	receiver.SetInheritStylePropertiesOfDocument()
-	/*
-		CssParser.ParseCssFromDocument(receiver.Document)
-		CssParser.SetInheritCssProperties(receiver.Document)
-		JavascriptHandler.InitializeJSInterpreter(receiver.Document)
-	*/
 }
 
 func (receiver *TaskManager) HandleStyleTag(htmlElement *HtmlParser.HtmlElement, styleSheet *StyleEngine.StyleSheet) {

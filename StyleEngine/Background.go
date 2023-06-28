@@ -96,14 +96,6 @@ func setBackgroundColor(background *structs2.Background, value string) {
 	background.BackgroundColor.SetColor(value)
 }
 
-/*
-func setBackgroundImageColor(background *structs.Background, values []string) {
-	for i, value := range values {
-		background.BackgroundImageColorList[i] =
-	}
-}
-*/
-
 func BackgroundColorPropertySetValue(properties *StyleProperty, value string) {
 	if value == "inherit" {
 		if !properties.BackgroundInherit {

@@ -6,10 +6,6 @@ import (
 	"strings"
 )
 
-/*css parser result'lar rule olarak tutulacak. style property sadece elementlerin style özellikleri için kullanılcak
-eskisi gibi parse edilen css rule'lar style propertylere uygulanmıcak.
-*/
-
 type CssSheet interface {
 }
 
@@ -33,18 +29,6 @@ type StyleEngine struct {
 	CssStyleSheetList []*StyleSheet
 }
 
-/*
-	func (receiver *StyleEngine) Run() {
-		for {
-			select {
-			case CssRule := <-receiver.CssSheetAddQuery:
-				receiver.CssSheetList = append(receiver.CssSheetList, CssRule)
-			case CssRule := <-receiver.CssSheetGetQuery:
-				receiver.CssSheetList = append(receiver.CssSheetList, CssRule)
-			}
-		}
-	}
-*/
 func (receiver *StyleEngine) CreateCssSheet(external bool) (cssSheet *StyleSheet) {
 	cssSheet = new(StyleSheet)
 	cssSheet.external = external

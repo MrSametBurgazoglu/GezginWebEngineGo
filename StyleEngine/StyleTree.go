@@ -10,8 +10,6 @@ type CssRuleListItem struct {
 	declarations map[string]string
 }
 
-/*we are going to store rules here with identifiers but unique values*/
-
 type CssRuleList struct {
 	CssPropertiesByIDList      []*CssRuleListItem
 	CssPropertiesByClassList   []*CssRuleListItem

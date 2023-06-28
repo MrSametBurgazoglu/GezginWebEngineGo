@@ -41,6 +41,5 @@ func (receiver *JavascriptEngine) InitializeJSInterpreter() {
 	ctx.Global().Set("document", documentObj)
 	CreateElementTemplate(iso)
 	receiver.GlobalContext = ctx
-	//parseScriptElements(ctx, script)
 
 }

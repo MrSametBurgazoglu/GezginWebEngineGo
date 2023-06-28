@@ -51,7 +51,6 @@ func main() {
 	startTime := time.Now()
 	newTab := web_engine.NewTab()
 	newTab.OpenWebPageFromFile("exampleHtmlFiles/newExa.html")
-	//web_engine.OpenWebEngine("exampleHtmlFiles/newExa.html")
 	fmt.Println("Total time taken ", time.Since(startTime).Milliseconds())
 
 	web_engine.InitDrawer(700, 1300)
@@ -62,8 +61,7 @@ func main() {
 	defer window.Destroy()
 
 	running := true
-	//newTab.RenderPage(renderer)
-	//newTab.DrawPage(renderer)
+
 	for running {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch event.(type) {

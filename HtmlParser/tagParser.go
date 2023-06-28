@@ -29,33 +29,6 @@ func ParseParameters(element *HtmlElement, parameters []string, group *sync.Wait
 	group.Done()
 }
 
-/* WE CAN USE THIS IN WIDGET BUT I DON'T THINK WE CAN USE THIS FOR HTML ELEMENT
-func ParseParameters(element *HtmlElement, parameters []string, group *sync.WaitGroup) {
-	if len(parameters) > 1 {
-		parameters = utils.MergeAttributes(parameters)
-	}
-	for _, s := range parameters[0:] {
-		varName, varValue, found := strings.Cut(s, "=")
-		if found {
-			if isStandard := widget.SetStandardVariables(varName, varValue, widget); isStandard == false {
-				var varReader, ok = widget.WidgetProperties.(VarReaderInterface)
-				if ok {
-					varReader.VarReaderFunc(varName, varValue)
-				}
-			}
-		} else {
-			if isStandard := widget.SetStandardContextVariables(s); isStandard == false {
-				var contextReader, ok = widget.WidgetProperties.(ContextReaderInterface)
-				if ok {
-					contextReader.ContextReaderFunc(s)
-				}
-			}
-		}
-	}
-	group.Done()
-}
-*/
-
 func ParseInsideOfTag(element *HtmlElement, text string, group *sync.WaitGroup) bool {
 	parameters := strings.Split(text, " ")
 	htmlTag, endTag := FindHtmlTag(parameters[0])
