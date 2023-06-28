@@ -57,6 +57,7 @@ func (receiver *TaskManager) CreateFromFile(fileUrl string) {
 	receiver.CreateWidgetTree()
 	receiver.SetStylePropertiesOfDocument()
 	receiver.SetInheritStylePropertiesOfDocument()
+	receiver.ExecuteScripts()
 }
 
 func (receiver *TaskManager) HandleStyleTag(htmlElement *HtmlParser.HtmlElement, styleSheet *StyleEngine.StyleSheet) {
@@ -69,7 +70,7 @@ func (receiver *TaskManager) HandleScriptTag(scriptElement *HtmlParser.HtmlEleme
 	receiver.javascriptEngine.AppendScript(scriptElement.Children[0].GetText())
 }
 
-func (receiver *TaskManager) ExecuteScripts(scriptElement *HtmlParser.HtmlElement) {
+func (receiver *TaskManager) ExecuteScripts() {
 	//give style element to v8 engine
 	receiver.javascriptEngine.ExecuteScripts()
 }
