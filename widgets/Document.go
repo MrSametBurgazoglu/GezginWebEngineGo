@@ -272,15 +272,11 @@ func SetPositionOfElements(document WidgetInterface) {
 				widgetList = append(widgetList, widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]))
 				widgetIndexList = append(widgetIndexList, 0)
 				currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
-				if currentWidget.GetHtmlTag() != 106 {
-					SetXYForWidget(currentWidget)
-				}
+				SetXYForWidget(currentWidget)
 				currentIndex++
 			} else {
 				currentWidget := widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex])
-				if currentWidget.GetHtmlTag() != 106 {
-					SetXYForWidget(currentWidget)
-				}
+				SetXYForWidget(currentWidget)
 				widgetIndexList[currentIndex]++
 			}
 		}
