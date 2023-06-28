@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"gezgin_web_engine/HtmlParser"
 	"github.com/veandco/go-sdl2/sdl"
 	"strconv"
 )
@@ -29,7 +30,8 @@ func (receiver *HtmlTagCanvas) Render(renderer *sdl.Renderer) {
 
 }
 
-func SetWidgetPropertiesForCanvasTag() WidgetInterface {
+func SetWidgetPropertiesForCanvasTag(element *HtmlParser.HtmlElement) WidgetInterface {
 	widget := new(HtmlTagCanvas)
+	widget.HtmlElement = element
 	return widget
 }

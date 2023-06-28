@@ -89,7 +89,7 @@ func (receiver *DocumentWidget) RenderDocument(renderer *sdl.Renderer) {
 	}
 }
 
-func (receiver *DocumentWidget) Render(renderer *sdl.Renderer) {
+func (receiver *DocumentWidget) RenderPage(renderer *sdl.Renderer) {
 	receiver.DrawProperties.Rect.W = int32(ScreenProperties.WindowWidth)
 	receiver.DrawProperties.Rect.H = int32(ScreenProperties.WindowHeight)
 	SetWidthForBlockElements(receiver)
@@ -98,6 +98,10 @@ func (receiver *DocumentWidget) Render(renderer *sdl.Renderer) {
 	SetHeightForInlineElements(receiver)
 	SetHeightForBlockElements(receiver)
 	SetPositionOfElements(receiver)
+}
+
+func (receiver *DocumentWidget) Render(renderer *sdl.Renderer) {
+
 	/*
 		widgetList := []WidgetInterface{receiver}
 		var edgeList []WidgetInterface

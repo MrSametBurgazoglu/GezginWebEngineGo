@@ -83,8 +83,8 @@ func (receiver *TaskManager) ExecuteScripts(scriptElement *HtmlParser.HtmlElemen
 func (receiver *TaskManager) CreateWidgetTree() {
 	receiver.DocumentWidget = new(widgets.DocumentWidget)
 	element := receiver.FindBody()
-	receiver.DocumentWidget.Initialize()
 	receiver.DocumentWidget.HtmlElement = element
+	receiver.DocumentWidget.Initialize()
 	var wg sync.WaitGroup
 	wg.Add(1)
 	receiver.CreateWidgetForTree(receiver.DocumentWidget, element, &wg)
@@ -94,8 +94,7 @@ func (receiver *TaskManager) CreateWidgetTree() {
 func (receiver *TaskManager) CreateWidgetForTree(parentWidget widgets.WidgetInterface, parentHtmlElement *HtmlParser.HtmlElement, group *sync.WaitGroup) {
 	for _, child := range parentHtmlElement.Children {
 		function := widgets.WidgetFunctions[child.HtmlTag]
-		newWidget := function()
-		newWidget.CopyFromHtmlElement(child)
+		newWidget := function(child)
 		newWidget.SetParent(parentWidget)
 		parentWidget.AppendChild(newWidget)
 		group.Add(1)
@@ -145,18 +144,20 @@ func (receiver *TaskManager) SetStylePropertiesOfWidget(widget widgets.WidgetInt
 }
 
 func (receiver *TaskManager) SetInheritStylePropertiesOfDocument() {
-	var wg *sync.WaitGroup
+	var wg sync.WaitGroup
 	wg.Add(1)
-	receiver.SetInheritStylePropertiesOfWidget(receiver.DocumentWidget, wg)
+	receiver.SetInheritStylePropertiesOfWidget(receiver.DocumentWidget, &wg)
 	wg.Wait()
 }
 
 func (receiver *TaskManager) SetInheritStylePropertiesOfWidget(widget widgets.WidgetInterface, group *sync.WaitGroup) {
-	widget.GetStyleProperty().ApplyCssRules(receiver.styleEngine, widget.GetID(), widget.GetClasses(), widget.GetHtmlTag(), widget.GetStyleRules())
+	//widget.GetStyleProperty().ApplyCssRules(receiver.styleEngine, widget.GetID(), widget.GetClasses(), widget.GetHtmlTag(), widget.GetStyleRules())
 	for _, child := range widget.GetChildren() {
-		child.GetStyleProperty().SetInheritStyleProperties(widget.GetStyleProperty())
-		group.Add(1)
-		go receiver.SetStylePropertiesOfWidget(child, group)
+		if child.GetStyleProperty() != nil {
+			child.GetStyleProperty().SetInheritStyleProperties(widget.GetStyleProperty())
+			group.Add(1)
+			go receiver.SetInheritStylePropertiesOfWidget(child, group)
+		}
 	}
 	group.Done()
 }
@@ -167,7 +168,7 @@ func (receiver *TaskManager) Draw(renderer *sdl.Renderer) {
 }
 
 func (receiver *TaskManager) Render(renderer *sdl.Renderer) {
-	receiver.DocumentWidget.Render(renderer)
+	receiver.DocumentWidget.RenderPage(renderer)
 }
 
 func (receiver *TaskManager) IsRendered() bool {

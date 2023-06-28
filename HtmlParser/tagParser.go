@@ -21,7 +21,7 @@ func ParseParameters(element *HtmlElement, parameters []string, group *sync.Wait
 	for _, s := range parameters[1:] {
 		varName, varValue, found := strings.Cut(s, "=")
 		if found {
-			element.Attributes[varName] = varValue
+			element.Attributes[varName] = varValue[1 : len(varValue)-1]
 		} else {
 			element.Attributes[varName] = ""
 		}

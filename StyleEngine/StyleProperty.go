@@ -105,21 +105,25 @@ func (receiver *StyleProperty) ApplyCssRules(styleEngine *StyleEngine, id string
 	for _, rule := range internalTagRules {
 		receiver.ApplyRules(rule)
 	}
-	externalClassRules := styleEngine.GetCssRulesByClass(classes[0], false)
-	for _, rule := range externalClassRules {
-		receiver.ApplyRules(rule)
+	if classes != nil {
+		externalClassRules := styleEngine.GetCssRulesByClass(classes[0], false)
+		for _, rule := range externalClassRules {
+			receiver.ApplyRules(rule)
+		}
+		internalClassRules := styleEngine.GetCssRulesByClass(classes[0], true)
+		for _, rule := range internalClassRules {
+			receiver.ApplyRules(rule)
+		}
 	}
-	internalClassRules := styleEngine.GetCssRulesByClass(classes[0], true)
-	for _, rule := range internalClassRules {
-		receiver.ApplyRules(rule)
-	}
-	externalIDRules := styleEngine.GetCssRulesByID(id, false)
-	for _, rule := range externalIDRules {
-		receiver.ApplyRules(rule)
-	}
-	internalIDRules := styleEngine.GetCssRulesByID(id, true)
-	for _, rule := range internalIDRules {
-		receiver.ApplyRules(rule)
+	if id != "" {
+		externalIDRules := styleEngine.GetCssRulesByID(id, false)
+		for _, rule := range externalIDRules {
+			receiver.ApplyRules(rule)
+		}
+		internalIDRules := styleEngine.GetCssRulesByID(id, true)
+		for _, rule := range internalIDRules {
+			receiver.ApplyRules(rule)
+		}
 	}
 	receiver.ApplyInlineRules(styleMap)
 }

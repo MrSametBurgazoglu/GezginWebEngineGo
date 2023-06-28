@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"github.com/veandco/go-sdl2/sdl"
 	"strconv"
@@ -71,7 +72,10 @@ func (receiver *HtmlTagImg) Render(renderer *sdl.Renderer) {
 
 }
 
-func SetWidgetPropertiesForImgTag() WidgetInterface {
+func SetWidgetPropertiesForImgTag(element *HtmlParser.HtmlElement) WidgetInterface {
 	widget := new(HtmlTagImg)
+	widget.HtmlElement = element
+	widget.Initialize()
+	widget.Src = widget.HtmlElement.Attributes["src"]
 	return widget
 }

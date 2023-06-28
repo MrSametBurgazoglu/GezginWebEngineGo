@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"gezgin_web_engine/HtmlParser"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -31,7 +32,8 @@ func (receiver *HtmlTagA) Render(renderer *sdl.Renderer) {
 
 }
 
-func SetWidgetPropertiesForATag() WidgetInterface {
+func SetWidgetPropertiesForATag(element *HtmlParser.HtmlElement) WidgetInterface {
 	widget := new(HtmlTagA)
+	widget.HtmlElement = element
 	return widget
 }

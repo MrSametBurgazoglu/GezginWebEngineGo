@@ -1,6 +1,9 @@
 package widgets
 
-import "github.com/veandco/go-sdl2/sdl"
+import (
+	"gezgin_web_engine/HtmlParser"
+	"github.com/veandco/go-sdl2/sdl"
+)
 
 type HtmlTagButton struct {
 	Widget
@@ -59,7 +62,8 @@ func (receiver *HtmlTagButton) Render(renderer *sdl.Renderer) {
 
 }
 
-func SetWidgetPropertiesForButtonTag() WidgetInterface {
+func SetWidgetPropertiesForButtonTag(element *HtmlParser.HtmlElement) WidgetInterface {
 	widget := new(HtmlTagButton)
+	widget.HtmlElement = element
 	return widget
 }

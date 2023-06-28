@@ -6,7 +6,7 @@ import (
 	"gezgin_web_engine/HtmlParser/htmlVariables/standardHtmlTagVariables"
 	"gezgin_web_engine/LayoutEngine"
 	"gezgin_web_engine/StyleEngine"
-	structs2 "gezgin_web_engine/drawer/structs"
+	"gezgin_web_engine/drawer/structs"
 	"github.com/veandco/go-sdl2/sdl"
 	"strings"
 )
@@ -32,7 +32,7 @@ type Widget struct {
 	LayoutProperty *LayoutEngine.LayoutProperty
 	standardHtmlTagVariables.StandardHtmlTagVariables
 	StyleRules     map[string]string
-	DrawProperties *structs2.DrawProperties
+	DrawProperties *structs.DrawProperties
 	RenderWidget   func(*Widget, *sdl.Renderer)
 	DrawWidget     func(*Widget, *sdl.Renderer)
 	Children       []WidgetInterface
@@ -43,6 +43,9 @@ type Widget struct {
 
 func (receiver *Widget) Initialize() {
 	receiver.StyleProperty = new(StyleEngine.StyleProperty)
+	receiver.DrawProperties = new(structs.DrawProperties)
+	receiver.CopyFromHtmlElement(receiver.HtmlElement)
+
 }
 
 func (receiver *Widget) SetChildrenCount(count int) {
@@ -102,6 +105,7 @@ func (receiver *Widget) SetRender(render bool) {
 }
 
 func (receiver *Widget) CopyFromHtmlElement(htmlElement *HtmlParser.HtmlElement) {
+	receiver.HtmlElement = htmlElement
 	receiver.ChildrenCount = htmlElement.ChildrenCount
 	receiver.ChildrenIndex = htmlElement.ChildrenIndex
 	receiver.ID = htmlElement.Attributes["id"]
@@ -132,6 +136,6 @@ func (receiver *Widget) GetStyleRules() map[string]string {
 	return receiver.StyleRules
 }
 
-func (receiver *Widget) GetDrawProperties() *structs2.DrawProperties {
+func (receiver *Widget) GetDrawProperties() *structs.DrawProperties {
 	return receiver.DrawProperties
 }

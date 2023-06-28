@@ -62,7 +62,8 @@ func main() {
 	defer window.Destroy()
 
 	running := true
-	newTab.RenderPage(renderer)
+	//newTab.RenderPage(renderer)
+	//newTab.DrawPage(renderer)
 	for running {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch event.(type) {

@@ -1,6 +1,8 @@
 package widgets
 
-var WidgetFunctions = []func() WidgetInterface{
+import "gezgin_web_engine/HtmlParser"
+
+var WidgetFunctions = []func(element *HtmlParser.HtmlElement) WidgetInterface{
 	nil,
 	SetWidgetPropertiesForATag,
 	nil,
@@ -38,6 +40,8 @@ var WidgetFunctions = []func() WidgetInterface{
 	nil,
 	nil,
 	nil,
+	nil,
+	nil,
 	SetWidgetPropertiesForH1Tag,
 	SetWidgetPropertiesForH2Tag,
 	SetWidgetPropertiesForH3Tag,
@@ -48,8 +52,6 @@ var WidgetFunctions = []func() WidgetInterface{
 	nil,
 	nil,
 	SetWidgetPropertiesForHtmlTag,
-	nil,
-	nil,
 	nil,
 	nil,
 	SetWidgetPropertiesForImgTag,

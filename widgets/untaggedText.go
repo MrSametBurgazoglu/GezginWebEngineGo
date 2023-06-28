@@ -1,8 +1,10 @@
 package widgets
 
 import (
+	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/drawer/Fonts"
 	"gezgin_web_engine/drawer/drawerBackend"
+	"gezgin_web_engine/drawer/structs"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
 	"strings"
@@ -54,8 +56,10 @@ func (receiver *UntaggedText) Render(renderer *sdl.Renderer) {
 	}
 }
 
-func SetWidgetPropertiesForUntaggedText() WidgetInterface {
+func SetWidgetPropertiesForUntaggedText(element *HtmlParser.HtmlElement) WidgetInterface {
 	widget := new(UntaggedText)
+	widget.HtmlElement = element
+	widget.DrawProperties = new(structs.DrawProperties)
 	return widget
 }
 

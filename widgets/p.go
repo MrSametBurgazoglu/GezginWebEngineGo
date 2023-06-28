@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"gezgin_web_engine/HtmlParser"
 	structs2 "gezgin_web_engine/StyleEngine/structs"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"github.com/veandco/go-sdl2/sdl"
@@ -21,8 +22,9 @@ func (receiver *HtmlTagP) Render(renderer *sdl.Renderer) {
 
 }
 
-func SetWidgetPropertiesForPTag() WidgetInterface {
+func SetWidgetPropertiesForPTag(element *HtmlParser.HtmlElement) WidgetInterface {
 	widget := new(HtmlTagP)
+	widget.HtmlElement = element
 	widget.Initialize()
 	widget.StyleProperty.Font = new(structs2.Font)
 	widget.StyleProperty.Font.FontSizeValue = 14

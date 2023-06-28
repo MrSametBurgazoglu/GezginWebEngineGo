@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"github.com/veandco/go-sdl2/sdl"
 )
@@ -20,8 +21,9 @@ func (receiver *HtmlTagBody) Render(renderer *sdl.Renderer) {
 
 }
 
-func SetWidgetPropertiesForBodyTag() WidgetInterface {
+func SetWidgetPropertiesForBodyTag(element *HtmlParser.HtmlElement) WidgetInterface {
 	widget := new(HtmlTagBody)
+	widget.HtmlElement = element
 	widget.Initialize()
 	return widget
 }

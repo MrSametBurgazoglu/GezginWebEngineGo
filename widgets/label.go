@@ -1,6 +1,9 @@
 package widgets
 
-import "github.com/veandco/go-sdl2/sdl"
+import (
+	"gezgin_web_engine/HtmlParser"
+	"github.com/veandco/go-sdl2/sdl"
+)
 
 type HtmlTagLabel struct {
 	Widget
@@ -25,7 +28,9 @@ func (receiver *HtmlTagLabel) Render(renderer *sdl.Renderer) {
 
 }
 
-func SetWidgetPropertiesForLabelTag() WidgetInterface {
+func SetWidgetPropertiesForLabelTag(element *HtmlParser.HtmlElement) WidgetInterface {
 	widget := new(HtmlTagLabel)
+	widget.HtmlElement = element
+	widget.Initialize()
 	return widget
 }
