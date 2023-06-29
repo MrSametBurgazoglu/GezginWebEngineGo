@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/ResourceManager"
 	"github.com/veandco/go-sdl2/sdl"
 	"strconv"
 )
@@ -26,7 +27,7 @@ func (receiver *HtmlTagCanvas) Draw(renderer *sdl.Renderer) {
 
 }
 
-func (receiver *HtmlTagCanvas) Render(renderer *sdl.Renderer) {
+func (receiver *HtmlTagCanvas) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
 
 }
 

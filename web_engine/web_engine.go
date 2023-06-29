@@ -14,6 +14,10 @@ func (receiver *WebTab) OpenWebPageFromFile(fileUrl string) {
 	receiver.taskManager.CreateFromFile(fileUrl)
 }
 
+func (receiver *WebTab) OpenWebPageFromWeb(Url string) {
+	receiver.taskManager.CreateFromWeb(Url)
+}
+
 func (receiver *WebTab) DrawPage(renderer *sdl.Renderer) {
 	receiver.taskManager.Draw(renderer)
 }

@@ -5,6 +5,8 @@ import (
 	"gezgin_web_engine/FileManager"
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/JavascriptHandler"
+	"gezgin_web_engine/NetworkManager"
+	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/eventSystem"
 	"gezgin_web_engine/widgets"
@@ -29,6 +31,8 @@ type TaskManager struct {
 	styleEngine      *StyleEngine.StyleEngine
 	javascriptEngine *JavascriptHandler.JavascriptEngine
 	DocumentWidget   *widgets.DocumentWidget
+	NetworkManager   *NetworkManager.NetworkManager
+	ResourceManager  *ResourceManager.ResourceManager
 }
 
 func (receiver *TaskManager) Initialize() {
@@ -38,9 +42,15 @@ func (receiver *TaskManager) Initialize() {
 	receiver.styleEngine = new(StyleEngine.StyleEngine)
 	receiver.styleEngine.WorkerPool = workerpool.New(runtime.NumCPU() - 1)
 	receiver.javascriptEngine = new(JavascriptHandler.JavascriptEngine)
+	receiver.NetworkManager = new(NetworkManager.NetworkManager)
+	receiver.NetworkManager.Initialize()
+	receiver.ResourceManager = new(ResourceManager.ResourceManager)
+	receiver.ResourceManager.Initialize()
+	receiver.ResourceManager.NetworkManager = receiver.NetworkManager
 }
 
 func (receiver *TaskManager) CreateFromFile(fileUrl string) {
+	receiver.ResourceManager.Online = false
 	dat := FileManager.LoadFile(fileUrl)
 	receiver.HtmlDocument = HtmlParser.CreateDocumentElement()
 	nodes := make(chan *HtmlParser.HtmlElement)
@@ -58,6 +68,38 @@ func (receiver *TaskManager) CreateFromFile(fileUrl string) {
 	receiver.SetStylePropertiesOfDocument()
 	receiver.SetInheritStylePropertiesOfDocument()
 	receiver.ExecuteScripts()
+}
+
+func (receiver *TaskManager) CreateFromWeb(webUrl string) {
+	receiver.ResourceManager.Online = true
+	receiver.NetworkManager.Url = webUrl
+	dat := receiver.NetworkManager.Get("")
+	receiver.HtmlDocument = HtmlParser.CreateDocumentElement()
+	nodes := make(chan *HtmlParser.HtmlElement)
+	go receiver.htmlParser.ParseHtmlFromFile(receiver.HtmlDocument, dat, nodes)
+	count := 0
+	for node := range nodes {
+		count += 1
+		if node.HtmlTag == HtmlParser.HTML_SCRIPT {
+			receiver.HandleScriptTag(node)
+		} else if node.HtmlTag == HtmlParser.HTML_STYLE {
+			styleSheet := receiver.styleEngine.CreateCssSheet(false)
+			receiver.styleEngine.WorkerPool.Submit(func() { receiver.HandleStyleTag(node, styleSheet) }) //maybe worker pool
+		} else if node.HtmlTag == HtmlParser.HTML_IMG {
+			if src := node.Attributes["src"]; src != "" {
+				receiver.HandleWebResource(src)
+			}
+		}
+	}
+	receiver.styleEngine.WorkerPool.StopWait()
+	receiver.CreateWidgetTree()
+	receiver.SetStylePropertiesOfDocument()
+	receiver.SetInheritStylePropertiesOfDocument()
+	receiver.ExecuteScripts()
+}
+
+func (receiver *TaskManager) HandleWebResource(url string) {
+	receiver.ResourceManager.CreateResourceFromWeb(url)
 }
 
 func (receiver *TaskManager) HandleStyleTag(htmlElement *HtmlParser.HtmlElement, styleSheet *StyleEngine.StyleSheet) {
@@ -80,6 +122,7 @@ func (receiver *TaskManager) CreateWidgetTree() {
 	element := receiver.FindBody()
 	receiver.DocumentWidget.HtmlElement = element
 	receiver.DocumentWidget.Initialize()
+	receiver.DocumentWidget.ResourceManager = receiver.ResourceManager
 	var wg sync.WaitGroup
 	wg.Add(1)
 	receiver.CreateWidgetForTree(receiver.DocumentWidget, element, &wg)

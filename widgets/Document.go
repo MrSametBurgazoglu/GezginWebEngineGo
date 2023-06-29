@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"github.com/veandco/go-sdl2/sdl"
@@ -9,6 +10,7 @@ import (
 
 type DocumentWidget struct {
 	Widget
+	ResourceManager *ResourceManager.ResourceManager
 }
 
 func allChildrenRendered(widget WidgetInterface) bool {
@@ -74,7 +76,7 @@ func (receiver *DocumentWidget) RenderDocument(renderer *sdl.Renderer) {
 		keepGo = false
 		for _, w := range widgetList {
 			if allChildrenRendered(w) {
-				w.Render(renderer)
+				w.Render(renderer, receiver.ResourceManager)
 				w.SetRender(true)
 			}
 		}
@@ -102,7 +104,7 @@ func (receiver *DocumentWidget) RenderPage(renderer *sdl.Renderer) {
 	SetPositionOfElements(receiver)
 }
 
-func (receiver *DocumentWidget) Render(renderer *sdl.Renderer) {
+func (receiver *DocumentWidget) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
 	//render body
 }
 

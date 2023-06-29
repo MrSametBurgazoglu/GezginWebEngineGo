@@ -2,9 +2,11 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"github.com/veandco/go-sdl2/sdl"
 	"strconv"
+	"time"
 )
 
 type HtmlTagImg struct {
@@ -62,14 +64,20 @@ func (receiver *HtmlTagImg) Draw(renderer *sdl.Renderer) {
 	renderer.Copy(receiver.DrawProperties.Texture, nil, &receiver.DrawProperties.Rect)
 }
 
-func (receiver *HtmlTagImg) Render(renderer *sdl.Renderer) {
-	drawerBackend.GetImageTexture(
-		renderer,
-		receiver.Src,
-		&receiver.DrawProperties.Texture,
-		&receiver.DrawProperties.Rect,
-	)
-
+func (receiver *HtmlTagImg) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
+	for !resourceManager.CheckResource(receiver.Src) {
+		time.Sleep(time.Millisecond)
+	}
+	resource, err := resourceManager.GetResource(receiver.Src)
+	rw, err := sdl.RWFromMem(resource.GetData())
+	if err == nil {
+		drawerBackend.GetImageTexture(
+			renderer,
+			rw,
+			&receiver.DrawProperties.Texture,
+			&receiver.DrawProperties.Rect,
+		)
+	}
 }
 
 func SetWidgetPropertiesForImgTag(element *HtmlParser.HtmlElement) WidgetInterface {

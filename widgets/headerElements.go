@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/StyleEngine/structs"
 	"gezgin_web_engine/drawer/drawerBackend"
@@ -19,7 +20,7 @@ func (receiver *HtmlTagHeader) Draw(renderer *sdl.Renderer) {
 	}
 }
 
-func (receiver *HtmlTagHeader) Render(renderer *sdl.Renderer) {
+func (receiver *HtmlTagHeader) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
 
 }
 

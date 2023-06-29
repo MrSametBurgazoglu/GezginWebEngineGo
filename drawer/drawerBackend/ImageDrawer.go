@@ -5,8 +5,8 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-func GetImageTexture(renderer *sdl.Renderer, imagePath string, texture **sdl.Texture, rect *sdl.Rect) {
-	image, err := img.LoadTexture(renderer, "exampleHtmlFiles/"+imagePath)
+func GetImageTexture(renderer *sdl.Renderer, imageSrc *sdl.RWops, texture **sdl.Texture, rect *sdl.Rect) {
+	image, err := img.LoadTextureRW(renderer, imageSrc, true)
 	if err != nil {
 		println(err.Error())
 	}

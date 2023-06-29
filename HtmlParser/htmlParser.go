@@ -48,10 +48,10 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 				currentElement.Children = append(currentElement.Children, &newElement)
 				newElement.Attributes = make(map[string]string)
 				currentElement = &newElement
-				nodes <- &newElement
 				if ParseInsideOfTag(currentElement, data[seek+start+1:seek+start+end], &wg) {
 					currentElement = currentElement.Parent
 				}
+				nodes <- &newElement
 			}
 			seek += start + end + 1
 		}

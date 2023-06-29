@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"github.com/veandco/go-sdl2/sdl"
 )
@@ -17,7 +18,7 @@ func (receiver *HtmlTagBody) Draw(renderer *sdl.Renderer) {
 	}
 }
 
-func (receiver *HtmlTagBody) Render(renderer *sdl.Renderer) {
+func (receiver *HtmlTagBody) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
 
 }
 

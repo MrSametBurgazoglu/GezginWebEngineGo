@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/drawer/structs"
 	"github.com/veandco/go-sdl2/sdl"
@@ -29,5 +30,5 @@ type WidgetInterface interface {
 	GetStyleProperty() *StyleEngine.StyleProperty
 	GetDrawProperties() *structs.DrawProperties
 	Draw(renderer *sdl.Renderer)
-	Render(renderer *sdl.Renderer)
+	Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager)
 }

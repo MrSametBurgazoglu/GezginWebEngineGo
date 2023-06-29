@@ -50,7 +50,8 @@ func main() {
 
 	startTime := time.Now()
 	newTab := web_engine.NewTab()
-	newTab.OpenWebPageFromFile("exampleHtmlFiles/newExa.html")
+	//newTab.OpenWebPageFromFile("exampleHtmlFiles/newExa.html")
+	newTab.OpenWebPageFromWeb("http://127.0.0.1:8080")
 	fmt.Println("Total time taken ", time.Since(startTime).Milliseconds())
 
 	web_engine.InitDrawer(700, 1300)

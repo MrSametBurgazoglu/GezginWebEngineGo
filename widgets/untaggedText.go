@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/Fonts"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"gezgin_web_engine/drawer/structs"
@@ -19,7 +20,7 @@ func (receiver *UntaggedText) Draw(renderer *sdl.Renderer) {
 	renderer.Copy(receiver.DrawProperties.Texture, nil, &receiver.DrawProperties.Rect)
 }
 
-func (receiver *UntaggedText) Render(renderer *sdl.Renderer) {
+func (receiver *UntaggedText) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
 	if receiver.GetParent().GetDrawProperties().Font == nil {
 		if receiver.GetParent().GetStyleProperty().Font != nil {
 			receiver.GetParent().GetDrawProperties().Font = Fonts.GetFont(receiver.GetParent().GetStyleProperty().Font.FontSizeValue)
