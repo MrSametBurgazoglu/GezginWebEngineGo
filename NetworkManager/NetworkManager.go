@@ -4,11 +4,12 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type NetworkManager struct {
-	client *http.Client
-	Url    string
+	client  *http.Client
+	BaseUrl string
 }
 
 func (receiver *NetworkManager) Initialize() {
@@ -16,7 +17,20 @@ func (receiver *NetworkManager) Initialize() {
 }
 
 func (receiver *NetworkManager) Get(url string) []byte {
-	req, err := http.NewRequest("GET", receiver.Url+url, nil)
+	targetUrl := ""
+	if strings.HasPrefix(url, "/") {
+		targetUrl = receiver.BaseUrl + url
+	} else if strings.HasPrefix(url, "http") {
+		targetUrl = url
+	} else {
+		index := strings.LastIndexAny(receiver.BaseUrl, "/")
+		if index == -1 {
+			targetUrl = receiver.BaseUrl
+		} else {
+			targetUrl = receiver.BaseUrl[:index]
+		}
+	}
+	req, err := http.NewRequest("GET", targetUrl, nil)
 	if err != nil {
 		log.Fatalln(err)
 	}

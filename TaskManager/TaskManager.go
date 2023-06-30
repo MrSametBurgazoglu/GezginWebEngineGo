@@ -72,7 +72,7 @@ func (receiver *TaskManager) CreateFromFile(fileUrl string) {
 
 func (receiver *TaskManager) CreateFromWeb(webUrl string) {
 	receiver.ResourceManager.Online = true
-	receiver.NetworkManager.Url = webUrl
+	receiver.NetworkManager.BaseUrl = webUrl
 	dat := receiver.NetworkManager.Get("")
 	receiver.HtmlDocument = HtmlParser.CreateDocumentElement()
 	nodes := make(chan *HtmlParser.HtmlElement)
