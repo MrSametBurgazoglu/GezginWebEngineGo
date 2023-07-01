@@ -15,7 +15,7 @@ func SetInput(event string, currentWidget InputWidget) {
 	EventMap[event] = append(EventMap[event], currentWidget)
 }
 
-func TakeInputFromSdl(event sdl.Event) {
+func TakeInput(event sdl.Event) {
 	switch currentEvent := (event).(type) {
 	case *sdl.MouseButtonEvent:
 		widgetList := EventMap["onclick"]

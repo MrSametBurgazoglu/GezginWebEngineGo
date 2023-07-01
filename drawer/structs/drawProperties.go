@@ -10,4 +10,8 @@ type DrawProperties struct {
 	Rect              sdl.Rect
 	Texture           *sdl.Texture
 	BackgroundTexture *sdl.Texture
+	X                 int
+	Y                 int
+	W                 int
+	H                 int
 }
