@@ -97,30 +97,30 @@ type StyleProperty struct {
 }
 
 func (receiver *StyleProperty) ApplyCssRules(styleEngine *StyleEngine, id string, classes []string, htmlTag int, styleMap map[string]string) {
-	externalTagRules := styleEngine.GetCssRulesByTag(htmlTag, false)
+	externalTagRules := styleEngine.GetCssRulesByTag(htmlTag, true)
 	for _, rule := range externalTagRules {
 		receiver.ApplyRules(rule)
 	}
-	internalTagRules := styleEngine.GetCssRulesByTag(htmlTag, true)
+	internalTagRules := styleEngine.GetCssRulesByTag(htmlTag, false)
 	for _, rule := range internalTagRules {
 		receiver.ApplyRules(rule)
 	}
 	if classes != nil {
-		externalClassRules := styleEngine.GetCssRulesByClass(classes[0], false)
+		externalClassRules := styleEngine.GetCssRulesByClass(classes[0], true)
 		for _, rule := range externalClassRules {
 			receiver.ApplyRules(rule)
 		}
-		internalClassRules := styleEngine.GetCssRulesByClass(classes[0], true)
+		internalClassRules := styleEngine.GetCssRulesByClass(classes[0], false)
 		for _, rule := range internalClassRules {
 			receiver.ApplyRules(rule)
 		}
 	}
 	if id != "" {
-		externalIDRules := styleEngine.GetCssRulesByID(id, false)
+		externalIDRules := styleEngine.GetCssRulesByID(id, true)
 		for _, rule := range externalIDRules {
 			receiver.ApplyRules(rule)
 		}
-		internalIDRules := styleEngine.GetCssRulesByID(id, true)
+		internalIDRules := styleEngine.GetCssRulesByID(id, false)
 		for _, rule := range internalIDRules {
 			receiver.ApplyRules(rule)
 		}

@@ -32,6 +32,8 @@ type StyleEngine struct {
 func (receiver *StyleEngine) CreateCssSheet(external bool) (cssSheet *StyleSheet) {
 	cssSheet = new(StyleSheet)
 	cssSheet.external = external
+	cssSheet.cssRuleList = new(CssRuleList)
+	cssSheet.cssRuleList.Initialize()
 	receiver.CssStyleSheetList = append(receiver.CssStyleSheetList, cssSheet)
 	return
 }
@@ -57,7 +59,9 @@ func (receiver *StyleEngine) GetCssRulesByClass(class string, external bool) (ru
 	for _, sheet := range receiver.CssStyleSheetList {
 		if sheet.external == external {
 			rules := sheet.cssRuleList.GetCssRulesByClass(class)
-			ruleList = append(ruleList, rules)
+			if rules != nil {
+				ruleList = append(ruleList, rules)
+			}
 		}
 	}
 	return
@@ -67,7 +71,9 @@ func (receiver *StyleEngine) GetCssRulesByTag(htmlTag int, external bool) (ruleL
 	for _, sheet := range receiver.CssStyleSheetList {
 		if sheet.external == external {
 			rules := sheet.cssRuleList.GetCssRulesByElement(htmlTagList[htmlTag])
-			ruleList = append(ruleList, rules)
+			if rules != nil {
+				ruleList = append(ruleList, rules)
+			}
 		}
 	}
 	return
@@ -77,7 +83,9 @@ func (receiver *StyleEngine) GetCssRulesByID(id string, external bool) (ruleList
 	for _, sheet := range receiver.CssStyleSheetList {
 		if sheet.external == external {
 			rules := sheet.cssRuleList.GetCssRulesByID(id)
-			ruleList = append(ruleList, rules)
+			if rules != nil {
+				ruleList = append(ruleList, rules)
+			}
 		}
 	}
 	return

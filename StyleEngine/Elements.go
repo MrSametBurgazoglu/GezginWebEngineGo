@@ -1,6 +1,7 @@
 package StyleEngine
 
 var htmlTagList = []string{
+	"Document",
 	"!DOCTYPE",
 	"a",
 	"abbr",

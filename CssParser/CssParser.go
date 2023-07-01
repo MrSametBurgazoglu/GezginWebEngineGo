@@ -40,10 +40,12 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 		selectors := styleText[seek : seek+index]
 		cssText := styleText[seek+index+1 : seek+index2]
 		seek += index2 + 1
+		newCssRule.cssDeclarationBlock = new(CssDeclarationBlock)
 		newCssRule.SetStyleSheet(newCssStyleSheet)
 		newCssRule.SetCssSelectors(selectors)
 		newCssRule.SetCssDeclarationBlock(cssText)
 		result.CssStyleSheetRules = append(result.CssStyleSheetRules, newCssRule)
+		result.ruleCount += 1
 		index = strings.Index(styleText[seek:], "{")
 	}
 	return

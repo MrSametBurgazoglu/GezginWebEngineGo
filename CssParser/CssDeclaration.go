@@ -3,8 +3,8 @@ package CssParser
 import "strings"
 
 type CssDeclaration struct {
-	cssProperty *CssProperty
-	cssValue    *CssValue
+	cssProperty CssProperty
+	cssValue    CssValue
 }
 
 func (receiver *CssDeclaration) Set(text string) {

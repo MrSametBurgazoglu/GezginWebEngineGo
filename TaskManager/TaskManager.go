@@ -86,7 +86,14 @@ func (receiver *TaskManager) CreateFromWeb(webUrl string) {
 			receiver.styleEngine.WorkerPool.Submit(func() { receiver.HandleStyleTag(node, styleSheet) }) //maybe worker pool
 		} else if node.HtmlTag == HtmlParser.HTML_IMG {
 			if src := node.Attributes["src"]; src != "" {
-				receiver.HandleWebResource(src)
+				receiver.HandleWebImgResource(src)
+			}
+		} else if node.HtmlTag == HtmlParser.HTML_LINK {
+			if node.Attributes["rel"] != "" && node.Attributes["href"] != "" {
+				switch node.Attributes["rel"] {
+				case "stylesheet":
+					receiver.HandleWebLinkStyleSheet(node.Attributes["href"])
+				}
 			}
 		}
 	}
@@ -97,8 +104,19 @@ func (receiver *TaskManager) CreateFromWeb(webUrl string) {
 	receiver.ExecuteScripts()
 }
 
-func (receiver *TaskManager) HandleWebResource(url string) {
+func (receiver *TaskManager) HandleWebImgResource(url string) {
 	receiver.ResourceManager.CreateResourceFromWeb(url)
+}
+
+func (receiver *TaskManager) HandleWebLinkStyleSheet(url string) {
+	styleSheet := receiver.styleEngine.CreateCssSheet(true)
+	receiver.styleEngine.WorkerPool.Submit(func() {
+		dat := receiver.NetworkManager.Get(url)
+		styleTag := HtmlParser.HtmlElement{HtmlTag: HtmlParser.HTML_STYLE}
+		untaggedText := HtmlParser.HtmlElement{HtmlTag: HtmlParser.HTML_UNTAGGED_TEXT, Text: string(dat)}
+		styleTag.Children = append(styleTag.Children, &untaggedText)
+		receiver.HandleStyleTag(&styleTag, styleSheet)
+	})
 }
 
 func (receiver *TaskManager) HandleStyleTag(htmlElement *HtmlParser.HtmlElement, styleSheet *StyleEngine.StyleSheet) {
@@ -174,8 +192,11 @@ func (receiver *TaskManager) SetStylePropertiesOfDocument() {
 func (receiver *TaskManager) SetStylePropertiesOfWidget(widget widgets.WidgetInterface, group *sync.WaitGroup) {
 	widget.GetStyleProperty().ApplyCssRules(receiver.styleEngine, widget.GetID(), widget.GetClasses(), widget.GetHtmlTag(), widget.GetStyleRules())
 	for _, child := range widget.GetChildren() {
-		group.Add(1)
-		go receiver.SetStylePropertiesOfWidget(child, group)
+		if child.GetHtmlTag() != 106 { //untagged text shouldn't have style property
+			println(child.GetHtmlTag(), "html tag")
+			group.Add(1)
+			go receiver.SetStylePropertiesOfWidget(child, group)
+		}
 	}
 	group.Done()
 }
