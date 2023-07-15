@@ -5,7 +5,7 @@ import (
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/drawer/structs"
-	"github.com/veandco/go-sdl2/sdl"
+	"image"
 )
 
 type WidgetInterface interface {
@@ -29,6 +29,6 @@ type WidgetInterface interface {
 	CopyFromHtmlElement(htmlElement *HtmlParser.HtmlElement)
 	GetStyleProperty() *StyleEngine.StyleProperty
 	GetDrawProperties() *structs.DrawProperties
-	Draw(renderer *sdl.Renderer)
-	Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager)
+	Draw(rgba *image.RGBA)
+	Render(rgba *image.RGBA, resourceManager *ResourceManager.ResourceManager)
 }

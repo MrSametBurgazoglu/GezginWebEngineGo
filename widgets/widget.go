@@ -7,7 +7,7 @@ import (
 	"gezgin_web_engine/LayoutEngine"
 	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/drawer/structs"
-	"github.com/veandco/go-sdl2/sdl"
+	"image"
 	"strings"
 )
 
@@ -33,8 +33,8 @@ type Widget struct {
 	standardHtmlTagVariables.StandardHtmlTagVariables
 	StyleRules     map[string]string
 	DrawProperties *structs.DrawProperties
-	RenderWidget   func(*Widget, *sdl.Renderer)
-	DrawWidget     func(*Widget, *sdl.Renderer)
+	RenderWidget   func(*Widget, *image.RGBA)
+	DrawWidget     func(*Widget, *image.RGBA)
 	Children       []WidgetInterface
 	Parent         WidgetInterface
 	Draw           bool
@@ -84,8 +84,8 @@ func (receiver *Widget) AppendChild(child WidgetInterface) {
 	receiver.Children = append(receiver.Children, child)
 }
 
-func (receiver *Widget) GetRect() *sdl.Rect {
-	return &receiver.DrawProperties.Rect
+func (receiver *Widget) GetRect() *image.Rectangle {
+	return receiver.DrawProperties.Rect
 }
 
 func (receiver *Widget) IsDraw() bool {

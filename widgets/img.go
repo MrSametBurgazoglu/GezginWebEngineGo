@@ -1,10 +1,12 @@
 package widgets
 
 import (
+	"bytes"
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/drawerBackend"
-	"github.com/veandco/go-sdl2/sdl"
+	"image"
+	"image/draw"
 	"strconv"
 	"time"
 )
@@ -60,22 +62,21 @@ func (receiver *HtmlTagImg) VarReaderFunc(variableName string, variableValue str
 	}
 }
 
-func (receiver *HtmlTagImg) Draw(renderer *sdl.Renderer) {
-	renderer.Copy(receiver.DrawProperties.Texture, nil, &receiver.DrawProperties.Rect)
+func (receiver *HtmlTagImg) Draw(mainImage *image.RGBA) {
+	draw.Draw(mainImage, *receiver.DrawProperties.Rect, receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Src)
 }
 
-func (receiver *HtmlTagImg) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
+func (receiver *HtmlTagImg) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 	for !resourceManager.CheckResource(receiver.Src) {
 		time.Sleep(time.Millisecond)
 	}
 	resource, err := resourceManager.GetResource(receiver.Src)
-	rw, err := sdl.RWFromMem(resource.GetData())
+	img, _, err := image.Decode(bytes.NewReader(resource.GetData())) //TODO PERFORMANCE UPDATE
 	if err == nil {
 		drawerBackend.GetImageTexture(
-			renderer,
-			rw,
-			&receiver.DrawProperties.Texture,
-			&receiver.DrawProperties.Rect,
+			&img,
+			receiver.DrawProperties.Texture,
+			receiver.DrawProperties.Rect,
 		)
 	}
 }

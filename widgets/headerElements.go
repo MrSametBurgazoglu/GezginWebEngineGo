@@ -6,21 +6,21 @@ import (
 	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/StyleEngine/structs"
 	"gezgin_web_engine/drawer/drawerBackend"
-	"github.com/veandco/go-sdl2/sdl"
+	"image"
 )
 
 type HtmlTagHeader struct {
 	Widget
 }
 
-func (receiver *HtmlTagHeader) Draw(renderer *sdl.Renderer) {
+func (receiver *HtmlTagHeader) Draw(mainImage *image.RGBA) {
 	if receiver.GetStyleProperty().Background != nil {
 		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
-		drawerBackend.DrawBackground(red, green, blue, alpha, &receiver.DrawProperties.Rect, renderer)
+		drawerBackend.DrawBackground(red, green, blue, alpha, receiver.DrawProperties.Texture)
 	}
 }
 
-func (receiver *HtmlTagHeader) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
+func (receiver *HtmlTagHeader) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 
 }
 

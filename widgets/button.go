@@ -3,7 +3,7 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
-	"github.com/veandco/go-sdl2/sdl"
+	"image"
 )
 
 type HtmlTagButton struct {
@@ -55,11 +55,11 @@ func (receiver *HtmlTagButton) VarReaderFunc(variableName string, variableValue 
 	}
 }
 
-func (receiver *HtmlTagButton) Draw(renderer *sdl.Renderer) {
+func (receiver *HtmlTagButton) Draw(mainImage *image.RGBA) {
 
 }
 
-func (receiver *HtmlTagButton) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
+func (receiver *HtmlTagButton) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 
 }
 

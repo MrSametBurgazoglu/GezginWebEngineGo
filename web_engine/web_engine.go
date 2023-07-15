@@ -3,7 +3,6 @@ package web_engine
 import (
 	"gezgin_web_engine/TaskManager"
 	"gezgin_web_engine/drawer"
-	"github.com/veandco/go-sdl2/sdl"
 )
 
 type WebTab struct {
@@ -18,11 +17,11 @@ func (receiver *WebTab) OpenWebPageFromWeb(Url string) {
 	receiver.taskManager.CreateFromWeb(Url)
 }
 
-func (receiver *WebTab) DrawPage(renderer *sdl.Renderer) {
+func (receiver *WebTab) DrawPage(mainImage *image.RGBA) {
 	receiver.taskManager.Draw(renderer)
 }
 
-func (receiver *WebTab) RenderPage(renderer *sdl.Renderer) {
+func (receiver *WebTab) RenderPage(mainImage *image.RGBA) {
 	receiver.taskManager.Render(renderer)
 }
 
@@ -64,11 +63,11 @@ var document *tags.Widget
 		drawer.SetWindowSize(height, width)
 	}
 
-	func DrawPage(renderer *sdl.Renderer) {
+	func DrawPage(mainImage *image.RGBA) {
 		drawer.DrawDocument(document, renderer)
 	}
 
-	func RenderPage(renderer *sdl.Renderer) {
+	func RenderPage(mainImage *image.RGBA) {
 		drawer.SetDrawPropertiesForWidgets(document, renderer)
 	}
 */

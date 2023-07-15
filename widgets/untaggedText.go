@@ -4,11 +4,9 @@ import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/Fonts"
-	"gezgin_web_engine/drawer/drawerBackend"
 	"gezgin_web_engine/drawer/structs"
-	"github.com/veandco/go-sdl2/sdl"
-	"github.com/veandco/go-sdl2/ttf"
-	"strings"
+	"image"
+	"image/draw"
 )
 
 type UntaggedText struct {
@@ -16,11 +14,11 @@ type UntaggedText struct {
 	Value string
 }
 
-func (receiver *UntaggedText) Draw(renderer *sdl.Renderer) {
-	renderer.Copy(receiver.DrawProperties.Texture, nil, &receiver.DrawProperties.Rect)
+func (receiver *UntaggedText) Draw(mainImage *image.RGBA) {
+	draw.Draw(mainImage, *receiver.DrawProperties.Rect, receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Src)
 }
 
-func (receiver *UntaggedText) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
+func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 	if receiver.GetParent().GetDrawProperties().Font == nil {
 		if receiver.GetParent().GetStyleProperty().Font != nil {
 			receiver.GetParent().GetDrawProperties().Font = Fonts.GetFont(receiver.GetParent().GetStyleProperty().Font.FontSizeValue)
@@ -28,31 +26,17 @@ func (receiver *UntaggedText) Render(renderer *sdl.Renderer, resourceManager *Re
 			receiver.GetParent().GetDrawProperties().Font = Fonts.GetFont(14)
 		}
 	}
-	if currentWidth, _, _ := receiver.GetParent().GetDrawProperties().Font.SizeUTF8(receiver.Value); currentWidth > int(receiver.GetParent().GetDrawProperties().Rect.W) {
-		Lines := splitTextAndRenderByLines(receiver.Value, renderer, receiver.GetParent().GetDrawProperties().Font, int(receiver.GetParent().GetDrawProperties().Rect.W))
-		drawerBackend.GetTextTexture(
-			renderer,
-			Lines,
-			receiver.GetParent().GetStyleProperty().Color,
-			receiver.GetParent().GetDrawProperties().Font,
-			&receiver.GetDrawProperties().Texture,
-			&receiver.GetDrawProperties().Rect,
-		)
+	if currentWidth := int(receiver.GetParent().GetDrawProperties().Font.Size * float64(len(receiver.Value)) * 1.2); currentWidth > int(receiver.GetParent().GetDrawProperties().W) {
+		Lines := splitTextAndRenderByLines(receiver.Value, int(receiver.GetParent().GetDrawProperties().W), receiver.GetParent().GetDrawProperties().Font.Size)
+		Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, Lines, receiver.DrawProperties.Texture)
 	} else {
-		drawerBackend.GetTextTexture(
-			renderer,
-			receiver.Value,
-			receiver.GetParent().GetStyleProperty().Color,
-			receiver.GetParent().GetDrawProperties().Font,
-			&receiver.GetDrawProperties().Texture,
-			&receiver.GetDrawProperties().Rect,
-		)
+		Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, []string{receiver.Value}, receiver.DrawProperties.Texture)
 	}
 
-	if receiver.GetDrawProperties().Rect.W > receiver.GetParent().GetDrawProperties().Rect.W {
+	if receiver.GetDrawProperties().W > receiver.GetParent().GetDrawProperties().W {
 		println("bigger than parent")
-		println(receiver.GetDrawProperties().Rect.W)
-		Lines := splitTextAndRenderByLines(receiver.Value, renderer, receiver.GetParent().GetDrawProperties().Font, int(receiver.GetParent().GetDrawProperties().Rect.W))
+		println(receiver.GetDrawProperties().W)
+		Lines := splitTextAndRenderByLines(receiver.Value, int(receiver.GetParent().GetDrawProperties().W), receiver.GetParent().GetDrawProperties().Font.Size)
 		println(Lines)
 	}
 }
@@ -74,7 +58,7 @@ func findLastSpace(text string, last int) int {
 	return last
 }
 
-func splitTextAndRenderByLines(text string, renderer *sdl.Renderer, font *ttf.Font, maxWidth int) string {
+func splitTextAndRenderByLines(text string, maxWidth int, size float64) []string {
 	println(text)
 	var Lines []string
 	var err error
@@ -83,10 +67,10 @@ func splitTextAndRenderByLines(text string, renderer *sdl.Renderer, font *ttf.Fo
 	start = 0
 	end = length
 	for start < length {
-		currentWidth, _, err = font.SizeUTF8(text[start:end])
+		currentWidth = int(size * float64(len(text[start:end])) * 1.2)
 		for currentWidth > maxWidth {
 			end = findLastSpace(text, end)
-			currentWidth, _, err = font.SizeUTF8(text[start:end])
+			currentWidth = int(size * float64(len(text[start:end])) * 1.2)
 			if err != nil {
 				panic(err)
 			}
@@ -95,5 +79,5 @@ func splitTextAndRenderByLines(text string, renderer *sdl.Renderer, font *ttf.Fo
 		start = end + 1
 		end = length
 	}
-	return strings.Join(Lines, "\n")
+	return Lines
 }

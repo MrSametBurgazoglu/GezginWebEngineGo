@@ -5,7 +5,7 @@ import (
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/drawer/drawerBackend"
-	"github.com/veandco/go-sdl2/sdl"
+	"image"
 )
 
 type DocumentWidget struct {
@@ -22,8 +22,8 @@ func allChildrenRendered(widget WidgetInterface) bool {
 	return true
 }
 
-func (receiver *DocumentWidget) DrawPage(renderer *sdl.Renderer) {
-	receiver.Draw(renderer)
+func (receiver *DocumentWidget) DrawPage(mainImage *image.RGBA) {
+	receiver.Draw(mainImage)
 	widgetList := []WidgetInterface{receiver}
 	widgetIndexList := []int{0}
 	currentIndex := 0
@@ -37,17 +37,17 @@ func (receiver *DocumentWidget) DrawPage(renderer *sdl.Renderer) {
 			if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).GetChildrenCount() > 0 {
 				widgetList = append(widgetList, widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]))
 				widgetIndexList = append(widgetIndexList, 0)
-				widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).Draw(renderer)
+				widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).Draw(mainImage)
 				currentIndex++
 			} else {
-				widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).Draw(renderer)
+				widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).Draw(mainImage)
 				widgetIndexList[currentIndex]++
 			}
 		}
 	}
 }
 
-func (receiver *DocumentWidget) RenderDocument(renderer *sdl.Renderer) {
+func (receiver *DocumentWidget) RenderDocument(mainImage *image.RGBA) {
 	widgetList := []WidgetInterface{receiver}
 	var edgeList []WidgetInterface
 	length := len(widgetList)
@@ -76,7 +76,7 @@ func (receiver *DocumentWidget) RenderDocument(renderer *sdl.Renderer) {
 		keepGo = false
 		for _, w := range widgetList {
 			if allChildrenRendered(w) {
-				w.Render(renderer, receiver.ResourceManager)
+				w.Render(mainImage, receiver.ResourceManager)
 				w.SetRender(true)
 			}
 		}
@@ -93,42 +93,42 @@ func (receiver *DocumentWidget) RenderDocument(renderer *sdl.Renderer) {
 	}
 }
 
-func (receiver *DocumentWidget) RenderPage(renderer *sdl.Renderer) {
-	receiver.DrawProperties.Rect.W = int32(ScreenProperties.WindowWidth)
-	receiver.DrawProperties.Rect.H = int32(ScreenProperties.WindowHeight)
+func (receiver *DocumentWidget) RenderPage(mainImage *image.RGBA) {
+	receiver.DrawProperties.W = int32(ScreenProperties.WindowWidth)
+	receiver.DrawProperties.H = int32(ScreenProperties.WindowHeight)
 	SetWidthForBlockElements(receiver)
-	receiver.RenderDocument(renderer)
+	receiver.RenderDocument(mainImage)
 	SetWidthForInlineElements(receiver)
 	SetHeightForInlineElements(receiver)
 	SetHeightForBlockElements(receiver)
 	SetPositionOfElements(receiver)
 }
 
-func (receiver *DocumentWidget) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
+func (receiver *DocumentWidget) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 	//render body
 }
 
-func (receiver *DocumentWidget) Draw(renderer *sdl.Renderer) {
+func (receiver *DocumentWidget) Draw(mainImage *image.RGBA) {
 	if receiver.GetStyleProperty().Background != nil {
 		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
-		drawerBackend.DrawBackground(red, green, blue, alpha, &receiver.DrawProperties.Rect, renderer)
+		drawerBackend.DrawBackground(red, green, blue, alpha, mainImage)
 	}
 }
 
 func SetWidthForWidget(widget WidgetInterface) {
 	width := CalculateWidthOfWidget(widget)
-	widget.GetDrawProperties().Rect.W = int32(width)
+	widget.GetDrawProperties().W = int32(width)
 }
 func SetHeightForWidget(widget WidgetInterface) {
 	height := CalculateHeightOfWidget(widget)
-	widget.GetDrawProperties().Rect.H = int32(height)
+	widget.GetDrawProperties().H = int32(height)
 }
 
 func SetXYForWidget(widget WidgetInterface) {
 	posX := CalculateXPosOfWidget(widget)
 	posY := CalculateYPosOfWidget(widget)
-	widget.GetDrawProperties().Rect.X = posX
-	widget.GetDrawProperties().Rect.Y = posY
+	widget.GetDrawProperties().X = posX
+	widget.GetDrawProperties().Y = posY
 }
 
 func SetWidthForBlockElements(document WidgetInterface) {

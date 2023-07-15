@@ -2,43 +2,20 @@ package main
 
 import (
 	"fmt"
-	"github.com/diamondburned/gotk4/pkg/gdk/v4"
+	"image"
+	"image/color"
+	"image/draw"
+	"os"
+
+	_ "embed"
+
+	"github.com/diamondburned/gotk4/pkg/cairo"
+	"github.com/diamondburned/gotk4/pkg/gdkpixbuf/v2"
 	"github.com/diamondburned/gotk4/pkg/gio/v2"
 	"github.com/diamondburned/gotk4/pkg/gtk/v4"
-	"github.com/go-gl/gl/v2.1/gl"
-	"os"
-	"strings"
 )
 
 const appID = "com.github.diamondburned.gotk4-examples.gtk4.drawingarea"
-
-var program uint32
-
-var (
-	triangle = []float32{
-		0, 0.05, 0, // top
-		-0.5, -0.05, 0, // left
-		0.5, -0.05, 0, // right
-	}
-)
-
-var vao uint32
-
-const vertexShaderSource = `
-    #version 410
-    in vec3 vp;
-    void main() {
-        gl_Position = vec4(vp, 1.0);
-    }
-` + "\x00"
-
-const fragmentShaderSource = `
-    #version 410
-    out vec4 frag_colour;
-    void main() {
-        frag_colour = vec4(1, 1, 1, 1);
-    }
-` + "\x00"
 
 func main() {
 	app := gtk.NewApplication(appID, gio.ApplicationFlagsNone)
@@ -49,86 +26,60 @@ func main() {
 	}
 }
 
-func render(area *gtk.GLArea, context *gdk.GLContext) bool {
-	gl.ClearColor(0, 0, 0, 0)
-	gl.Clear(gl.COLOR_BUFFER_BIT)
-	gl.UseProgram(program)
-	gl.BindVertexArray(vao)
-	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(triangle)/3))
-	return true
+// State describes the cursor state.
+type State struct {
+	X float64
+	Y float64
 }
 
-func onRealize(area *gtk.GLArea) {
-	area.MakeCurrent()
-	program = initOpenGL()
-	gl.Ortho(0, 800, 480, 0, -1, 1)
-	gl.LinkProgram(program)
-	vao = makeVao(triangle)
+func drawingFunction(area *gtk.DrawingArea, cr *cairo.Context, w, h int) {
+	println("drawing")
+	imageSurface := image.NewRGBA(image.Rect(0, 0, w, h))
+	mygreen := color.RGBA{G: 100, A: 255} //  R, G, B, Alpha
+
+	// backfill entire background surface with color mygreen
+	draw.Draw(imageSurface, imageSurface.Bounds(), &image.Uniform{C: mygreen}, image.Point{Y: 0, X: 0}, draw.Src)
+	surface := cairo.CreateSurfaceFromImage(imageSurface)
+	cr.SetSourceSurface(surface, 0, 0)
+	cr.Paint()
 }
 
 func activate(app *gtk.Application) {
+	var state State
+
+	drawArea := gtk.NewDrawingArea()
+	drawArea.SetVExpand(true)
+	drawArea.SetDrawFunc(drawingFunction)
+
+	motionCtrl := gtk.NewEventControllerMotion()
+	motionCtrl.ConnectMotion(func(x, y float64) {
+		state.X = x
+		state.Y = y
+		drawArea.QueueDraw()
+	})
+	drawArea.AddController(motionCtrl)
+
 	window := gtk.NewApplicationWindow(app)
-	gl.Init()
-	glArea := gtk.NewGLArea()
-	glArea.Connect("render", render)
-	glArea.Connect("realize", onRealize)
 	window.SetTitle("drawingarea - gotk4 Example")
-	window.SetChild(glArea)
-	window.SetDefaultSize(800, 480)
+	window.SetChild(drawArea)
+	window.SetDefaultSize(640, 480)
 	window.Show()
 }
 
-func compileShader(source string, shaderType uint32) (uint32, error) {
-	shader := gl.CreateShader(shaderType)
-
-	csources, free := gl.Strs(source)
-	gl.ShaderSource(shader, 1, csources, nil)
-	free()
-	gl.CompileShader(shader)
-
-	var status int32
-	gl.GetShaderiv(shader, gl.COMPILE_STATUS, &status)
-	if status == gl.FALSE {
-		var logLength int32
-		gl.GetShaderiv(shader, gl.INFO_LOG_LENGTH, &logLength)
-
-		log := strings.Repeat("\x00", int(logLength+1))
-		gl.GetShaderInfoLog(shader, logLength, nil, gl.Str(log))
-
-		return 0, fmt.Errorf("failed to compile %v: %v", source, log)
-	}
-
-	return shader, nil
-}
-
-func makeVao(points []float32) uint32 {
-	var vbo uint32
-	gl.GenBuffers(1, &vbo)
-	gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
-	gl.BufferData(gl.ARRAY_BUFFER, 4*len(points), gl.Ptr(points), gl.STATIC_DRAW)
-
-	gl.GenVertexArrays(1, &vao)
-	gl.BindVertexArray(vao)
-	gl.EnableVertexAttribArray(0)
-	gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
-	gl.VertexAttribPointer(0, 3, gl.FLOAT, false, 0, nil)
-
-	return vao
-}
-
-func initOpenGL() uint32 {
-	vertexShader, err := compileShader(vertexShaderSource, gl.VERTEX_SHADER)
+func loadPNG(data []byte) (*gdkpixbuf.Pixbuf, error) {
+	l, err := gdkpixbuf.NewPixbufLoaderWithType("png")
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("NewLoaderWithType png: %w", err)
 	}
-	fragmentShader, err := compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER)
-	if err != nil {
-		panic(err)
+	defer l.Close()
+
+	if err := l.Write(data); err != nil {
+		return nil, fmt.Errorf("PixbufLoader.Write: %w", err)
 	}
 
-	prog := gl.CreateProgram()
-	gl.AttachShader(prog, vertexShader)
-	gl.AttachShader(prog, fragmentShader)
-	gl.LinkProgram(prog)
-	return prog
+	if err := l.Close(); err != nil {
+		return nil, fmt.Errorf("PixbufLoader.Close: %w", err)
+	}
+
+	return l.Pixbuf(), nil
 }

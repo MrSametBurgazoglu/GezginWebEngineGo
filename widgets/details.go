@@ -3,7 +3,7 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
-	"github.com/veandco/go-sdl2/sdl"
+	"image"
 )
 
 type HtmlTagDetails struct {
@@ -18,11 +18,11 @@ func (receiver *HtmlTagDetails) ContextReaderFunc(context string) {
 	}
 }
 
-func (receiver *HtmlTagDetails) Draw(renderer *sdl.Renderer) {
+func (receiver *HtmlTagDetails) Draw(mainImage *image.RGBA) {
 
 }
 
-func (receiver *HtmlTagDetails) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
+func (receiver *HtmlTagDetails) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 
 }
 

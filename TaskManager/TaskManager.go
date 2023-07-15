@@ -11,7 +11,6 @@ import (
 	"gezgin_web_engine/eventSystem"
 	"gezgin_web_engine/widgets"
 	"github.com/gammazero/workerpool"
-	"github.com/veandco/go-sdl2/sdl"
 	"runtime"
 	"sync"
 )
@@ -220,12 +219,12 @@ func (receiver *TaskManager) SetInheritStylePropertiesOfWidget(widget widgets.Wi
 	group.Done()
 }
 
-func (receiver *TaskManager) Draw(renderer *sdl.Renderer) {
+func (receiver *TaskManager) Draw(mainImage *image.RGBA) {
 	receiver.DocumentWidget.DrawPage(renderer)
 
 }
 
-func (receiver *TaskManager) Render(renderer *sdl.Renderer) {
+func (receiver *TaskManager) Render(mainImage *image.RGBA) {
 	receiver.DocumentWidget.RenderPage(renderer)
 }
 

@@ -4,21 +4,21 @@ import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/drawerBackend"
-	"github.com/veandco/go-sdl2/sdl"
+	"image"
 )
 
 type HtmlTagDiv struct {
 	Widget
 }
 
-func (receiver *HtmlTagDiv) Draw(renderer *sdl.Renderer) {
+func (receiver *HtmlTagDiv) Draw(mainImage *image.RGBA) {
 	if receiver.GetStyleProperty().Background != nil {
 		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
-		drawerBackend.DrawBackground(red, green, blue, alpha, &receiver.DrawProperties.Rect, renderer)
+		drawerBackend.DrawBackground(red, green, blue, alpha, mainImage)
 	}
 }
 
-func (receiver *HtmlTagDiv) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
+func (receiver *HtmlTagDiv) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 
 }
 

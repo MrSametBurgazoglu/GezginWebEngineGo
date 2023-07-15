@@ -5,21 +5,21 @@ import (
 	"gezgin_web_engine/ResourceManager"
 	structs2 "gezgin_web_engine/StyleEngine/structs"
 	"gezgin_web_engine/drawer/drawerBackend"
-	"github.com/veandco/go-sdl2/sdl"
+	"image"
 )
 
 type HtmlTagP struct {
 	Widget
 }
 
-func (receiver *HtmlTagP) Draw(renderer *sdl.Renderer) {
+func (receiver *HtmlTagP) Draw(mainImage *image.RGBA) {
 	if receiver.GetStyleProperty().Background != nil {
 		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
-		drawerBackend.DrawBackground(red, green, blue, alpha, &receiver.DrawProperties.Rect, renderer)
+		drawerBackend.DrawBackground(red, green, blue, alpha, receiver.DrawProperties.Texture)
 	}
 }
 
-func (receiver *HtmlTagP) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
+func (receiver *HtmlTagP) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 
 }
 

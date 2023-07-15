@@ -3,7 +3,7 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
-	"github.com/veandco/go-sdl2/sdl"
+	"image"
 	"strconv"
 )
 
@@ -23,11 +23,11 @@ func (receiver *HtmlTagCanvas) VarReaderFunc(variableName string, variableValue 
 	}
 }
 
-func (receiver *HtmlTagCanvas) Draw(renderer *sdl.Renderer) {
+func (receiver *HtmlTagCanvas) Draw(mainImage *image.RGBA) {
 
 }
 
-func (receiver *HtmlTagCanvas) Render(renderer *sdl.Renderer, resourceManager *ResourceManager.ResourceManager) {
+func (receiver *HtmlTagCanvas) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 
 }
 
