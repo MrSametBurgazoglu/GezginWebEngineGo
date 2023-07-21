@@ -17,3 +17,9 @@ type DrawProperties struct {
 	W int32
 	H int32
 }
+
+func (receiver *DrawProperties) Initialize() {
+	receiver.Rect = new(image.Rectangle)
+	receiver.Texture = new(image.RGBA)
+	receiver.BackgroundTexture = new(image.RGBA)
+}

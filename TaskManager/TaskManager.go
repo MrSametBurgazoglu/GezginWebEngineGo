@@ -8,9 +8,13 @@ import (
 	"gezgin_web_engine/NetworkManager"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/StyleEngine"
+	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/eventSystem"
 	"gezgin_web_engine/widgets"
 	"github.com/gammazero/workerpool"
+	"image"
+	"image/color"
+	"image/draw"
 	"runtime"
 	"sync"
 )
@@ -32,6 +36,7 @@ type TaskManager struct {
 	DocumentWidget   *widgets.DocumentWidget
 	NetworkManager   *NetworkManager.NetworkManager
 	ResourceManager  *ResourceManager.ResourceManager
+	WebView          *image.RGBA
 }
 
 func (receiver *TaskManager) Initialize() {
@@ -46,6 +51,9 @@ func (receiver *TaskManager) Initialize() {
 	receiver.ResourceManager = new(ResourceManager.ResourceManager)
 	receiver.ResourceManager.Initialize()
 	receiver.ResourceManager.NetworkManager = receiver.NetworkManager
+	receiver.WebView = image.NewRGBA(image.Rect(0, 0, ScreenProperties.WindowWidth, ScreenProperties.WindowHeight))
+	white := color.RGBA{R: 255, G: 255, B: 255, A: 255} //  R, G, B, Alpha
+	draw.Draw(receiver.WebView, receiver.WebView.Bounds(), &image.Uniform{C: white}, image.Point{Y: 0, X: 0}, draw.Src)
 }
 
 func (receiver *TaskManager) CreateFromFile(fileUrl string) {
@@ -78,6 +86,7 @@ func (receiver *TaskManager) CreateFromWeb(webUrl string) {
 	count := 0
 	for node := range nodes {
 		count += 1
+		println(node.HtmlTag, "html tag")
 		if node.HtmlTag == HtmlParser.HTML_SCRIPT {
 			receiver.HandleScriptTag(node)
 		} else if node.HtmlTag == HtmlParser.HTML_STYLE {
@@ -97,6 +106,7 @@ func (receiver *TaskManager) CreateFromWeb(webUrl string) {
 		}
 	}
 	receiver.styleEngine.WorkerPool.StopWait()
+	println("heyyyy")
 	receiver.CreateWidgetTree()
 	receiver.SetStylePropertiesOfDocument()
 	receiver.SetInheritStylePropertiesOfDocument()
@@ -192,7 +202,6 @@ func (receiver *TaskManager) SetStylePropertiesOfWidget(widget widgets.WidgetInt
 	widget.GetStyleProperty().ApplyCssRules(receiver.styleEngine, widget.GetID(), widget.GetClasses(), widget.GetHtmlTag(), widget.GetStyleRules())
 	for _, child := range widget.GetChildren() {
 		if child.GetHtmlTag() != 106 { //untagged text shouldn't have style property
-			println(child.GetHtmlTag(), "html tag")
 			group.Add(1)
 			go receiver.SetStylePropertiesOfWidget(child, group)
 		}
@@ -219,13 +228,13 @@ func (receiver *TaskManager) SetInheritStylePropertiesOfWidget(widget widgets.Wi
 	group.Done()
 }
 
-func (receiver *TaskManager) Draw(mainImage *image.RGBA) {
-	receiver.DocumentWidget.DrawPage(renderer)
+func (receiver *TaskManager) Draw() {
+	receiver.DocumentWidget.DrawPage(receiver.WebView)
 
 }
 
-func (receiver *TaskManager) Render(mainImage *image.RGBA) {
-	receiver.DocumentWidget.RenderPage(renderer)
+func (receiver *TaskManager) Render() {
+	receiver.DocumentWidget.RenderPage(receiver.WebView)
 }
 
 func (receiver *TaskManager) IsRendered() bool {

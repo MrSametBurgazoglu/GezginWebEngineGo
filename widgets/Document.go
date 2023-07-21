@@ -111,7 +111,7 @@ func (receiver *DocumentWidget) Render(mainImage *image.RGBA, resourceManager *R
 func (receiver *DocumentWidget) Draw(mainImage *image.RGBA) {
 	if receiver.GetStyleProperty().Background != nil {
 		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
-		drawerBackend.DrawBackground(red, green, blue, alpha, mainImage)
+		drawerBackend.DrawBackground(red, green, blue, alpha, mainImage, receiver.DrawProperties)
 	}
 }
 

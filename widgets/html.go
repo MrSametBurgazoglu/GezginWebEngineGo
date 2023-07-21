@@ -14,7 +14,7 @@ type HtmlTagHtml struct {
 func (receiver *HtmlTagHtml) Draw(mainImage *image.RGBA) {
 	if receiver.GetStyleProperty().Background != nil {
 		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
-		drawerBackend.DrawBackground(red, green, blue, alpha, receiver.DrawProperties.Texture)
+		drawerBackend.DrawBackground(red, green, blue, alpha, receiver.DrawProperties.Texture, receiver.DrawProperties)
 	}
 }
 

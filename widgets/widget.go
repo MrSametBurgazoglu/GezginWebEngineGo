@@ -44,6 +44,7 @@ type Widget struct {
 func (receiver *Widget) Initialize() {
 	receiver.StyleProperty = new(StyleEngine.StyleProperty)
 	receiver.DrawProperties = new(structs.DrawProperties)
+	receiver.DrawProperties.Initialize()
 	receiver.CopyFromHtmlElement(receiver.HtmlElement)
 
 }

@@ -6,7 +6,6 @@ import (
 	"gezgin_web_engine/drawer/Fonts"
 	"gezgin_web_engine/drawer/structs"
 	"image"
-	"image/draw"
 )
 
 type UntaggedText struct {
@@ -15,7 +14,7 @@ type UntaggedText struct {
 }
 
 func (receiver *UntaggedText) Draw(mainImage *image.RGBA) {
-	draw.Draw(mainImage, *receiver.DrawProperties.Rect, receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Src)
+	//draw.Draw(mainImage, *receiver.DrawProperties.Rect, receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Src)
 }
 
 func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
@@ -45,6 +44,7 @@ func SetWidgetPropertiesForUntaggedText(element *HtmlParser.HtmlElement) WidgetI
 	widget := new(UntaggedText)
 	widget.HtmlElement = element
 	widget.DrawProperties = new(structs.DrawProperties)
+	widget.DrawProperties.Initialize()
 	widget.Value = element.Text
 	return widget
 }

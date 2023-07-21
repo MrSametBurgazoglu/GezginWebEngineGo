@@ -1,12 +1,13 @@
 package widgets
 
 import (
-	"bytes"
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"image"
 	"image/draw"
+	"image/png"
+	"os"
 	"strconv"
 	"time"
 )
@@ -63,20 +64,34 @@ func (receiver *HtmlTagImg) VarReaderFunc(variableName string, variableValue str
 }
 
 func (receiver *HtmlTagImg) Draw(mainImage *image.RGBA) {
-	draw.Draw(mainImage, *receiver.DrawProperties.Rect, receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Src)
+	//file, err := os.Open("exampleHtmlFiles/browser-diagram.png")
+	//img, err2 := png.Decode(file)
+	//if err == nil && err2 == nil {
+	println("draw properties x y", receiver.DrawProperties.X, receiver.DrawProperties.Y, receiver.DrawProperties.W, receiver.DrawProperties.H)
+	draw.Draw(mainImage, image.Rect(int(receiver.DrawProperties.X), int(receiver.DrawProperties.Y), int(receiver.DrawProperties.W+receiver.DrawProperties.X), int(receiver.DrawProperties.H+receiver.DrawProperties.Y)), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Src)
+	//}
 }
 
 func (receiver *HtmlTagImg) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 	for !resourceManager.CheckResource(receiver.Src) {
 		time.Sleep(time.Millisecond)
+		println("waiting for resource")
 	}
-	resource, err := resourceManager.GetResource(receiver.Src)
-	img, _, err := image.Decode(bytes.NewReader(resource.GetData())) //TODO PERFORMANCE UPDATE
-	if err == nil {
+	//resource, err := resourceManager.GetResource(receiver.Src)
+	//img, format, err2 := image.Decode(bytes.NewReader(resource.GetData())) //TODO PERFORMANCE UPDATE
+	file, err := os.Open("exampleHtmlFiles/browser-diagram.png")
+	img, err2 := png.Decode(file)
+	//if err == nil && err2 == nil {
+	//	draw.Draw(mainImage, mainImage.Bounds(), img, image.Point{X: 0, Y: 0}, draw.Src)
+	//}
+	if img.Bounds().Size() != receiver.DrawProperties.Texture.Bounds().Size() {
+		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, img.Bounds().Size().X, img.Bounds().Size().Y))
+	}
+	if err == nil && err2 == nil {
 		drawerBackend.GetImageTexture(
 			&img,
 			receiver.DrawProperties.Texture,
-			receiver.DrawProperties.Rect,
+			receiver.DrawProperties,
 		)
 	}
 }
