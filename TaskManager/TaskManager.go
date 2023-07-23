@@ -93,6 +93,11 @@ func (receiver *TaskManager) CreateFromWeb(webUrl string) {
 			styleSheet := receiver.styleEngine.CreateCssSheet(false)
 			receiver.styleEngine.WorkerPool.Submit(func() { receiver.HandleStyleTag(node, styleSheet) }) //maybe worker pool
 		} else if node.HtmlTag == HtmlParser.HTML_IMG {
+			println("img tag", node.Attributes["src"])
+			if src := node.Attributes["src"]; src != "" {
+				receiver.HandleWebImgResource(src)
+			}
+		} else if node.HtmlTag == HtmlParser.HTML_IMG {
 			if src := node.Attributes["src"]; src != "" {
 				receiver.HandleWebImgResource(src)
 			}
@@ -106,7 +111,6 @@ func (receiver *TaskManager) CreateFromWeb(webUrl string) {
 		}
 	}
 	receiver.styleEngine.WorkerPool.StopWait()
-	println("heyyyy")
 	receiver.CreateWidgetTree()
 	receiver.SetStylePropertiesOfDocument()
 	receiver.SetInheritStylePropertiesOfDocument()
@@ -157,8 +161,8 @@ func (receiver *TaskManager) CreateWidgetTree() {
 
 func (receiver *TaskManager) CreateWidgetForTree(parentWidget widgets.WidgetInterface, parentHtmlElement *HtmlParser.HtmlElement, group *sync.WaitGroup) {
 	for _, child := range parentHtmlElement.Children {
-		function := widgets.WidgetFunctions[child.HtmlTag]
-		newWidget := function(child)
+		function := widgets.WidgetFunctions[child.HtmlTag] // function will always return even if not drawen html elements
+		newWidget := function(child, receiver)             // but function return value can be nil because not drawen html elements don't exist in widget tree
 		newWidget.SetParent(parentWidget)
 		parentWidget.AppendChild(newWidget)
 		group.Add(1)
@@ -167,6 +171,7 @@ func (receiver *TaskManager) CreateWidgetForTree(parentWidget widgets.WidgetInte
 	group.Done()
 }
 
+// we will not need this function because body widget can set now body of document
 func (receiver *TaskManager) FindBody() *HtmlParser.HtmlElement {
 	elementList := []*HtmlParser.HtmlElement{receiver.HtmlDocument}
 	length := len(elementList)

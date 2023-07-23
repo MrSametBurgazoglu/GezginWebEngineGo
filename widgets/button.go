@@ -63,7 +63,7 @@ func (receiver *HtmlTagButton) Render(mainImage *image.RGBA, resourceManager *Re
 
 }
 
-func SetWidgetPropertiesForButtonTag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForButtonTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagButton)
 	widget.HtmlElement = element
 	return widget

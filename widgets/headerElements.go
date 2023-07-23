@@ -24,7 +24,7 @@ func (receiver *HtmlTagHeader) Render(mainImage *image.RGBA, resourceManager *Re
 
 }
 
-func SetWidgetPropertiesForH1Tag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForH1Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
@@ -33,7 +33,7 @@ func SetWidgetPropertiesForH1Tag(element *HtmlParser.HtmlElement) WidgetInterfac
 	return widget
 }
 
-func SetWidgetPropertiesForH2Tag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForH2Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
@@ -42,7 +42,7 @@ func SetWidgetPropertiesForH2Tag(element *HtmlParser.HtmlElement) WidgetInterfac
 	return widget
 }
 
-func SetWidgetPropertiesForH3Tag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForH3Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.StyleProperty = new(StyleEngine.StyleProperty)
@@ -51,7 +51,7 @@ func SetWidgetPropertiesForH3Tag(element *HtmlParser.HtmlElement) WidgetInterfac
 	return widget
 }
 
-func SetWidgetPropertiesForH4Tag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForH4Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
@@ -60,7 +60,7 @@ func SetWidgetPropertiesForH4Tag(element *HtmlParser.HtmlElement) WidgetInterfac
 	return widget
 }
 
-func SetWidgetPropertiesForH5Tag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForH5Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.StyleProperty.Font = new(structs.Font)
@@ -68,7 +68,7 @@ func SetWidgetPropertiesForH5Tag(element *HtmlParser.HtmlElement) WidgetInterfac
 	return widget
 }
 
-func SetWidgetPropertiesForH6Tag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForH6Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.StyleProperty.Font = new(structs.Font)

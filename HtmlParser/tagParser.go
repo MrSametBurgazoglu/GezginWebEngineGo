@@ -3,7 +3,6 @@ package HtmlParser
 import (
 	"gezgin_web_engine/utils"
 	"strings"
-	"sync"
 )
 
 type VarReaderInterface interface {
@@ -14,7 +13,7 @@ type ContextReaderInterface interface {
 	ContextReaderFunc(string)
 }
 
-func ParseParameters(element *HtmlElement, parameters []string, group *sync.WaitGroup) {
+func ParseParameters(element *HtmlElement, parameters []string) {
 	if len(parameters) > 1 {
 		parameters = utils.MergeAttributes(parameters)
 	}
@@ -26,14 +25,13 @@ func ParseParameters(element *HtmlElement, parameters []string, group *sync.Wait
 			element.Attributes[varName] = ""
 		}
 	}
-	group.Done()
 }
 
-func ParseInsideOfTag(element *HtmlElement, text string, group *sync.WaitGroup) bool {
+func ParseInsideOfTag(element *HtmlElement, text string) bool {
 	parameters := strings.Split(text, " ")
 	htmlTag, endTag := FindHtmlTag(parameters[0])
 	element.HtmlTag = htmlTag
-	group.Add(1)
-	go ParseParameters(element, parameters, group)
+	//group.Add(1)
+	ParseParameters(element, parameters)
 	return endTag
 }

@@ -35,8 +35,8 @@ type State struct {
 
 func drawingFunction(area *gtk.DrawingArea, cr *cairo.Context, w, h int) {
 
+	//web_engine.InitDrawer(w, h)
 	if currentTab.IsRendered() == false {
-		println("drawing")
 		currentTab.RenderPage()
 		currentTab.DrawPage()
 		currentTab.SetRendered(true)

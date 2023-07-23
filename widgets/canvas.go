@@ -31,7 +31,7 @@ func (receiver *HtmlTagCanvas) Render(mainImage *image.RGBA, resourceManager *Re
 
 }
 
-func SetWidgetPropertiesForCanvasTag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForCanvasTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagCanvas)
 	widget.HtmlElement = element
 	return widget

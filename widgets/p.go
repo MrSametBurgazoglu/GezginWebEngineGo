@@ -23,7 +23,7 @@ func (receiver *HtmlTagP) Render(mainImage *image.RGBA, resourceManager *Resourc
 
 }
 
-func SetWidgetPropertiesForPTag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForPTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagP)
 	widget.HtmlElement = element
 	widget.Initialize()

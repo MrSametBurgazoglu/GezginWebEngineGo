@@ -54,7 +54,6 @@ func (receiver *NetworkManager) GetPage(url string) []byte {
 
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
-	println(body)
 	return body
 }
 
@@ -88,6 +87,5 @@ func (receiver *NetworkManager) Get(url string) []byte {
 
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
-	println(body)
 	return body
 }

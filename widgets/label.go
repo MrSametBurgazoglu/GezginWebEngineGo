@@ -29,7 +29,7 @@ func (receiver *HtmlTagLabel) Render(mainImage *image.RGBA, resourceManager *Res
 
 }
 
-func SetWidgetPropertiesForLabelTag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForLabelTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagLabel)
 	widget.HtmlElement = element
 	widget.Initialize()

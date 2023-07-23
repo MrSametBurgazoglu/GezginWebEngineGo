@@ -1,11 +1,14 @@
 package Fonts
 
 import (
+	"gezgin_web_engine/StyleEngine/structs"
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
 	_ "golang.org/x/image/font"
+	"golang.org/x/image/math/fixed"
 	"image"
 	"image/color"
+	"image/draw"
 	"log"
 	"os"
 )
@@ -43,6 +46,7 @@ func InitFont(size int) (*GezginFont, error) {
 	c.SetFont(newFont.Font)
 	c.SetFontSize(newFont.Size)
 	c.SetSrc(fg)
+	newFont.Spacing = 1.5
 	newFont.Context = c
 	return newFont, nil
 }
@@ -61,14 +65,21 @@ func GetFont(size int) *GezginFont {
 	return nil
 }
 
-func DrawText(font *GezginFont, text []string, destination *image.RGBA) {
+func DrawText(font *GezginFont, text []string, destination *image.RGBA, fontColor *structs.ColorRGBA) (int32, int32) {
 	// Initialize the context.
-	var err error
+	//var err error
 	ruler := color.RGBA{R: 0xdd, G: 0xdd, B: 0xdd, A: 0xff}
-	rgba := image.NewRGBA(image.Rect(0, 0, 640, 480))
-	//draw.Draw(rgba, rgba.Bounds(), bg, image.Point{X: 0, Y: 0}, draw.Src)
-	var context *freetype.Context = font.Context
+	rgba := image.NewRGBA(image.Rect(0, 0, 1500, 800))
+	alpha, red, green, blue := fontColor.GetColorByRGBA()
+	fg := image.NewUniform(color.RGBA{R: red, G: green, B: blue, A: alpha})
+	bg := image.NewUniform(color.Transparent)
+	draw.Draw(rgba, rgba.Bounds(), fg, image.Point{X: 0, Y: 0}, draw.Src)
+	draw.Draw(destination, rgba.Bounds(), bg, image.Point{X: 0, Y: 0}, draw.Src)
+	var context = font.Context
 	context.SetDst(destination)
+	context.SetSrc(fg)
+	context.SetClip(destination.Bounds())
+	//context.SetDPI(20)
 
 	// Draw the guidelines.
 	for i := 0; i < 200; i++ {
@@ -78,12 +89,20 @@ func DrawText(font *GezginFont, text []string, destination *image.RGBA) {
 
 	// Draw the text.
 	pt := freetype.Pt(10, 10+int(context.PointToFixed(font.Size)>>6))
+	var maxPt = fixed.Int26_6(0)
+	//font.Font.HMetric()
 	for _, s := range text {
-		_, err = context.DrawString(s, pt)
+		p, err := context.DrawString(s, pt)
+		if p.X > maxPt {
+			maxPt = p.X
+		}
 		if err != nil {
 			log.Println(err)
-			return
+			return 0, 0
 		}
 		pt.Y += context.PointToFixed(font.Size * font.Spacing)
 	}
+	pt.Y -= context.PointToFixed(font.Size)
+	const shift, mask = 6, 1<<6 - 1
+	return int32(pt.Y >> shift), int32(maxPt >> shift)
 }

@@ -26,7 +26,7 @@ func (receiver *HtmlTagDetails) Render(mainImage *image.RGBA, resourceManager *R
 
 }
 
-func SetWidgetPropertiesForDetailsTag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForDetailsTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagDetails)
 	widget.HtmlElement = element
 	return widget

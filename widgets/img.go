@@ -67,8 +67,7 @@ func (receiver *HtmlTagImg) Draw(mainImage *image.RGBA) {
 	//file, err := os.Open("exampleHtmlFiles/browser-diagram.png")
 	//img, err2 := png.Decode(file)
 	//if err == nil && err2 == nil {
-	println("draw properties x y", receiver.DrawProperties.X, receiver.DrawProperties.Y, receiver.DrawProperties.W, receiver.DrawProperties.H)
-	draw.Draw(mainImage, image.Rect(int(receiver.DrawProperties.X), int(receiver.DrawProperties.Y), int(receiver.DrawProperties.W+receiver.DrawProperties.X), int(receiver.DrawProperties.H+receiver.DrawProperties.Y)), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Src)
+	draw.Draw(mainImage, image.Rect(int(receiver.DrawProperties.X), int(receiver.DrawProperties.Y), int(receiver.DrawProperties.W+receiver.DrawProperties.X), int(receiver.DrawProperties.H+receiver.DrawProperties.Y)), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
 	//}
 }
 
@@ -96,7 +95,7 @@ func (receiver *HtmlTagImg) Render(mainImage *image.RGBA, resourceManager *Resou
 	}
 }
 
-func SetWidgetPropertiesForImgTag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForImgTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagImg)
 	widget.HtmlElement = element
 	widget.Initialize()

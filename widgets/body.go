@@ -22,7 +22,7 @@ func (receiver *HtmlTagBody) Render(mainImage *image.RGBA, resourceManager *Reso
 
 }
 
-func SetWidgetPropertiesForBodyTag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForBodyTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagBody)
 	widget.HtmlElement = element
 	widget.Initialize()

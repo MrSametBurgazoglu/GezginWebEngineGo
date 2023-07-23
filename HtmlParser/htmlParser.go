@@ -48,7 +48,7 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 				currentElement.Children = append(currentElement.Children, &newElement)
 				newElement.Attributes = make(map[string]string)
 				currentElement = &newElement
-				if ParseInsideOfTag(currentElement, data[seek+start+1:seek+start+end], &wg) {
+				if ParseInsideOfTag(currentElement, data[seek+start+1:seek+start+end]) {
 					currentElement = currentElement.Parent
 				}
 				nodes <- &newElement
@@ -57,6 +57,7 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 		}
 	}
 	wg.Wait()
+	println("waited")
 	close(nodes)
 }
 

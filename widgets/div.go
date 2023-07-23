@@ -22,7 +22,7 @@ func (receiver *HtmlTagDiv) Render(mainImage *image.RGBA, resourceManager *Resou
 
 }
 
-func SetWidgetPropertiesForDivTag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForDivTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagDiv)
 	widget.HtmlElement = element
 	widget.Initialize()
