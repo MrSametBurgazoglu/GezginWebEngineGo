@@ -37,9 +37,11 @@ func drawingFunction(area *gtk.DrawingArea, cr *cairo.Context, w, h int) {
 
 	//web_engine.InitDrawer(w, h)
 	if currentTab.IsRendered() == false {
+		startTime := time.Now()
 		currentTab.RenderPage()
 		currentTab.DrawPage()
 		currentTab.SetRendered(true)
+		fmt.Println("Drawing Total time taken ", time.Since(startTime).Milliseconds())
 	}
 
 	tab := currentTab

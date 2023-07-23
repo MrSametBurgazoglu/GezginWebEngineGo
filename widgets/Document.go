@@ -93,6 +93,7 @@ func (receiver *DocumentWidget) RenderDocument(mainImage *image.RGBA) {
 	}
 }
 
+// This function and sub functions will be rewritten
 func (receiver *DocumentWidget) RenderPage(mainImage *image.RGBA) {
 	receiver.DrawProperties.W = int32(ScreenProperties.WindowWidth)
 	receiver.DrawProperties.H = int32(ScreenProperties.WindowHeight)
