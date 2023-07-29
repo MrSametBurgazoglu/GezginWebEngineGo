@@ -74,7 +74,7 @@ func DrawText(font *GezginFont, text []string, destination *image.RGBA, fontColo
 	fg := image.NewUniform(color.RGBA{R: red, G: green, B: blue, A: alpha})
 	bg := image.NewUniform(color.Transparent)
 	draw.Draw(rgba, rgba.Bounds(), fg, image.Point{X: 0, Y: 0}, draw.Src)
-	draw.Draw(destination, rgba.Bounds(), bg, image.Point{X: 0, Y: 0}, draw.Src)
+	draw.Draw(destination, destination.Bounds(), bg, image.Point{X: 0, Y: 0}, draw.Src)
 	var context = font.Context
 	context.SetDst(destination)
 	context.SetSrc(fg)

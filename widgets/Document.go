@@ -100,8 +100,9 @@ func (receiver *DocumentWidget) RenderPage(mainImage *image.RGBA) {
 	SetWidthForBlockElements(receiver)
 	receiver.RenderDocument(mainImage)
 	SetWidthForInlineElements(receiver)
-	SetHeightForInlineElements(receiver)
-	SetHeightForBlockElements(receiver)
+	receiver.SetHeightForElements()
+	//SetHeightForInlineElements(receiver)
+	//SetHeightForBlockElements(receiver)
 	SetPositionOfElements(receiver)
 }
 
@@ -110,6 +111,7 @@ func (receiver *DocumentWidget) Render(mainImage *image.RGBA, resourceManager *R
 }
 
 func (receiver *DocumentWidget) Draw(mainImage *image.RGBA) {
+	//draw.Draw(mainImage, mainImage.Bounds(), image.White, image.Point{X: 0, Y: 0}, draw.Over)
 	if receiver.GetStyleProperty().Background != nil {
 		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
 		drawerBackend.DrawBackground(red, green, blue, alpha, mainImage, receiver.DrawProperties)
@@ -193,6 +195,52 @@ func SetWidthForInlineElements(document WidgetInterface) {
 
 				widgetIndexList[currentIndex]++
 			}
+		}
+	}
+}
+
+func (receiver *DocumentWidget) SetHeightForElements() {
+	widgetList := []WidgetInterface{receiver}
+	var edgeList []WidgetInterface
+	length := len(widgetList)
+	keepGo := true
+	for keepGo {
+		keepGo = false
+		for _, w := range widgetList {
+			if w.GetChildrenCount() > 0 {
+				for _, child := range w.GetChildren() {
+					widgetList = append(widgetList, child)
+					child.SetRender(false)
+					keepGo = true
+				}
+			} else {
+				edgeList = append(edgeList, w)
+			}
+		}
+		if keepGo {
+			widgetList = widgetList[length:]
+			length = len(widgetList)
+		}
+	}
+	widgetList = edgeList
+	keepGo = true
+	for keepGo {
+		keepGo = false
+		for _, w := range widgetList {
+			if allChildrenRendered(w) {
+				SetHeightForWidget(w)
+				w.SetRender(true)
+			}
+		}
+		for _, w := range widgetList {
+			if w.GetParent() != receiver {
+				widgetList = append(widgetList, w.GetParent())
+				keepGo = true
+			}
+		}
+		if keepGo {
+			widgetList = widgetList[length:]
+			length = len(widgetList)
 		}
 	}
 }

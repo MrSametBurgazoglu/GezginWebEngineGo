@@ -144,7 +144,11 @@ func (receiver *StyleProperty) ApplyDeclaration(property string, value string) {
 	index := utils.IndexFounder(cssPropertiesNameList, property, cssPropertyCount)
 	if index != -1 {
 		function := functionList[index]
-		function(receiver, value)
+		if function != nil {
+			function(receiver, value)
+		} else {
+			println(property, " NOT DEFINED")
+		}
 	}
 }
 

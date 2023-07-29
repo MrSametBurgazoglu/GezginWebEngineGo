@@ -8,12 +8,12 @@ import (
 	"gezgin_web_engine/NetworkManager"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/StyleEngine"
+	"gezgin_web_engine/StyleEngine/structs"
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/eventSystem"
 	"gezgin_web_engine/widgets"
 	"github.com/gammazero/workerpool"
 	"image"
-	"image/color"
 	"image/draw"
 	"runtime"
 	"sync"
@@ -52,8 +52,7 @@ func (receiver *TaskManager) Initialize() {
 	receiver.ResourceManager.Initialize()
 	receiver.ResourceManager.NetworkManager = receiver.NetworkManager
 	receiver.WebView = image.NewRGBA(image.Rect(0, 0, ScreenProperties.WindowWidth, ScreenProperties.WindowHeight))
-	white := color.RGBA{R: 255, G: 255, B: 255, A: 255} //  R, G, B, Alpha
-	draw.Draw(receiver.WebView, receiver.WebView.Bounds(), &image.Uniform{C: white}, image.Point{Y: 0, X: 0}, draw.Src)
+	draw.Draw(receiver.WebView, receiver.WebView.Bounds(), image.White, image.Point{Y: 0, X: 0}, draw.Src)
 }
 
 func (receiver *TaskManager) CreateFromFile(fileUrl string) {
@@ -153,6 +152,8 @@ func (receiver *TaskManager) CreateWidgetTree() {
 	receiver.DocumentWidget.HtmlElement = element
 	receiver.DocumentWidget.Initialize()
 	receiver.DocumentWidget.ResourceManager = receiver.ResourceManager
+	receiver.DocumentWidget.StyleProperty.Color = new(structs.ColorRGBA)
+	receiver.DocumentWidget.StyleProperty.Color.SetColorByRGB(0, 0, 0)
 	var wg sync.WaitGroup
 	wg.Add(1)
 	receiver.CreateWidgetForTree(receiver.DocumentWidget, element, &wg)

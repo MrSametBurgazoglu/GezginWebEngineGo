@@ -45,6 +45,7 @@ func SetWidgetPropertiesForH2Tag(element *HtmlParser.HtmlElement, taskManager Ta
 func SetWidgetPropertiesForH3Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
+	widget.Initialize()
 	widget.StyleProperty = new(StyleEngine.StyleProperty)
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 12
@@ -63,6 +64,7 @@ func SetWidgetPropertiesForH4Tag(element *HtmlParser.HtmlElement, taskManager Ta
 func SetWidgetPropertiesForH5Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
+	widget.Initialize()
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 8
 	return widget
@@ -71,6 +73,7 @@ func SetWidgetPropertiesForH5Tag(element *HtmlParser.HtmlElement, taskManager Ta
 func SetWidgetPropertiesForH6Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
+	widget.Initialize()
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 6
 	return widget

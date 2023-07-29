@@ -1,7 +1,6 @@
 package structs
 
 import (
-	"fmt"
 	"gezgin_web_engine/utils"
 	"strconv"
 )
@@ -42,7 +41,7 @@ func (receiver *ColorRGBA) SetColorByRGBA(red uint8, green uint8, blue uint8, al
 }
 
 func (receiver *ColorRGBA) SetColorByRGB(red uint8, green uint8, blue uint8) {
-	receiver.alpha = 0
+	receiver.alpha = 255
 	receiver.red = red
 	receiver.green = green
 	receiver.blue = blue
@@ -78,11 +77,14 @@ func (receiver *ColorRGBA) SetColorByHSLA(h float32, s float32, l float32, alpha
 
 func (receiver *ColorRGBA) SetColorByHex(value string) bool {
 	if value[0] == '#' {
-		var r, g, b float32
-		n, err := fmt.Sscanf(value, "#%02x%02x%02x", &r, &g, &b)
-		if err != nil && n == 3 {
+		values, err := strconv.ParseUint(value[1:], 16, 32)
+		//n, err := fmt.Sscanf(value, "#%02x%02x%02x", &r, &g, &b)
+		if err != nil {
 			return true
 		}
+		receiver.red = uint8(values >> 16)
+		receiver.green = uint8((values >> 8) & 0xFF)
+		receiver.blue = uint8(values & 0xFF)
 	}
 	return false
 }

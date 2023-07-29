@@ -43,8 +43,7 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 	}
 	media := false
 	for index != -1 { //maybe go routine for every cssText
-		println(styleText[seek : seek+200])
-		if strings.HasPrefix(styleText[seek:seek+6], "@media") {
+		if strings.HasPrefix(styleText[seek:seek+6], "@") {
 			media = true
 			println("media started", seek)
 			index = strings.Index(styleText[seek:], "{")
@@ -56,6 +55,7 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 		newCssRule := new(CssRule)
 		index2 := strings.Index(styleText[seek:], "}")
 		selectors := styleText[seek : seek+index]
+		println(selectors)
 		cssText := styleText[seek+index+1 : seek+index2]
 		seek += index2 + 1
 		newCssRule.cssDeclarationBlock = new(CssDeclarationBlock)
