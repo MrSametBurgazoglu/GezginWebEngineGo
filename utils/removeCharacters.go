@@ -9,3 +9,11 @@ func RemoveCharsFromString(str string) string {
 	}
 	return str
 }
+
+func RemoveEscapesFromString(str string) string {
+	charsToRemove := []string{"\n", "\t"}
+	for _, char := range charsToRemove {
+		str = strings.ReplaceAll(str, char, "")
+	}
+	return str
+}

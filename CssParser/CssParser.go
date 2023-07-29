@@ -27,14 +27,32 @@ func (receiver *Result) GetRuleByIndex(index int) GlobalTypes.CssRuleInterface {
 type StyleElement interface {
 }
 
+/*SUPPORT MEDIA QUERIES*/ //we should rewrite css parser like a programming language
 func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, styleText string) (result *Result) {
 	result = new(Result)
 	newCssStyleSheet := new(CssStyleSheet)
 	styleText = utils.RemoveCharsFromString(styleText)
 	seek := 0
 	index := 0
+	commentStart := strings.Index(styleText[seek:], "/*")
 	index = strings.Index(styleText[seek:], "{")
+	if commentStart < index {
+		commentEnd := strings.LastIndex(styleText[seek:index], "*/")
+		seek += commentEnd + 2
+		index -= commentEnd + 2
+	}
+	media := false
 	for index != -1 { //maybe go routine for every cssText
+		println(styleText[seek : seek+200])
+		if strings.HasPrefix(styleText[seek:seek+6], "@media") {
+			media = true
+			println("media started", seek)
+			index = strings.Index(styleText[seek:], "{")
+			seek += index + 2
+			index = strings.Index(styleText[seek:], "{")
+			println("media ended", seek+index)
+			continue
+		}
 		newCssRule := new(CssRule)
 		index2 := strings.Index(styleText[seek:], "}")
 		selectors := styleText[seek : seek+index]
@@ -46,6 +64,11 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 		newCssRule.SetCssDeclarationBlock(cssText)
 		result.CssStyleSheetRules = append(result.CssStyleSheetRules, newCssRule)
 		result.ruleCount += 1
+		println(string(styleText[seek]))
+		if media && styleText[seek] == '}' {
+			media = false
+			seek += 1
+		}
 		index = strings.Index(styleText[seek:], "{")
 	}
 	return

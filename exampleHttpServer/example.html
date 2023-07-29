@@ -1,29 +1,37 @@
 <!DOCTYPE html>
-<link rel="stylesheet" href="/static/main.css">
 <html lang="en">
-<body style="color: white">
-<div style="position:relative;left:300px">
-    <h1>What is browser engine and how does it work?</h1>
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="jumbotron text-center">
+    <h1>My First Bootstrap Page</h1>
+    <p>Resize this responsive page to see the effect!</p>
 </div>
 
-<div style="position: absolute; left:20px; top:50px">
-    <img alt="What is browser engine and how does it work?" width="413" height="373" src="/static/browser-diagram.png">
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <h3>Column 1</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+        </div>
+        <div class="col-sm-4">
+            <h3>Column 2</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+        </div>
+        <div class="col-sm-4">
+            <h3>Column 3</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+        </div>
+    </div>
 </div>
 
-<div style="position: absolute; left:470px; top:50px; width: 800px" onclick="console.log('hello')">
-    <h2>Name and scope</h2>
-    <p>A browser engine is not a stand-alone computer program but a critical piece of a more extensive program, such as a web browser, from which the term is derived. The word "engine" is an analogy to the engine of a car.</p>
-
-    <p>Besides "browser engine", two other terms are in everyday use regarding related concepts: "layout engine" and "rendering engine".In theory, layout and rendering (or "painting") could be handled by different engines. In practice, however, they are tightly coupled and rarely considered separately.</p>
-
-    <p>In addition to layout and rendering, a browser engine enforces the security policy between documents, handles navigation through hyperlinks and data submitted through forms, and implements the Document Object Model (DOM) data structure exposed to page scripts</p>
-
-    <p>Executing JavaScript (JS) code is a separate matter, however, as every significant web browser uses a dedicated engine for this. The JS language was initially created for use in browsers, but it is now used elsewhere, too, so the implementation of JS engines is decoupled from browser engines. The two engines work in concert via the shared DOM data structure in a web browser.</p>
-
-    <h2>Layout and rendering</h2>
-
-    <p>The layout of a web page is typically specified by Cascading Style Sheets (CSS). Each style sheet is a series of rules which the browser engine interprets. For example, some rules specify typography details, such as font, color, and text size. The engine combines all relevant CSS rules to calculate precise graphical coordinates for the visual representation it will paint on the screen.</p>
-
-</div>
 </body>
 </html>

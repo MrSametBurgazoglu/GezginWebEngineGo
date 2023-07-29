@@ -140,3 +140,7 @@ func (receiver *Widget) GetStyleRules() map[string]string {
 func (receiver *Widget) GetDrawProperties() *structs.DrawProperties {
 	return receiver.DrawProperties
 }
+
+func (receiver *Widget) CalculateWidth() {
+
+}
