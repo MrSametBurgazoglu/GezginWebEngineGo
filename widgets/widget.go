@@ -110,7 +110,10 @@ func (receiver *Widget) CopyFromHtmlElement(htmlElement *HtmlParser.HtmlElement)
 	receiver.ChildrenCount = htmlElement.ChildrenCount
 	receiver.ChildrenIndex = htmlElement.ChildrenIndex
 	receiver.ID = htmlElement.Attributes["id"]
-	receiver.Classes = strings.Split(htmlElement.Attributes["class"], " ")
+	classes, found := htmlElement.Attributes["class"]
+	if found {
+		receiver.Classes = strings.Split(classes, " ")
+	}
 	styleText, found := htmlElement.Attributes["style"]
 	if found {
 		receiver.StyleRules = CssParser.ParseCssFromInlineStyle(styleText)

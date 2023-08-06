@@ -26,5 +26,6 @@ func SetWidgetPropertiesForBodyTag(element *HtmlParser.HtmlElement, taskManager 
 	widget := new(HtmlTagBody)
 	widget.HtmlElement = element
 	widget.Initialize()
+	taskManager.SetBodyElement(widget)
 	return widget
 }

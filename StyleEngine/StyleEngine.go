@@ -3,6 +3,7 @@ package StyleEngine
 import (
 	"gezgin_web_engine/GlobalTypes"
 	"github.com/gammazero/workerpool"
+	"runtime"
 	"strings"
 )
 
@@ -27,6 +28,12 @@ type StyleSheet struct {
 type StyleEngine struct {
 	WorkerPool        *workerpool.WorkerPool
 	CssStyleSheetList []*StyleSheet
+	Root              *StyleProperty
+}
+
+func (receiver *StyleEngine) Initialize() {
+	receiver.WorkerPool = workerpool.New(runtime.NumCPU() - 1)
+	receiver.Root = new(StyleProperty)
 }
 
 func (receiver *StyleEngine) CreateCssSheet(external bool) (cssSheet *StyleSheet) {

@@ -5,6 +5,8 @@ import "gezgin_web_engine/HtmlParser"
 type TaskManagerInterface interface {
 	HandleWebImgResource(string)
 	HandleWebLinkStyleSheet(string)
+	SetHtmlElement(widgetInterface WidgetInterface)
+	SetBodyElement(widgetInterface WidgetInterface)
 }
 
 var WidgetFunctions = []func(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface{

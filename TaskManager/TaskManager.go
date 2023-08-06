@@ -37,6 +37,8 @@ type TaskManager struct {
 	NetworkManager   *NetworkManager.NetworkManager
 	ResourceManager  *ResourceManager.ResourceManager
 	WebView          *image.RGBA
+	HtmlWidget       widgets.WidgetInterface
+	BodyWidget       widgets.WidgetInterface
 }
 
 func (receiver *TaskManager) Initialize() {
@@ -44,7 +46,7 @@ func (receiver *TaskManager) Initialize() {
 	receiver.htmlParser = new(HtmlParser.HtmlParser)
 	receiver.cssParser = new(CssParser.CssParser)
 	receiver.styleEngine = new(StyleEngine.StyleEngine)
-	receiver.styleEngine.WorkerPool = workerpool.New(runtime.NumCPU() - 1)
+	receiver.styleEngine.Initialize()
 	receiver.javascriptEngine = new(JavascriptHandler.JavascriptEngine)
 	receiver.NetworkManager = new(NetworkManager.NetworkManager)
 	receiver.NetworkManager.Initialize()
@@ -249,4 +251,12 @@ func (receiver *TaskManager) IsRendered() bool {
 
 func (receiver *TaskManager) SetRendered(rendered bool) {
 	receiver.DocumentWidget.Rendered = rendered
+}
+
+func (receiver *TaskManager) SetHtmlElement(widget widgets.WidgetInterface) {
+	receiver.HtmlWidget = widget
+}
+
+func (receiver *TaskManager) SetBodyElement(widget widgets.WidgetInterface) {
+	receiver.BodyWidget = widget
 }

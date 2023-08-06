@@ -4,9 +4,11 @@ import (
 	"gezgin_web_engine/StyleEngine/enums"
 	"gezgin_web_engine/StyleEngine/structs"
 	"gezgin_web_engine/utils"
+	"strings"
 )
 
 type StyleProperty struct {
+	CssVariables map[string]string
 	//this could be bit field
 	AccentColorInherit        bool
 	AlignContentInherit       bool
@@ -96,6 +98,8 @@ type StyleProperty struct {
 	Visibility         enums.CssVisibilityType
 }
 
+/*TODO MAKE STYLE ENGINE ROOT TO HTML ELEMENT STYLE PROPERTY AND GIVE IT HERE FOR GLOBAL CSS VARIABLES*/
+/*TODO MAKE STYLE PROPERTIES MAP FOR CSS VARIABLES AND GIVE HERE PARENT STYLE PROPERTY FOR APPLYING*/
 func (receiver *StyleProperty) ApplyCssRules(styleEngine *StyleEngine, id string, classes []string, htmlTag int, styleMap map[string]string) {
 	externalTagRules := styleEngine.GetCssRulesByTag(htmlTag, true)
 	for _, rule := range externalTagRules {
@@ -141,6 +145,9 @@ func (receiver *StyleProperty) ApplyInlineRules(m map[string]string) {
 }
 
 func (receiver *StyleProperty) ApplyDeclaration(property string, value string) {
+	if strings.HasPrefix(property, "--") {
+		println("var function we need")
+	}
 	index := utils.IndexFounder(cssPropertiesNameList, property, cssPropertyCount)
 	if index != -1 {
 		function := functionList[index]

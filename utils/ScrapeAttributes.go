@@ -22,7 +22,9 @@ func MergeAttributes(values []string) (result []string) {
 	}
 	value := values[len(values)-1]
 	if value[len(value)-1] == '"' {
-		lastStr += value
+		if !strings.Contains(value, "=") {
+			lastStr += " " + value
+		}
 		result = append(result, lastStr)
 	} else {
 		result = append(result, value)
