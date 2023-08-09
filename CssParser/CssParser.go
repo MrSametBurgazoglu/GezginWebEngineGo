@@ -41,15 +41,26 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 		seek += commentEnd + 2
 		index -= commentEnd + 2
 	}
-	media := false
+	frontRule := false
 	for index != -1 { //maybe go routine for every cssText
-		if strings.HasPrefix(styleText[seek:seek+6], "@") {
-			media = true
-			println("media started", seek)
+		if styleText[seek] == '@' {
+			frontRule = true
+			firstSeek := seek
+			println("frontRule started", seek)
 			index = strings.Index(styleText[seek:], "{")
 			seek += index + 2
 			index = strings.Index(styleText[seek:], "{")
-			println("media ended", seek+index)
+			println("frontRule ended", seek+index)
+			println("frontRule", styleText[firstSeek:seek+index])
+			if strings.HasPrefix(styleText[firstSeek:], "@media") {
+				if !IsMediaRuleCorrect(styleText[firstSeek : seek+index]) {
+					endOfAllRule := strings.Index(styleText[seek+index:], "}}")
+					println("end of rule", endOfAllRule, styleText[seek+index+endOfAllRule:seek+index+endOfAllRule+3])
+					seek = seek + index + endOfAllRule + 2
+					frontRule = false
+				}
+				println("type media")
+			}
 			continue
 		}
 		newCssRule := new(CssRule)
@@ -65,8 +76,8 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 		result.CssStyleSheetRules = append(result.CssStyleSheetRules, newCssRule)
 		result.ruleCount += 1
 		println(string(styleText[seek]))
-		if media && styleText[seek] == '}' {
-			media = false
+		if frontRule && styleText[seek] == '}' {
+			frontRule = false
 			seek += 1
 		}
 		index = strings.Index(styleText[seek:], "{")
