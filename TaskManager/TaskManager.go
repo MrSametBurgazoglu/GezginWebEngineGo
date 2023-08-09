@@ -200,13 +200,14 @@ func (receiver *TaskManager) FindBody() *HtmlParser.HtmlElement {
 }
 
 func (receiver *TaskManager) SetStylePropertiesOfDocument() {
+	receiver.styleEngine.InitializeRoot()
 	var wg sync.WaitGroup
 	wg.Add(1)
 	receiver.SetStylePropertiesOfWidget(receiver.DocumentWidget, &wg)
 	wg.Wait()
 }
 
-func (receiver *TaskManager) SetStylePropertiesOfWidget(widget widgets.WidgetInterface, group *sync.WaitGroup) {
+func (receiver *TaskManager) SetStylePropertiesOfWidget(widget widgets.WidgetInterface, group *sync.WaitGroup) { //TODO html tag must be string and can be custom
 	widget.GetStyleProperty().ApplyCssRules(receiver.styleEngine, widget.GetID(), widget.GetClasses(), widget.GetHtmlTag(), widget.GetStyleRules())
 	for _, child := range widget.GetChildren() {
 		if child.GetHtmlTag() != 106 { //untagged text shouldn't have style property

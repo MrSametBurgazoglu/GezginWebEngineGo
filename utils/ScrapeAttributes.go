@@ -24,6 +24,8 @@ func MergeAttributes(values []string) (result []string) {
 	if value[len(value)-1] == '"' {
 		if !strings.Contains(value, "=") {
 			lastStr += " " + value
+		} else {
+			lastStr += value
 		}
 		result = append(result, lastStr)
 	} else {

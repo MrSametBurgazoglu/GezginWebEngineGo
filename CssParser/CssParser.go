@@ -58,13 +58,20 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 					println("end of rule", endOfAllRule, styleText[seek+index+endOfAllRule:seek+index+endOfAllRule+3])
 					seek = seek + index + endOfAllRule + 2
 					frontRule = false
+					index = strings.Index(styleText[seek:], "{")
 				}
 				println("type media")
 			}
 			continue
+		} else if strings.HasPrefix(styleText[seek:], "/*") {
+			commentEnd := strings.LastIndex(styleText[seek:], "*/")
+			seek += commentEnd + 2
 		}
 		newCssRule := new(CssRule)
 		index2 := strings.Index(styleText[seek:], "}")
+		if index2 == -1 {
+			return
+		}
 		selectors := styleText[seek : seek+index]
 		println(selectors)
 		cssText := styleText[seek+index+1 : seek+index2]

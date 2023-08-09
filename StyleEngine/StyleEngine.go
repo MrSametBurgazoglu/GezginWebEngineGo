@@ -36,6 +36,10 @@ func (receiver *StyleEngine) Initialize() {
 	receiver.Root = new(StyleProperty)
 }
 
+func (receiver *StyleEngine) InitializeRoot() {
+	receiver.Root.ApplyCssRules(receiver, ":root", []string{":root"}, 0, map[string]string{})
+}
+
 func (receiver *StyleEngine) CreateCssSheet(external bool) (cssSheet *StyleSheet) {
 	cssSheet = new(StyleSheet)
 	cssSheet.external = external
