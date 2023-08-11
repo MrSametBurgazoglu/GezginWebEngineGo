@@ -34,10 +34,11 @@ type StyleEngine struct {
 func (receiver *StyleEngine) Initialize() {
 	receiver.WorkerPool = workerpool.New(runtime.NumCPU() - 1)
 	receiver.Root = new(StyleProperty)
+	receiver.Root.Initialize()
 }
 
 func (receiver *StyleEngine) InitializeRoot() {
-	receiver.Root.ApplyCssRules(receiver, ":root", []string{":root"}, 0, map[string]string{})
+	receiver.Root.ApplyCssRules(receiver, ":root", nil, 0, map[string]string{})
 }
 
 func (receiver *StyleEngine) CreateCssSheet(external bool) (cssSheet *StyleSheet) {
@@ -123,6 +124,11 @@ func (receiver *StyleSheet) GetCssRuleItem(selector string) *CssRuleListItem {
 		cssRuleList = receiver.cssRuleList.GetCssRulesByClass(selector[1:])
 		if cssRuleList == nil {
 			cssRuleList = receiver.cssRuleList.CreateNewCssRulesByClass(selector[1:])
+		}
+	case ':':
+		cssRuleList = receiver.cssRuleList.GetCssRulesByID(selector)
+		if cssRuleList == nil {
+			cssRuleList = receiver.cssRuleList.CreateNewCssRulesByID(selector)
 		}
 	default:
 		tag := selector[0:]

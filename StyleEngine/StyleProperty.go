@@ -98,6 +98,10 @@ type StyleProperty struct {
 	Visibility         enums.CssVisibilityType
 }
 
+func (receiver *StyleProperty) Initialize() {
+	receiver.CssVariables = make(map[string]string)
+}
+
 /*TODO MAKE STYLE ENGINE ROOT TO HTML ELEMENT STYLE PROPERTY AND GIVE IT HERE FOR GLOBAL CSS VARIABLES*/
 /*TODO MAKE STYLE PROPERTIES MAP FOR CSS VARIABLES AND GIVE HERE PARENT STYLE PROPERTY FOR APPLYING*/
 func (receiver *StyleProperty) ApplyCssRules(styleEngine *StyleEngine, id string, classes []string, htmlTag int, styleMap map[string]string) {
@@ -147,7 +151,9 @@ func (receiver *StyleProperty) ApplyInlineRules(m map[string]string) {
 func (receiver *StyleProperty) ApplyDeclaration(property string, value string) {
 	println(property)
 	if strings.HasPrefix(property, "--") {
-		println("var function we need")
+		receiver.AddVariable(property, value)
+	} else if strings.HasPrefix(value, "var(") {
+		println(property)
 	}
 	index := utils.IndexFounder(cssPropertiesNameList, property, cssPropertyCount)
 	if index != -1 {
@@ -163,4 +169,12 @@ func (receiver *StyleProperty) ApplyDeclaration(property string, value string) {
 func (receiver *StyleProperty) SetInheritStyleProperties(source *StyleProperty) {
 	UpdateBackground(receiver, source)
 	UpdateColor(receiver, source)
+}
+
+func (receiver *StyleProperty) AddVariable(key, value string) {
+	receiver.CssVariables[key] = value
+}
+
+func (receiver *StyleProperty) GetVariable(key, value string) {
+	receiver.CssVariables[key] = value
 }

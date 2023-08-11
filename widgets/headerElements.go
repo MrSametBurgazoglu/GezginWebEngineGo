@@ -47,6 +47,7 @@ func SetWidgetPropertiesForH3Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget.HtmlElement = element
 	widget.Initialize()
 	widget.StyleProperty = new(StyleEngine.StyleProperty)
+	widget.StyleProperty.Initialize()
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 12
 	return widget
