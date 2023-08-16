@@ -26,5 +26,6 @@ func SetWidgetPropertiesForDivTag(element *HtmlParser.HtmlElement, taskManager T
 	widget := new(HtmlTagDiv)
 	widget.HtmlElement = element
 	widget.Initialize()
+	widget.LayoutProperty.Display = "block"
 	return widget
 }

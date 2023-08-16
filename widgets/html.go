@@ -25,6 +25,7 @@ func (receiver *HtmlTagHtml) Render(mainImage *image.RGBA, resourceManager *Reso
 func SetWidgetPropertiesForHtmlTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagHtml)
 	widget.Initialize()
+	widget.LayoutProperty.Display = "block"
 	taskManager.SetHtmlElement(widget)
 	return widget
 }

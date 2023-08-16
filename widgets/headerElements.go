@@ -28,6 +28,7 @@ func SetWidgetPropertiesForH1Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
+	widget.LayoutProperty.Display = "block"
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 24
 	return widget
@@ -37,8 +38,10 @@ func SetWidgetPropertiesForH2Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
+	widget.LayoutProperty.Display = "block"
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 20
+
 	return widget
 }
 
@@ -46,6 +49,7 @@ func SetWidgetPropertiesForH3Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
+	widget.LayoutProperty.Display = "block"
 	widget.StyleProperty = new(StyleEngine.StyleProperty)
 	widget.StyleProperty.Initialize()
 	widget.StyleProperty.Font = new(structs.Font)
@@ -57,6 +61,7 @@ func SetWidgetPropertiesForH4Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
+	widget.LayoutProperty.Display = "block"
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 10
 	return widget
@@ -66,6 +71,7 @@ func SetWidgetPropertiesForH5Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
+	widget.LayoutProperty.Display = "block"
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 8
 	return widget
@@ -75,6 +81,7 @@ func SetWidgetPropertiesForH6Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
+	widget.LayoutProperty.Display = "block"
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 6
 	return widget

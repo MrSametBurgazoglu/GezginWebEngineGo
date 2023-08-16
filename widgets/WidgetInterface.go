@@ -31,4 +31,5 @@ type WidgetInterface interface {
 	GetDrawProperties() *structs.DrawProperties
 	Draw(rgba *image.RGBA)
 	Render(rgba *image.RGBA, resourceManager *ResourceManager.ResourceManager)
+	IsBlockElement() bool
 }

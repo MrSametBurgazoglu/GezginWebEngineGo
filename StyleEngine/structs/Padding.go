@@ -10,10 +10,10 @@ type Padding struct {
 	PaddingLeftInherit   bool
 	PaddingRightInherit  bool
 
-	PaddingTop    int
-	PaddingBottom int
-	PaddingLeft   int
-	PaddingRight  int
+	PaddingTop    float64
+	PaddingBottom float64
+	PaddingLeft   float64
+	PaddingRight  float64
 
 	PaddingTopValueType    enums.CssPropertyValueType
 	PaddingBottomValueType enums.CssPropertyValueType

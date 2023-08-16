@@ -15,13 +15,19 @@ func setPaddingTop(padding *structs.Padding, value string) {
 		intValue, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err == nil {
 			padding.PaddingTopValueType = enums.CSS_PROPERTY_VALUE_TYPE_LENGTH
-			padding.PaddingTop = intValue
+			padding.PaddingTop = float64(intValue)
 			return
 		}
 		floatValue, err := strconv.ParseFloat(strings.TrimSuffix(value, "%"), 64)
 		if err == nil {
 			padding.PaddingTopValueType = enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE
-			padding.PaddingTop = int(floatValue)
+			padding.PaddingTop = floatValue
+			return
+		}
+		floatValue2, err := strconv.ParseFloat(strings.TrimSuffix(value, "rem"), 64)
+		if err == nil {
+			padding.PaddingTopValueType = enums.CSS_PROPERTY_VALUE_TYPE_LENGTH
+			padding.PaddingTop = floatValue2 * 16
 			return
 		}
 	}
@@ -34,13 +40,19 @@ func setPaddingBottom(padding *structs.Padding, value string) {
 		intValue, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err == nil {
 			padding.PaddingBottomValueType = enums.CSS_PROPERTY_VALUE_TYPE_LENGTH
-			padding.PaddingBottom = intValue
+			padding.PaddingBottom = float64(intValue)
 			return
 		}
 		floatValue, err := strconv.ParseFloat(strings.TrimSuffix(value, "%"), 64)
 		if err == nil {
 			padding.PaddingBottomValueType = enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE
-			padding.PaddingBottom = int(floatValue)
+			padding.PaddingBottom = floatValue
+			return
+		}
+		floatValue2, err := strconv.ParseFloat(strings.TrimSuffix(value, "rem"), 64)
+		if err == nil {
+			padding.PaddingBottomValueType = enums.CSS_PROPERTY_VALUE_TYPE_LENGTH
+			padding.PaddingBottom = floatValue2 * 16
 			return
 		}
 	}
@@ -53,13 +65,19 @@ func setPaddingLeft(padding *structs.Padding, value string) {
 		intValue, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err == nil {
 			padding.PaddingLeftValueType = enums.CSS_PROPERTY_VALUE_TYPE_LENGTH
-			padding.PaddingLeft = intValue
+			padding.PaddingLeft = float64(intValue)
 			return
 		}
 		floatValue, err := strconv.ParseFloat(strings.TrimSuffix(value, "%"), 64)
 		if err == nil {
 			padding.PaddingLeftValueType = enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE
-			padding.PaddingLeft = int(floatValue)
+			padding.PaddingLeft = floatValue
+			return
+		}
+		floatValue2, err := strconv.ParseFloat(strings.TrimSuffix(value, "rem"), 64)
+		if err == nil {
+			padding.PaddingLeftValueType = enums.CSS_PROPERTY_VALUE_TYPE_LENGTH
+			padding.PaddingLeft = floatValue2 * 16
 			return
 		}
 	}
@@ -72,13 +90,19 @@ func setPaddingRight(padding *structs.Padding, value string) {
 		intValue, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err == nil {
 			padding.PaddingRightValueType = enums.CSS_PROPERTY_VALUE_TYPE_LENGTH
-			padding.PaddingRight = intValue
+			padding.PaddingRight = float64(intValue)
 			return
 		}
 		floatValue, err := strconv.ParseFloat(strings.TrimSuffix(value, "%"), 64)
 		if err == nil {
 			padding.PaddingRightValueType = enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE
-			padding.PaddingRight = int(floatValue)
+			padding.PaddingRight = floatValue
+			return
+		}
+		floatValue2, err := strconv.ParseFloat(strings.TrimSuffix(value, "rem"), 64)
+		if err == nil {
+			padding.PaddingRightValueType = enums.CSS_PROPERTY_VALUE_TYPE_LENGTH
+			padding.PaddingRight = floatValue2 * 16
 			return
 		}
 	}

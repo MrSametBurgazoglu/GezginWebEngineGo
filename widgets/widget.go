@@ -46,6 +46,7 @@ func (receiver *Widget) Initialize() {
 	receiver.StyleProperty.Initialize()
 	receiver.DrawProperties = new(structs.DrawProperties)
 	receiver.DrawProperties.Initialize()
+	receiver.LayoutProperty = new(LayoutEngine.LayoutProperty)
 	receiver.CopyFromHtmlElement(receiver.HtmlElement)
 
 }
@@ -147,4 +148,8 @@ func (receiver *Widget) GetDrawProperties() *structs.DrawProperties {
 
 func (receiver *Widget) CalculateWidth() {
 
+}
+
+func (receiver *Widget) IsBlockElement() bool {
+	return receiver.LayoutProperty.Display == "block"
 }

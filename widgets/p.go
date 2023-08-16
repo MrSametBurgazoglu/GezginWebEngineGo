@@ -27,6 +27,7 @@ func SetWidgetPropertiesForPTag(element *HtmlParser.HtmlElement, taskManager Tas
 	widget := new(HtmlTagP)
 	widget.HtmlElement = element
 	widget.Initialize()
+	widget.LayoutProperty.Display = "block"
 	widget.StyleProperty.Font = new(structs2.Font)
 	widget.StyleProperty.Font.FontSizeValue = 14
 	widget.StyleProperty.Margin = new(structs2.Margin)

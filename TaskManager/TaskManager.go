@@ -153,6 +153,7 @@ func (receiver *TaskManager) CreateWidgetTree() {
 	element := receiver.FindBody()
 	receiver.DocumentWidget.HtmlElement = element
 	receiver.DocumentWidget.Initialize()
+	receiver.DocumentWidget.LayoutProperty.Display = "block"
 	receiver.DocumentWidget.ResourceManager = receiver.ResourceManager
 	receiver.DocumentWidget.StyleProperty.Color = new(structs.ColorRGBA)
 	receiver.DocumentWidget.StyleProperty.Color.SetColorByRGB(0, 0, 0)
@@ -203,6 +204,7 @@ func (receiver *TaskManager) SetStylePropertiesOfDocument() {
 	receiver.styleEngine.InitializeRoot()
 	var wg sync.WaitGroup
 	wg.Add(1)
+	receiver.styleEngine.Root.InheritVariables(receiver.DocumentWidget.GetStyleProperty())
 	receiver.SetStylePropertiesOfWidget(receiver.DocumentWidget, &wg)
 	wg.Wait()
 }
@@ -212,6 +214,7 @@ func (receiver *TaskManager) SetStylePropertiesOfWidget(widget widgets.WidgetInt
 	for _, child := range widget.GetChildren() {
 		if child.GetHtmlTag() != 106 { //untagged text shouldn't have style property
 			group.Add(1)
+			widget.GetStyleProperty().InheritVariables(child.GetStyleProperty())
 			go receiver.SetStylePropertiesOfWidget(child, group)
 		}
 	}

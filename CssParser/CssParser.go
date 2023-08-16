@@ -48,21 +48,24 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 			firstSeek := seek
 			println("frontRule started", seek)
 			index = strings.Index(styleText[seek:], "{")
-			seek += index + 2
-			index = strings.Index(styleText[seek:], "{")
 			println("frontRule ended", seek+index)
 			println("frontRule", styleText[firstSeek:seek+index])
-			if strings.HasPrefix(styleText[firstSeek:], "@media") {
-				if !IsMediaRuleCorrect(styleText[firstSeek : seek+index]) {
-					endOfAllRule := strings.Index(styleText[seek+index:], "}}")
-					println("end of rule", endOfAllRule, styleText[seek+index+endOfAllRule:seek+index+endOfAllRule+3])
-					seek = seek + index + endOfAllRule + 2
-					frontRule = false
-					index = strings.Index(styleText[seek:], "{")
-				}
-				println("type media")
+			if strings.HasPrefix(styleText[firstSeek:], "@media") && IsMediaRuleCorrect(styleText[firstSeek:seek+index]) {
+				seek += index + 1
+				println(styleText[seek : seek+10])
+				index = strings.Index(styleText[seek:], "{")
+				println(styleText[seek : seek+index+10])
+				continue
+
+			} else {
+				endOfAllRule := strings.Index(styleText[seek+index:], "}}")
+				println("end of rule", endOfAllRule, styleText[seek+index+endOfAllRule:seek+index+endOfAllRule+3])
+				seek = seek + index + endOfAllRule + 2
+				frontRule = false
+				index = strings.Index(styleText[seek:], "{")
+				continue
 			}
-			continue
+
 		} else if strings.HasPrefix(styleText[seek:], "/*") {
 			commentEnd := strings.LastIndex(styleText[seek:], "*/")
 			seek += commentEnd + 2

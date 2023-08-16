@@ -153,7 +153,8 @@ func (receiver *StyleProperty) ApplyDeclaration(property string, value string) {
 	if strings.HasPrefix(property, "--") {
 		receiver.AddVariable(property, value)
 	} else if strings.HasPrefix(value, "var(") {
-		println(property)
+		variable := receiver.GetVariable(value[4 : len(value)-1])
+		value = variable
 	}
 	index := utils.IndexFounder(cssPropertiesNameList, property, cssPropertyCount)
 	if index != -1 {
@@ -175,6 +176,22 @@ func (receiver *StyleProperty) AddVariable(key, value string) {
 	receiver.CssVariables[key] = value
 }
 
-func (receiver *StyleProperty) GetVariable(key, value string) {
-	receiver.CssVariables[key] = value
+func (receiver *StyleProperty) GetVariable(key string) string {
+	if strings.Contains(key, ",") {
+		sepIndex := strings.Index(key, ",")
+		keyValue := key[:sepIndex]
+		initialValue := key[sepIndex+1:]
+		value := receiver.CssVariables[keyValue]
+		if value == "" {
+			value = initialValue
+		}
+		return value
+	}
+	return receiver.CssVariables[key]
+}
+
+func (receiver *StyleProperty) InheritVariables(dest *StyleProperty) {
+	for key, value := range receiver.CssVariables {
+		dest.CssVariables[key] = value
+	}
 }
