@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/LayoutEngine"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/drawer/structs"
@@ -29,6 +30,7 @@ type WidgetInterface interface {
 	CopyFromHtmlElement(htmlElement *HtmlParser.HtmlElement)
 	GetStyleProperty() *StyleEngine.StyleProperty
 	GetDrawProperties() *structs.DrawProperties
+	GetLayout() *LayoutEngine.LayoutProperty
 	Draw(rgba *image.RGBA)
 	Render(rgba *image.RGBA, resourceManager *ResourceManager.ResourceManager)
 	IsBlockElement() bool

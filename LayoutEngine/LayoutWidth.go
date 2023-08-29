@@ -8,28 +8,37 @@ func (receiver *LayoutProperty) SetWidth(parent *LayoutProperty, children []*Lay
 	} else {
 		receiver.SetWidthInline(children, styleProperty)
 	}
-	return receiver.ContentWidth
+	return receiver.Width
 }
 
 func (receiver *LayoutProperty) SetWidthBlock(parent *LayoutProperty, styleProperty *StyleEngine.StyleProperty) {
-	width := parent.ContentWidth
-	if uint(width) > styleProperty.MaxWidth {
+	width := parent.Width
+	if styleProperty.MaxWidth > 0 && uint(width) > styleProperty.MaxWidth {
 		width = int(styleProperty.MaxWidth)
 	}
-	if uint(width) < styleProperty.MinWidth {
+	if styleProperty.MinWidth > 0 && uint(width) < styleProperty.MinWidth {
 		width = int(styleProperty.MinWidth)
 	}
-	contentWidth := width - (styleProperty.Margin.MarginLeft + styleProperty.Margin.MarginRight)
 	receiver.Width = width
-	receiver.ContentWidth = contentWidth
+	if styleProperty != nil && styleProperty.Margin != nil {
+		contentWidth := width - (styleProperty.Margin.MarginLeft + styleProperty.Margin.MarginRight)
+		receiver.ContentWidth = contentWidth
+	} else {
+		receiver.ContentWidth = width
+	}
 }
 
 func (receiver *LayoutProperty) SetWidthInline(children []*LayoutProperty, styleProperty *StyleEngine.StyleProperty) {
-	width := 0
-	for _, child := range children {
-		width += child.Width
+	if children == nil {
+		receiver.Width = 0
+		receiver.ContentWidth = 0
+	} else {
+		width := 0
+		for _, child := range children {
+			width += child.Width
+		}
+		contentWidth := width - (styleProperty.Margin.MarginLeft + styleProperty.Margin.MarginRight)
+		receiver.Width = width
+		receiver.ContentWidth = contentWidth
 	}
-	contentWidth := width - (styleProperty.Margin.MarginLeft + styleProperty.Margin.MarginRight)
-	receiver.Width = width
-	receiver.ContentWidth = contentWidth
 }

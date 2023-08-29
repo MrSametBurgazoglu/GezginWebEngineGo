@@ -1,14 +1,14 @@
 package drawerBackend
 
 import (
-	"gezgin_web_engine/drawer/structs"
+	"gezgin_web_engine/LayoutEngine"
 	"image"
 	"image/draw"
 	_ "image/png"
 )
 
-func GetImageTexture(imageSrc *image.Image, imageDest *image.RGBA, drawProperties *structs.DrawProperties) {
+func GetImageTexture(imageSrc *image.Image, imageDest *image.RGBA, layoutProperty *LayoutEngine.LayoutProperty) {
 	draw.Draw(imageDest, imageDest.Bounds(), *imageSrc, image.Point{X: 0, Y: 0}, draw.Src)
-	drawProperties.W = int32(imageDest.Rect.Max.X)
-	drawProperties.H = int32(imageDest.Rect.Max.Y)
+	layoutProperty.Width = imageDest.Rect.Max.X
+	layoutProperty.Height = imageDest.Rect.Max.Y
 }

@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/LayoutEngine"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/drawer/drawerBackend"
@@ -97,8 +98,8 @@ func (receiver *DocumentWidget) RenderDocument(mainImage *image.RGBA) {
 
 // This function and sub functions will be rewritten
 func (receiver *DocumentWidget) RenderPage(mainImage *image.RGBA) {
-	receiver.DrawProperties.W = int32(ScreenProperties.WindowWidth)
-	receiver.DrawProperties.H = int32(ScreenProperties.WindowHeight)
+	receiver.LayoutProperty.Width = ScreenProperties.WindowWidth
+	receiver.LayoutProperty.Height = ScreenProperties.WindowHeight
 	receiver.SetWidthForBlockElements()
 	println("width for block elements finished")
 	receiver.RenderDocument(mainImage)
@@ -128,19 +129,44 @@ func (receiver *DocumentWidget) Draw(mainImage *image.RGBA) {
 }
 
 func SetWidthForWidget(widget WidgetInterface) {
-	width := CalculateWidthOfWidget(widget)
-	widget.GetDrawProperties().W = int32(width)
+	layout := widget.GetLayout()
+	var layoutList []*LayoutEngine.LayoutProperty
+	for _, widgetInterface := range widget.GetChildren() {
+		layoutList = append(layoutList, widgetInterface.GetLayout())
+	}
+
+	layout.SetWidth(widget.GetParent().GetLayout(), layoutList, widget.GetStyleProperty())
+	widget.GetLayout().Width = layout.Width
 }
 func SetHeightForWidget(widget WidgetInterface) {
-	height := CalculateHeightOfWidget(widget)
-	widget.GetDrawProperties().H = int32(height)
+	layout := widget.GetLayout()
+	var layoutList []*LayoutEngine.LayoutProperty
+	for _, widgetInterface := range widget.GetChildren() {
+		layoutList = append(layoutList, widgetInterface.GetLayout())
+	}
+
+	layout.SetHeight(widget.GetParent().GetLayout(), layoutList, widget.GetStyleProperty())
+	widget.GetLayout().Height = layout.Height
 }
 
 func SetXYForWidget(widget WidgetInterface) {
-	posX := CalculateXPosOfWidget(widget)
-	posY := CalculateYPosOfWidget(widget)
-	widget.GetDrawProperties().X = posX
-	widget.GetDrawProperties().Y = posY
+	layout := widget.GetLayout()
+	var layoutList []*LayoutEngine.LayoutProperty
+	for _, widgetInterface := range widget.GetChildren() {
+		layoutList = append(layoutList, widgetInterface.GetLayout())
+	}
+
+	x := layout.SetPositionX(widget.GetParent().GetLayout(), widget.GetStyleProperty())
+	layout.XPosition = x
+	if widget.GetChildrenIndex() == 0 {
+		y := layout.SetPositionY(widget.GetParent().GetLayout(), nil, widget.GetStyleProperty())
+		layout.YPosition = y
+	} else {
+		y := layout.SetPositionY(widget.GetParent().GetLayout(), widget.GetParent().GetChildrenByIndex(widget.GetChildrenIndex()-1).GetLayout(), widget.GetStyleProperty())
+		layout.YPosition = y
+	}
+	widget.GetLayout().XPosition = layout.XPosition
+	widget.GetLayout().YPosition = layout.YPosition
 }
 
 func (receiver *DocumentWidget) SetWidthForBlockElements() {
@@ -164,7 +190,6 @@ func (receiver *DocumentWidget) SetWidthOfWidget(widget WidgetInterface, group *
 		}
 	}
 	group.Done()
-	println("done")
 }
 
 func SetWidthForBlockElements(document WidgetInterface) {

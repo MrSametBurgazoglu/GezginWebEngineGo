@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/LayoutEngine"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/Fonts"
 	"gezgin_web_engine/drawer/structs"
@@ -15,7 +16,7 @@ type UntaggedText struct {
 }
 
 func (receiver *UntaggedText) Draw(mainImage *image.RGBA) {
-	draw.Draw(mainImage, image.Rect(int(receiver.DrawProperties.X), int(receiver.DrawProperties.Y), int(receiver.DrawProperties.X+receiver.DrawProperties.W), int(receiver.DrawProperties.Y+receiver.DrawProperties.H)), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
+	draw.Draw(mainImage, image.Rect(receiver.LayoutProperty.XPosition, receiver.LayoutProperty.YPosition, receiver.LayoutProperty.XPosition+receiver.LayoutProperty.Width, receiver.LayoutProperty.YPosition+receiver.LayoutProperty.Height), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
 }
 
 func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
@@ -26,19 +27,21 @@ func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *Res
 			receiver.GetParent().GetDrawProperties().Font = Fonts.GetFont(14)
 		}
 	}
-	receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, int(receiver.GetParent().GetDrawProperties().W), 500)) // change this later
-	if currentWidth := int(receiver.GetParent().GetDrawProperties().Font.Size * float64(len(receiver.Value)) * 0.5); currentWidth > int(receiver.GetParent().GetDrawProperties().W) {
-		Lines := splitTextAndRenderByLines(receiver.Value, int(receiver.GetParent().GetDrawProperties().W), receiver.GetParent().GetDrawProperties().Font.Size)
-		receiver.DrawProperties.H, receiver.DrawProperties.W = Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, Lines, receiver.DrawProperties.Texture, receiver.GetParent().GetStyleProperty().Color)
+	receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, receiver.GetParent().GetLayout().Width, 500)) // change this later
+	if currentWidth := int(receiver.GetParent().GetDrawProperties().Font.Size * float64(len(receiver.Value)) * 0.5); currentWidth > receiver.GetParent().GetLayout().Width {
+		Lines := splitTextAndRenderByLines(receiver.Value, receiver.GetParent().GetLayout().Width, receiver.GetParent().GetDrawProperties().Font.Size)
+		height, width := Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, Lines, receiver.DrawProperties.Texture, receiver.GetParent().GetStyleProperty().Color)
+		receiver.LayoutProperty.Height, receiver.LayoutProperty.Width = int(height), int(width)
 	} else {
-		receiver.DrawProperties.H, receiver.DrawProperties.W = Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, []string{receiver.Value}, receiver.DrawProperties.Texture, receiver.GetParent().GetStyleProperty().Color)
+		height, width := Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, []string{receiver.Value}, receiver.DrawProperties.Texture, receiver.GetParent().GetStyleProperty().Color)
+		receiver.LayoutProperty.Height, receiver.LayoutProperty.Width = int(height), int(width)
 	}
 	//receiver.DrawProperties.W = int32(receiver.GetParent().GetDrawProperties().Font.Size * float64(len(receiver.Value)) * 0.5) // change this later and calculate text width
 
-	if receiver.GetDrawProperties().W > receiver.GetParent().GetDrawProperties().W {
+	if receiver.LayoutProperty.Width > receiver.GetParent().GetLayout().Width {
 		println("bigger than parent")
-		println(receiver.GetDrawProperties().W)
-		Lines := splitTextAndRenderByLines(receiver.Value, int(receiver.GetParent().GetDrawProperties().W), receiver.GetParent().GetDrawProperties().Font.Size)
+		println(receiver.GetLayout().Width)
+		Lines := splitTextAndRenderByLines(receiver.Value, int(receiver.GetParent().GetLayout().Width), receiver.GetParent().GetDrawProperties().Font.Size)
 		println(Lines)
 	}
 }
@@ -47,6 +50,7 @@ func SetWidgetPropertiesForUntaggedText(element *HtmlParser.HtmlElement, taskMan
 	widget := new(UntaggedText)
 	widget.HtmlElement = element
 	widget.DrawProperties = new(structs.DrawProperties)
+	widget.LayoutProperty = new(LayoutEngine.LayoutProperty)
 	widget.DrawProperties.Initialize()
 	widget.Value = element.Text
 	return widget

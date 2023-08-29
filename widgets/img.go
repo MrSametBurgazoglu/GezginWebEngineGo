@@ -67,7 +67,14 @@ func (receiver *HtmlTagImg) Draw(mainImage *image.RGBA) {
 	//file, err := os.Open("exampleHtmlFiles/browser-diagram.png")
 	//img, err2 := png.Decode(file)
 	//if err == nil && err2 == nil {
-	draw.Draw(mainImage, image.Rect(int(receiver.DrawProperties.X), int(receiver.DrawProperties.Y), int(receiver.DrawProperties.W+receiver.DrawProperties.X), int(receiver.DrawProperties.H+receiver.DrawProperties.Y)), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
+	draw.Draw(mainImage,
+		image.Rect(receiver.LayoutProperty.XPosition,
+			receiver.LayoutProperty.YPosition,
+			receiver.LayoutProperty.Width+receiver.LayoutProperty.XPosition,
+			receiver.LayoutProperty.Height+receiver.LayoutProperty.YPosition),
+		receiver.DrawProperties.Texture,
+		image.Point{X: 0, Y: 0},
+		draw.Over)
 	//}
 }
 
@@ -90,7 +97,7 @@ func (receiver *HtmlTagImg) Render(mainImage *image.RGBA, resourceManager *Resou
 		drawerBackend.GetImageTexture(
 			&img,
 			receiver.DrawProperties.Texture,
-			receiver.DrawProperties,
+			receiver.LayoutProperty,
 		)
 	}
 }

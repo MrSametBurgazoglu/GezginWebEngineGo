@@ -146,6 +146,10 @@ func (receiver *Widget) GetDrawProperties() *structs.DrawProperties {
 	return receiver.DrawProperties
 }
 
+func (receiver *Widget) GetLayout() *LayoutEngine.LayoutProperty {
+	return receiver.LayoutProperty
+}
+
 func (receiver *Widget) CalculateWidth() {
 
 }
