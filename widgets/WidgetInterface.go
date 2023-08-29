@@ -33,5 +33,5 @@ type WidgetInterface interface {
 	GetLayout() *LayoutEngine.LayoutProperty
 	Draw(rgba *image.RGBA)
 	Render(rgba *image.RGBA, resourceManager *ResourceManager.ResourceManager)
-	IsBlockElement() bool
+	IsPreSetWidth() bool
 }

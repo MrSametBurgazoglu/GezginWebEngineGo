@@ -8,7 +8,6 @@ func (receiver *LayoutProperty) SetHeight(parent *LayoutProperty, children []*La
 		for _, child := range children {
 			height += child.Height
 		}
-
 		if styleProperty != nil && styleProperty.Margin != nil {
 			contentHeight := height - (styleProperty.Margin.MarginTop + styleProperty.Margin.MarginBottom)
 			receiver.ContentHeight = contentHeight
@@ -20,5 +19,4 @@ func (receiver *LayoutProperty) SetHeight(parent *LayoutProperty, children []*La
 	} else {
 		return receiver.Height
 	}
-
 }

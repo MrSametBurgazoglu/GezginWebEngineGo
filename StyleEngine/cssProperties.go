@@ -1,6 +1,6 @@
 package StyleEngine
 
-const cssPropertyCount = 147
+const cssPropertyCount = 148
 
 var cssPropertiesNameList = []string{
 	"accent-color",
@@ -73,6 +73,7 @@ var cssPropertiesNameList = []string{
 	"column-span",
 	"column-width",
 	"columns",
+	"display",
 	"flex",
 	"flex-basis",
 	"flex-direction",
@@ -225,6 +226,7 @@ var functionList = []cssPropertyFunction{
 	nil,
 	nil,
 	nil,
+	DisplayPropertySetValue,
 	nil,
 	nil,
 	nil,

@@ -1,7 +1,11 @@
 package LayoutEngine
 
+import (
+	"gezgin_web_engine/StyleEngine"
+	"gezgin_web_engine/StyleEngine/enums"
+)
+
 type LayoutProperty struct {
-	Display          string
 	Position         string
 	XPosition        int
 	YPosition        int
@@ -19,4 +23,17 @@ type LayoutProperty struct {
 	MarginRight      int
 	MarginTop        int
 	MarginBottom     int
+}
+
+func (receiver *LayoutProperty) SetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) (int, int) {
+	if styleProperty == nil {
+		return receiver.BlockSetPosition(parent, beforeCurrentWidget, styleProperty)
+	}
+	switch styleProperty.Display {
+	case enums.CSS_DISPLAY_TYPE_BLOCK:
+		return receiver.BlockSetPosition(parent, beforeCurrentWidget, styleProperty)
+	case enums.CSS_DISPLAY_TYPE_INLINE:
+		return receiver.InlineSetPosition(parent, beforeCurrentWidget, styleProperty)
+	}
+	return 0, 0
 }

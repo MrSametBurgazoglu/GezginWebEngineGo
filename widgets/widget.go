@@ -6,6 +6,7 @@ import (
 	"gezgin_web_engine/HtmlParser/htmlVariables/standardHtmlTagVariables"
 	"gezgin_web_engine/LayoutEngine"
 	"gezgin_web_engine/StyleEngine"
+	"gezgin_web_engine/StyleEngine/enums"
 	"gezgin_web_engine/drawer/structs"
 	"image"
 	"strings"
@@ -154,6 +155,6 @@ func (receiver *Widget) CalculateWidth() {
 
 }
 
-func (receiver *Widget) IsBlockElement() bool {
-	return receiver.LayoutProperty.Display == "block"
+func (receiver *Widget) IsPreSetWidth() bool {
+	return receiver.StyleProperty.Display == enums.CSS_DISPLAY_TYPE_BLOCK || receiver.StyleProperty.Display == enums.CSS_DISPLAY_TYPE_FLEX
 }

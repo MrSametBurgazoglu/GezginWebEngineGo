@@ -3,6 +3,7 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
+	"gezgin_web_engine/StyleEngine/enums"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"image"
 )
@@ -26,7 +27,7 @@ func SetWidgetPropertiesForBodyTag(element *HtmlParser.HtmlElement, taskManager 
 	widget := new(HtmlTagBody)
 	widget.HtmlElement = element
 	widget.Initialize()
-	widget.LayoutProperty.Display = "block"
+	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
 	taskManager.SetBodyElement(widget)
 	return widget
 }

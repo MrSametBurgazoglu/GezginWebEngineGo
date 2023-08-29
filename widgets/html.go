@@ -3,6 +3,7 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
+	"gezgin_web_engine/StyleEngine/enums"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"image"
 )
@@ -25,7 +26,7 @@ func (receiver *HtmlTagHtml) Render(mainImage *image.RGBA, resourceManager *Reso
 func SetWidgetPropertiesForHtmlTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
 	widget := new(HtmlTagHtml)
 	widget.Initialize()
-	widget.LayoutProperty.Display = "block"
+	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
 	taskManager.SetHtmlElement(widget)
 	return widget
 }

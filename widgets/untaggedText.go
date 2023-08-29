@@ -88,6 +88,6 @@ func splitTextAndRenderByLines(text string, maxWidth int, size float64) []string
 	return Lines
 }
 
-func (receiver *UntaggedText) IsBlockElement() bool {
-	return true
+func (receiver *UntaggedText) IsPreSetWidth() bool {
+	return false
 }

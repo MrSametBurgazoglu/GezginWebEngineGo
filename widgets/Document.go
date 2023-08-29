@@ -136,6 +136,9 @@ func SetWidthForWidget(widget WidgetInterface) {
 	}
 
 	layout.SetWidth(widget.GetParent().GetLayout(), layoutList, widget.GetStyleProperty())
+	if layout.Width == 0 {
+		println("hey")
+	}
 	widget.GetLayout().Width = layout.Width
 }
 func SetHeightForWidget(widget WidgetInterface) {
@@ -156,17 +159,18 @@ func SetXYForWidget(widget WidgetInterface) {
 		layoutList = append(layoutList, widgetInterface.GetLayout())
 	}
 
-	x := layout.SetPositionX(widget.GetParent().GetLayout(), widget.GetStyleProperty())
-	layout.XPosition = x
-	if widget.GetChildrenIndex() == 0 {
-		y := layout.SetPositionY(widget.GetParent().GetLayout(), nil, widget.GetStyleProperty())
-		layout.YPosition = y
-	} else {
-		y := layout.SetPositionY(widget.GetParent().GetLayout(), widget.GetParent().GetChildrenByIndex(widget.GetChildrenIndex()-1).GetLayout(), widget.GetStyleProperty())
-		layout.YPosition = y
+	parentLayout := widget.GetParent().GetLayout()
+	styleProperty := widget.GetStyleProperty()
+	var beforeCurrentWidget *LayoutEngine.LayoutProperty
+
+	if widget.GetChildrenIndex() > 0 {
+		beforeCurrentWidget = widget.GetParent().GetChildrenByIndex(widget.GetChildrenIndex() - 1).GetLayout()
 	}
-	widget.GetLayout().XPosition = layout.XPosition
-	widget.GetLayout().YPosition = layout.YPosition
+
+	x, y := layout.SetPosition(parentLayout, beforeCurrentWidget, styleProperty)
+
+	widget.GetLayout().XPosition = x
+	widget.GetLayout().YPosition = y
 }
 
 func (receiver *DocumentWidget) SetWidthForBlockElements() {
@@ -183,10 +187,12 @@ func (receiver *DocumentWidget) SetWidthOfWidget(widget WidgetInterface, group *
 	SetWidthForWidget(widget)
 	println("widget width setted", widget.GetHtmlTag())
 	for _, child := range widget.GetChildren() {
-		if child.IsBlockElement() {
+		if child.IsPreSetWidth() {
 			group.Add(1)
 			println("added")
 			go receiver.SetWidthOfWidget(child, group)
+		} else {
+			println("not block")
 		}
 	}
 	group.Done()
@@ -251,13 +257,13 @@ func SetWidthForInlineElements(document WidgetInterface) {
 	for keepGo {
 		keepGo = false
 		for _, w := range widgetList {
-			if allChildrenRendered(w) && !w.IsBlockElement() {
+			if allChildrenRendered(w) && !w.IsPreSetWidth() {
 				SetHeightForWidget(w)
 				w.SetRender(true)
 			}
 		}
 		for _, w := range widgetList {
-			if !w.GetParent().IsBlockElement() {
+			if !w.GetParent().IsPreSetWidth() {
 				widgetList = append(widgetList, w.GetParent())
 				keepGo = true
 			}

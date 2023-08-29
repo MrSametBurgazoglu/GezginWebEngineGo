@@ -4,6 +4,7 @@ import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/StyleEngine"
+	"gezgin_web_engine/StyleEngine/enums"
 	"gezgin_web_engine/StyleEngine/structs"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"image"
@@ -28,7 +29,7 @@ func SetWidgetPropertiesForH1Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
-	widget.LayoutProperty.Display = "block"
+	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 24
 	return widget
@@ -38,7 +39,7 @@ func SetWidgetPropertiesForH2Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
-	widget.LayoutProperty.Display = "block"
+	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 20
 
@@ -49,7 +50,7 @@ func SetWidgetPropertiesForH3Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
-	widget.LayoutProperty.Display = "block"
+	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
 	widget.StyleProperty = new(StyleEngine.StyleProperty)
 	widget.StyleProperty.Initialize()
 	widget.StyleProperty.Font = new(structs.Font)
@@ -61,7 +62,7 @@ func SetWidgetPropertiesForH4Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
-	widget.LayoutProperty.Display = "block"
+	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 10
 	return widget
@@ -71,7 +72,7 @@ func SetWidgetPropertiesForH5Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
-	widget.LayoutProperty.Display = "block"
+	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 8
 	return widget
@@ -81,7 +82,7 @@ func SetWidgetPropertiesForH6Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget := new(HtmlTagHeader)
 	widget.HtmlElement = element
 	widget.Initialize()
-	widget.LayoutProperty.Display = "block"
+	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 6
 	return widget

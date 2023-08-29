@@ -3,6 +3,7 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
+	"gezgin_web_engine/StyleEngine/enums"
 	structs2 "gezgin_web_engine/StyleEngine/structs"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"image"
@@ -27,7 +28,7 @@ func SetWidgetPropertiesForPTag(element *HtmlParser.HtmlElement, taskManager Tas
 	widget := new(HtmlTagP)
 	widget.HtmlElement = element
 	widget.Initialize()
-	widget.LayoutProperty.Display = "block"
+	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
 	widget.StyleProperty.Font = new(structs2.Font)
 	widget.StyleProperty.Font.FontSizeValue = 14
 	widget.StyleProperty.Margin = new(structs2.Margin)
