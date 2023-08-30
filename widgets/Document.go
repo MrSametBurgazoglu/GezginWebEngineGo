@@ -135,10 +135,7 @@ func SetWidthForWidget(widget WidgetInterface) {
 		layoutList = append(layoutList, widgetInterface.GetLayout())
 	}
 
-	layout.SetWidth(widget.GetParent().GetLayout(), layoutList, widget.GetStyleProperty())
-	if layout.Width == 0 {
-		println("hey")
-	}
+	layout.SetWidth(widget.GetParent().GetLayout(), layoutList, widget.GetStyleProperty(), widget.GetParent().GetStyleProperty())
 	widget.GetLayout().Width = layout.Width
 }
 func SetHeightForWidget(widget WidgetInterface) {
@@ -258,12 +255,14 @@ func SetWidthForInlineElements(document WidgetInterface) {
 		keepGo = false
 		for _, w := range widgetList {
 			if allChildrenRendered(w) && !w.IsPreSetWidth() {
-				SetHeightForWidget(w)
+				SetWidthForWidget(w)
 				w.SetRender(true)
 			}
 		}
 		for _, w := range widgetList {
-			if !w.GetParent().IsPreSetWidth() {
+			//TODO FLEX CONTAINER'S CHILDREN MUST BE ALSO FLEX
+			//THE FIX THAT WE PUT HERE IS CAN BE WRONG BUT IF A BLOCK ELEMENT WIDTH COULDN'T BE 0
+			if !w.GetParent().IsPreSetWidth() || w.GetParent().GetLayout().Width == 0 {
 				widgetList = append(widgetList, w.GetParent())
 				keepGo = true
 			}

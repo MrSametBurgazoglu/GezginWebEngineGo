@@ -8,6 +8,7 @@ import (
 	"gezgin_web_engine/drawer/structs"
 	"image"
 	"image/draw"
+	"strings"
 )
 
 type UntaggedText struct {
@@ -27,12 +28,14 @@ func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *Res
 			receiver.GetParent().GetDrawProperties().Font = Fonts.GetFont(14)
 		}
 	}
-	receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, receiver.GetParent().GetLayout().Width, 500)) // change this later
 	if currentWidth := int(receiver.GetParent().GetDrawProperties().Font.Size * float64(len(receiver.Value)) * 0.5); currentWidth > receiver.GetParent().GetLayout().Width {
-		Lines := splitTextAndRenderByLines(receiver.Value, receiver.GetParent().GetLayout().Width, receiver.GetParent().GetDrawProperties().Font.Size)
+		Lines, maxTextWidth := splitTextAndRenderByLines(receiver.Value, receiver.GetParent().GetLayout().Width, receiver.GetParent().GetDrawProperties().Font.Size)
+		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, maxTextWidth*2, 500)) // change this later
 		height, width := Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, Lines, receiver.DrawProperties.Texture, receiver.GetParent().GetStyleProperty().Color)
 		receiver.LayoutProperty.Height, receiver.LayoutProperty.Width = int(height), int(width)
 	} else {
+		//change this to calculated text
+		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, receiver.GetParent().GetLayout().Width, 500)) // change this later
 		height, width := Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, []string{receiver.Value}, receiver.DrawProperties.Texture, receiver.GetParent().GetStyleProperty().Color)
 		receiver.LayoutProperty.Height, receiver.LayoutProperty.Width = int(height), int(width)
 	}
@@ -41,7 +44,7 @@ func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *Res
 	if receiver.LayoutProperty.Width > receiver.GetParent().GetLayout().Width {
 		println("bigger than parent")
 		println(receiver.GetLayout().Width)
-		Lines := splitTextAndRenderByLines(receiver.Value, int(receiver.GetParent().GetLayout().Width), receiver.GetParent().GetDrawProperties().Font.Size)
+		Lines, _ := splitTextAndRenderByLines(receiver.Value, int(receiver.GetParent().GetLayout().Width), receiver.GetParent().GetDrawProperties().Font.Size)
 		println(Lines)
 	}
 }
@@ -65,18 +68,30 @@ func findLastSpace(text string, last int) int {
 	return last
 }
 
-func splitTextAndRenderByLines(text string, maxWidth int, size float64) []string {
+func splitTextAndRenderByLines(text string, maxWidth int, size float64) ([]string, int) {
 	var Lines []string
 	var err error
 	var currentWidth, _, start, end int
+	calculatedMaxWidth := 0
 	length := len(text)
 	start = 0
 	end = length
+	currentWidth = int(size * float64(length) * 0.55)
+	if maxWidth <= 0 || !strings.Contains(text, " ") {
+		return append(Lines, text), currentWidth
+	}
 	for start < length {
 		currentWidth = int(size * float64(len(text[start:end])) * 0.55)
 		for currentWidth > maxWidth {
 			end = findLastSpace(text, end)
-			currentWidth = int(size * float64(len(text[start:end])) * 0.55)
+			newCurrentWidth := int(size * float64(len(text[start:end])) * 0.55)
+			if newCurrentWidth > calculatedMaxWidth {
+				calculatedMaxWidth = newCurrentWidth
+			}
+			if newCurrentWidth == currentWidth {
+				break
+			}
+			currentWidth = newCurrentWidth
 			if err != nil {
 				panic(err)
 			}
@@ -85,9 +100,17 @@ func splitTextAndRenderByLines(text string, maxWidth int, size float64) []string
 		start = end + 1
 		end = length
 	}
-	return Lines
+	for i, line := range Lines {
+		println("deneme", i, line)
+	}
+	return Lines, calculatedMaxWidth
 }
 
 func (receiver *UntaggedText) IsPreSetWidth() bool {
 	return false
+}
+
+func (receiver *UntaggedText) SetParent(parent WidgetInterface) {
+	receiver.Widget.Parent = parent
+	receiver.Widget.LayoutProperty.Parent = parent.GetLayout()
 }

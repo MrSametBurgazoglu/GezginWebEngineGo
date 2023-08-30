@@ -6,6 +6,7 @@ import (
 )
 
 type LayoutProperty struct {
+	Parent           *LayoutProperty
 	Position         string
 	XPosition        int
 	YPosition        int
@@ -27,13 +28,15 @@ type LayoutProperty struct {
 
 func (receiver *LayoutProperty) SetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) (int, int) {
 	if styleProperty == nil {
-		return receiver.BlockSetPosition(parent, beforeCurrentWidget, styleProperty)
+		return receiver.BlockSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty)
+	} else if styleProperty.Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX {
+		return receiver.SetPositionFlex(parent, beforeCurrentWidget, styleProperty)
 	}
 	switch styleProperty.Display {
 	case enums.CSS_DISPLAY_TYPE_BLOCK:
-		return receiver.BlockSetPosition(parent, beforeCurrentWidget, styleProperty)
+		return receiver.BlockSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty)
 	case enums.CSS_DISPLAY_TYPE_INLINE:
-		return receiver.InlineSetPosition(parent, beforeCurrentWidget, styleProperty)
+		return receiver.InlineSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty)
 	}
 	return 0, 0
 }

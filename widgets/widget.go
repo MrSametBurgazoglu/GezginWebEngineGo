@@ -49,7 +49,6 @@ func (receiver *Widget) Initialize() {
 	receiver.DrawProperties.Initialize()
 	receiver.LayoutProperty = new(LayoutEngine.LayoutProperty)
 	receiver.CopyFromHtmlElement(receiver.HtmlElement)
-
 }
 
 func (receiver *Widget) SetChildrenCount(count int) {
@@ -82,6 +81,8 @@ func (receiver *Widget) GetParent() WidgetInterface {
 
 func (receiver *Widget) SetParent(widget WidgetInterface) {
 	receiver.Parent = widget
+	receiver.LayoutProperty.Parent = widget.GetLayout()
+	receiver.StyleProperty.Parent = widget.GetStyleProperty()
 }
 
 func (receiver *Widget) AppendChild(child WidgetInterface) {
@@ -156,5 +157,5 @@ func (receiver *Widget) CalculateWidth() {
 }
 
 func (receiver *Widget) IsPreSetWidth() bool {
-	return receiver.StyleProperty.Display == enums.CSS_DISPLAY_TYPE_BLOCK || receiver.StyleProperty.Display == enums.CSS_DISPLAY_TYPE_FLEX
+	return receiver.StyleProperty.Display == enums.CSS_DISPLAY_TYPE_BLOCK
 }

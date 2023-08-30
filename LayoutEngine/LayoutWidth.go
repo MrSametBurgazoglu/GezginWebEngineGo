@@ -5,8 +5,10 @@ import (
 	"gezgin_web_engine/StyleEngine/enums"
 )
 
-func (receiver *LayoutProperty) SetWidth(parent *LayoutProperty, children []*LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
-	if styleProperty == nil {
+func (receiver *LayoutProperty) SetWidth(parent *LayoutProperty, children []*LayoutProperty, styleProperty, parentStyleProperty *StyleEngine.StyleProperty) int {
+	if parentStyleProperty.Display == enums.CSS_DISPLAY_TYPE_FLEX {
+		receiver.SetWidthFlexChild(children, styleProperty)
+	} else if styleProperty == nil {
 		receiver.SetWidthInline(children, styleProperty)
 	} else if styleProperty.Display == enums.CSS_DISPLAY_TYPE_BLOCK {
 		receiver.SetWidthBlock(parent, styleProperty)
@@ -42,6 +44,22 @@ func (receiver *LayoutProperty) SetWidthInline(children []*LayoutProperty, style
 			width += child.Width
 		}
 		contentWidth := width - (styleProperty.Margin.MarginLeft + styleProperty.Margin.MarginRight)
+		receiver.Width = width
+		receiver.ContentWidth = contentWidth
+	}
+}
+
+func (receiver *LayoutProperty) SetWidthFlexChild(children []*LayoutProperty, styleProperty *StyleEngine.StyleProperty) {
+	//you must set childrens width first
+	if children != nil {
+		width := 0
+		for _, child := range children {
+			width += child.Width
+		}
+		contentWidth := width
+		if styleProperty != nil && styleProperty.Margin != nil {
+			contentWidth = width - (styleProperty.Margin.MarginLeft + styleProperty.Margin.MarginRight)
+		}
 		receiver.Width = width
 		receiver.ContentWidth = contentWidth
 	}
