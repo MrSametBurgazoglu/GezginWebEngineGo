@@ -101,3 +101,15 @@ func (receiver *LayoutProperty) InlineSetPositionY(parent, beforeCurrentWidget *
 	}
 	return 0
 }
+
+func (receiver *LayoutProperty) SetWidthInline(children []*LayoutProperty, styleProperty *StyleEngine.StyleProperty) {
+	if children != nil {
+		width := 0
+		for _, child := range children {
+			width += child.Width
+		}
+		contentWidth := width - (styleProperty.Margin.MarginLeft + styleProperty.Margin.MarginRight)
+		receiver.Width = width
+		receiver.ContentWidth = contentWidth
+	}
+}

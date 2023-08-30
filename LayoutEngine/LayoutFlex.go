@@ -5,6 +5,27 @@ import (
 	"gezgin_web_engine/StyleEngine/enums"
 )
 
+func LookForWidth(layoutProperty *LayoutProperty) int {
+	if len(layoutProperty.Children) == 0 {
+		return layoutProperty.Width
+	} else {
+		maxWidth := 0
+		for _, child := range layoutProperty.Children {
+			currentWidth := LookForWidth(child)
+			if currentWidth > maxWidth {
+				maxWidth = currentWidth
+			}
+		}
+		return maxWidth
+	}
+}
+
+func (receiver *LayoutProperty) SetFLexContainerWidth() {
+	width := LookForWidth(receiver)
+	receiver.Width = width
+	receiver.ContentWidth = width
+}
+
 func (receiver *LayoutProperty) SetPositionFlex(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) (int, int) {
 	return receiver.SetPositionXFlex(parent, beforeCurrentWidget, styleProperty), receiver.SetPositionYFlex(parent, beforeCurrentWidget, styleProperty)
 }
@@ -119,4 +140,20 @@ func (receiver *LayoutProperty) SetPositionYFlex(parent, beforeCurrentWidget *La
 		}
 	}
 	return 0
+}
+
+func (receiver *LayoutProperty) SetWidthFlexChild(children []*LayoutProperty, styleProperty *StyleEngine.StyleProperty) {
+	//you must set childrens width first
+	if children != nil {
+		width := 0
+		for _, child := range children {
+			width += child.Width
+		}
+		contentWidth := width
+		if styleProperty != nil && styleProperty.Margin != nil {
+			contentWidth = width - (styleProperty.Margin.MarginLeft + styleProperty.Margin.MarginRight)
+		}
+		receiver.Width = width
+		receiver.ContentWidth = contentWidth
+	}
 }

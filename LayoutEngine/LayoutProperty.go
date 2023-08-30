@@ -7,6 +7,7 @@ import (
 
 type LayoutProperty struct {
 	Parent           *LayoutProperty
+	Children         []*LayoutProperty
 	Position         string
 	XPosition        int
 	YPosition        int

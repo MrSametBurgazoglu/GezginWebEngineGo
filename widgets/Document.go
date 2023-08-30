@@ -100,6 +100,8 @@ func (receiver *DocumentWidget) RenderDocument(mainImage *image.RGBA) {
 func (receiver *DocumentWidget) RenderPage(mainImage *image.RGBA) {
 	receiver.LayoutProperty.Width = ScreenProperties.WindowWidth
 	receiver.LayoutProperty.Height = ScreenProperties.WindowHeight
+	//TODO FLEX ITEM MUST NEED TO CALCULATED WIDTH OF UNTAGGED TEXT BUT
+	receiver.RenderDocument(mainImage)
 	receiver.SetWidthForBlockElements()
 	println("width for block elements finished")
 	receiver.RenderDocument(mainImage)
@@ -188,8 +190,9 @@ func (receiver *DocumentWidget) SetWidthOfWidget(widget WidgetInterface, group *
 			group.Add(1)
 			println("added")
 			go receiver.SetWidthOfWidget(child, group)
-		} else {
-			println("not block")
+		} else if child.IsSetWidthSelf() { //we need to look at here
+			group.Add(1)
+			go receiver.SetWidthOfWidget(child, group)
 		}
 	}
 	group.Done()
@@ -262,7 +265,7 @@ func SetWidthForInlineElements(document WidgetInterface) {
 		for _, w := range widgetList {
 			//TODO FLEX CONTAINER'S CHILDREN MUST BE ALSO FLEX
 			//THE FIX THAT WE PUT HERE IS CAN BE WRONG BUT IF A BLOCK ELEMENT WIDTH COULDN'T BE 0
-			if !w.GetParent().IsPreSetWidth() || w.GetParent().GetLayout().Width == 0 {
+			if !w.GetParent().IsPreSetWidth() {
 				widgetList = append(widgetList, w.GetParent())
 				keepGo = true
 			}

@@ -101,3 +101,20 @@ func (receiver *LayoutProperty) BlockSetPositionY(parent, beforeCurrentWidget *L
 	}
 	return 0
 }
+
+func (receiver *LayoutProperty) SetWidthBlock(parent *LayoutProperty, styleProperty *StyleEngine.StyleProperty) {
+	width := parent.Width
+	if styleProperty.MaxWidth > 0 && uint(width) > styleProperty.MaxWidth {
+		width = int(styleProperty.MaxWidth)
+	}
+	if styleProperty.MinWidth > 0 && uint(width) < styleProperty.MinWidth {
+		width = int(styleProperty.MinWidth)
+	}
+	receiver.Width = width
+	if styleProperty != nil && styleProperty.Margin != nil {
+		contentWidth := width - (styleProperty.Margin.MarginLeft + styleProperty.Margin.MarginRight)
+		receiver.ContentWidth = contentWidth
+	} else {
+		receiver.ContentWidth = width
+	}
+}

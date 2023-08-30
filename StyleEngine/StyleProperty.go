@@ -9,6 +9,7 @@ import (
 
 type StyleProperty struct {
 	Parent       *StyleProperty
+	Children     []*StyleProperty
 	CssVariables map[string]string
 	//this could be bit field
 	AccentColorInherit        bool

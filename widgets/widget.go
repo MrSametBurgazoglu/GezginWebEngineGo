@@ -82,7 +82,9 @@ func (receiver *Widget) GetParent() WidgetInterface {
 func (receiver *Widget) SetParent(widget WidgetInterface) {
 	receiver.Parent = widget
 	receiver.LayoutProperty.Parent = widget.GetLayout()
+	receiver.Parent.GetLayout().Children = append(receiver.Parent.GetLayout().Children, receiver.LayoutProperty)
 	receiver.StyleProperty.Parent = widget.GetStyleProperty()
+	receiver.Parent.GetStyleProperty().Children = append(receiver.Parent.GetStyleProperty().Children, receiver.StyleProperty)
 }
 
 func (receiver *Widget) AppendChild(child WidgetInterface) {
@@ -158,4 +160,8 @@ func (receiver *Widget) CalculateWidth() {
 
 func (receiver *Widget) IsPreSetWidth() bool {
 	return receiver.StyleProperty.Display == enums.CSS_DISPLAY_TYPE_BLOCK
+}
+
+func (receiver *Widget) IsSetWidthSelf() bool {
+	return receiver.StyleProperty.Display == enums.CSS_DISPLAY_TYPE_FLEX
 }

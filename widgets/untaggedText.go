@@ -110,7 +110,12 @@ func (receiver *UntaggedText) IsPreSetWidth() bool {
 	return false
 }
 
+func (receiver *UntaggedText) IsSetWidthSelf() bool {
+	return false
+}
+
 func (receiver *UntaggedText) SetParent(parent WidgetInterface) {
-	receiver.Widget.Parent = parent
-	receiver.Widget.LayoutProperty.Parent = parent.GetLayout()
+	receiver.Parent = parent
+	receiver.LayoutProperty.Parent = parent.GetLayout()
+	receiver.Parent.GetLayout().Children = append(receiver.Parent.GetLayout().Children, receiver.LayoutProperty)
 }
