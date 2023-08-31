@@ -16,7 +16,13 @@ func (receiver *LayoutProperty) BlockSetPositionX(parent *LayoutProperty, styleP
 		case enums.CSS_POSITION_TYPE_STICKY:
 			position = parent.ContentXPosition
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			position = parent.ContentXPosition
+			position = parent.XPosition
+			if styleProperty.Margin != nil {
+				if styleProperty.Margin.MarginLeftValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO && styleProperty.Margin.MarginRightValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO {
+					position += (receiver.Parent.Width - receiver.Width) / 2
+				}
+			}
+			//position = parent.ContentXPosition
 		case enums.CSS_POSITION_TYPE_STATIC:
 			position = parent.ContentXPosition
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
@@ -42,6 +48,7 @@ func (receiver *LayoutProperty) BlockSetPositionX(parent *LayoutProperty, styleP
 		position = parent.ContentXPosition
 	}
 	receiver.ContentXPosition = position
+	receiver.XPosition = position
 	return receiver.ContentXPosition
 }
 

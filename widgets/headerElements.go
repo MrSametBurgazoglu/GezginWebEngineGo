@@ -31,7 +31,7 @@ func SetWidgetPropertiesForH1Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget.Initialize()
 	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
 	widget.StyleProperty.Font = new(structs.Font)
-	widget.StyleProperty.Font.FontSizeValue = 24
+	widget.StyleProperty.Font.FontSizeValue = 32
 	return widget
 }
 
@@ -54,7 +54,7 @@ func SetWidgetPropertiesForH3Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	widget.StyleProperty = new(StyleEngine.StyleProperty)
 	widget.StyleProperty.Initialize()
 	widget.StyleProperty.Font = new(structs.Font)
-	widget.StyleProperty.Font.FontSizeValue = 12
+	widget.StyleProperty.Font.FontSizeValue = 20
 	return widget
 }
 

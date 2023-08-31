@@ -9,7 +9,6 @@ import (
 	_ "embed"
 
 	"github.com/diamondburned/gotk4/pkg/cairo"
-	"github.com/diamondburned/gotk4/pkg/gdkpixbuf/v2"
 	"github.com/diamondburned/gotk4/pkg/gio/v2"
 	"github.com/diamondburned/gotk4/pkg/gtk/v4"
 )
@@ -75,10 +74,10 @@ func activate(app *gtk.Application) {
 	window := gtk.NewApplicationWindow(app)
 	window.SetTitle("drawingarea - gotk4 Example")
 	window.SetChild(drawArea)
-	window.SetDefaultSize(1200, 700)
+	window.SetDefaultSize(1300, 700)
 
 	startTime := time.Now()
-	web_engine.InitDrawer(1200, 700)
+	web_engine.InitDrawer(1300, 700)
 	newTab := web_engine.NewTab()
 	//newTab.OpenWebPageFromFile("exampleHtmlFiles/newExa.html")
 	newTab.OpenWebPageFromWeb("http://127.0.0.1:8080")
@@ -86,22 +85,4 @@ func activate(app *gtk.Application) {
 	fmt.Println("Total time taken ", time.Since(startTime).Milliseconds())
 
 	window.Show()
-}
-
-func loadPNG(data []byte) (*gdkpixbuf.Pixbuf, error) {
-	l, err := gdkpixbuf.NewPixbufLoaderWithType("png")
-	if err != nil {
-		return nil, fmt.Errorf("NewLoaderWithType png: %w", err)
-	}
-	defer l.Close()
-
-	if err := l.Write(data); err != nil {
-		return nil, fmt.Errorf("PixbufLoader.Write: %w", err)
-	}
-
-	if err := l.Close(); err != nil {
-		return nil, fmt.Errorf("PixbufLoader.Close: %w", err)
-	}
-
-	return l.Pixbuf(), nil
 }

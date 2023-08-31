@@ -9,5 +9,5 @@ func SetWindowSize(width int, height int) {
 }
 
 func GetWindowSize() (int, int) {
-	return WindowHeight, WindowWidth
+	return WindowWidth, WindowHeight
 }

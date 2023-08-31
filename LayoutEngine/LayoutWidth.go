@@ -9,7 +9,9 @@ func (receiver *LayoutProperty) SetWidth(parent *LayoutProperty, children []*Lay
 	if styleProperty == nil {
 		receiver.SetWidthInline(children, styleProperty)
 	} else if styleProperty.Display == enums.CSS_DISPLAY_TYPE_FLEX {
-		receiver.SetFLexContainerWidth()
+		receiver.SetFLexContainerWidth(styleProperty)
+	} else if styleProperty.Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX {
+		println("heyyo")
 	} else if styleProperty.Display == enums.CSS_DISPLAY_TYPE_BLOCK {
 		receiver.SetWidthBlock(parent, styleProperty)
 	} else if styleProperty.Display == enums.CSS_DISPLAY_TYPE_FLEX {

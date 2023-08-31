@@ -15,7 +15,7 @@ func SetWidth(cssProperties *StyleProperty, value string) {
 		cssProperties.Width = uint(width)
 		cssProperties.WidthValueType = enums.CSS_PROPERTY_VALUE_TYPE_PIXEL
 	} else if strings.HasSuffix(value, "%") {
-		width, err := strconv.Atoi(strings.TrimSuffix(value, "%"))
+		width, err := strconv.ParseFloat(strings.TrimSuffix(value, "%"), 64)
 		if err != nil {
 			// handle error
 		}

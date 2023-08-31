@@ -12,6 +12,7 @@ func LookForWidth(layoutProperty *LayoutProperty) int {
 		maxWidth := 0
 		for _, child := range layoutProperty.Children {
 			currentWidth := LookForWidth(child)
+			println(currentWidth, " asdadadasdsadsa")
 			if currentWidth > maxWidth {
 				maxWidth = currentWidth
 			}
@@ -20,10 +21,33 @@ func LookForWidth(layoutProperty *LayoutProperty) int {
 	}
 }
 
-func (receiver *LayoutProperty) SetFLexContainerWidth() {
-	width := LookForWidth(receiver)
-	receiver.Width = width
-	receiver.ContentWidth = width
+func (receiver *LayoutProperty) SetFLexContainerWidth(styleProperty *StyleEngine.StyleProperty) {
+	receiver.SetWidthBlock(receiver.Parent, styleProperty)
+	totalWidth := 0
+	for i, child := range receiver.Children {
+		width := LookForWidth(receiver)
+		if styleProperty.Children[i].Width != 0 {
+			switch styleProperty.Children[i].WidthValueType {
+			case enums.CSS_PROPERTY_VALUE_TYPE_PIXEL:
+				width = int(styleProperty.Children[i].Width)
+			case enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE:
+				width = int(float64(receiver.Width) * (float64(styleProperty.Children[i].Width) / 100.0))
+			}
+		}
+		//look width here
+		if styleProperty.Children[i].MaxWidth != 0 && width > int(styleProperty.Children[i].MaxWidth) {
+			width = int(styleProperty.Children[i].MaxWidth)
+		}
+		if width < int(styleProperty.Children[i].MinWidth) {
+			width = int(styleProperty.Children[i].MinWidth)
+		}
+		child.Width = width
+		totalWidth += width
+	}
+	if totalWidth > receiver.Width {
+		receiver.Width = totalWidth
+		receiver.ContentWidth = totalWidth
+	}
 }
 
 func (receiver *LayoutProperty) SetPositionFlex(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) (int, int) {
