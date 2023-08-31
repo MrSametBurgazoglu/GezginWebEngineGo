@@ -76,6 +76,7 @@ type StyleProperty struct {
 	Font               *structs.Font
 	Margin             *structs.Margin
 	Padding            *structs.Padding
+	TextAlign          enums.CssTextAlignType
 	Height             uint
 	Width              uint
 	MinHeight          uint
@@ -172,6 +173,7 @@ func (receiver *StyleProperty) ApplyDeclaration(property string, value string) {
 func (receiver *StyleProperty) SetInheritStyleProperties(source *StyleProperty) {
 	UpdateBackground(receiver, source)
 	UpdateColor(receiver, source)
+	UpdateText(receiver, source)
 }
 
 func (receiver *StyleProperty) AddVariable(key, value string) {

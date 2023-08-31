@@ -4,6 +4,7 @@ import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/LayoutEngine"
 	"gezgin_web_engine/ResourceManager"
+	"gezgin_web_engine/StyleEngine/enums"
 	"gezgin_web_engine/drawer/Fonts"
 	"gezgin_web_engine/drawer/structs"
 	"image"
@@ -17,7 +18,12 @@ type UntaggedText struct {
 }
 
 func (receiver *UntaggedText) Draw(mainImage *image.RGBA) {
-	draw.Draw(mainImage, image.Rect(receiver.LayoutProperty.XPosition, receiver.LayoutProperty.YPosition, receiver.LayoutProperty.XPosition+receiver.LayoutProperty.Width, receiver.LayoutProperty.YPosition+receiver.LayoutProperty.Height), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
+	if receiver.Parent.GetStyleProperty() != nil && receiver.Parent.GetStyleProperty().TextAlign == enums.CSS_TEXT_ALIGN_CENTER {
+		middlePoint := receiver.Parent.GetLayout().XPosition + receiver.Parent.GetLayout().Width/2
+		draw.Draw(mainImage, image.Rect(middlePoint-receiver.LayoutProperty.Width/2, receiver.LayoutProperty.YPosition, middlePoint-receiver.LayoutProperty.Width/2+receiver.LayoutProperty.Width, receiver.LayoutProperty.YPosition+receiver.LayoutProperty.Height), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
+	} else {
+		draw.Draw(mainImage, image.Rect(receiver.LayoutProperty.XPosition, receiver.LayoutProperty.YPosition, receiver.LayoutProperty.XPosition+receiver.LayoutProperty.Width, receiver.LayoutProperty.YPosition+receiver.LayoutProperty.Height), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
+	}
 }
 
 func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
@@ -30,7 +36,7 @@ func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *Res
 	}
 	if currentWidth := int(receiver.GetParent().GetDrawProperties().Font.Size * float64(len(receiver.Value)) * 0.5); currentWidth > receiver.GetParent().GetLayout().Width {
 		Lines, maxTextWidth := splitTextAndRenderByLines(receiver.Value, receiver.GetParent().GetLayout().Width, receiver.GetParent().GetDrawProperties().Font.Size)
-		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, maxTextWidth*2, 500)) // change this later
+		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, maxTextWidth*3, 500)) // change this later
 		height, width := Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, Lines, receiver.DrawProperties.Texture, receiver.GetParent().GetStyleProperty().Color)
 		receiver.LayoutProperty.Height, receiver.LayoutProperty.Width = int(height), int(width)
 	} else {

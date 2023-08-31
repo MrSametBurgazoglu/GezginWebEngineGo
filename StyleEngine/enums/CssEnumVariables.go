@@ -6,6 +6,7 @@ type CssAnimationFillModeType uint8
 type CssAnimationPlayStateType uint8
 type CssFilterType uint8
 type CssAlignType uint8
+type CssTextAlignType uint8
 type CssVisibilityType uint8
 type CssBackgroundType uint8
 type CssBackgroundPositionType uint8
@@ -71,6 +72,14 @@ const (
 	CSS_ALIGN_SPACE_EVENLY
 	CSS_ALIGN_BASELINE
 	CSS_ALIGN_AUTO
+)
+
+const (
+	CSS_TEXT_ALIGN_EMPTY CssTextAlignType = iota
+	CSS_TEXT_ALIGN_CENTER
+	CSS_TEXT_ALIGN_JUSTIFY
+	CSS_TEXT_ALIGN_LEFT
+	CSS_TEXT_ALIGN_RIGHT
 )
 
 const (
