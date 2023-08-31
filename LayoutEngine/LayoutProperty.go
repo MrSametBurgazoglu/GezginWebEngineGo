@@ -38,6 +38,8 @@ func (receiver *LayoutProperty) SetPosition(parent, beforeCurrentWidget *LayoutP
 		return receiver.BlockSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty)
 	case enums.CSS_DISPLAY_TYPE_INLINE:
 		return receiver.InlineSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty)
+	case enums.CSS_DISPLAY_TYPE_FLEX:
+		return receiver.BlockSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty)
 	}
 	return 0, 0
 }

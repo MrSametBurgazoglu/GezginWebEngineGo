@@ -37,7 +37,6 @@ func (receiver *LayoutProperty) SetPositionX(parent *LayoutProperty, styleProper
 	} else {
 		position = parent.ContentXPosition
 	}
-	position = 0
 	receiver.ContentXPosition = position
 	return receiver.ContentXPosition
 }

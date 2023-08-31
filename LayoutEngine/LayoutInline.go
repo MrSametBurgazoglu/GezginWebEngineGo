@@ -41,7 +41,6 @@ func (receiver *LayoutProperty) InlineSetPositionX(parent *LayoutProperty, style
 	} else {
 		position = parent.ContentXPosition
 	}
-	position = 0
 	receiver.ContentXPosition = position
 	return receiver.ContentXPosition
 }

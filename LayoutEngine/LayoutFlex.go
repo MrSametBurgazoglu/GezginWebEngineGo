@@ -92,29 +92,19 @@ func (receiver *LayoutProperty) SetPositionYFlex(parent, beforeCurrentWidget *La
 		case enums.CSS_POSITION_TYPE_STICKY:
 			return parent.XPosition
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			if beforeCurrentWidget != nil {
-				marginTop := 0
-				if styleProperty.Margin != nil {
-					marginTop = styleProperty.Margin.MarginTop
-				}
-				return beforeCurrentWidget.YPosition + beforeCurrentWidget.Height + marginTop
-			} else {
-				marginTop := 0
-				if styleProperty.Margin != nil {
-					marginTop = styleProperty.Margin.MarginTop
-				}
-				return parent.YPosition + marginTop
+			marginTop := 0
+			if styleProperty.Margin != nil {
+				marginTop = styleProperty.Margin.MarginTop
 			}
+			return parent.YPosition + marginTop
+
 		case enums.CSS_POSITION_TYPE_STATIC:
 			marginTop := 0
 			if styleProperty.Margin != nil {
 				marginTop = styleProperty.Margin.MarginTop
 			}
-			if beforeCurrentWidget != nil {
-				return beforeCurrentWidget.YPosition + beforeCurrentWidget.Height + marginTop
-			} else {
-				return parent.YPosition + parent.Height + marginTop
-			}
+			return parent.YPosition + parent.Height + marginTop
+
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
 			if styleProperty.Top != 0 {
 				return parent.YPosition + int(styleProperty.Top)
