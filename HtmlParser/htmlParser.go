@@ -10,6 +10,7 @@ type HtmlParser struct {
 }
 
 func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte, nodes chan *HtmlElement) {
+	/*TODO DO NOT PARSE INSIDE SCRIPT TAG*/
 	currentElement := document
 
 	var wg sync.WaitGroup
@@ -37,6 +38,7 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 				nodes <- currentElement
 			}
 			if data[seek+start+1] == '/' {
+				nodes <- currentElement
 				currentElement = currentElement.Parent
 			} else {
 				newElement := HtmlElement{
@@ -51,7 +53,7 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 				if ParseInsideOfTag(currentElement, data[seek+start+1:seek+start+end]) {
 					currentElement = currentElement.Parent
 				}
-				nodes <- &newElement
+				//nodes <- &newElement
 			}
 			seek += start + end + 1
 		}

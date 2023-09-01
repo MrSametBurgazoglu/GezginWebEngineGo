@@ -28,7 +28,7 @@ func ParseParameters(element *HtmlElement, parameters []string) {
 }
 
 func ParseInsideOfTag(element *HtmlElement, text string) bool {
-	parameters := strings.Split(text, " ")
+	parameters := strings.Fields(text)
 	htmlTag, endTag := FindHtmlTag(parameters[0])
 	element.HtmlTag = htmlTag
 	//group.Add(1)

@@ -78,19 +78,19 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 		selectors := styleText[seek : seek+index]
 		println(selectors)
 		cssText := styleText[seek+index+1 : seek+index2]
-		seek += index2 + 1
+		seek += index2
 		newCssRule.cssDeclarationBlock = new(CssDeclarationBlock)
 		newCssRule.SetStyleSheet(newCssStyleSheet)
 		newCssRule.SetCssSelectors(selectors)
 		newCssRule.SetCssDeclarationBlock(cssText)
 		result.CssStyleSheetRules = append(result.CssStyleSheetRules, newCssRule)
 		result.ruleCount += 1
-		println(string(styleText[seek]))
-		if frontRule && styleText[seek] == '}' {
+		if frontRule && styleText[seek+1] == '}' {
 			frontRule = false
 			seek += 1
 		}
-		index = strings.Index(styleText[seek:], "{")
+		index = strings.Index(styleText[seek+1:], "{")
+		seek += 1
 	}
 	return
 }

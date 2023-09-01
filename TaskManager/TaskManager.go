@@ -91,7 +91,9 @@ func (receiver *TaskManager) CreateFromWeb(webUrl string) {
 		count += 1
 		println(node.HtmlTag, "html tag")
 		if node.HtmlTag == HtmlParser.HTML_SCRIPT {
-			receiver.HandleScriptTag(node)
+			println(node.Children, "  children")
+			//for now we will not use js-script
+			//receiver.HandleScriptTag(node)
 		} else if node.HtmlTag == HtmlParser.HTML_STYLE {
 			styleSheet := receiver.styleEngine.CreateCssSheet(false)
 			receiver.styleEngine.WorkerPool.Submit(func() { receiver.HandleStyleTag(node, styleSheet) }) //maybe worker pool
@@ -142,7 +144,10 @@ func (receiver *TaskManager) HandleStyleTag(htmlElement *HtmlParser.HtmlElement,
 
 func (receiver *TaskManager) HandleScriptTag(scriptElement *HtmlParser.HtmlElement) {
 	//give style element to v8 engine
-	receiver.javascriptEngine.AppendScript(scriptElement.Children[0].GetText())
+	println(scriptElement.Children)
+	if len(scriptElement.Children) == 1 {
+		receiver.javascriptEngine.AppendScript(scriptElement.Children[0].GetText())
+	}
 }
 
 func (receiver *TaskManager) ExecuteScripts() {
@@ -168,12 +173,16 @@ func (receiver *TaskManager) CreateWidgetTree() {
 
 func (receiver *TaskManager) CreateWidgetForTree(parentWidget widgets.WidgetInterface, parentHtmlElement *HtmlParser.HtmlElement, group *sync.WaitGroup) {
 	for _, child := range parentHtmlElement.Children {
-		function := widgets.WidgetFunctions[child.HtmlTag] // function will always return even if not drawen html elements
-		newWidget := function(child, receiver)             // but function return value can be nil because not drawen html elements don't exist in widget tree
-		newWidget.SetParent(parentWidget)
-		parentWidget.AppendChild(newWidget)
-		group.Add(1)
-		go receiver.CreateWidgetForTree(newWidget, child, group)
+		function := widgets.WidgetFunctions[child.HtmlTag] // if element will not draw then function is nil
+		if function != nil {
+			newWidget := function(child, receiver) // but function return value can be nil because not drawen html elements don't exist in widget tree
+			newWidget.SetParent(parentWidget)
+			parentWidget.AppendChild(newWidget)
+			group.Add(1)
+			go receiver.CreateWidgetForTree(newWidget, child, group)
+		} else {
+			println("it is nil")
+		}
 	}
 	group.Done()
 }
