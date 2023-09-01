@@ -38,7 +38,7 @@ func (receiver *StyleEngine) Initialize() {
 }
 
 func (receiver *StyleEngine) InitializeRoot() {
-	receiver.Root.ApplyCssRules(receiver, ":root", nil, 0, map[string]string{})
+	receiver.Root.ApplyCssRules(receiver, ":root", nil, "root", map[string]string{})
 }
 
 func (receiver *StyleEngine) CreateCssSheet(external bool) (cssSheet *StyleSheet) {
@@ -79,10 +79,10 @@ func (receiver *StyleEngine) GetCssRulesByClass(class string, external bool) (ru
 	return
 }
 
-func (receiver *StyleEngine) GetCssRulesByTag(htmlTag int, external bool) (ruleList []*CssRuleListItem) {
+func (receiver *StyleEngine) GetCssRulesByTag(htmlTag string, external bool) (ruleList []*CssRuleListItem) {
 	for _, sheet := range receiver.CssStyleSheetList {
 		if sheet.external == external {
-			rules := sheet.cssRuleList.GetCssRulesByElement(htmlTagList[htmlTag])
+			rules := sheet.cssRuleList.GetCssRulesByElement(htmlTag)
 			if rules != nil {
 				ruleList = append(ruleList, rules)
 			}

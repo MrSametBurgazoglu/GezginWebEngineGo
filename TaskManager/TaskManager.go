@@ -199,6 +199,9 @@ func (receiver *TaskManager) FindBody() *HtmlParser.HtmlElement {
 				return w
 			} else if w.ChildrenCount > 0 {
 				for _, child := range w.Children {
+					if child.HtmlTag == HtmlParser.HTML_IFRAME {
+						continue
+					}
 					elementList = append(elementList, child)
 					keepGo = true
 				}
@@ -222,7 +225,7 @@ func (receiver *TaskManager) SetStylePropertiesOfDocument() {
 }
 
 func (receiver *TaskManager) SetStylePropertiesOfWidget(widget widgets.WidgetInterface, group *sync.WaitGroup) { //TODO html tag must be string and can be custom
-	widget.GetStyleProperty().ApplyCssRules(receiver.styleEngine, widget.GetID(), widget.GetClasses(), widget.GetHtmlTag(), widget.GetStyleRules())
+	widget.GetStyleProperty().ApplyCssRules(receiver.styleEngine, widget.GetID(), widget.GetClasses(), widget.GetHtmlName(), widget.GetStyleRules())
 	for _, child := range widget.GetChildren() {
 		if child.GetHtmlTag() != 106 { //untagged text shouldn't have style property
 			group.Add(1)

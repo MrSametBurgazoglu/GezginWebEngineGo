@@ -13,6 +13,7 @@ type WidgetInterface interface {
 	GetID() string
 	GetClasses() []string
 	GetHtmlTag() int
+	GetHtmlName() string
 	GetStyleRules() map[string]string
 	SetChildrenCount(int)
 	GetChildrenCount() int

@@ -117,4 +117,5 @@ var WidgetFunctions = []func(element *HtmlParser.HtmlElement, taskManager TaskMa
 	nil,
 	nil,
 	SetWidgetPropertiesForUntaggedText,
+	SetCustomWidgetProperties,
 }

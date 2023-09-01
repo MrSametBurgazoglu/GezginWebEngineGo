@@ -107,12 +107,12 @@ func (receiver *StyleProperty) Initialize() {
 
 /*TODO MAKE STYLE ENGINE ROOT TO HTML ELEMENT STYLE PROPERTY AND GIVE IT HERE FOR GLOBAL CSS VARIABLES*/
 /*TODO MAKE STYLE PROPERTIES MAP FOR CSS VARIABLES AND GIVE HERE PARENT STYLE PROPERTY FOR APPLYING*/
-func (receiver *StyleProperty) ApplyCssRules(styleEngine *StyleEngine, id string, classes []string, htmlTag int, styleMap map[string]string) {
-	externalTagRules := styleEngine.GetCssRulesByTag(htmlTag, true)
+func (receiver *StyleProperty) ApplyCssRules(styleEngine *StyleEngine, id string, classes []string, htmlName string, styleMap map[string]string) {
+	externalTagRules := styleEngine.GetCssRulesByTag(htmlName, true)
 	for _, rule := range externalTagRules {
 		receiver.ApplyRules(rule)
 	}
-	internalTagRules := styleEngine.GetCssRulesByTag(htmlTag, false)
+	internalTagRules := styleEngine.GetCssRulesByTag(htmlName, false)
 	for _, rule := range internalTagRules {
 		receiver.ApplyRules(rule)
 	}

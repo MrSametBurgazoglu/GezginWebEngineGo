@@ -89,6 +89,8 @@ func (receiver *Widget) SetParent(widget WidgetInterface) {
 
 func (receiver *Widget) AppendChild(child WidgetInterface) {
 	receiver.Children = append(receiver.Children, child)
+	child.SetChildrenIndex(receiver.ChildrenCount)
+	receiver.ChildrenCount += 1
 }
 
 func (receiver *Widget) GetRect() *image.Rectangle {
@@ -113,8 +115,8 @@ func (receiver *Widget) SetRender(render bool) {
 
 func (receiver *Widget) CopyFromHtmlElement(htmlElement *HtmlParser.HtmlElement) {
 	receiver.HtmlElement = htmlElement
-	receiver.ChildrenCount = htmlElement.ChildrenCount
-	receiver.ChildrenIndex = htmlElement.ChildrenIndex
+	//receiver.ChildrenCount = htmlElement.ChildrenCount
+	//receiver.ChildrenIndex = htmlElement.ChildrenIndex
 	receiver.ID = htmlElement.Attributes["id"]
 	classes, found := htmlElement.Attributes["class"]
 	if found {
@@ -140,6 +142,10 @@ func (receiver *Widget) GetClasses() []string {
 
 func (receiver *Widget) GetHtmlTag() int {
 	return int(receiver.HtmlElement.HtmlTag)
+}
+
+func (receiver *Widget) GetHtmlName() string {
+	return receiver.HtmlElement.Name
 }
 
 func (receiver *Widget) GetStyleRules() map[string]string {

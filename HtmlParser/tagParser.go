@@ -27,11 +27,11 @@ func ParseParameters(element *HtmlElement, parameters []string) {
 	}
 }
 
-func ParseInsideOfTag(element *HtmlElement, text string) bool {
+func ParseInsideOfTag(element *HtmlElement, text string) (bool, bool, string) {
 	parameters := strings.Fields(text)
-	htmlTag, endTag := FindHtmlTag(parameters[0])
+	htmlTag, endTag, notParseInside := FindHtmlTag(parameters[0])
 	element.HtmlTag = htmlTag
 	//group.Add(1)
 	ParseParameters(element, parameters)
-	return endTag
+	return endTag, notParseInside, parameters[0]
 }
