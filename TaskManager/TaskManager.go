@@ -96,7 +96,9 @@ func (receiver *TaskManager) CreateFromWeb(webUrl string) {
 			//receiver.HandleScriptTag(node)
 		} else if node.HtmlTag == HtmlParser.HTML_STYLE {
 			styleSheet := receiver.styleEngine.CreateCssSheet(false)
-			receiver.styleEngine.WorkerPool.Submit(func() { receiver.HandleStyleTag(node, styleSheet) }) //maybe worker pool
+			println(node.HtmlTag, "heyyo")
+			element := node
+			receiver.styleEngine.WorkerPool.Submit(func() { receiver.HandleStyleTag(element, styleSheet) }) //maybe worker pool
 		} else if node.HtmlTag == HtmlParser.HTML_IMG {
 			println("img tag", node.Attributes["src"])
 			if src := node.Attributes["src"]; src != "" {

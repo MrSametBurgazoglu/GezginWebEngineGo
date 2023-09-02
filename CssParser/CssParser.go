@@ -59,7 +59,6 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 
 			} else {
 				endOfAllRule := strings.Index(styleText[seek+index:], "}}")
-				println("end of rule", endOfAllRule, styleText[seek+index+endOfAllRule:seek+index+endOfAllRule+3])
 				seek = seek + index + endOfAllRule + 2
 				frontRule = false
 				index = strings.Index(styleText[seek:], "{")
@@ -67,7 +66,9 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 			}
 
 		} else if strings.HasPrefix(styleText[seek:], "/*") {
-			commentEnd := strings.LastIndex(styleText[seek:], "*/")
+			println(styleText[seek : seek+100])
+			commentEnd := strings.LastIndex(styleText[seek:seek+index], "*/")
+			println(styleText[seek+17:seek+19], " /*")
 			seek += commentEnd + 2
 		}
 		newCssRule := new(CssRule)
@@ -99,6 +100,9 @@ func ParseCssFromInlineStyle(cssText string) (m map[string]string) {
 	m = make(map[string]string)
 	declarations := strings.Split(cssText, ";")
 	for _, declaration := range declarations {
+		if declaration == "" { //TODO FIX HERE
+			break
+		}
 		list := strings.Split(declaration, ":")
 		m[list[0]] = list[1]
 	}

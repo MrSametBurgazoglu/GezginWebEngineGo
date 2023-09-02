@@ -67,11 +67,6 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 				currentElement = &newElement
 				endTag, notParseInside, tagName = ParseInsideOfTag(currentElement, data[seek+start+1:seek+start+end])
 				newElement.Name = tagName
-				println(data[seek : seek+50])
-				println("htmlTag:", tagName)
-				if strings.Contains(tagName, "ytd") {
-					println("this is strange")
-				}
 				if endTag {
 					currentElement = currentElement.Parent
 				}

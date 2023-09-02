@@ -80,7 +80,7 @@ func activate(app *gtk.Application) {
 	web_engine.InitDrawer(1300, 700)
 	newTab := web_engine.NewTab()
 	//newTab.OpenWebPageFromFile("exampleHtmlFiles/newExa.html")
-	newTab.OpenWebPageFromWeb("https://www.youtube.com")
+	newTab.OpenWebPageFromWeb("https://www.w3schools.com")
 	currentTab = newTab
 	fmt.Println("Total time taken ", time.Since(startTime).Milliseconds())
 
