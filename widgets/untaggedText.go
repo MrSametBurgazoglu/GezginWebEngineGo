@@ -48,10 +48,8 @@ func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *Res
 	//receiver.DrawProperties.W = int32(receiver.GetParent().GetDrawProperties().Font.Size * float64(len(receiver.Value)) * 0.5) // change this later and calculate text width
 
 	if receiver.LayoutProperty.Width > receiver.GetParent().GetLayout().Width {
-		println("bigger than parent")
-		println(receiver.GetLayout().Width)
 		Lines, _ := splitTextAndRenderByLines(receiver.Value, int(receiver.GetParent().GetLayout().Width), receiver.GetParent().GetDrawProperties().Font.Size)
-		println(Lines)
+		println(Lines, " Lines")
 	}
 }
 
@@ -105,9 +103,6 @@ func splitTextAndRenderByLines(text string, maxWidth int, size float64) ([]strin
 		Lines = append(Lines, text[start:end])
 		start = end + 1
 		end = length
-	}
-	for i, line := range Lines {
-		println("deneme", i, line)
 	}
 	return Lines, calculatedMaxWidth
 }

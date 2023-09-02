@@ -152,7 +152,6 @@ func (receiver *StyleProperty) ApplyInlineRules(m map[string]string) {
 }
 
 func (receiver *StyleProperty) ApplyDeclaration(property string, value string) {
-	println(property)
 	if strings.HasPrefix(property, "--") {
 		receiver.AddVariable(property, value)
 	} else if strings.HasPrefix(value, "var(") {

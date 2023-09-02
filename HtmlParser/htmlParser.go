@@ -44,16 +44,27 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 				notParseInside = false
 			}
 			start := strings.Index(data[seek:], "<")
-			if start != 0 {
-				println("heyy")
-			}
 			end := strings.Index(data[seek+start:], ">")
 			if start > 0 {
 				receiver.CreateUntaggedHtmlText(data[seek:seek+start], currentElement)
 				nodes <- currentElement
 			}
+			if data[seek:seek+4] == "<!--" {
+				endCommentTag := strings.Index(data[seek:], "-->")
+				seek += endCommentTag + 4
+				println("there is comment")
+				continue
+			}
 			if data[seek+start+1] == '/' {
 				nodes <- currentElement
+				if currentElement.Name != data[seek+start+2:seek+start+end] {
+					println("something wrong")
+					for currentElement.Name != data[seek+start+2:seek+start+end] {
+						println(currentElement.Name, " -> ", currentElement.Parent.Name)
+						currentElement = currentElement.Parent
+					}
+				}
+				println(currentElement.Name, " -> ", currentElement.Parent.Name)
 				currentElement = currentElement.Parent
 			} else {
 				newElement := HtmlElement{
@@ -65,11 +76,23 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 				currentElement.Children = append(currentElement.Children, &newElement)
 				newElement.Attributes = make(map[string]string)
 				currentElement = &newElement
-				endTag, notParseInside, tagName = ParseInsideOfTag(currentElement, data[seek+start+1:seek+start+end])
-				newElement.Name = tagName
-				if endTag {
+				if data[seek+start+end-1] == '/' {
+					end -= 2
+					endTag, notParseInside, tagName = ParseInsideOfTag(currentElement, data[seek+start+1:seek+start+end])
+					nodes <- currentElement
 					currentElement = currentElement.Parent
+					println(currentElement.Name, " -> ", currentElement.Parent.Name)
+				} else {
+					endTag, notParseInside, tagName = ParseInsideOfTag(currentElement, data[seek+start+1:seek+start+end])
+					newElement.Name = tagName
+					if endTag {
+						if currentElement.Parent != nil {
+							println(currentElement.Name, " -> ", currentElement.Parent.Name)
+						}
+						currentElement = currentElement.Parent
+					}
 				}
+
 				//nodes <- &newElement
 			}
 			seek += start + end + 1

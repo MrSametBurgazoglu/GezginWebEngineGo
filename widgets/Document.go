@@ -76,11 +76,12 @@ func (receiver *DocumentWidget) RenderDocument(mainImage *image.RGBA) {
 	keepGo = true
 	for keepGo {
 		keepGo = false
-		for _, w := range widgetList {
+		for index, w := range widgetList {
 			if allChildrenRendered(w) {
 				w.Render(mainImage, receiver.ResourceManager)
 				w.SetRender(true)
 			}
+			println(index)
 		}
 		for _, w := range widgetList {
 			if w.GetParent() != nil {
@@ -93,7 +94,6 @@ func (receiver *DocumentWidget) RenderDocument(mainImage *image.RGBA) {
 			length = len(widgetList)
 		}
 	}
-	println("rendering finished")
 }
 
 // This function and sub functions will be rewritten
@@ -103,11 +103,8 @@ func (receiver *DocumentWidget) RenderPage(mainImage *image.RGBA) {
 	//TODO FLEX ITEM MUST NEED TO CALCULATED WIDTH OF UNTAGGED TEXT BUT
 	receiver.RenderDocument(mainImage)
 	receiver.SetWidthForBlockElements()
-	println("width for block elements finished")
 	receiver.RenderDocument(mainImage)
-	println("widget rendered")
 	SetWidthForInlineElements(receiver)
-	println("width for inline elements finished")
 	receiver.SetHeightForElements()
 	//SetHeightForInlineElements(receiver)
 	//SetHeightForBlockElements(receiver)
@@ -176,7 +173,6 @@ func (receiver *DocumentWidget) SetWidthForBlockElements() {
 	var wg sync.WaitGroup
 	for _, child := range receiver.Children {
 		wg.Add(1)
-		println("added")
 		receiver.SetWidthOfWidget(child, &wg)
 	}
 	wg.Wait()
@@ -184,11 +180,9 @@ func (receiver *DocumentWidget) SetWidthForBlockElements() {
 
 func (receiver *DocumentWidget) SetWidthOfWidget(widget WidgetInterface, group *sync.WaitGroup) { //TODO html tag must be string and can be custom
 	SetWidthForWidget(widget)
-	println("widget width setted", widget.GetHtmlTag())
 	for _, child := range widget.GetChildren() {
 		if child.IsPreSetWidth() {
 			group.Add(1)
-			println("added")
 			go receiver.SetWidthOfWidget(child, group)
 		} else if child.IsSetWidthSelf() { //we need to look at here
 			group.Add(1)

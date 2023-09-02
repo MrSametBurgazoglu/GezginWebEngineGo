@@ -81,7 +81,6 @@ func (receiver *HtmlTagImg) Draw(mainImage *image.RGBA) {
 func (receiver *HtmlTagImg) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 	for !resourceManager.CheckResource(receiver.Src) {
 		time.Sleep(time.Millisecond)
-		println("waiting for resource")
 	}
 	//resource, err := resourceManager.GetResource(receiver.Src)
 	//img, format, err2 := image.Decode(bytes.NewReader(resource.GetData())) //TODO PERFORMANCE UPDATE

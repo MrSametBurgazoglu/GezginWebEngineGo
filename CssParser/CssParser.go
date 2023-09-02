@@ -46,15 +46,10 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 		if styleText[seek] == '@' {
 			frontRule = true
 			firstSeek := seek
-			println("frontRule started", seek)
 			index = strings.Index(styleText[seek:], "{")
-			println("frontRule ended", seek+index)
-			println("frontRule", styleText[firstSeek:seek+index])
 			if strings.HasPrefix(styleText[firstSeek:], "@media") && IsMediaRuleCorrect(styleText[firstSeek:seek+index]) {
 				seek += index + 1
-				println(styleText[seek : seek+10])
 				index = strings.Index(styleText[seek:], "{")
-				println(styleText[seek : seek+index+10])
 				continue
 
 			} else {
@@ -66,9 +61,7 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 			}
 
 		} else if strings.HasPrefix(styleText[seek:], "/*") {
-			println(styleText[seek : seek+100])
 			commentEnd := strings.LastIndex(styleText[seek:seek+index], "*/")
-			println(styleText[seek+17:seek+19], " /*")
 			seek += commentEnd + 2
 		}
 		newCssRule := new(CssRule)
@@ -77,7 +70,6 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 			return
 		}
 		selectors := styleText[seek : seek+index]
-		println(selectors)
 		cssText := styleText[seek+index+1 : seek+index2]
 		seek += index2
 		newCssRule.cssDeclarationBlock = new(CssDeclarationBlock)

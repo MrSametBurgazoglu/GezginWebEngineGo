@@ -12,7 +12,6 @@ func LookForWidth(layoutProperty *LayoutProperty) int {
 		maxWidth := 0
 		for _, child := range layoutProperty.Children {
 			currentWidth := LookForWidth(child)
-			println(currentWidth, " asdadadasdsadsa")
 			if currentWidth > maxWidth {
 				maxWidth = currentWidth
 			}

@@ -89,18 +89,14 @@ func (receiver *TaskManager) CreateFromWeb(webUrl string) {
 	count := 0
 	for node := range nodes {
 		count += 1
-		println(node.HtmlTag, "html tag")
 		if node.HtmlTag == HtmlParser.HTML_SCRIPT {
-			println(node.Children, "  children")
 			//for now we will not use js-script
 			//receiver.HandleScriptTag(node)
 		} else if node.HtmlTag == HtmlParser.HTML_STYLE {
 			styleSheet := receiver.styleEngine.CreateCssSheet(false)
-			println(node.HtmlTag, "heyyo")
 			element := node
 			receiver.styleEngine.WorkerPool.Submit(func() { receiver.HandleStyleTag(element, styleSheet) }) //maybe worker pool
 		} else if node.HtmlTag == HtmlParser.HTML_IMG {
-			println("img tag", node.Attributes["src"])
 			if src := node.Attributes["src"]; src != "" {
 				receiver.HandleWebImgResource(src)
 			}
@@ -146,7 +142,6 @@ func (receiver *TaskManager) HandleStyleTag(htmlElement *HtmlParser.HtmlElement,
 
 func (receiver *TaskManager) HandleScriptTag(scriptElement *HtmlParser.HtmlElement) {
 	//give style element to v8 engine
-	println(scriptElement.Children)
 	if len(scriptElement.Children) == 1 {
 		receiver.javascriptEngine.AppendScript(scriptElement.Children[0].GetText())
 	}
@@ -175,7 +170,7 @@ func (receiver *TaskManager) CreateWidgetTree() {
 
 func (receiver *TaskManager) CreateWidgetForTree(parentWidget widgets.WidgetInterface, parentHtmlElement *HtmlParser.HtmlElement, group *sync.WaitGroup) {
 	for _, child := range parentHtmlElement.Children {
-		function := widgets.WidgetFunctions[child.HtmlTag] // if element will not draw then function is nil
+		function := widgets.WidgetFunctions[child.HtmlTag-1] // if element will not draw then function is nil
 		if function != nil {
 			newWidget := function(child, receiver) // but function return value can be nil because not drawen html elements don't exist in widget tree
 			newWidget.SetParent(parentWidget)
