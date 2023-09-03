@@ -12,7 +12,11 @@ func MergeAttributes(values []string) (result []string) {
 		if !equalFound {
 			result = append(result, value)
 		} else {
-			lastStr += value
+			if strings.Contains(value, "=") {
+				lastStr += value
+			} else {
+				lastStr += " " + value
+			}
 			if value[len(value)-1] == '"' && !strings.HasSuffix(value, "=\"") {
 				result = append(result, lastStr)
 				lastStr = ""

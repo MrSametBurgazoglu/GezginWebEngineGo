@@ -64,7 +64,12 @@ func (receiver *NetworkManager) Get(url string) []byte {
 	} else if strings.HasPrefix(url, "http") {
 		targetUrl = url
 	} else {
-		index := strings.LastIndexAny(receiver.BaseUrl, "/")
+		index := -1
+		if strings.HasPrefix(receiver.BaseUrl, "https://") {
+			index = strings.LastIndex(receiver.BaseUrl[8:], "/")
+		} else {
+			index = strings.LastIndexAny(receiver.BaseUrl, "/")
+		}
 		if index == -1 {
 			targetUrl = receiver.CurrentUrl + "/" + url
 		} else {

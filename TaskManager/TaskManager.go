@@ -89,17 +89,15 @@ func (receiver *TaskManager) CreateFromWeb(webUrl string) {
 	count := 0
 	for node := range nodes {
 		count += 1
+		element := node
+		println(element.Name, " node")
+
 		if node.HtmlTag == HtmlParser.HTML_SCRIPT {
 			//for now we will not use js-script
 			//receiver.HandleScriptTag(node)
 		} else if node.HtmlTag == HtmlParser.HTML_STYLE {
 			styleSheet := receiver.styleEngine.CreateCssSheet(false)
-			element := node
 			receiver.styleEngine.WorkerPool.Submit(func() { receiver.HandleStyleTag(element, styleSheet) }) //maybe worker pool
-		} else if node.HtmlTag == HtmlParser.HTML_IMG {
-			if src := node.Attributes["src"]; src != "" {
-				receiver.HandleWebImgResource(src)
-			}
 		} else if node.HtmlTag == HtmlParser.HTML_IMG {
 			if src := node.Attributes["src"]; src != "" {
 				receiver.HandleWebImgResource(src)

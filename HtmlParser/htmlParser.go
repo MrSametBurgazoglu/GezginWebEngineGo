@@ -62,6 +62,7 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 					for currentElement.Name != data[seek+start+2:seek+start+end] {
 						println(currentElement.Name, " -> ", currentElement.Parent.Name)
 						currentElement = currentElement.Parent
+						nodes <- currentElement
 					}
 				}
 				println(currentElement.Name, " -> ", currentElement.Parent.Name)
@@ -89,6 +90,7 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 						if currentElement.Parent != nil {
 							println(currentElement.Name, " -> ", currentElement.Parent.Name)
 						}
+						nodes <- currentElement
 						currentElement = currentElement.Parent
 					}
 				}
