@@ -45,12 +45,24 @@ func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *Res
 		height, width := Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, []string{receiver.Value}, receiver.DrawProperties.Texture, receiver.GetParent().GetStyleProperty().Color)
 		receiver.LayoutProperty.Height, receiver.LayoutProperty.Width = int(height), int(width)
 	}
-	//receiver.DrawProperties.W = int32(receiver.GetParent().GetDrawProperties().Font.Size * float64(len(receiver.Value)) * 0.5) // change this later and calculate text width
+}
 
-	if receiver.LayoutProperty.Width > receiver.GetParent().GetLayout().Width {
-		Lines, _ := splitTextAndRenderByLines(receiver.Value, int(receiver.GetParent().GetLayout().Width), receiver.GetParent().GetDrawProperties().Font.Size)
-		println(Lines, " Lines")
+func (receiver *UntaggedText) SetValue(text string) {
+	escapeCharacters := map[string]string{
+		"&lt;":   "<",
+		"&gt;":   ">",
+		"&quot;": "\"",
+		"&#39;":  "'",
+		"&amp;":  "&",
 	}
+	for key, value := range escapeCharacters {
+		text = strings.ReplaceAll(text, key, value)
+	}
+	if strings.Contains(text, "html") {
+		println("hey")
+	}
+	text = strings.Trim(text, "\n")
+	receiver.Value = text
 }
 
 func SetWidgetPropertiesForUntaggedText(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
@@ -59,7 +71,8 @@ func SetWidgetPropertiesForUntaggedText(element *HtmlParser.HtmlElement, taskMan
 	widget.DrawProperties = new(structs.DrawProperties)
 	widget.LayoutProperty = new(LayoutEngine.LayoutProperty)
 	widget.DrawProperties.Initialize()
-	widget.Value = element.Text
+
+	widget.SetValue(element.Text)
 	return widget
 }
 

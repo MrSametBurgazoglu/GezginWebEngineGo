@@ -166,7 +166,7 @@ func (receiver *StyleProperty) ApplyDeclaration(property string, value string) {
 		if function != nil {
 			function(receiver, value)
 		} else {
-			println(property, " NOT DEFINED")
+			println("CSS PROPERTY ", property, " NOT DEFINED")
 		}
 	}
 }

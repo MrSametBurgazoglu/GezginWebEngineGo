@@ -26,10 +26,10 @@ func allChildrenRendered(widget WidgetInterface) bool {
 
 func (receiver *DocumentWidget) DrawPage(mainImage *image.RGBA) {
 	receiver.Draw(mainImage)
-	widgetList := []WidgetInterface{receiver}
+	widgetList := []WidgetInterface{receiver.Children[2]}
 	widgetIndexList := []int{0}
 	currentIndex := 0
-	for widgetIndexList[0] != receiver.ChildrenCount {
+	for widgetIndexList[0] != widgetList[0].GetChildrenCount() {
 		if widgetIndexList[currentIndex] == widgetList[currentIndex].GetChildrenCount() {
 			currentIndex--
 			widgetIndexList = widgetIndexList[:len(widgetIndexList)-1]
@@ -163,6 +163,14 @@ func SetXYForWidget(widget WidgetInterface) {
 	}
 
 	x, y := layout.SetPosition(parentLayout, beforeCurrentWidget, styleProperty)
+
+	if untaggedText, ok := widget.(*UntaggedText); ok {
+		println("x:", x, "y:", y, "value:", untaggedText.Value)
+	}
+
+	if HtmlParser.HtmlTags(widget.GetHtmlTag()) == HtmlParser.HTML_PRE {
+		println("heyyo")
+	}
 
 	widget.GetLayout().XPosition = x
 	widget.GetLayout().YPosition = y

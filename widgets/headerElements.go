@@ -10,23 +10,23 @@ import (
 	"image"
 )
 
-type HtmlTagHeader struct {
+type HtmlTagHeaderText struct {
 	Widget
 }
 
-func (receiver *HtmlTagHeader) Draw(mainImage *image.RGBA) {
+func (receiver *HtmlTagHeaderText) Draw(mainImage *image.RGBA) {
 	if receiver.GetStyleProperty().Background != nil {
 		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
 		drawerBackend.DrawBackground(red, green, blue, alpha, receiver.DrawProperties.Texture, receiver.DrawProperties)
 	}
 }
 
-func (receiver *HtmlTagHeader) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
+func (receiver *HtmlTagHeaderText) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 
 }
 
 func SetWidgetPropertiesForH1Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
-	widget := new(HtmlTagHeader)
+	widget := new(HtmlTagHeaderText)
 	widget.HtmlElement = element
 	widget.Initialize()
 	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
@@ -36,7 +36,7 @@ func SetWidgetPropertiesForH1Tag(element *HtmlParser.HtmlElement, taskManager Ta
 }
 
 func SetWidgetPropertiesForH2Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
-	widget := new(HtmlTagHeader)
+	widget := new(HtmlTagHeaderText)
 	widget.HtmlElement = element
 	widget.Initialize()
 	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
@@ -47,7 +47,7 @@ func SetWidgetPropertiesForH2Tag(element *HtmlParser.HtmlElement, taskManager Ta
 }
 
 func SetWidgetPropertiesForH3Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
-	widget := new(HtmlTagHeader)
+	widget := new(HtmlTagHeaderText)
 	widget.HtmlElement = element
 	widget.Initialize()
 	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
@@ -59,7 +59,7 @@ func SetWidgetPropertiesForH3Tag(element *HtmlParser.HtmlElement, taskManager Ta
 }
 
 func SetWidgetPropertiesForH4Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
-	widget := new(HtmlTagHeader)
+	widget := new(HtmlTagHeaderText)
 	widget.HtmlElement = element
 	widget.Initialize()
 	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
@@ -69,7 +69,7 @@ func SetWidgetPropertiesForH4Tag(element *HtmlParser.HtmlElement, taskManager Ta
 }
 
 func SetWidgetPropertiesForH5Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
-	widget := new(HtmlTagHeader)
+	widget := new(HtmlTagHeaderText)
 	widget.HtmlElement = element
 	widget.Initialize()
 	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
@@ -79,7 +79,7 @@ func SetWidgetPropertiesForH5Tag(element *HtmlParser.HtmlElement, taskManager Ta
 }
 
 func SetWidgetPropertiesForH6Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
-	widget := new(HtmlTagHeader)
+	widget := new(HtmlTagHeaderText)
 	widget.HtmlElement = element
 	widget.Initialize()
 	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK

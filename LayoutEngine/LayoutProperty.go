@@ -29,7 +29,7 @@ type LayoutProperty struct {
 
 func (receiver *LayoutProperty) SetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) (int, int) {
 	if styleProperty == nil {
-		return receiver.BlockSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty)
+		return receiver.InlineSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty)
 	} else if styleProperty.Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX {
 		return receiver.SetPositionFlex(parent, beforeCurrentWidget, styleProperty)
 	}

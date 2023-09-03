@@ -52,7 +52,6 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 			if data[seek:seek+4] == "<!--" {
 				endCommentTag := strings.Index(data[seek:], "-->")
 				seek += endCommentTag + 4
-				println("there is comment")
 				continue
 			}
 			if data[seek+start+1] == '/' {

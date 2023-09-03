@@ -90,7 +90,6 @@ func (receiver *TaskManager) CreateFromWeb(webUrl string) {
 	for node := range nodes {
 		count += 1
 		element := node
-		println(element.Name, " node")
 
 		if node.HtmlTag == HtmlParser.HTML_SCRIPT {
 			//for now we will not use js-script
@@ -182,6 +181,8 @@ func (receiver *TaskManager) CreateWidgetForTree(parentWidget widgets.WidgetInte
 			parentWidget.AppendChild(newWidget)
 			group.Add(1)
 			go receiver.CreateWidgetForTree(newWidget, child, group)
+		} else {
+			println("HTML ELEMENT ", child.Name, " NOT DEFINED")
 		}
 	}
 	group.Done()

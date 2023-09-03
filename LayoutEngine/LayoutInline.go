@@ -6,19 +6,27 @@ import (
 )
 
 func (receiver *LayoutProperty) InlineSetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) (int, int) {
-	return receiver.InlineSetPositionX(parent, styleProperty), receiver.InlineSetPositionY(parent, beforeCurrentWidget, styleProperty)
+	return receiver.InlineSetPositionX(parent, beforeCurrentWidget, styleProperty), receiver.InlineSetPositionY(parent, beforeCurrentWidget, styleProperty)
 }
 
-func (receiver *LayoutProperty) InlineSetPositionX(parent *LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
+func (receiver *LayoutProperty) InlineSetPositionX(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
 	position := 0
 	if styleProperty != nil {
 		switch styleProperty.Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
 			position = parent.ContentXPosition
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			position = parent.ContentXPosition
+			if beforeCurrentWidget != nil {
+				position = beforeCurrentWidget.XPosition + beforeCurrentWidget.Width
+			} else {
+				position = parent.ContentXPosition
+			}
 		case enums.CSS_POSITION_TYPE_STATIC:
-			position = parent.ContentXPosition
+			if beforeCurrentWidget != nil {
+				position = beforeCurrentWidget.XPosition + beforeCurrentWidget.Width
+			} else {
+				position = parent.ContentXPosition
+			}
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
 			if styleProperty.Left != 0 {
 				position = parent.ContentXPosition + int(styleProperty.Left)
@@ -39,7 +47,11 @@ func (receiver *LayoutProperty) InlineSetPositionX(parent *LayoutProperty, style
 			}
 		}
 	} else {
-		position = parent.ContentXPosition
+		if beforeCurrentWidget != nil {
+			position = beforeCurrentWidget.XPosition + beforeCurrentWidget.Width
+		} else {
+			position = parent.ContentXPosition
+		}
 	}
 	receiver.ContentXPosition = position
 	return receiver.ContentXPosition
@@ -107,8 +119,11 @@ func (receiver *LayoutProperty) SetWidthInline(children []*LayoutProperty, style
 		for _, child := range children {
 			width += child.Width
 		}
-		contentWidth := width - (styleProperty.Margin.MarginLeft + styleProperty.Margin.MarginRight)
 		receiver.Width = width
-		receiver.ContentWidth = contentWidth
+		receiver.ContentWidth = width
+		if styleProperty != nil && styleProperty.Margin != nil {
+			contentWidth := width - (styleProperty.Margin.MarginLeft + styleProperty.Margin.MarginRight)
+			receiver.ContentWidth = contentWidth
+		}
 	}
 }

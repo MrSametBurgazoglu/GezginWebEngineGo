@@ -3,6 +3,7 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
+	"gezgin_web_engine/StyleEngine/enums"
 	"image"
 )
 
@@ -67,5 +68,6 @@ func SetWidgetPropertiesForButtonTag(element *HtmlParser.HtmlElement, taskManage
 	widget := new(HtmlTagButton)
 	widget.HtmlElement = element
 	widget.Initialize()
+	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_INLINE
 	return widget
 }

@@ -126,7 +126,7 @@ func (receiver *LayoutProperty) SetPositionYFlex(parent, beforeCurrentWidget *La
 			if styleProperty.Margin != nil {
 				marginTop = styleProperty.Margin.MarginTop
 			}
-			return parent.YPosition + parent.Height + marginTop
+			return parent.YPosition + marginTop
 
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
 			if styleProperty.Top != 0 {
@@ -149,7 +149,7 @@ func (receiver *LayoutProperty) SetPositionYFlex(parent, beforeCurrentWidget *La
 		if beforeCurrentWidget == nil {
 			return parent.YPosition
 		} else {
-			return beforeCurrentWidget.Height
+			return beforeCurrentWidget.YPosition
 		}
 	}
 	return 0
