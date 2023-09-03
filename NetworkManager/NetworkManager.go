@@ -27,7 +27,7 @@ func (receiver *NetworkManager) GetPage(url string) []byte {
 		if index == -1 {
 			receiver.BaseUrl = url
 		} else {
-			receiver.BaseUrl = url[:index+firstIndex]
+			receiver.BaseUrl = url[:index+firstIndex+2]
 		}
 		receiver.CurrentUrl = url
 	} else if strings.HasPrefix(url, "www") {

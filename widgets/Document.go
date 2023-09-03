@@ -76,12 +76,11 @@ func (receiver *DocumentWidget) RenderDocument(mainImage *image.RGBA) {
 	keepGo = true
 	for keepGo {
 		keepGo = false
-		for index, w := range widgetList {
+		for _, w := range widgetList {
 			if allChildrenRendered(w) {
 				w.Render(mainImage, receiver.ResourceManager)
 				w.SetRender(true)
 			}
-			println(index)
 		}
 		for _, w := range widgetList {
 			if w.GetParent() != nil {

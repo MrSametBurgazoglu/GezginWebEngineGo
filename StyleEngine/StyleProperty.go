@@ -117,13 +117,15 @@ func (receiver *StyleProperty) ApplyCssRules(styleEngine *StyleEngine, id string
 		receiver.ApplyRules(rule)
 	}
 	if classes != nil {
-		externalClassRules := styleEngine.GetCssRulesByClass(classes[0], true)
-		for _, rule := range externalClassRules {
-			receiver.ApplyRules(rule)
-		}
-		internalClassRules := styleEngine.GetCssRulesByClass(classes[0], false)
-		for _, rule := range internalClassRules {
-			receiver.ApplyRules(rule)
+		for _, class := range classes {
+			externalClassRules := styleEngine.GetCssRulesByClass(class, true)
+			for _, rule := range externalClassRules {
+				receiver.ApplyRules(rule)
+			}
+			internalClassRules := styleEngine.GetCssRulesByClass(class, false)
+			for _, rule := range internalClassRules {
+				receiver.ApplyRules(rule)
+			}
 		}
 	}
 	if id != "" {

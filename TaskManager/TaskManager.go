@@ -175,8 +175,13 @@ func (receiver *TaskManager) CreateWidgetForTree(parentWidget widgets.WidgetInte
 			parentWidget.AppendChild(newWidget)
 			group.Add(1)
 			go receiver.CreateWidgetForTree(newWidget, child, group)
-		} else {
-			println("it is nil")
+		} else if child.HtmlTag == HtmlParser.HTML_CUSTOM_TAG {
+			function = widgets.WidgetFunctions[len(widgets.WidgetFunctions)-1]
+			newWidget := function(child, receiver)
+			newWidget.SetParent(parentWidget)
+			parentWidget.AppendChild(newWidget)
+			group.Add(1)
+			go receiver.CreateWidgetForTree(newWidget, child, group)
 		}
 	}
 	group.Done()

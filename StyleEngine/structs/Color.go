@@ -30,6 +30,9 @@ func HueToRGB(v1 float32, v2 float32, vH float32) float32 {
 }
 
 func (receiver *ColorRGBA) GetColorByRGBA() (uint8, uint8, uint8, uint8) {
+	if receiver == nil {
+		return 255, 0, 0, 0
+	}
 	return receiver.alpha, receiver.red, receiver.green, receiver.blue
 }
 
