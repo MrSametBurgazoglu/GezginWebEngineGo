@@ -26,7 +26,7 @@ func allChildrenRendered(widget WidgetInterface) bool {
 
 func (receiver *DocumentWidget) DrawPage(mainImage *image.RGBA) {
 	receiver.Draw(mainImage)
-	widgetList := []WidgetInterface{receiver.Children[2]}
+	widgetList := []WidgetInterface{receiver}
 	widgetIndexList := []int{0}
 	currentIndex := 0
 	for widgetIndexList[0] != widgetList[0].GetChildrenCount() {
@@ -122,7 +122,7 @@ func (receiver *DocumentWidget) Draw(mainImage *image.RGBA) {
 	//draw.Draw(mainImage, mainImage.Bounds(), image.White, image.Point{X: 0, Y: 0}, draw.Over)
 	if receiver.GetStyleProperty().Background != nil {
 		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
-		drawerBackend.DrawBackground(red, green, blue, alpha, mainImage, receiver.DrawProperties)
+		drawerBackend.DrawBackground(red, green, blue, alpha, mainImage, receiver.LayoutProperty)
 	}
 }
 

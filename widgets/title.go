@@ -8,23 +8,23 @@ import (
 	"image"
 )
 
-type HtmlTagCode struct {
+type HtmlTagTitle struct {
 	Widget
 }
 
-func (receiver *HtmlTagCode) Draw(mainImage *image.RGBA) {
+func (receiver *HtmlTagTitle) Draw(mainImage *image.RGBA) {
 	if receiver.GetStyleProperty().Background != nil {
 		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
 		drawerBackend.DrawBackground(red, green, blue, alpha, mainImage, receiver.LayoutProperty)
 	}
 }
 
-func (receiver *HtmlTagCode) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
+func (receiver *HtmlTagTitle) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 
 }
 
-func SetWidgetPropertiesForCodeTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
-	widget := new(HtmlTagCode)
+func SetWidgetPropertiesForTitleTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+	widget := new(HtmlTagTitle)
 	widget.HtmlElement = element
 	widget.Initialize()
 	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_INLINE
