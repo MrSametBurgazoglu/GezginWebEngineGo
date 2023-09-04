@@ -21,6 +21,14 @@ func LookForWidth(layoutProperty *LayoutProperty) int {
 }
 
 func (receiver *LayoutProperty) SetFLexContainerWidth(styleProperty *StyleEngine.StyleProperty) {
+	if styleProperty.FlexDirection == enums.CSS_FLEX_DIRECTION_EMPTY || styleProperty.FlexDirection == enums.CSS_FLEX_DIRECTION_ROW {
+		receiver.SetFLexContainerWidthRow(styleProperty)
+	} else {
+		receiver.SetFLexContainerWidthColumn(styleProperty)
+	}
+}
+
+func (receiver *LayoutProperty) SetFLexContainerWidthRow(styleProperty *StyleEngine.StyleProperty) {
 	receiver.SetWidthBlock(receiver.Parent, styleProperty)
 	totalWidth := 0
 	for i, child := range receiver.Children {
@@ -49,8 +57,35 @@ func (receiver *LayoutProperty) SetFLexContainerWidth(styleProperty *StyleEngine
 	}
 }
 
+func (receiver *LayoutProperty) SetFLexContainerWidthColumn(styleProperty *StyleEngine.StyleProperty) {
+	receiver.SetWidthBlock(receiver.Parent, styleProperty)
+	for i, child := range receiver.Children {
+		width := receiver.Width
+		if styleProperty.Children[i].Width != 0 {
+			switch styleProperty.Children[i].WidthValueType {
+			case enums.CSS_PROPERTY_VALUE_TYPE_PIXEL:
+				width = int(styleProperty.Children[i].Width)
+			case enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE:
+				width = int(float64(receiver.Width) * (float64(styleProperty.Children[i].Width) / 100.0))
+			}
+		}
+		//look width here
+		if styleProperty.Children[i].MaxWidth != 0 && width > int(styleProperty.Children[i].MaxWidth) {
+			width = int(styleProperty.Children[i].MaxWidth)
+		}
+		if width < int(styleProperty.Children[i].MinWidth) {
+			width = int(styleProperty.Children[i].MinWidth)
+		}
+		child.Width = width
+	}
+}
+
 func (receiver *LayoutProperty) SetPositionFlex(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) (int, int) {
-	return receiver.SetPositionXFlex(parent, beforeCurrentWidget, styleProperty), receiver.SetPositionYFlex(parent, beforeCurrentWidget, styleProperty)
+	if styleProperty.Parent.FlexDirection == enums.CSS_FLEX_DIRECTION_EMPTY || styleProperty.Parent.FlexDirection == enums.CSS_FLEX_DIRECTION_ROW {
+		return receiver.SetPositionXFlex(parent, beforeCurrentWidget, styleProperty), receiver.SetPositionYFlex(parent, beforeCurrentWidget, styleProperty)
+	} else {
+		return receiver.BlockSetPositionX(parent, styleProperty), receiver.BlockSetPositionY(parent, beforeCurrentWidget, styleProperty)
+	}
 }
 
 func (receiver *LayoutProperty) SetPositionXFlex(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {

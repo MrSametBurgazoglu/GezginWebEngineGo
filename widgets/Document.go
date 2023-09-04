@@ -4,6 +4,7 @@ import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/LayoutEngine"
 	"gezgin_web_engine/ResourceManager"
+	"gezgin_web_engine/StyleEngine"
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"image"
@@ -157,15 +158,17 @@ func SetXYForWidget(widget WidgetInterface) {
 	parentLayout := widget.GetParent().GetLayout()
 	styleProperty := widget.GetStyleProperty()
 	var beforeCurrentWidget *LayoutEngine.LayoutProperty
+	var beforeCurrentWidgetStyle *StyleEngine.StyleProperty
 
 	if widget.GetChildrenIndex() > 0 {
 		beforeCurrentWidget = widget.GetParent().GetChildrenByIndex(widget.GetChildrenIndex() - 1).GetLayout()
+		beforeCurrentWidgetStyle = widget.GetParent().GetChildrenByIndex(widget.GetChildrenIndex() - 1).GetStyleProperty()
 	}
 
-	x, y := layout.SetPosition(parentLayout, beforeCurrentWidget, styleProperty)
+	x, y := layout.SetPosition(parentLayout, beforeCurrentWidget, styleProperty, beforeCurrentWidgetStyle)
 
 	if untaggedText, ok := widget.(*UntaggedText); ok {
-		println("x:", x, "y:", y, "value:", untaggedText.Value)
+		println("x:", x, "y:", y, "value:", untaggedText.Value, "w:", layout.Width, "h:", layout.Height)
 	}
 
 	if HtmlParser.HtmlTags(widget.GetHtmlTag()) == HtmlParser.HTML_PRE {

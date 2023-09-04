@@ -229,7 +229,7 @@ var functionList = []cssPropertyFunction{
 	DisplayPropertySetValue,
 	nil,
 	nil,
-	nil,
+	FlexDirectionPropertySetValue,
 	nil,
 	nil,
 	nil,

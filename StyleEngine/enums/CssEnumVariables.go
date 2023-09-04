@@ -31,6 +31,7 @@ type CssBoxSizingType uint8
 type CssDisplayType uint8
 type CssPositionType uint8
 type CssFontSizeType uint8
+type CssFlexDirectionType uint8
 
 const (
 	CSS_ANIMATION_TIMING_FUNCTION_LINEAR CssAnimationTimingFunctionType = iota
@@ -286,4 +287,12 @@ const (
 	CSS_FONT_SIZE_TYPE_LARGER
 	CSS_FONT_SIZE_TYPE_LENGTH
 	CSS_FONT_SIZE_TYPE_PERCENTAGE
+)
+
+const (
+	CSS_FLEX_DIRECTION_EMPTY CssFlexDirectionType = iota
+	CSS_FLEX_DIRECTION_COLUMN
+	CSS_FLEX_DIRECTION_COLUMN_REVERSE
+	CSS_FLEX_DIRECTION_ROW
+	CSS_FLEX_DIRECTION_ROW_REVERSE
 )

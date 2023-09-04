@@ -5,8 +5,8 @@ import (
 	"gezgin_web_engine/StyleEngine/enums"
 )
 
-func (receiver *LayoutProperty) InlineSetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) (int, int) {
-	return receiver.InlineSetPositionX(parent, beforeCurrentWidget, styleProperty), receiver.InlineSetPositionY(parent, beforeCurrentWidget, styleProperty)
+func (receiver *LayoutProperty) InlineSetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty, beforeCurrentWidgetStyle *StyleEngine.StyleProperty) (int, int) {
+	return receiver.InlineSetPositionX(parent, beforeCurrentWidget, styleProperty), receiver.InlineSetPositionY(parent, beforeCurrentWidget, styleProperty, beforeCurrentWidgetStyle)
 }
 
 func (receiver *LayoutProperty) InlineSetPositionX(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
@@ -54,27 +54,34 @@ func (receiver *LayoutProperty) InlineSetPositionX(parent, beforeCurrentWidget *
 		}
 	}
 	receiver.ContentXPosition = position
+	receiver.XPosition = position
 	return receiver.ContentXPosition
 }
 
-func (receiver *LayoutProperty) InlineSetPositionY(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
+func (receiver *LayoutProperty) InlineSetPositionY(parent, beforeCurrentWidget *LayoutProperty, styleProperty, beforeCurrentWidgetStyle *StyleEngine.StyleProperty) int {
 	if styleProperty != nil {
 		switch styleProperty.Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
 			return parent.XPosition
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			if beforeCurrentWidget != nil {
-				marginTop := 0
-				if styleProperty.Margin != nil {
-					marginTop = styleProperty.Margin.MarginTop
-				}
-				return beforeCurrentWidget.YPosition + beforeCurrentWidget.Height + marginTop
-			} else {
+			if beforeCurrentWidget == nil || beforeCurrentWidgetStyle == nil {
 				marginTop := 0
 				if styleProperty.Margin != nil {
 					marginTop = styleProperty.Margin.MarginTop
 				}
 				return parent.YPosition + marginTop
+			} else if beforeCurrentWidgetStyle.Display == enums.CSS_DISPLAY_TYPE_INLINE {
+				marginTop := 0
+				if styleProperty.Margin != nil {
+					marginTop = styleProperty.Margin.MarginTop
+				}
+				return parent.YPosition + marginTop
+			} else if beforeCurrentWidgetStyle.Display == enums.CSS_DISPLAY_TYPE_BLOCK {
+				marginTop := 0
+				if styleProperty.Margin != nil {
+					marginTop = styleProperty.Margin.MarginTop
+				}
+				return beforeCurrentWidget.YPosition + beforeCurrentWidget.Height + marginTop
 			}
 		case enums.CSS_POSITION_TYPE_STATIC:
 			marginTop := 0
@@ -106,8 +113,12 @@ func (receiver *LayoutProperty) InlineSetPositionY(parent, beforeCurrentWidget *
 	} else {
 		if beforeCurrentWidget == nil {
 			return parent.YPosition
-		} else {
-			return beforeCurrentWidget.Height
+		} else { //TODO look before current widget if it is block then before height + y
+			if beforeCurrentWidgetStyle.Display == enums.CSS_DISPLAY_TYPE_INLINE {
+				return parent.YPosition
+			} else {
+				return beforeCurrentWidget.Height + beforeCurrentWidget.YPosition
+			}
 		}
 	}
 	return 0

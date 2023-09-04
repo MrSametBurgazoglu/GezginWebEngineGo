@@ -27,9 +27,9 @@ type LayoutProperty struct {
 	MarginBottom     int
 }
 
-func (receiver *LayoutProperty) SetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) (int, int) {
+func (receiver *LayoutProperty) SetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty, beforeCurrentWidgetStyle *StyleEngine.StyleProperty) (int, int) {
 	if styleProperty == nil {
-		return receiver.InlineSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty)
+		return receiver.InlineSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty, beforeCurrentWidgetStyle)
 	} else if styleProperty.Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX {
 		return receiver.SetPositionFlex(parent, beforeCurrentWidget, styleProperty)
 	}
@@ -37,7 +37,7 @@ func (receiver *LayoutProperty) SetPosition(parent, beforeCurrentWidget *LayoutP
 	case enums.CSS_DISPLAY_TYPE_BLOCK:
 		return receiver.BlockSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty)
 	case enums.CSS_DISPLAY_TYPE_INLINE:
-		return receiver.InlineSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty)
+		return receiver.InlineSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty, beforeCurrentWidgetStyle)
 	case enums.CSS_DISPLAY_TYPE_FLEX:
 		return receiver.BlockSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty)
 	}

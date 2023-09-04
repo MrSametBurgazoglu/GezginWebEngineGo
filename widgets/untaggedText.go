@@ -19,8 +19,18 @@ type UntaggedText struct {
 
 func (receiver *UntaggedText) Draw(mainImage *image.RGBA) {
 	if receiver.Parent.GetStyleProperty() != nil && receiver.Parent.GetStyleProperty().TextAlign == enums.CSS_TEXT_ALIGN_CENTER {
-		middlePoint := receiver.Parent.GetLayout().XPosition + receiver.Parent.GetLayout().Width/2
-		draw.Draw(mainImage, image.Rect(middlePoint-receiver.LayoutProperty.Width/2, receiver.LayoutProperty.YPosition, middlePoint-receiver.LayoutProperty.Width/2+receiver.LayoutProperty.Width, receiver.LayoutProperty.YPosition+receiver.LayoutProperty.Height), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
+		childrenTotalWidth := 0
+		for _, widgetInterface := range receiver.Parent.GetChildren() {
+			childrenTotalWidth += widgetInterface.GetLayout().Width
+		}
+		startPoint := receiver.Parent.GetLayout().XPosition + receiver.Parent.GetLayout().Width/2 - childrenTotalWidth/2
+		println("children index", receiver.ChildrenIndex)
+		for _, widgetInterface := range receiver.Parent.GetChildren()[:receiver.ChildrenIndex] {
+			startPoint -= widgetInterface.GetLayout().Width
+			println("- ", widgetInterface.GetLayout().Width)
+		}
+		println("start:", startPoint, "value", receiver.Value)
+		draw.Draw(mainImage, image.Rect(startPoint, receiver.LayoutProperty.YPosition, startPoint+receiver.LayoutProperty.Width, receiver.LayoutProperty.YPosition+receiver.LayoutProperty.Height), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
 	} else {
 		draw.Draw(mainImage, image.Rect(receiver.LayoutProperty.XPosition, receiver.LayoutProperty.YPosition, receiver.LayoutProperty.XPosition+receiver.LayoutProperty.Width, receiver.LayoutProperty.YPosition+receiver.LayoutProperty.Height), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
 	}

@@ -77,6 +77,7 @@ type StyleProperty struct {
 	Margin             *structs.Margin
 	Padding            *structs.Padding
 	TextAlign          enums.CssTextAlignType
+	FlexDirection      enums.CssFlexDirectionType
 	Height             uint
 	Width              uint
 	MinHeight          uint
@@ -160,9 +161,12 @@ func (receiver *StyleProperty) ApplyDeclaration(property string, value string) {
 		variable := receiver.GetVariable(value[4 : len(value)-1])
 		value = variable
 	}
-	//if strings.Contains(value, "!important") {
-	//	value = strings.ReplaceAll(value, "!important", "")
-	//}
+	if strings.Contains(value, "!important") {
+		if property == "display" {
+			value = strings.ReplaceAll(value, "!important", "")
+		}
+		println(value)
+	}
 	index := utils.IndexFounder(cssPropertiesNameList, property, cssPropertyCount)
 	if index != -1 {
 		function := functionList[index]
