@@ -20,12 +20,20 @@ type UntaggedText struct {
 func (receiver *UntaggedText) Draw(mainImage *image.RGBA) {
 	if receiver.Parent.GetStyleProperty() != nil && receiver.Parent.GetStyleProperty().TextAlign == enums.CSS_TEXT_ALIGN_CENTER {
 		childrenTotalWidth := 0
-		for _, widgetInterface := range receiver.Parent.GetChildren() {
+		currentParent := receiver.Parent
+		childrenIndex := receiver.ChildrenIndex
+		for currentParent.GetStyleProperty().Display != enums.CSS_DISPLAY_TYPE_BLOCK {
+			childrenIndex += currentParent.GetChildrenIndex()
+			println("children index", childrenIndex)
+			currentParent = currentParent.GetParent()
+		}
+		for _, widgetInterface := range currentParent.GetChildren() {
 			childrenTotalWidth += widgetInterface.GetLayout().Width
 		}
-		startPoint := receiver.Parent.GetLayout().XPosition + receiver.Parent.GetLayout().Width/2 - childrenTotalWidth/2
+		startPoint := currentParent.GetLayout().XPosition + currentParent.GetLayout().Width/2 + childrenTotalWidth/2
 		println("children index", receiver.ChildrenIndex)
-		for _, widgetInterface := range receiver.Parent.GetChildren()[:receiver.ChildrenIndex] {
+		println("current parent child count", currentParent.GetChildrenCount())
+		for _, widgetInterface := range currentParent.GetChildren()[childrenIndex:] {
 			startPoint -= widgetInterface.GetLayout().Width
 			println("- ", widgetInterface.GetLayout().Width)
 		}
