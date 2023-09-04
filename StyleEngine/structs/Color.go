@@ -85,14 +85,21 @@ func (receiver *ColorRGBA) SetColorByHex(value string) bool {
 		if err != nil {
 			return true
 		}
-		receiver.red = uint8(values >> 16)
-		receiver.green = uint8((values >> 8) & 0xFF)
-		receiver.blue = uint8(values & 0xFF)
+		if len(value) == 7 {
+			receiver.red = uint8(values >> 16)
+			receiver.green = uint8((values >> 8) & 0xFF)
+			receiver.blue = uint8(values & 0xFF)
+		} else if len(value) == 4 {
+			receiver.red = uint8(values >> 4)
+			receiver.green = uint8((values >> 2) & 0xFF)
+			receiver.blue = uint8(values & 0xFF)
+		}
 	}
 	return false
 }
 
 func (receiver *ColorRGBA) SetColor(value string) bool {
+
 	if receiver.SetColorByName(value) {
 		return true
 	} else if receiver.SetColorByFunction(value) {

@@ -160,6 +160,9 @@ func (receiver *StyleProperty) ApplyDeclaration(property string, value string) {
 		variable := receiver.GetVariable(value[4 : len(value)-1])
 		value = variable
 	}
+	//if strings.Contains(value, "!important") {
+	//	value = strings.ReplaceAll(value, "!important", "")
+	//}
 	index := utils.IndexFounder(cssPropertiesNameList, property, cssPropertyCount)
 	if index != -1 {
 		function := functionList[index]

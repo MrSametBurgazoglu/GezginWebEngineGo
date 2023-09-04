@@ -2,9 +2,13 @@ package StyleEngine
 
 import (
 	"gezgin_web_engine/StyleEngine/structs"
+	"strings"
 )
 
 func ColorPropertySetValue(properties *StyleProperty, value string) {
+	if strings.Contains(value, "!important") {
+		value = strings.ReplaceAll(value, "!important", "")
+	}
 	if value == "inherit" {
 		properties.ColorInherit = true
 	} else {
