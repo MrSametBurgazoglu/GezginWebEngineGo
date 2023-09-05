@@ -4,6 +4,7 @@ import (
 	"gezgin_web_engine/StyleEngine/enums"
 	structs2 "gezgin_web_engine/StyleEngine/structs"
 	"gezgin_web_engine/utils"
+	"strings"
 )
 
 const BackgroundBlendModeCount = 10
@@ -97,6 +98,9 @@ func setBackgroundColor(background *structs2.Background, value string) {
 }
 
 func BackgroundColorPropertySetValue(properties *StyleProperty, value string) {
+	if strings.Contains(value, "!important") {
+		value = strings.ReplaceAll(value, "!important", "")
+	}
 	if value == "inherit" {
 		if !properties.BackgroundInherit {
 			if properties.Background == nil {

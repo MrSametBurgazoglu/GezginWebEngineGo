@@ -85,6 +85,7 @@ func (receiver *ColorRGBA) SetColorByHex(value string) bool {
 		if err != nil {
 			return true
 		}
+		receiver.alpha = 255
 		if len(value) == 7 {
 			receiver.red = uint8(values >> 16)
 			receiver.green = uint8((values >> 8) & 0xFF)
@@ -172,7 +173,8 @@ func (receiver *ColorRGBA) SetColorByFunction(value string) bool {
 				if err3 != nil {
 					value3 = 0
 				}
-				value4, err4 := strconv.Atoi(functionParameters[3])
+				value4, err4 := strconv.ParseFloat(functionParameters[3], 64)
+				value4 *= 255
 				if err4 != nil {
 					value4 = 0
 				}
