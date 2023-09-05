@@ -121,9 +121,28 @@ func (receiver *StyleSheet) GetCssRuleItem(selector string) *CssRuleListItem {
 			cssRuleList = receiver.cssRuleList.CreateNewCssRulesByID(selector[0:])
 		}
 	case '.':
-		cssRuleList = receiver.cssRuleList.GetCssRulesByClass(selector[1:])
-		if cssRuleList == nil {
-			cssRuleList = receiver.cssRuleList.CreateNewCssRulesByClass(selector[1:])
+		secondDotIndex := strings.Index(selector[0:], ".")
+		if secondDotIndex == -1 {
+			cssRuleList = receiver.cssRuleList.GetCssRulesByClass(selector[1:])
+			if cssRuleList == nil {
+				cssRuleList = receiver.cssRuleList.CreateNewCssRulesByClass(selector[1:])
+			}
+		} else {
+			if selector[secondDotIndex] == ' ' {
+				firstClass := selector[1:secondDotIndex]
+				secondClass := selector[secondDotIndex+1:]
+				cssRuleList = receiver.cssRuleList.GetCssRulesByClassDescendant(firstClass, secondClass)
+				if cssRuleList == nil {
+					cssRuleList = receiver.cssRuleList.CreateNewCssRulesByClassDescendant(firstClass, secondClass)
+				}
+			} else {
+				firstClass := selector[1:secondDotIndex]
+				secondClass := selector[secondDotIndex:]
+				cssRuleList = receiver.cssRuleList.GetCssRulesByClassBoth(firstClass, secondClass)
+				if cssRuleList == nil {
+					cssRuleList = receiver.cssRuleList.CreateNewCssRulesByClassBoth(firstClass, secondClass)
+				}
+			}
 		}
 	case ':':
 		cssRuleList = receiver.cssRuleList.GetCssRulesByID(selector)

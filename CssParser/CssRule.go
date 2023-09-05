@@ -15,6 +15,7 @@ func (receiver *CssRule) SetStyleSheet(styleSheet *CssStyleSheet) {
 	receiver.cssStyleSheet = styleSheet
 }
 
+/*TODO WE NEED BETTER CSS SELECTOR PARSER AND SEARCHER*/
 func (receiver *CssRule) SetCssSelectors(text string) {
 	selectorList := strings.Split(text, ",")
 	for _, s := range selectorList {
