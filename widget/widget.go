@@ -1,12 +1,12 @@
-package widgets
+package widget
 
 import (
 	"gezgin_web_engine/CssParser"
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/HtmlParser/htmlVariables/standardHtmlTagVariables"
 	"gezgin_web_engine/LayoutEngine"
-	"gezgin_web_engine/StyleEngine"
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty"
+	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/drawer/structs"
 	"image"
 	"strings"
@@ -29,7 +29,7 @@ type Widget struct {
 	ChildrenCount  int
 	ChildrenIndex  int
 	HtmlElement    *HtmlParser.HtmlElement
-	StyleProperty  *StyleEngine.StyleProperty
+	StyleProperty  *StyleProperty.StyleProperty
 	LayoutProperty *LayoutEngine.LayoutProperty
 	standardHtmlTagVariables.StandardHtmlTagVariables
 	StyleRules     map[string]string
@@ -43,7 +43,7 @@ type Widget struct {
 }
 
 func (receiver *Widget) Initialize() {
-	receiver.StyleProperty = new(StyleEngine.StyleProperty)
+	receiver.StyleProperty = new(StyleProperty.StyleProperty)
 	receiver.StyleProperty.Initialize()
 	receiver.DrawProperties = new(structs.DrawProperties)
 	receiver.DrawProperties.Initialize()
@@ -132,7 +132,7 @@ func (receiver *Widget) CopyFromHtmlElement(htmlElement *HtmlParser.HtmlElement)
 	}
 }
 
-func (receiver *Widget) GetStyleProperty() *StyleEngine.StyleProperty {
+func (receiver *Widget) GetStyleProperty() *StyleProperty.StyleProperty {
 	return receiver.StyleProperty
 }
 

@@ -1,15 +1,18 @@
 package widgets
 
-import "gezgin_web_engine/HtmlParser"
+import (
+	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/widget"
+)
 
 type TaskManagerInterface interface {
 	HandleWebImgResource(string)
 	HandleWebLinkStyleSheet(string)
-	SetHtmlElement(widgetInterface WidgetInterface)
-	SetBodyElement(widgetInterface WidgetInterface)
+	SetHtmlElement(widgetInterface widget.WidgetInterface)
+	SetBodyElement(widgetInterface widget.WidgetInterface)
 }
 
-var WidgetFunctions = []func(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface{
+var WidgetFunctions = []func(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface{
 	nil,
 	SetWidgetPropertiesForATag,
 	nil,

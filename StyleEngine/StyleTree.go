@@ -1,5 +1,7 @@
 package StyleEngine
 
+import "gezgin_web_engine/widget"
+
 const HtmlTagCount = 105
 
 /*
@@ -81,15 +83,27 @@ WE CAN DO THIS FILTERS BY SEARCHING ELEMENT AND LOOK ATTRIBUTE BY FUNCTION
 :visited	a:visited	Selects all visited links
 */
 
+type CSS_RULE_TYPE uint16
+
+const (
+	CSS_RULE_TYPE_TAG_ONLY = iota
+	CSS_RULE_TYPE_CLASS_ONLY
+	CSS_RULE_TYPE_TAG_AND_CLASS
+	CSS_RULE_TYPE_CLASS_BOTH
+	CSS_RULE_TYPE_CLASS_DESCENDANT
+	CSS_RULE_TYPE_TAG_DESCENDANT
+	CSS_RULE_TYPE_TAG_DESCENDANT_FIRST
+)
+
 type CssRuleListItem struct {
 	Identifier1  string
 	Identifier2  string
-	declarations map[string]string
-	function     func() //we use this function for checking advanced css selectors
+	Declarations map[string]string
+	function     func(widget *widget.Widget, item *CssRuleListItem) //we use this function for checking advanced css selectors
 }
 
 func (receiver *CssRuleListItem) Initialize() {
-	receiver.declarations = make(map[string]string)
+	receiver.Declarations = make(map[string]string)
 }
 
 type CssRuleList struct {

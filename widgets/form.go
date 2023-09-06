@@ -3,13 +3,14 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/drawer/drawerBackend"
+	"gezgin_web_engine/widget"
 	"image"
 )
 
 type HtmlTagForm struct {
-	Widget
+	widget.Widget
 }
 
 func (receiver *HtmlTagForm) Draw(mainImage *image.RGBA) {
@@ -23,7 +24,7 @@ func (receiver *HtmlTagForm) Render(mainImage *image.RGBA, resourceManager *Reso
 
 }
 
-func SetWidgetPropertiesForFormTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+func SetWidgetPropertiesForFormTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagForm)
 	widget.HtmlElement = element
 	widget.Initialize()

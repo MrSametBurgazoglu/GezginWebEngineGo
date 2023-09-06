@@ -4,16 +4,17 @@ import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/LayoutEngine"
 	"gezgin_web_engine/ResourceManager"
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/drawer/Fonts"
 	"gezgin_web_engine/drawer/structs"
+	"gezgin_web_engine/widget"
 	"image"
 	"image/draw"
 	"strings"
 )
 
 type UntaggedText struct {
-	Widget
+	widget.Widget
 	Value string
 }
 
@@ -83,7 +84,7 @@ func (receiver *UntaggedText) SetValue(text string) {
 	receiver.Value = text
 }
 
-func SetWidgetPropertiesForUntaggedText(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+func SetWidgetPropertiesForUntaggedText(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(UntaggedText)
 	widget.HtmlElement = element
 	widget.DrawProperties = new(structs.DrawProperties)
@@ -146,7 +147,7 @@ func (receiver *UntaggedText) IsSetWidthSelf() bool {
 	return false
 }
 
-func (receiver *UntaggedText) SetParent(parent WidgetInterface) {
+func (receiver *UntaggedText) SetParent(parent widget.WidgetInterface) {
 	receiver.Parent = parent
 	receiver.LayoutProperty.Parent = parent.GetLayout()
 	receiver.Parent.GetLayout().Children = append(receiver.Parent.GetLayout().Children, receiver.LayoutProperty)

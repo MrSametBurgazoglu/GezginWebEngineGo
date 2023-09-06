@@ -1,15 +1,15 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty"
+	"gezgin_web_engine/StyleProperty/enums"
 )
 
-func (receiver *LayoutProperty) InlineSetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty, beforeCurrentWidgetStyle *StyleEngine.StyleProperty) (int, int) {
+func (receiver *LayoutProperty) InlineSetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty, beforeCurrentWidgetStyle *StyleProperty.StyleProperty) (int, int) {
 	return receiver.InlineSetPositionX(parent, beforeCurrentWidget, styleProperty), receiver.InlineSetPositionY(parent, beforeCurrentWidget, styleProperty, beforeCurrentWidgetStyle)
 }
 
-func (receiver *LayoutProperty) InlineSetPositionX(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
+func (receiver *LayoutProperty) InlineSetPositionX(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleProperty.StyleProperty) int {
 	position := 0
 	if styleProperty != nil {
 		switch styleProperty.Position {
@@ -58,7 +58,7 @@ func (receiver *LayoutProperty) InlineSetPositionX(parent, beforeCurrentWidget *
 	return receiver.ContentXPosition
 }
 
-func (receiver *LayoutProperty) InlineSetPositionY(parent, beforeCurrentWidget *LayoutProperty, styleProperty, beforeCurrentWidgetStyle *StyleEngine.StyleProperty) int {
+func (receiver *LayoutProperty) InlineSetPositionY(parent, beforeCurrentWidget *LayoutProperty, styleProperty, beforeCurrentWidgetStyle *StyleProperty.StyleProperty) int {
 	if styleProperty != nil {
 		switch styleProperty.Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
@@ -124,7 +124,7 @@ func (receiver *LayoutProperty) InlineSetPositionY(parent, beforeCurrentWidget *
 	return 0
 }
 
-func (receiver *LayoutProperty) SetWidthInline(children []*LayoutProperty, styleProperty *StyleEngine.StyleProperty) {
+func (receiver *LayoutProperty) SetWidthInline(children []*LayoutProperty, styleProperty *StyleProperty.StyleProperty) {
 	if children != nil {
 		width := 0
 		for _, child := range children {

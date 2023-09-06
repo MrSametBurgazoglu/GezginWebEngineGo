@@ -1,11 +1,11 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty"
+	"gezgin_web_engine/StyleProperty/enums"
 )
 
-func (receiver *LayoutProperty) SetPositionY(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
+func (receiver *LayoutProperty) SetPositionY(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleProperty.StyleProperty) int {
 	if styleProperty != nil {
 		switch styleProperty.Position {
 		case enums.CSS_POSITION_TYPE_STICKY:

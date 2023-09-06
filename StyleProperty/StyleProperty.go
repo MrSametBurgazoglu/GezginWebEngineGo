@@ -1,8 +1,8 @@
-package StyleEngine
+package StyleProperty
 
 import (
-	"gezgin_web_engine/StyleEngine/enums"
-	"gezgin_web_engine/StyleEngine/structs"
+	"gezgin_web_engine/StyleProperty/enums"
+	structs2 "gezgin_web_engine/StyleProperty/structs"
 	"gezgin_web_engine/utils"
 	"strings"
 )
@@ -62,20 +62,20 @@ type StyleProperty struct {
 	OpacityInherit            bool
 	ResizeInherit             bool
 
-	AccentColor        *structs.ColorRGBA
+	AccentColor        *structs2.ColorRGBA
 	AlignContent       enums.CssAlignType
 	AlignItems         enums.CssAlignType
 	AlignSelf          enums.CssAlignType
-	Animation          *structs.Animation
-	Background         *structs.Background
+	Animation          *structs2.Animation
+	Background         *structs2.Background
 	BackdropFilter     enums.CssFilterType
-	Border             *structs.Border
+	Border             *structs2.Border
 	BorderCollapseType enums.CssBorderCollapseType
-	Color              *structs.ColorRGBA
+	Color              *structs2.ColorRGBA
 	Display            enums.CssDisplayType
-	Font               *structs.Font
-	Margin             *structs.Margin
-	Padding            *structs.Padding
+	Font               *structs2.Font
+	Margin             *structs2.Margin
+	Padding            *structs2.Padding
 	TextAlign          enums.CssTextAlignType
 	FlexDirection      enums.CssFlexDirectionType
 	Height             uint
@@ -104,48 +104,6 @@ type StyleProperty struct {
 
 func (receiver *StyleProperty) Initialize() {
 	receiver.CssVariables = make(map[string]string)
-}
-
-/*TODO MAKE STYLE ENGINE ROOT TO HTML ELEMENT STYLE PROPERTY AND GIVE IT HERE FOR GLOBAL CSS VARIABLES*/
-/*TODO MAKE STYLE PROPERTIES MAP FOR CSS VARIABLES AND GIVE HERE PARENT STYLE PROPERTY FOR APPLYING*/
-func (receiver *StyleProperty) ApplyCssRules(styleEngine *StyleEngine, id string, classes []string, htmlName string, styleMap map[string]string) {
-	externalTagRules := styleEngine.GetCssRulesByTag(htmlName, true)
-	for _, rule := range externalTagRules {
-		receiver.ApplyRules(rule)
-	}
-	internalTagRules := styleEngine.GetCssRulesByTag(htmlName, false)
-	for _, rule := range internalTagRules {
-		receiver.ApplyRules(rule)
-	}
-	if classes != nil {
-		for _, class := range classes {
-			externalClassRules := styleEngine.GetCssRulesByClass(class, true)
-			for _, rule := range externalClassRules {
-				receiver.ApplyRules(rule)
-			}
-			internalClassRules := styleEngine.GetCssRulesByClass(class, false)
-			for _, rule := range internalClassRules {
-				receiver.ApplyRules(rule)
-			}
-		}
-	}
-	if id != "" {
-		externalIDRules := styleEngine.GetCssRulesByID(id, true)
-		for _, rule := range externalIDRules {
-			receiver.ApplyRules(rule)
-		}
-		internalIDRules := styleEngine.GetCssRulesByID(id, false)
-		for _, rule := range internalIDRules {
-			receiver.ApplyRules(rule)
-		}
-	}
-	receiver.ApplyInlineRules(styleMap)
-}
-
-func (receiver *StyleProperty) ApplyRules(rule *CssRuleListItem) {
-	for property, value := range rule.declarations {
-		receiver.ApplyDeclaration(property, value)
-	}
 }
 
 func (receiver *StyleProperty) ApplyInlineRules(m map[string]string) {

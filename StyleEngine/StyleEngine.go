@@ -2,6 +2,7 @@ package StyleEngine
 
 import (
 	"gezgin_web_engine/GlobalTypes"
+	"gezgin_web_engine/StyleProperty"
 	"github.com/gammazero/workerpool"
 	"runtime"
 	"strings"
@@ -28,17 +29,18 @@ type StyleSheet struct {
 type StyleEngine struct {
 	WorkerPool        *workerpool.WorkerPool
 	CssStyleSheetList []*StyleSheet
-	Root              *StyleProperty
+	Root              *StyleProperty.StyleProperty
 }
 
 func (receiver *StyleEngine) Initialize() {
 	receiver.WorkerPool = workerpool.New(runtime.NumCPU() - 1)
-	receiver.Root = new(StyleProperty)
+	receiver.Root = new(StyleProperty.StyleProperty)
 	receiver.Root.Initialize()
 }
 
 func (receiver *StyleEngine) InitializeRoot() {
-	receiver.Root.ApplyCssRules(receiver, ":root", nil, "root", map[string]string{})
+	rules := receiver.GetAllCssRules(":root", nil, "root")
+	receiver.ApplyRules(receiver.Root, rules)
 }
 
 func (receiver *StyleEngine) CreateCssSheet(external bool) (cssSheet *StyleSheet) {
@@ -61,7 +63,7 @@ func (receiver *StyleEngine) CreateStyleRules(styleSheet *StyleSheet, cssRules C
 			property := declaration.GetProperty()
 			value := declaration.GetValue()
 			for _, item := range cssRuleList {
-				item.declarations[property] = value
+				item.Declarations[property] = value
 			}
 		}
 	}
@@ -121,7 +123,7 @@ func (receiver *StyleSheet) GetCssRuleItem(selector string) *CssRuleListItem {
 			cssRuleList = receiver.cssRuleList.CreateNewCssRulesByID(selector[0:])
 		}
 	case '.':
-		secondDotIndex := strings.Index(selector[0:], ".")
+		secondDotIndex := strings.Index(selector[1:], ".")
 		if secondDotIndex == -1 {
 			cssRuleList = receiver.cssRuleList.GetCssRulesByClass(selector[1:])
 			if cssRuleList == nil {
@@ -130,7 +132,7 @@ func (receiver *StyleSheet) GetCssRuleItem(selector string) *CssRuleListItem {
 		} else {
 			if selector[secondDotIndex] == ' ' {
 				firstClass := selector[1:secondDotIndex]
-				secondClass := selector[secondDotIndex+1:]
+				secondClass := selector[secondDotIndex+2:]
 				cssRuleList = receiver.cssRuleList.GetCssRulesByClassDescendant(firstClass, secondClass)
 				if cssRuleList == nil {
 					cssRuleList = receiver.cssRuleList.CreateNewCssRulesByClassDescendant(firstClass, secondClass)
@@ -157,4 +159,45 @@ func (receiver *StyleSheet) GetCssRuleItem(selector string) *CssRuleListItem {
 		}
 	}
 	return cssRuleList
+}
+
+/*TODO PROCESSES HERE WITH STYLE PROPERTY DONE IN STYLE_ENGINE NOT STYLE PROPERTY*/
+func (receiver *StyleEngine) GetAllCssRules(id string, classes []string, htmlName string) []*CssRuleListItem {
+	var rules []*CssRuleListItem
+	rules = append(rules, receiver.GetCssRulesByTag(htmlName, true)...)
+	rules = append(rules, receiver.GetCssRulesByTag(htmlName, false)...)
+	if classes != nil {
+		for _, class := range classes {
+			rules = append(rules, receiver.GetCssRulesByClass(class, true)...)
+			rules = append(rules, receiver.GetCssRulesByClass(class, false)...)
+		}
+	}
+	if id != "" {
+		rules = append(rules, receiver.GetCssRulesByID(id, true)...)
+		rules = append(rules, receiver.GetCssRulesByID(id, false)...)
+	}
+	for _, rule := range rules {
+		println(rule.function)
+	}
+	return rules
+}
+
+func (receiver *StyleEngine) ApplyRules(styleProperty *StyleProperty.StyleProperty, rules []*CssRuleListItem) {
+	for _, rule := range rules {
+		receiver.ApplyRule(styleProperty, rule)
+	}
+}
+
+/*TODO MAKE STYLE ENGINE ROOT TO HTML ELEMENT STYLE PROPERTY AND GIVE IT HERE FOR GLOBAL CSS VARIABLES*/
+/*TODO MAKE STYLE PROPERTIES MAP FOR CSS VARIABLES AND GIVE HERE PARENT STYLE PROPERTY FOR APPLYING*/
+func (receiver *StyleEngine) ApplyCssRules(styleProperty *StyleProperty.StyleProperty, id string, classes []string, htmlName string, styleMap map[string]string) {
+	rules := receiver.GetAllCssRules(id, classes, htmlName)
+	receiver.ApplyRules(styleProperty, rules)
+	styleProperty.ApplyInlineRules(styleMap)
+}
+
+func (receiver *StyleEngine) ApplyRule(styleProperty *StyleProperty.StyleProperty, rule *CssRuleListItem) {
+	for property, value := range rule.Declarations {
+		styleProperty.ApplyDeclaration(property, value)
+	}
 }

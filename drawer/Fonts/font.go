@@ -1,7 +1,7 @@
 package Fonts
 
 import (
-	"gezgin_web_engine/StyleEngine/structs"
+	"gezgin_web_engine/StyleProperty/structs"
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
 	_ "golang.org/x/image/font"

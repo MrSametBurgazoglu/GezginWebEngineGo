@@ -3,15 +3,16 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
-	"gezgin_web_engine/StyleEngine"
-	"gezgin_web_engine/StyleEngine/enums"
-	"gezgin_web_engine/StyleEngine/structs"
+	"gezgin_web_engine/StyleProperty"
+	"gezgin_web_engine/StyleProperty/enums"
+	"gezgin_web_engine/StyleProperty/structs"
 	"gezgin_web_engine/drawer/drawerBackend"
+	"gezgin_web_engine/widget"
 	"image"
 )
 
 type HtmlTagHeaderText struct {
-	Widget
+	widget.Widget
 }
 
 func (receiver *HtmlTagHeaderText) Draw(mainImage *image.RGBA) {
@@ -25,7 +26,7 @@ func (receiver *HtmlTagHeaderText) Render(mainImage *image.RGBA, resourceManager
 
 }
 
-func SetWidgetPropertiesForH1Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+func SetWidgetPropertiesForH1Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagHeaderText)
 	widget.HtmlElement = element
 	widget.Initialize()
@@ -35,7 +36,7 @@ func SetWidgetPropertiesForH1Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	return widget
 }
 
-func SetWidgetPropertiesForH2Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+func SetWidgetPropertiesForH2Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagHeaderText)
 	widget.HtmlElement = element
 	widget.Initialize()
@@ -46,19 +47,19 @@ func SetWidgetPropertiesForH2Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	return widget
 }
 
-func SetWidgetPropertiesForH3Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+func SetWidgetPropertiesForH3Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagHeaderText)
 	widget.HtmlElement = element
 	widget.Initialize()
 	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
-	widget.StyleProperty = new(StyleEngine.StyleProperty)
+	widget.StyleProperty = new(StyleProperty.StyleProperty)
 	widget.StyleProperty.Initialize()
 	widget.StyleProperty.Font = new(structs.Font)
 	widget.StyleProperty.Font.FontSizeValue = 20
 	return widget
 }
 
-func SetWidgetPropertiesForH4Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+func SetWidgetPropertiesForH4Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagHeaderText)
 	widget.HtmlElement = element
 	widget.Initialize()
@@ -68,7 +69,7 @@ func SetWidgetPropertiesForH4Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	return widget
 }
 
-func SetWidgetPropertiesForH5Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+func SetWidgetPropertiesForH5Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagHeaderText)
 	widget.HtmlElement = element
 	widget.Initialize()
@@ -78,7 +79,7 @@ func SetWidgetPropertiesForH5Tag(element *HtmlParser.HtmlElement, taskManager Ta
 	return widget
 }
 
-func SetWidgetPropertiesForH6Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+func SetWidgetPropertiesForH6Tag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagHeaderText)
 	widget.HtmlElement = element
 	widget.Initialize()

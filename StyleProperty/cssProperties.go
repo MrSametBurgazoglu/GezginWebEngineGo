@@ -1,4 +1,4 @@
-package StyleEngine
+package StyleProperty
 
 const cssPropertyCount = 148
 

@@ -3,12 +3,13 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty/enums"
+	"gezgin_web_engine/widget"
 	"image"
 )
 
 type HtmlTagButton struct {
-	Widget
+	widget.Widget
 	autoFocus      bool
 	disabled       bool
 	formNovalidate bool
@@ -64,7 +65,7 @@ func (receiver *HtmlTagButton) Render(mainImage *image.RGBA, resourceManager *Re
 
 }
 
-func SetWidgetPropertiesForButtonTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+func SetWidgetPropertiesForButtonTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagButton)
 	widget.HtmlElement = element
 	widget.Initialize()

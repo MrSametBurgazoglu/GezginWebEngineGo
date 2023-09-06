@@ -1,7 +1,7 @@
-package StyleEngine
+package StyleProperty
 
 import (
-	"gezgin_web_engine/StyleEngine/structs"
+	"gezgin_web_engine/StyleProperty/structs"
 )
 
 func accentColorPropertySetValue(currentWidget *StyleProperty, value string) {

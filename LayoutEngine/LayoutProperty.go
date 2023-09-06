@@ -1,8 +1,8 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty"
+	"gezgin_web_engine/StyleProperty/enums"
 )
 
 type LayoutProperty struct {
@@ -27,7 +27,7 @@ type LayoutProperty struct {
 	MarginBottom     int
 }
 
-func (receiver *LayoutProperty) SetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty, beforeCurrentWidgetStyle *StyleEngine.StyleProperty) (int, int) {
+func (receiver *LayoutProperty) SetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty, beforeCurrentWidgetStyle *StyleProperty.StyleProperty) (int, int) {
 	if styleProperty == nil {
 		return receiver.InlineSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty, beforeCurrentWidgetStyle)
 	} else if styleProperty.Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX {

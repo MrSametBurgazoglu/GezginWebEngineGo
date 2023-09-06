@@ -1,15 +1,15 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty"
+	"gezgin_web_engine/StyleProperty/enums"
 )
 
-func (receiver *LayoutProperty) BlockSetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) (int, int) {
+func (receiver *LayoutProperty) BlockSetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleProperty.StyleProperty) (int, int) {
 	return receiver.BlockSetPositionX(parent, styleProperty), receiver.BlockSetPositionY(parent, beforeCurrentWidget, styleProperty)
 }
 
-func (receiver *LayoutProperty) BlockSetPositionX(parent *LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
+func (receiver *LayoutProperty) BlockSetPositionX(parent *LayoutProperty, styleProperty *StyleProperty.StyleProperty) int {
 	position := 0
 	if styleProperty != nil {
 		switch styleProperty.Position {
@@ -52,7 +52,7 @@ func (receiver *LayoutProperty) BlockSetPositionX(parent *LayoutProperty, styleP
 	return receiver.ContentXPosition
 }
 
-func (receiver *LayoutProperty) BlockSetPositionY(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
+func (receiver *LayoutProperty) BlockSetPositionY(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleProperty.StyleProperty) int {
 	if styleProperty != nil {
 		switch styleProperty.Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
@@ -108,7 +108,7 @@ func (receiver *LayoutProperty) BlockSetPositionY(parent, beforeCurrentWidget *L
 	return 0
 }
 
-func (receiver *LayoutProperty) SetWidthBlock(parent *LayoutProperty, styleProperty *StyleEngine.StyleProperty) {
+func (receiver *LayoutProperty) SetWidthBlock(parent *LayoutProperty, styleProperty *StyleProperty.StyleProperty) {
 	width := parent.Width
 	if styleProperty.MaxWidth > 0 && uint(width) > styleProperty.MaxWidth {
 		width = int(styleProperty.MaxWidth)

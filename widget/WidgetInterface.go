@@ -1,10 +1,10 @@
-package widgets
+package widget
 
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/LayoutEngine"
 	"gezgin_web_engine/ResourceManager"
-	"gezgin_web_engine/StyleEngine"
+	"gezgin_web_engine/StyleProperty"
 	"gezgin_web_engine/drawer/structs"
 	"image"
 )
@@ -29,7 +29,7 @@ type WidgetInterface interface {
 	IsRender() bool
 	SetRender(render bool)
 	CopyFromHtmlElement(htmlElement *HtmlParser.HtmlElement)
-	GetStyleProperty() *StyleEngine.StyleProperty
+	GetStyleProperty() *StyleProperty.StyleProperty
 	GetDrawProperties() *structs.DrawProperties
 	GetLayout() *LayoutEngine.LayoutProperty
 	Draw(rgba *image.RGBA)

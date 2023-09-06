@@ -1,7 +1,7 @@
-package StyleEngine
+package StyleProperty
 
 import (
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/utils"
 )
 

@@ -1,11 +1,11 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty"
+	"gezgin_web_engine/StyleProperty/enums"
 )
 
-func (receiver *LayoutProperty) SetPositionX(parent *LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
+func (receiver *LayoutProperty) SetPositionX(parent *LayoutProperty, styleProperty *StyleProperty.StyleProperty) int {
 	position := 0
 	if styleProperty != nil {
 		switch styleProperty.Position {

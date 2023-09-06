@@ -1,14 +1,14 @@
 package JavascriptHandler
 
 import (
-	"gezgin_web_engine/widgets"
+	"gezgin_web_engine/widget"
 	v8 "rogchap.com/v8go"
 )
 
 var Element *v8.ObjectTemplate
 
-func (receiver *JavascriptEngine) searchElementById(elementId string) widgets.WidgetInterface {
-	widgetList := []widgets.WidgetInterface{receiver.DocumentWidget}
+func (receiver *JavascriptEngine) searchElementById(elementId string) widget.WidgetInterface {
+	widgetList := []widget.WidgetInterface{receiver.DocumentWidget}
 	length := len(widgetList)
 	keepGo := true
 	for keepGo {

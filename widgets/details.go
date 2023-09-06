@@ -3,12 +3,13 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty/enums"
+	"gezgin_web_engine/widget"
 	"image"
 )
 
 type HtmlTagDetails struct {
-	Widget
+	widget.Widget
 	open bool
 }
 
@@ -27,7 +28,7 @@ func (receiver *HtmlTagDetails) Render(mainImage *image.RGBA, resourceManager *R
 
 }
 
-func SetWidgetPropertiesForDetailsTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+func SetWidgetPropertiesForDetailsTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagDetails)
 	widget.HtmlElement = element
 	widget.Initialize()

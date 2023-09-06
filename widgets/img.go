@@ -4,6 +4,7 @@ import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/drawerBackend"
+	"gezgin_web_engine/widget"
 	"image"
 	"image/draw"
 	"image/png"
@@ -13,7 +14,7 @@ import (
 )
 
 type HtmlTagImg struct {
-	Widget
+	widget.Widget
 	isMap          bool
 	alt            string
 	sizes          string
@@ -101,7 +102,7 @@ func (receiver *HtmlTagImg) Render(mainImage *image.RGBA, resourceManager *Resou
 	}
 }
 
-func SetWidgetPropertiesForImgTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+func SetWidgetPropertiesForImgTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagImg)
 	widget.HtmlElement = element
 	widget.Initialize()

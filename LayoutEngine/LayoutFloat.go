@@ -1,11 +1,11 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty"
+	"gezgin_web_engine/StyleProperty/enums"
 )
 
-func (receiver *LayoutProperty) SetFloatWidth(styleProperty *StyleEngine.StyleProperty) {
+func (receiver *LayoutProperty) SetFloatWidth(styleProperty *StyleProperty.StyleProperty) {
 	receiver.SetWidthBlock(receiver.Parent, styleProperty)
 	totalWidth := 0
 	for i, child := range receiver.Children {
@@ -34,11 +34,11 @@ func (receiver *LayoutProperty) SetFloatWidth(styleProperty *StyleEngine.StylePr
 	}
 }
 
-func (receiver *LayoutProperty) SetPositionFloat(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) (int, int) {
+func (receiver *LayoutProperty) SetPositionFloat(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleProperty.StyleProperty) (int, int) {
 	return receiver.SetPositionXFloat(parent, beforeCurrentWidget, styleProperty), receiver.SetPositionYFloat(parent, beforeCurrentWidget, styleProperty)
 }
 
-func (receiver *LayoutProperty) SetPositionXFloat(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
+func (receiver *LayoutProperty) SetPositionXFloat(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleProperty.StyleProperty) int {
 	position := 0
 	if styleProperty != nil {
 		switch styleProperty.Position {
@@ -94,7 +94,7 @@ func (receiver *LayoutProperty) SetPositionXFloat(parent, beforeCurrentWidget *L
 	return receiver.ContentXPosition
 }
 
-func (receiver *LayoutProperty) SetPositionYFloat(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
+func (receiver *LayoutProperty) SetPositionYFloat(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleProperty.StyleProperty) int {
 	if styleProperty != nil {
 		switch styleProperty.Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
@@ -140,7 +140,7 @@ func (receiver *LayoutProperty) SetPositionYFloat(parent, beforeCurrentWidget *L
 	return 0
 }
 
-func (receiver *LayoutProperty) SetWidthFloatChild(children []*LayoutProperty, styleProperty *StyleEngine.StyleProperty) {
+func (receiver *LayoutProperty) SetWidthFloatChild(children []*LayoutProperty, styleProperty *StyleProperty.StyleProperty) {
 	//you must set childrens width first
 	if children != nil {
 		width := 0

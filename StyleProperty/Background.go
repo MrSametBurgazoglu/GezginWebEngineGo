@@ -1,8 +1,8 @@
-package StyleEngine
+package StyleProperty
 
 import (
-	"gezgin_web_engine/StyleEngine/enums"
-	structs2 "gezgin_web_engine/StyleEngine/structs"
+	"gezgin_web_engine/StyleProperty/enums"
+	"gezgin_web_engine/StyleProperty/structs"
 	"gezgin_web_engine/utils"
 	"strings"
 )
@@ -47,7 +47,7 @@ var background_attachment_strings = []string{
 	"scroll",
 }
 
-func setBackgroundBlendMode(background *structs2.Background, value string) {
+func setBackgroundBlendMode(background *structs.Background, value string) {
 	index := utils.IndexFounder(backgroundBlendModeStrings, value, BackgroundBlendModeCount)
 	if index != -1 {
 		background.BackgroundBlendModeType = enums.CssBackgroundBlendModeType(index)
@@ -56,7 +56,7 @@ func setBackgroundBlendMode(background *structs2.Background, value string) {
 	}
 }
 
-func setBackgroundRepeat(background *structs2.Background, value string) {
+func setBackgroundRepeat(background *structs.Background, value string) {
 	index := utils.IndexFounder(backgroundRepeatStrings, value, BackgroundRepeatTypeCount)
 	if index != -1 {
 		background.BackgroundRepeatType = enums.CssBackgroundRepeatType(index)
@@ -65,7 +65,7 @@ func setBackgroundRepeat(background *structs2.Background, value string) {
 	}
 }
 
-func setBackgroundOrigin(background *structs2.Background, value string) {
+func setBackgroundOrigin(background *structs.Background, value string) {
 	index := utils.IndexFounder(background_origin_strings, value, BACKGROUND_ORIGIN_TYPE_COUNT)
 	if index != -1 {
 		background.BackgroundOriginType = enums.CssBackgroundOriginType(index)
@@ -74,7 +74,7 @@ func setBackgroundOrigin(background *structs2.Background, value string) {
 	}
 }
 
-func setBackgroundClip(background *structs2.Background, value string) {
+func setBackgroundClip(background *structs.Background, value string) {
 	index := utils.IndexFounder(background_origin_strings, value, BACKGROUND_CLIP_TYPE_COUNT)
 	if index != -1 {
 		background.BackgroundClipType = enums.CssBackgroundClipType(index)
@@ -83,7 +83,7 @@ func setBackgroundClip(background *structs2.Background, value string) {
 	}
 }
 
-func setBackgroundAttachment(background *structs2.Background, value string) {
+func setBackgroundAttachment(background *structs.Background, value string) {
 	index := utils.IndexFounder(background_attachment_strings, value, BACKGROUND_ATTACHMENT_TYPE_COUNT)
 	if index != -1 {
 		background.BackgroundAttachmentType = enums.CssBackgroundAttachmentType(index)
@@ -92,8 +92,8 @@ func setBackgroundAttachment(background *structs2.Background, value string) {
 	}
 }
 
-func setBackgroundColor(background *structs2.Background, value string) {
-	background.BackgroundColor = new(structs2.ColorRGBA)
+func setBackgroundColor(background *structs.Background, value string) {
+	background.BackgroundColor = new(structs.ColorRGBA)
 	background.BackgroundColor.SetColor(value)
 }
 
@@ -104,13 +104,13 @@ func BackgroundColorPropertySetValue(properties *StyleProperty, value string) {
 	if value == "inherit" {
 		if !properties.BackgroundInherit {
 			if properties.Background == nil {
-				properties.Background = new(structs2.Background)
+				properties.Background = new(structs.Background)
 			}
 			properties.Background.BackgroundColorInherit = true
 		}
 	} else {
 		if properties.Background == nil {
-			properties.Background = new(structs2.Background)
+			properties.Background = new(structs.Background)
 		}
 		if properties.BackgroundInherit {
 			properties.Background.BackgroundSizeInherit = true
@@ -123,7 +123,7 @@ func BackgroundColorPropertySetValue(properties *StyleProperty, value string) {
 		}
 		properties.Background.BackgroundColorInherit = false
 		if properties.Background.BackgroundColor == nil {
-			properties.Background.BackgroundColor = new(structs2.ColorRGBA)
+			properties.Background.BackgroundColor = new(structs.ColorRGBA)
 		}
 		if value == "initial" {
 			properties.Background.BackgroundColor.SetColorByRGBA(0, 0, 0, 0)
@@ -140,7 +140,7 @@ func BackgroundPropertySetValue(properties *StyleProperty, value string) {
 	} else {
 		properties.BackgroundInherit = false
 		if properties.Background == nil {
-			properties.Background = new(structs2.Background)
+			properties.Background = new(structs.Background)
 		}
 		if value == "initial" {
 			properties.Background.BackgroundColor.SetColorByRGBA(0, 0, 0, 0)

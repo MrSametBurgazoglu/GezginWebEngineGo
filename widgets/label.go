@@ -3,11 +3,12 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
+	"gezgin_web_engine/widget"
 	"image"
 )
 
 type HtmlTagLabel struct {
-	Widget
+	widget.Widget
 	for_ string
 	form string
 }
@@ -29,7 +30,7 @@ func (receiver *HtmlTagLabel) Render(mainImage *image.RGBA, resourceManager *Res
 
 }
 
-func SetWidgetPropertiesForLabelTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+func SetWidgetPropertiesForLabelTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagLabel)
 	widget.HtmlElement = element
 	widget.Initialize()

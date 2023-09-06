@@ -9,10 +9,11 @@ import (
 	"gezgin_web_engine/NetworkManager"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/StyleEngine"
-	"gezgin_web_engine/StyleEngine/enums"
-	"gezgin_web_engine/StyleEngine/structs"
+	"gezgin_web_engine/StyleProperty/enums"
+	"gezgin_web_engine/StyleProperty/structs"
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/eventSystem"
+	"gezgin_web_engine/widget"
 	"gezgin_web_engine/widgets"
 	"github.com/gammazero/workerpool"
 	"image"
@@ -39,8 +40,8 @@ type TaskManager struct {
 	NetworkManager   *NetworkManager.NetworkManager
 	ResourceManager  *ResourceManager.ResourceManager
 	WebView          *image.RGBA
-	HtmlWidget       widgets.WidgetInterface
-	BodyWidget       widgets.WidgetInterface
+	HtmlWidget       widget.WidgetInterface
+	BodyWidget       widget.WidgetInterface
 }
 
 func (receiver *TaskManager) Initialize() {
@@ -165,7 +166,7 @@ func (receiver *TaskManager) CreateWidgetTree() {
 	wg.Wait()
 }
 
-func (receiver *TaskManager) CreateWidgetForTree(parentWidget widgets.WidgetInterface, parentHtmlElement *HtmlParser.HtmlElement, group *sync.WaitGroup) {
+func (receiver *TaskManager) CreateWidgetForTree(parentWidget widget.WidgetInterface, parentHtmlElement *HtmlParser.HtmlElement, group *sync.WaitGroup) {
 	for _, child := range parentHtmlElement.Children {
 		function := widgets.WidgetFunctions[child.HtmlTag-1] // if element will not draw then function is nil
 		if function != nil {
@@ -225,8 +226,8 @@ func (receiver *TaskManager) SetStylePropertiesOfDocument() {
 	wg.Wait()
 }
 
-func (receiver *TaskManager) SetStylePropertiesOfWidget(widget widgets.WidgetInterface, group *sync.WaitGroup) { //TODO html tag must be string and can be custom
-	widget.GetStyleProperty().ApplyCssRules(receiver.styleEngine, widget.GetID(), widget.GetClasses(), widget.GetHtmlName(), widget.GetStyleRules())
+func (receiver *TaskManager) SetStylePropertiesOfWidget(widget widget.WidgetInterface, group *sync.WaitGroup) { //TODO html tag must be string and can be custom
+	receiver.styleEngine.ApplyCssRules(widget.GetStyleProperty(), widget.GetID(), widget.GetClasses(), widget.GetHtmlName(), widget.GetStyleRules())
 	for _, child := range widget.GetChildren() {
 		if child.GetHtmlTag() != 106 { //untagged text shouldn't have style property
 			group.Add(1)
@@ -244,7 +245,7 @@ func (receiver *TaskManager) SetInheritStylePropertiesOfDocument() {
 	wg.Wait()
 }
 
-func (receiver *TaskManager) SetInheritStylePropertiesOfWidget(widget widgets.WidgetInterface, group *sync.WaitGroup) {
+func (receiver *TaskManager) SetInheritStylePropertiesOfWidget(widget widget.WidgetInterface, group *sync.WaitGroup) {
 	//widget.GetStyleProperty().ApplyCssRules(receiver.styleEngine, widget.GetID(), widget.GetClasses(), widget.GetHtmlTag(), widget.GetStyleRules())
 	for _, child := range widget.GetChildren() {
 		if child.GetStyleProperty() != nil {
@@ -273,10 +274,10 @@ func (receiver *TaskManager) SetRendered(rendered bool) {
 	receiver.DocumentWidget.Rendered = rendered
 }
 
-func (receiver *TaskManager) SetHtmlElement(widget widgets.WidgetInterface) {
+func (receiver *TaskManager) SetHtmlElement(widget widget.WidgetInterface) {
 	receiver.HtmlWidget = widget
 }
 
-func (receiver *TaskManager) SetBodyElement(widget widgets.WidgetInterface) {
+func (receiver *TaskManager) SetBodyElement(widget widget.WidgetInterface) {
 	receiver.BodyWidget = widget
 }

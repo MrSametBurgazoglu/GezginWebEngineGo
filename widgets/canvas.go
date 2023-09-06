@@ -3,12 +3,13 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
+	"gezgin_web_engine/widget"
 	"image"
 	"strconv"
 )
 
 type HtmlTagCanvas struct {
-	Widget
+	widget.Widget
 	width  int
 	height int
 }
@@ -31,7 +32,7 @@ func (receiver *HtmlTagCanvas) Render(mainImage *image.RGBA, resourceManager *Re
 
 }
 
-func SetWidgetPropertiesForCanvasTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+func SetWidgetPropertiesForCanvasTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagCanvas)
 	widget.HtmlElement = element
 	return widget

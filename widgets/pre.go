@@ -3,13 +3,14 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/drawer/drawerBackend"
+	"gezgin_web_engine/widget"
 	"image"
 )
 
 type HtmlTagPRE struct {
-	Widget
+	widget.Widget
 }
 
 func (receiver *HtmlTagPRE) Draw(mainImage *image.RGBA) {
@@ -23,7 +24,7 @@ func (receiver *HtmlTagPRE) Render(mainImage *image.RGBA, resourceManager *Resou
 
 }
 
-func SetWidgetPropertiesForPRETag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) WidgetInterface {
+func SetWidgetPropertiesForPRETag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagPRE)
 	widget.HtmlElement = element
 	widget.Initialize()

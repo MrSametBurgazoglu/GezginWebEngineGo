@@ -1,8 +1,10 @@
 package LayoutEngine
 
-import "gezgin_web_engine/StyleEngine"
+import (
+	"gezgin_web_engine/StyleProperty"
+)
 
-func (receiver *LayoutProperty) SetHeight(parent *LayoutProperty, children []*LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
+func (receiver *LayoutProperty) SetHeight(parent *LayoutProperty, children []*LayoutProperty, styleProperty *StyleProperty.StyleProperty) int {
 	if children != nil {
 		height := 0
 		for _, child := range children {

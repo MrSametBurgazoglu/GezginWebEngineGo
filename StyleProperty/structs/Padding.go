@@ -1,7 +1,7 @@
 package structs
 
 import (
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty/enums"
 )
 
 type Padding struct {

@@ -4,19 +4,20 @@ import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/LayoutEngine"
 	"gezgin_web_engine/ResourceManager"
-	"gezgin_web_engine/StyleEngine"
+	"gezgin_web_engine/StyleProperty"
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/drawer/drawerBackend"
+	"gezgin_web_engine/widget"
 	"image"
 	"sync"
 )
 
 type DocumentWidget struct {
-	Widget
+	widget.Widget
 	ResourceManager *ResourceManager.ResourceManager
 }
 
-func allChildrenRendered(widget WidgetInterface) bool {
+func allChildrenRendered(widget widget.WidgetInterface) bool {
 	for _, child := range widget.GetChildren() {
 		if child.IsRender() == false {
 			return false
@@ -27,7 +28,7 @@ func allChildrenRendered(widget WidgetInterface) bool {
 
 func (receiver *DocumentWidget) DrawPage(mainImage *image.RGBA) {
 	receiver.Draw(mainImage)
-	widgetList := []WidgetInterface{receiver}
+	widgetList := []widget.WidgetInterface{receiver}
 	widgetIndexList := []int{0}
 	currentIndex := 0
 	for widgetIndexList[0] != widgetList[0].GetChildrenCount() {
@@ -51,8 +52,8 @@ func (receiver *DocumentWidget) DrawPage(mainImage *image.RGBA) {
 }
 
 func (receiver *DocumentWidget) RenderDocument(mainImage *image.RGBA) {
-	widgetList := []WidgetInterface{receiver}
-	var edgeList []WidgetInterface
+	widgetList := []widget.WidgetInterface{receiver}
+	var edgeList []widget.WidgetInterface
 	length := len(widgetList)
 	keepGo := true
 	for keepGo {
@@ -127,7 +128,7 @@ func (receiver *DocumentWidget) Draw(mainImage *image.RGBA) {
 	}
 }
 
-func SetWidthForWidget(widget WidgetInterface) {
+func SetWidthForWidget(widget widget.WidgetInterface) {
 	layout := widget.GetLayout()
 	var layoutList []*LayoutEngine.LayoutProperty
 	for _, widgetInterface := range widget.GetChildren() {
@@ -137,7 +138,7 @@ func SetWidthForWidget(widget WidgetInterface) {
 	layout.SetWidth(widget.GetParent().GetLayout(), layoutList, widget.GetStyleProperty(), widget.GetParent().GetStyleProperty())
 	widget.GetLayout().Width = layout.Width
 }
-func SetHeightForWidget(widget WidgetInterface) {
+func SetHeightForWidget(widget widget.WidgetInterface) {
 	layout := widget.GetLayout()
 	var layoutList []*LayoutEngine.LayoutProperty
 	for _, widgetInterface := range widget.GetChildren() {
@@ -148,7 +149,7 @@ func SetHeightForWidget(widget WidgetInterface) {
 	widget.GetLayout().Height = layout.Height
 }
 
-func SetXYForWidget(widget WidgetInterface) {
+func SetXYForWidget(widget widget.WidgetInterface) {
 	layout := widget.GetLayout()
 	var layoutList []*LayoutEngine.LayoutProperty
 	for _, widgetInterface := range widget.GetChildren() {
@@ -158,7 +159,7 @@ func SetXYForWidget(widget WidgetInterface) {
 	parentLayout := widget.GetParent().GetLayout()
 	styleProperty := widget.GetStyleProperty()
 	var beforeCurrentWidget *LayoutEngine.LayoutProperty
-	var beforeCurrentWidgetStyle *StyleEngine.StyleProperty
+	var beforeCurrentWidgetStyle *StyleProperty.StyleProperty
 
 	if widget.GetChildrenIndex() > 0 {
 		beforeCurrentWidget = widget.GetParent().GetChildrenByIndex(widget.GetChildrenIndex() - 1).GetLayout()
@@ -188,7 +189,7 @@ func (receiver *DocumentWidget) SetWidthForBlockElements() {
 	wg.Wait()
 }
 
-func (receiver *DocumentWidget) SetWidthOfWidget(widget WidgetInterface, group *sync.WaitGroup) { //TODO html tag must be string and can be custom
+func (receiver *DocumentWidget) SetWidthOfWidget(widget widget.WidgetInterface, group *sync.WaitGroup) { //TODO html tag must be string and can be custom
 	SetWidthForWidget(widget)
 	for _, child := range widget.GetChildren() {
 		if child.IsPreSetWidth() {
@@ -202,8 +203,8 @@ func (receiver *DocumentWidget) SetWidthOfWidget(widget WidgetInterface, group *
 	group.Done()
 }
 
-func SetWidthForBlockElements(document WidgetInterface) {
-	widgetList := []WidgetInterface{document}
+func SetWidthForBlockElements(document widget.WidgetInterface) {
+	widgetList := []widget.WidgetInterface{document}
 	widgetIndexList := []int{0}
 	currentIndex := 0
 	for widgetIndexList[0] != document.GetChildrenCount() {
@@ -233,9 +234,9 @@ func SetWidthForBlockElements(document WidgetInterface) {
 	}
 }
 
-func SetWidthForInlineElements(document WidgetInterface) {
-	widgetList := []WidgetInterface{document}
-	var edgeList []WidgetInterface
+func SetWidthForInlineElements(document widget.WidgetInterface) {
+	widgetList := []widget.WidgetInterface{document}
+	var edgeList []widget.WidgetInterface
 	length := len(widgetList)
 	keepGo := true
 	for keepGo {
@@ -282,8 +283,8 @@ func SetWidthForInlineElements(document WidgetInterface) {
 }
 
 func (receiver *DocumentWidget) SetHeightForElements() {
-	widgetList := []WidgetInterface{receiver}
-	var edgeList []WidgetInterface
+	widgetList := []widget.WidgetInterface{receiver}
+	var edgeList []widget.WidgetInterface
 	length := len(widgetList)
 	keepGo := true
 	for keepGo {
@@ -327,8 +328,8 @@ func (receiver *DocumentWidget) SetHeightForElements() {
 	}
 }
 
-func SetPositionOfElements(document WidgetInterface) {
-	widgetList := []WidgetInterface{document}
+func SetPositionOfElements(document widget.WidgetInterface) {
+	widgetList := []widget.WidgetInterface{document}
 	widgetIndexList := []int{0}
 	currentIndex := 0
 	for widgetIndexList[0] != document.GetChildrenCount() {

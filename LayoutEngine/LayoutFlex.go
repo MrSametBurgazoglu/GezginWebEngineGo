@@ -1,8 +1,8 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/StyleEngine"
-	"gezgin_web_engine/StyleEngine/enums"
+	"gezgin_web_engine/StyleProperty"
+	"gezgin_web_engine/StyleProperty/enums"
 )
 
 func LookForWidth(layoutProperty *LayoutProperty) int {
@@ -20,7 +20,7 @@ func LookForWidth(layoutProperty *LayoutProperty) int {
 	}
 }
 
-func (receiver *LayoutProperty) SetFLexContainerWidth(styleProperty *StyleEngine.StyleProperty) {
+func (receiver *LayoutProperty) SetFLexContainerWidth(styleProperty *StyleProperty.StyleProperty) {
 	if styleProperty.FlexDirection == enums.CSS_FLEX_DIRECTION_EMPTY || styleProperty.FlexDirection == enums.CSS_FLEX_DIRECTION_ROW {
 		receiver.SetFLexContainerWidthRow(styleProperty)
 	} else {
@@ -28,7 +28,7 @@ func (receiver *LayoutProperty) SetFLexContainerWidth(styleProperty *StyleEngine
 	}
 }
 
-func (receiver *LayoutProperty) SetFLexContainerWidthRow(styleProperty *StyleEngine.StyleProperty) {
+func (receiver *LayoutProperty) SetFLexContainerWidthRow(styleProperty *StyleProperty.StyleProperty) {
 	receiver.SetWidthBlock(receiver.Parent, styleProperty)
 	totalWidth := 0
 	for i, child := range receiver.Children {
@@ -57,7 +57,7 @@ func (receiver *LayoutProperty) SetFLexContainerWidthRow(styleProperty *StyleEng
 	}
 }
 
-func (receiver *LayoutProperty) SetFLexContainerWidthColumn(styleProperty *StyleEngine.StyleProperty) {
+func (receiver *LayoutProperty) SetFLexContainerWidthColumn(styleProperty *StyleProperty.StyleProperty) {
 	receiver.SetWidthBlock(receiver.Parent, styleProperty)
 	for i, child := range receiver.Children {
 		width := receiver.Width
@@ -80,7 +80,7 @@ func (receiver *LayoutProperty) SetFLexContainerWidthColumn(styleProperty *Style
 	}
 }
 
-func (receiver *LayoutProperty) SetPositionFlex(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) (int, int) {
+func (receiver *LayoutProperty) SetPositionFlex(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleProperty.StyleProperty) (int, int) {
 	if styleProperty.Parent.FlexDirection == enums.CSS_FLEX_DIRECTION_EMPTY || styleProperty.Parent.FlexDirection == enums.CSS_FLEX_DIRECTION_ROW {
 		return receiver.SetPositionXFlex(parent, beforeCurrentWidget, styleProperty), receiver.SetPositionYFlex(parent, beforeCurrentWidget, styleProperty)
 	} else {
@@ -88,7 +88,7 @@ func (receiver *LayoutProperty) SetPositionFlex(parent, beforeCurrentWidget *Lay
 	}
 }
 
-func (receiver *LayoutProperty) SetPositionXFlex(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
+func (receiver *LayoutProperty) SetPositionXFlex(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleProperty.StyleProperty) int {
 	position := 0
 	if styleProperty != nil {
 		switch styleProperty.Position {
@@ -144,7 +144,7 @@ func (receiver *LayoutProperty) SetPositionXFlex(parent, beforeCurrentWidget *La
 	return receiver.ContentXPosition
 }
 
-func (receiver *LayoutProperty) SetPositionYFlex(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleEngine.StyleProperty) int {
+func (receiver *LayoutProperty) SetPositionYFlex(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleProperty.StyleProperty) int {
 	if styleProperty != nil {
 		switch styleProperty.Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
@@ -190,7 +190,7 @@ func (receiver *LayoutProperty) SetPositionYFlex(parent, beforeCurrentWidget *La
 	return 0
 }
 
-func (receiver *LayoutProperty) SetWidthFlexChild(children []*LayoutProperty, styleProperty *StyleEngine.StyleProperty) {
+func (receiver *LayoutProperty) SetWidthFlexChild(children []*LayoutProperty, styleProperty *StyleProperty.StyleProperty) {
 	//you must set childrens width first
 	if children != nil {
 		width := 0

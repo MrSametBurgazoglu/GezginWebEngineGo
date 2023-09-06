@@ -1,8 +1,8 @@
-package StyleEngine
+package StyleProperty
 
 import (
-	"gezgin_web_engine/StyleEngine/enums"
-	structs2 "gezgin_web_engine/StyleEngine/structs"
+	"gezgin_web_engine/StyleProperty/enums"
+	"gezgin_web_engine/StyleProperty/structs"
 	"gezgin_web_engine/utils"
 	"log"
 	"strconv"
@@ -39,7 +39,7 @@ var border_image_repeat_strings = []string{
 	"stretch",
 }
 
-func setBorderTopStyle(border *structs2.Border, value string) {
+func setBorderTopStyle(border *structs.Border, value string) {
 	index := utils.IndexFounder(borderStyleStrings, value, BorderStyleStringCount)
 	if index != -1 {
 		border.BorderStyle.BorderStyleTypeTop = enums.CssBorderStyleType(index)
@@ -48,7 +48,7 @@ func setBorderTopStyle(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderBottomStyle(border *structs2.Border, value string) {
+func setBorderBottomStyle(border *structs.Border, value string) {
 	index := utils.IndexFounder(borderStyleStrings, value, BorderStyleStringCount)
 	if index != -1 {
 		border.BorderStyle.BorderStyleTypeBottom = enums.CssBorderStyleType(index)
@@ -57,7 +57,7 @@ func setBorderBottomStyle(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderLeftStyle(border *structs2.Border, value string) {
+func setBorderLeftStyle(border *structs.Border, value string) {
 	index := utils.IndexFounder(borderStyleStrings, value, BorderStyleStringCount)
 	if index != -1 {
 		border.BorderStyle.BorderStyleTypeLeft = enums.CssBorderStyleType(index)
@@ -66,7 +66,7 @@ func setBorderLeftStyle(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderRightStyle(border *structs2.Border, value string) {
+func setBorderRightStyle(border *structs.Border, value string) {
 	index := utils.IndexFounder(borderStyleStrings, value, BorderStyleStringCount)
 	if index != -1 {
 		border.BorderStyle.BorderStyleTypeRight = enums.CssBorderStyleType(index)
@@ -75,7 +75,7 @@ func setBorderRightStyle(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderStyle(border *structs2.Border, value string) {
+func setBorderStyle(border *structs.Border, value string) {
 	values := strings.Split(value, " ")
 	index := len(values)
 	switch index {
@@ -104,7 +104,7 @@ func setBorderStyle(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderTopWidth(border *structs2.Border, value string) {
+func setBorderTopWidth(border *structs.Border, value string) {
 	index := utils.IndexFounder(borderWidthStrings, value, BorderWidthStringCount)
 	if index != -1 {
 		border.BorderWidth.TopBorder.BorderLineType = enums.CssBorderlineType(index)
@@ -123,7 +123,7 @@ func setBorderTopWidth(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderBottomWidth(border *structs2.Border, value string) {
+func setBorderBottomWidth(border *structs.Border, value string) {
 	index := utils.IndexFounder(borderWidthStrings, value, BorderWidthStringCount)
 	if index != -1 {
 		border.BorderWidth.BottomBorder.BorderLineType = enums.CssBorderlineType(index)
@@ -142,7 +142,7 @@ func setBorderBottomWidth(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderLeftWidth(border *structs2.Border, value string) {
+func setBorderLeftWidth(border *structs.Border, value string) {
 	index := utils.IndexFounder(borderWidthStrings, value, BorderWidthStringCount)
 	if index != -1 {
 		border.BorderWidth.LeftBorder.BorderLineType = enums.CssBorderlineType(index)
@@ -161,7 +161,7 @@ func setBorderLeftWidth(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderRightWidth(border *structs2.Border, value string) {
+func setBorderRightWidth(border *structs.Border, value string) {
 	index := utils.IndexFounder(borderWidthStrings, value, BorderWidthStringCount)
 	if index != -1 {
 		border.BorderWidth.RightBorder.BorderLineType = enums.CssBorderlineType(index)
@@ -180,7 +180,7 @@ func setBorderRightWidth(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderWidth(border *structs2.Border, value string) {
+func setBorderWidth(border *structs.Border, value string) {
 	values := strings.Split(value, " ")
 	switch len(values) {
 	case 1:
@@ -208,23 +208,23 @@ func setBorderWidth(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderTopColor(border *structs2.Border, value string) {
+func setBorderTopColor(border *structs.Border, value string) {
 	border.BorderColor.TopBorderColor.SetColor(value)
 }
 
-func setBorderLeftColor(border *structs2.Border, value string) {
+func setBorderLeftColor(border *structs.Border, value string) {
 	border.BorderColor.LeftBorderColor.SetColor(value)
 }
 
-func setBorderRightColor(border *structs2.Border, value string) {
+func setBorderRightColor(border *structs.Border, value string) {
 	border.BorderColor.RightBorderColor.SetColor(value)
 }
 
-func setBorderBottomColor(border *structs2.Border, value string) {
+func setBorderBottomColor(border *structs.Border, value string) {
 	border.BorderColor.BottomBorderColor.SetColor(value)
 }
 
-func setBorderColor(border *structs2.Border, value string) {
+func setBorderColor(border *structs.Border, value string) {
 	values := strings.Split(value, " ")
 	switch len(values) {
 	case 1:
@@ -252,7 +252,7 @@ func setBorderColor(border *structs2.Border, value string) {
 	}
 }
 
-func setBorder(border *structs2.Border, value string) {
+func setBorder(border *structs.Border, value string) {
 	values := strings.Split(value, " ")
 	switch len(values) {
 	case 1:
@@ -269,7 +269,7 @@ func setBorder(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderBottomLeftRadius(borderRadius *structs2.BorderRadius, value string) {
+func setBorderBottomLeftRadius(borderRadius *structs.BorderRadius, value string) {
 	number, err := strconv.Atoi(value)
 	if err != nil {
 		log.Fatal(err)
@@ -282,7 +282,7 @@ func setBorderBottomLeftRadius(borderRadius *structs2.BorderRadius, value string
 	}
 }
 
-func setBorderBottomRightRadius(borderRadius *structs2.BorderRadius, value string) {
+func setBorderBottomRightRadius(borderRadius *structs.BorderRadius, value string) {
 	number, err := strconv.Atoi(value)
 	if err != nil {
 		log.Fatal(err)
@@ -295,7 +295,7 @@ func setBorderBottomRightRadius(borderRadius *structs2.BorderRadius, value strin
 	}
 }
 
-func setBorderTopLeftRadius(borderRadius *structs2.BorderRadius, value string) {
+func setBorderTopLeftRadius(borderRadius *structs.BorderRadius, value string) {
 	number, err := strconv.Atoi(value)
 	if err != nil {
 		log.Fatal(err)
@@ -308,7 +308,7 @@ func setBorderTopLeftRadius(borderRadius *structs2.BorderRadius, value string) {
 	}
 }
 
-func setBorderTopRightRadius(borderRadius *structs2.BorderRadius, value string) {
+func setBorderTopRightRadius(borderRadius *structs.BorderRadius, value string) {
 	number, err := strconv.Atoi(value)
 	if err != nil {
 		log.Fatal(err)
@@ -321,7 +321,7 @@ func setBorderTopRightRadius(borderRadius *structs2.BorderRadius, value string) 
 	}
 }
 
-func setBorderRadius(borderRadius *structs2.BorderRadius, value string) {
+func setBorderRadius(borderRadius *structs.BorderRadius, value string) {
 	values := strings.Split(value, " ")
 	switch len(values) {
 	case 1:
@@ -349,7 +349,7 @@ func setBorderRadius(borderRadius *structs2.BorderRadius, value string) {
 	}
 }
 
-func setBorderSpacing(borderSpacing *structs2.BorderSpacing, value string) {
+func setBorderSpacing(borderSpacing *structs.BorderSpacing, value string) {
 	values := strings.Split(value, " ")
 	switch len(values) {
 	case 1:
@@ -370,7 +370,7 @@ func setBorderSpacing(borderSpacing *structs2.BorderSpacing, value string) {
 	}
 }
 
-func setBorderBottom(border *structs2.Border, value string) {
+func setBorderBottom(border *structs.Border, value string) {
 	values := strings.Split(value, " ")
 	index := len(values)
 
@@ -389,7 +389,7 @@ func setBorderBottom(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderTop(border *structs2.Border, value string) {
+func setBorderTop(border *structs.Border, value string) {
 	values := strings.Split(value, " ")
 	index := len(values)
 
@@ -408,7 +408,7 @@ func setBorderTop(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderLeft(border *structs2.Border, value string) {
+func setBorderLeft(border *structs.Border, value string) {
 	values := strings.Split(value, " ")
 	index := len(values)
 
@@ -427,7 +427,7 @@ func setBorderLeft(border *structs2.Border, value string) {
 	}
 }
 
-func setBorderRight(border *structs2.Border, value string) {
+func setBorderRight(border *structs.Border, value string) {
 	values := strings.Split(value, " ")
 	index := len(values)
 
@@ -460,35 +460,35 @@ func BorderPropertySetValue(cssProperties *StyleProperty, value string) {
 	} else {
 		cssProperties.BorderInherit = false
 		if cssProperties.Border == nil || cssProperties.BorderInherit {
-			cssProperties.Border = new(structs2.Border)
-			cssProperties.Border.BorderStyle = new(structs2.BorderStyle)
-			cssProperties.Border.BorderWidth = new(structs2.BorderWidth)
-			cssProperties.Border.BorderWidth.TopBorder = new(structs2.BorderLineWidth)
-			cssProperties.Border.BorderWidth.BottomBorder = new(structs2.BorderLineWidth)
-			cssProperties.Border.BorderWidth.LeftBorder = new(structs2.BorderLineWidth)
-			cssProperties.Border.BorderWidth.RightBorder = new(structs2.BorderLineWidth)
-			cssProperties.Border.BorderColor = new(structs2.BorderColor)
-			cssProperties.Border.BorderColor.TopBorderColor = new(structs2.ColorRGBA)
-			cssProperties.Border.BorderColor.BottomBorderColor = new(structs2.ColorRGBA)
-			cssProperties.Border.BorderColor.LeftBorderColor = new(structs2.ColorRGBA)
-			cssProperties.Border.BorderColor.RightBorderColor = new(structs2.ColorRGBA)
+			cssProperties.Border = new(structs.Border)
+			cssProperties.Border.BorderStyle = new(structs.BorderStyle)
+			cssProperties.Border.BorderWidth = new(structs.BorderWidth)
+			cssProperties.Border.BorderWidth.TopBorder = new(structs.BorderLineWidth)
+			cssProperties.Border.BorderWidth.BottomBorder = new(structs.BorderLineWidth)
+			cssProperties.Border.BorderWidth.LeftBorder = new(structs.BorderLineWidth)
+			cssProperties.Border.BorderWidth.RightBorder = new(structs.BorderLineWidth)
+			cssProperties.Border.BorderColor = new(structs.BorderColor)
+			cssProperties.Border.BorderColor.TopBorderColor = new(structs.ColorRGBA)
+			cssProperties.Border.BorderColor.BottomBorderColor = new(structs.ColorRGBA)
+			cssProperties.Border.BorderColor.LeftBorderColor = new(structs.ColorRGBA)
+			cssProperties.Border.BorderColor.RightBorderColor = new(structs.ColorRGBA)
 		} else {
 			if cssProperties.Border.BorderStyle == nil || cssProperties.Border.BorderStyleInherit {
-				cssProperties.Border.BorderStyle = new(structs2.BorderStyle)
+				cssProperties.Border.BorderStyle = new(structs.BorderStyle)
 			}
 			if cssProperties.Border.BorderWidth == nil || cssProperties.Border.BorderWidthInherit {
-				cssProperties.Border.BorderWidth = new(structs2.BorderWidth)
-				cssProperties.Border.BorderWidth.TopBorder = new(structs2.BorderLineWidth)
-				cssProperties.Border.BorderWidth.BottomBorder = new(structs2.BorderLineWidth)
-				cssProperties.Border.BorderWidth.RightBorder = new(structs2.BorderLineWidth)
-				cssProperties.Border.BorderWidth.LeftBorder = new(structs2.BorderLineWidth)
+				cssProperties.Border.BorderWidth = new(structs.BorderWidth)
+				cssProperties.Border.BorderWidth.TopBorder = new(structs.BorderLineWidth)
+				cssProperties.Border.BorderWidth.BottomBorder = new(structs.BorderLineWidth)
+				cssProperties.Border.BorderWidth.RightBorder = new(structs.BorderLineWidth)
+				cssProperties.Border.BorderWidth.LeftBorder = new(structs.BorderLineWidth)
 			}
 			if cssProperties.Border.BorderColor == nil || cssProperties.Border.BorderColorInherit {
-				cssProperties.Border.BorderColor = new(structs2.BorderColor)
-				cssProperties.Border.BorderColor.TopBorderColor = new(structs2.ColorRGBA)
-				cssProperties.Border.BorderColor.BottomBorderColor = new(structs2.ColorRGBA)
-				cssProperties.Border.BorderColor.LeftBorderColor = new(structs2.ColorRGBA)
-				cssProperties.Border.BorderColor.RightBorderColor = new(structs2.ColorRGBA)
+				cssProperties.Border.BorderColor = new(structs.BorderColor)
+				cssProperties.Border.BorderColor.TopBorderColor = new(structs.ColorRGBA)
+				cssProperties.Border.BorderColor.BottomBorderColor = new(structs.ColorRGBA)
+				cssProperties.Border.BorderColor.LeftBorderColor = new(structs.ColorRGBA)
+				cssProperties.Border.BorderColor.RightBorderColor = new(structs.ColorRGBA)
 			}
 		}
 		if value == "initial" {

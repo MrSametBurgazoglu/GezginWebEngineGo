@@ -1,12 +1,12 @@
 package JavascriptHandler
 
 import (
-	"gezgin_web_engine/widgets"
+	"gezgin_web_engine/widget"
 	v8 "rogchap.com/v8go"
 )
 
 type JavascriptEngine struct {
-	DocumentWidget widgets.WidgetInterface
+	DocumentWidget widget.WidgetInterface
 	ScriptTexts    []string
 	GlobalContext  *v8.Context
 }

@@ -1,11 +1,7 @@
 package StyleEngine
 
-import "gezgin_web_engine/widgets"
+import "gezgin_web_engine/widget"
 
-func IsDescendant(widget widgets.WidgetInterface, cssRuleListItem *CssRuleListItem) bool {
-	return false
-}
+func IsDescendant(widget *widget.Widget, item *CssRuleListItem) {
 
-func IsBoth(widget widgets.WidgetInterface, cssRuleListItem *CssRuleListItem) bool {
-	return false
 }
