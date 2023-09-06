@@ -227,7 +227,7 @@ func (receiver *TaskManager) SetStylePropertiesOfDocument() {
 }
 
 func (receiver *TaskManager) SetStylePropertiesOfWidget(widget widget.WidgetInterface, group *sync.WaitGroup) { //TODO html tag must be string and can be custom
-	receiver.styleEngine.ApplyCssRules(widget.GetStyleProperty(), widget.GetID(), widget.GetClasses(), widget.GetHtmlName(), widget.GetStyleRules())
+	receiver.styleEngine.ApplyCssRules(widget)
 	for _, child := range widget.GetChildren() {
 		if child.GetHtmlTag() != 106 { //untagged text shouldn't have style property
 			group.Add(1)

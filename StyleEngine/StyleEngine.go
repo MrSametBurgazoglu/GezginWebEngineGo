@@ -3,6 +3,7 @@ package StyleEngine
 import (
 	"gezgin_web_engine/GlobalTypes"
 	"gezgin_web_engine/StyleProperty"
+	"gezgin_web_engine/widget"
 	"github.com/gammazero/workerpool"
 	"runtime"
 	"strings"
@@ -190,10 +191,15 @@ func (receiver *StyleEngine) ApplyRules(styleProperty *StyleProperty.StyleProper
 
 /*TODO MAKE STYLE ENGINE ROOT TO HTML ELEMENT STYLE PROPERTY AND GIVE IT HERE FOR GLOBAL CSS VARIABLES*/
 /*TODO MAKE STYLE PROPERTIES MAP FOR CSS VARIABLES AND GIVE HERE PARENT STYLE PROPERTY FOR APPLYING*/
-func (receiver *StyleEngine) ApplyCssRules(styleProperty *StyleProperty.StyleProperty, id string, classes []string, htmlName string, styleMap map[string]string) {
-	rules := receiver.GetAllCssRules(id, classes, htmlName)
-	receiver.ApplyRules(styleProperty, rules)
-	styleProperty.ApplyInlineRules(styleMap)
+func (receiver *StyleEngine) ApplyCssRules(currentWidget widget.WidgetInterface) {
+	rules := receiver.GetAllCssRules(currentWidget.GetID(), currentWidget.GetClasses(), currentWidget.GetHtmlName())
+	for _, rule := range rules {
+		if rule.function(currentWidget, rule) {
+			receiver.ApplyRule(currentWidget.GetStyleProperty(), rule)
+		}
+	}
+	//receiver.ApplyRules(currentWidget.GetStyleProperty(), rules)
+	currentWidget.GetStyleProperty().ApplyInlineRules(currentWidget.GetStyleRules())
 }
 
 func (receiver *StyleEngine) ApplyRule(styleProperty *StyleProperty.StyleProperty, rule *CssRuleListItem) {

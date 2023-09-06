@@ -144,6 +144,10 @@ func (receiver *Widget) GetClasses() []string {
 	return receiver.Classes
 }
 
+func (receiver *Widget) GetAttributes() map[string]string {
+	return receiver.HtmlElement.Attributes
+}
+
 func (receiver *Widget) GetHtmlTag() int {
 	return int(receiver.HtmlElement.HtmlTag)
 }

@@ -12,6 +12,7 @@ import (
 type WidgetInterface interface {
 	GetID() string
 	GetClasses() []string
+	GetAttributes() map[string]string
 	GetHtmlTag() int
 	GetHtmlName() string
 	GetStyleRules() map[string]string

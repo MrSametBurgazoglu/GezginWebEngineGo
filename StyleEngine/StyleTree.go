@@ -25,7 +25,7 @@ WE CAN DO THIS BY SEARCHING ELEMENT P THEN LOOKING FOR PARENTS
 element>element	div > p	Selects all <p> elements where the parent is a <div> element
 WE CAN DO THIS BY SEARCHING ELEMENT P THEN LOOK FOR PARENT
 element+element	div + p	Selects the first <p> element that is placed immediately after <div> elements
-WE CAN DO THIS BY SEARCHING ELEMENT P THEN LOOK FOR PARENTS CHILDREN
+WE CAN DO THIS BY SEARCHING ELEMENT P THEN LOOK FOR PARENTS CHILDREN    +
 element1~element2	p ~ ul	Selects every <ul> element that is preceded by a <p> element
 WE CAN DO THIS BY SEARCHING ELEMENT P THEN LOOK FOR PARENTS CHILDREN
 [attribute]	[target]	Selects all elements with a target attribute
@@ -98,8 +98,9 @@ const (
 type CssRuleListItem struct {
 	Identifier1  string
 	Identifier2  string
+	Identifier3  string
 	Declarations map[string]string
-	function     func(widget *widget.Widget, item *CssRuleListItem) //we use this function for checking advanced css selectors
+	function     func(widget widget.WidgetInterface, item *CssRuleListItem) bool //we use this function for checking advanced css selectors
 }
 
 func (receiver *CssRuleListItem) Initialize() {
@@ -107,18 +108,33 @@ func (receiver *CssRuleListItem) Initialize() {
 }
 
 type CssRuleList struct {
-	CssPropertiesByIDList      []*CssRuleListItem
-	CssPropertiesByClassList   []*CssRuleListItem
-	CssPropertiesByElementList map[string]*CssRuleListItem //it can be only map
+	CssPropertiesByIDList                             []*CssRuleListItem
+	CssPropertiesByClassList                          []*CssRuleListItem
+	CssPropertiesByElementList                        map[string]*CssRuleListItem //it can be only map
+	CssPropertiesByClassDescendantList                []*CssRuleListItem
+	CssPropertiesByClassBothList                      []*CssRuleListItem
+	CssPropertiesByElementAndClassList                []*CssRuleListItem
+	CssPropertiesByElementDescendant                  []*CssRuleListItem
+	CssPropertiesByElementParent                      []*CssRuleListItem
+	CssPropertiesByElementBefore                      []*CssRuleListItem
+	CssPropertiesByElementPreceded                    []*CssRuleListItem
+	CssPropertiesByElementAndAttribute                []*CssRuleListItem
+	CssPropertiesByElementAndAttributeAndValue        []*CssRuleListItem
+	CssPropertiesByElementAndAttributeAndContainValue []*CssRuleListItem
 }
 
 func (receiver *CssRuleList) Initialize() {
 	receiver.CssPropertiesByElementList = make(map[string]*CssRuleListItem)
 }
 
+func DefaultValidator(widget widget.WidgetInterface, item *CssRuleListItem) bool {
+	return true
+}
+
 func (receiver *CssRuleList) CreateNewCssRulesByID(id string) (cssRuleListItem *CssRuleListItem) {
 	cssRuleListItem = &CssRuleListItem{Identifier1: id}
 	cssRuleListItem.Initialize()
+	cssRuleListItem.function = DefaultValidator
 	receiver.CssPropertiesByIDList = append(receiver.CssPropertiesByIDList, cssRuleListItem)
 	return
 }
@@ -126,6 +142,7 @@ func (receiver *CssRuleList) CreateNewCssRulesByID(id string) (cssRuleListItem *
 func (receiver *CssRuleList) CreateNewCssRulesByClass(class string) (cssRuleListItem *CssRuleListItem) {
 	cssRuleListItem = &CssRuleListItem{Identifier1: class}
 	cssRuleListItem.Initialize()
+	cssRuleListItem.function = DefaultValidator
 	receiver.CssPropertiesByClassList = append(receiver.CssPropertiesByClassList, cssRuleListItem)
 	return
 }
@@ -133,27 +150,71 @@ func (receiver *CssRuleList) CreateNewCssRulesByClass(class string) (cssRuleList
 func (receiver *CssRuleList) CreateNewCssRulesByClassDescendant(class1, class2 string) (cssRuleListItem *CssRuleListItem) {
 	cssRuleListItem = &CssRuleListItem{Identifier1: class1, Identifier2: class2}
 	cssRuleListItem.Initialize()
-	receiver.CssPropertiesByClassList = append(receiver.CssPropertiesByClassList, cssRuleListItem)
+	cssRuleListItem.function = IsClassDescendant
+	receiver.CssPropertiesByClassDescendantList = append(receiver.CssPropertiesByClassDescendantList, cssRuleListItem)
 	return
 }
 
 func (receiver *CssRuleList) CreateNewCssRulesByClassBoth(class1, class2 string) (cssRuleListItem *CssRuleListItem) {
 	cssRuleListItem = &CssRuleListItem{Identifier1: class1, Identifier2: class2}
 	cssRuleListItem.Initialize()
-	receiver.CssPropertiesByClassList = append(receiver.CssPropertiesByClassList, cssRuleListItem)
+	cssRuleListItem.function = IsBothClass
+	receiver.CssPropertiesByClassBothList = append(receiver.CssPropertiesByClassBothList, cssRuleListItem)
 	return
 }
 
 func (receiver *CssRuleList) CreateNewCssPropertiesByElement(tag string) (cssRuleListItem *CssRuleListItem) {
 	receiver.CssPropertiesByElementList[tag] = new(CssRuleListItem)
 	receiver.CssPropertiesByElementList[tag].Initialize()
+	receiver.CssPropertiesByElementList[tag].function = DefaultValidator
 	return receiver.CssPropertiesByElementList[tag]
 }
 
-func (receiver *CssRuleList) CreateNewCssPropertiesByElementAndClass(id string) (cssRuleListItem *CssRuleListItem) {
-	cssRuleListItem = &CssRuleListItem{Identifier1: id}
+func (receiver *CssRuleList) CreateNewCssPropertiesByElementAndClass(tag, class string) (cssRuleListItem *CssRuleListItem) {
+	cssRuleListItem = &CssRuleListItem{Identifier1: tag, Identifier2: class}
 	cssRuleListItem.Initialize()
-	receiver.CssPropertiesByIDList = append(receiver.CssPropertiesByIDList, cssRuleListItem)
+	cssRuleListItem.function = DefaultValidator
+	receiver.CssPropertiesByElementAndClassList = append(receiver.CssPropertiesByElementAndClassList, cssRuleListItem)
+	return
+}
+
+func (receiver *CssRuleList) CreateNewCssPropertiesByElementDescendant(tag, descendantTag string) (cssRuleListItem *CssRuleListItem) {
+	cssRuleListItem = &CssRuleListItem{Identifier1: tag, Identifier2: descendantTag}
+	cssRuleListItem.Initialize()
+	cssRuleListItem.function = IsElementDescendant
+	receiver.CssPropertiesByElementDescendant = append(receiver.CssPropertiesByElementDescendant, cssRuleListItem)
+	return
+}
+
+func (receiver *CssRuleList) CreateNewCssPropertiesByElementParent(tag, parentTag string) (cssRuleListItem *CssRuleListItem) {
+	cssRuleListItem = &CssRuleListItem{Identifier1: tag, Identifier2: parentTag}
+	cssRuleListItem.Initialize()
+	cssRuleListItem.function = IsElementDescendant
+	receiver.CssPropertiesByElementParent = append(receiver.CssPropertiesByElementParent, cssRuleListItem)
+	return
+}
+
+func (receiver *CssRuleList) CreateNewCssPropertiesByElementBefore(tag, beforeTag string) (cssRuleListItem *CssRuleListItem) {
+	cssRuleListItem = &CssRuleListItem{Identifier1: tag, Identifier2: beforeTag}
+	cssRuleListItem.Initialize()
+	cssRuleListItem.function = IsElementBefore
+	receiver.CssPropertiesByElementBefore = append(receiver.CssPropertiesByElementBefore, cssRuleListItem)
+	return
+}
+
+func (receiver *CssRuleList) CreateNewCssPropertiesByElementPreceded(tag, precededTag string) (cssRuleListItem *CssRuleListItem) {
+	cssRuleListItem = &CssRuleListItem{Identifier1: tag, Identifier2: precededTag}
+	cssRuleListItem.Initialize()
+	cssRuleListItem.function = IsElementPreceded
+	receiver.CssPropertiesByElementPreceded = append(receiver.CssPropertiesByElementPreceded, cssRuleListItem)
+	return
+}
+
+func (receiver *CssRuleList) CreateNewCssPropertiesByElementAndAttribute(tag, attribute string) (cssRuleListItem *CssRuleListItem) {
+	cssRuleListItem = &CssRuleListItem{Identifier1: tag, Identifier2: attribute}
+	cssRuleListItem.Initialize()
+	cssRuleListItem.function = IsElementAndAttribute
+	receiver.CssPropertiesByElementAndAttribute = append(receiver.CssPropertiesByElementAndAttribute, cssRuleListItem)
 	return
 }
 
@@ -176,7 +237,7 @@ func (receiver *CssRuleList) GetCssRulesByClass(class string) *CssRuleListItem {
 }
 
 func (receiver *CssRuleList) GetCssRulesByClassDescendant(class1, class2 string) *CssRuleListItem {
-	for _, item := range receiver.CssPropertiesByClassList {
+	for _, item := range receiver.CssPropertiesByClassDescendantList {
 		if item.Identifier1 == class1 && item.Identifier2 == class2 {
 			return item
 		}
@@ -185,7 +246,7 @@ func (receiver *CssRuleList) GetCssRulesByClassDescendant(class1, class2 string)
 }
 
 func (receiver *CssRuleList) GetCssRulesByClassBoth(class1, class2 string) *CssRuleListItem {
-	for _, item := range receiver.CssPropertiesByClassList {
+	for _, item := range receiver.CssPropertiesByClassBothList {
 		if item.Identifier1 == class1 && item.Identifier2 == class2 {
 			return item
 		}
@@ -197,9 +258,45 @@ func (receiver *CssRuleList) GetCssRulesByElement(element string) *CssRuleListIt
 	return receiver.CssPropertiesByElementList[element]
 }
 
-func (receiver *CssRuleList) GetRulesByElementAndClass(class, element string) *CssRuleListItem {
-	for _, item := range receiver.CssPropertiesByIDList {
-		if item.Identifier1 == class && item.Identifier2 == element {
+func (receiver *CssRuleList) GetRulesByElementAndClass(element, class string) *CssRuleListItem {
+	for _, item := range receiver.CssPropertiesByElementAndClassList {
+		if item.Identifier1 == element && item.Identifier2 == class {
+			return item
+		}
+	}
+	return nil
+}
+
+func (receiver *CssRuleList) GetCssRulesByElementDescendant(element, descendantElement string) *CssRuleListItem {
+	for _, item := range receiver.CssPropertiesByElementDescendant {
+		if item.Identifier1 == element && item.Identifier2 == descendantElement {
+			return item
+		}
+	}
+	return nil
+}
+
+func (receiver *CssRuleList) GetCssRulesByElementBefore(element, beforeElement string) *CssRuleListItem {
+	for _, item := range receiver.CssPropertiesByElementDescendant {
+		if item.Identifier1 == element && item.Identifier2 == beforeElement {
+			return item
+		}
+	}
+	return nil
+}
+
+func (receiver *CssRuleList) GetCssRulesByElementPreceded(element, precededElement string) *CssRuleListItem {
+	for _, item := range receiver.CssPropertiesByElementDescendant {
+		if item.Identifier1 == element && item.Identifier2 == precededElement {
+			return item
+		}
+	}
+	return nil
+}
+
+func (receiver *CssRuleList) GetCssRulesByElementAndAttribute(element, precededElement string) *CssRuleListItem {
+	for _, item := range receiver.CssPropertiesByElementDescendant {
+		if item.Identifier1 == element && item.Identifier2 == precededElement {
 			return item
 		}
 	}
