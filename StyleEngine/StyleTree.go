@@ -108,19 +108,30 @@ func (receiver *CssRuleListItem) Initialize() {
 }
 
 type CssRuleList struct {
-	CssPropertiesByIDList                             []*CssRuleListItem
-	CssPropertiesByClassList                          []*CssRuleListItem
-	CssPropertiesByElementList                        map[string]*CssRuleListItem //it can be only map
-	CssPropertiesByClassDescendantList                []*CssRuleListItem
-	CssPropertiesByClassBothList                      []*CssRuleListItem
-	CssPropertiesByElementAndClassList                []*CssRuleListItem
-	CssPropertiesByElementDescendant                  []*CssRuleListItem
-	CssPropertiesByElementParent                      []*CssRuleListItem
-	CssPropertiesByElementBefore                      []*CssRuleListItem
-	CssPropertiesByElementPreceded                    []*CssRuleListItem
-	CssPropertiesByElementAndAttribute                []*CssRuleListItem
-	CssPropertiesByElementAndAttributeAndValue        []*CssRuleListItem
-	CssPropertiesByElementAndAttributeAndContainValue []*CssRuleListItem
+	CssPropertiesByIDList                                            []*CssRuleListItem
+	CssPropertiesByClassList                                         []*CssRuleListItem
+	CssPropertiesByElementList                                       map[string]*CssRuleListItem //it can be only map
+	CssPropertiesByClassDescendantList                               []*CssRuleListItem
+	CssPropertiesByClassBothList                                     []*CssRuleListItem
+	CssPropertiesByElementAndClassList                               []*CssRuleListItem
+	CssPropertiesByElementDescendant                                 []*CssRuleListItem
+	CssPropertiesByElementParent                                     []*CssRuleListItem
+	CssPropertiesByElementBefore                                     []*CssRuleListItem
+	CssPropertiesByElementPreceded                                   []*CssRuleListItem
+	CssPropertiesByEveryElementAndAttribute                          []*CssRuleListItem
+	CssPropertiesByEveryElementAndAttributeAndValue                  []*CssRuleListItem
+	CssPropertiesByEveryElementAndAttributeAndContainValue           []*CssRuleListItem
+	CssPropertiesByEveryElementAndAttributeAndStartsValue            []*CssRuleListItem
+	CssPropertiesByEveryElementAndAttributeAndBeginsValue            []*CssRuleListItem
+	CssPropertiesByEveryElementAndAttributeAndEndsValue              []*CssRuleListItem
+	CssPropertiesByEveryElementAndAttributeAndContainsSubstringValue []*CssRuleListItem
+	CssPropertiesByElementAndAttribute                               []*CssRuleListItem
+	CssPropertiesByElementAndAttributeAndValue                       []*CssRuleListItem
+	CssPropertiesByElementAndAttributeAndContainValue                []*CssRuleListItem
+	CssPropertiesByElementAndAttributeAndStartsValue                 []*CssRuleListItem
+	CssPropertiesByElementAndAttributeAndBeginsValue                 []*CssRuleListItem
+	CssPropertiesByElementAndAttributeAndEndsValue                   []*CssRuleListItem
+	CssPropertiesByElementAndAttributeAndContainsSubstringValue      []*CssRuleListItem
 }
 
 func (receiver *CssRuleList) Initialize() {
@@ -218,6 +229,18 @@ func (receiver *CssRuleList) CreateNewCssPropertiesByElementAndAttribute(tag, at
 	return
 }
 
+func (receiver *CssRuleList) CreateNewCssPropertiesByElementAndAttributeAndValue(tag, attribute, value string) (cssRuleListItem *CssRuleListItem) {
+	cssRuleListItem = receiver.GenericCreate(receiver.CssPropertiesByElementAndAttributeAndValue, tag, attribute, value)
+	cssRuleListItem.function = IsElementAndAttributeAndValue
+	return
+}
+
+func (receiver *CssRuleList) CreateNewCssPropertiesByElementAndAttributeAndContainsValue(tag, attribute, value string) (cssRuleListItem *CssRuleListItem) {
+	cssRuleListItem = receiver.GenericCreate(receiver.CssPropertiesByElementAndAttributeAndContainValue, tag, attribute, value)
+	cssRuleListItem.function = IsElementAndAttributeAndContainsValue
+	return
+}
+
 func (receiver *CssRuleList) GetCssRulesByID(id string) (cssRuleListItem *CssRuleListItem) {
 	for _, item := range receiver.CssPropertiesByIDList {
 		if item.Identifier1 == id {
@@ -237,21 +260,11 @@ func (receiver *CssRuleList) GetCssRulesByClass(class string) *CssRuleListItem {
 }
 
 func (receiver *CssRuleList) GetCssRulesByClassDescendant(class1, class2 string) *CssRuleListItem {
-	for _, item := range receiver.CssPropertiesByClassDescendantList {
-		if item.Identifier1 == class1 && item.Identifier2 == class2 {
-			return item
-		}
-	}
-	return nil
+	return receiver.GenericSearch(receiver.CssPropertiesByClassDescendantList, class1, class2, "")
 }
 
 func (receiver *CssRuleList) GetCssRulesByClassBoth(class1, class2 string) *CssRuleListItem {
-	for _, item := range receiver.CssPropertiesByClassBothList {
-		if item.Identifier1 == class1 && item.Identifier2 == class2 {
-			return item
-		}
-	}
-	return nil
+	return receiver.GenericSearch(receiver.CssPropertiesByClassBothList, class1, class2, "")
 }
 
 func (receiver *CssRuleList) GetCssRulesByElement(element string) *CssRuleListItem {
@@ -259,46 +272,45 @@ func (receiver *CssRuleList) GetCssRulesByElement(element string) *CssRuleListIt
 }
 
 func (receiver *CssRuleList) GetRulesByElementAndClass(element, class string) *CssRuleListItem {
-	for _, item := range receiver.CssPropertiesByElementAndClassList {
-		if item.Identifier1 == element && item.Identifier2 == class {
-			return item
-		}
-	}
-	return nil
+	return receiver.GenericSearch(receiver.CssPropertiesByElementAndClassList, element, class, "")
 }
 
 func (receiver *CssRuleList) GetCssRulesByElementDescendant(element, descendantElement string) *CssRuleListItem {
-	for _, item := range receiver.CssPropertiesByElementDescendant {
-		if item.Identifier1 == element && item.Identifier2 == descendantElement {
-			return item
-		}
-	}
-	return nil
+	return receiver.GenericSearch(receiver.CssPropertiesByElementDescendant, element, descendantElement, "")
 }
 
 func (receiver *CssRuleList) GetCssRulesByElementBefore(element, beforeElement string) *CssRuleListItem {
-	for _, item := range receiver.CssPropertiesByElementDescendant {
-		if item.Identifier1 == element && item.Identifier2 == beforeElement {
-			return item
-		}
-	}
-	return nil
+	return receiver.GenericSearch(receiver.CssPropertiesByElementBefore, element, beforeElement, "")
 }
 
 func (receiver *CssRuleList) GetCssRulesByElementPreceded(element, precededElement string) *CssRuleListItem {
-	for _, item := range receiver.CssPropertiesByElementDescendant {
-		if item.Identifier1 == element && item.Identifier2 == precededElement {
+	return receiver.GenericSearch(receiver.CssPropertiesByElementPreceded, element, precededElement, "")
+}
+
+func (receiver *CssRuleList) GetCssRulesByElementAndAttribute(element, attribute string) *CssRuleListItem {
+	return receiver.GenericSearch(receiver.CssPropertiesByElementAndAttribute, element, attribute, "")
+}
+
+func (receiver *CssRuleList) GetCssRulesByElementAndAttributeAndValue(element, attribute, value string) *CssRuleListItem {
+	return receiver.GenericSearch(receiver.CssPropertiesByElementAndAttributeAndValue, element, attribute, value)
+}
+
+func (receiver *CssRuleList) GetCssRulesByElementAndAttributeAndContainsValue(element, attribute, value string) *CssRuleListItem {
+	return receiver.GenericSearch(receiver.CssPropertiesByElementAndAttributeAndContainValue, element, attribute, value)
+}
+
+func (receiver *CssRuleList) GenericSearch(ruleList []*CssRuleListItem, identifier1, identifier2, identifier3 string) *CssRuleListItem {
+	for _, item := range ruleList {
+		if item.Identifier1 == identifier1 && item.Identifier2 == identifier2 && item.Identifier3 == identifier3 {
 			return item
 		}
 	}
 	return nil
 }
 
-func (receiver *CssRuleList) GetCssRulesByElementAndAttribute(element, precededElement string) *CssRuleListItem {
-	for _, item := range receiver.CssPropertiesByElementDescendant {
-		if item.Identifier1 == element && item.Identifier2 == precededElement {
-			return item
-		}
-	}
-	return nil
+func (receiver *CssRuleList) GenericCreate(ruleList []*CssRuleListItem, identifier1, identifier2, identifier3 string) *CssRuleListItem {
+	cssRuleListItem := &CssRuleListItem{Identifier1: identifier1, Identifier2: identifier2, Identifier3: identifier3}
+	cssRuleListItem.Initialize()
+	ruleList = append(ruleList, cssRuleListItem)
+	return cssRuleListItem
 }

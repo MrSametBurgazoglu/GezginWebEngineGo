@@ -1,6 +1,9 @@
 package StyleEngine
 
-import "gezgin_web_engine/widget"
+import (
+	"gezgin_web_engine/widget"
+	"strings"
+)
 
 func IsClassDescendant(currentWidget widget.WidgetInterface, item *CssRuleListItem) bool {
 	for currentWidget.GetParent() != nil {
@@ -56,6 +59,24 @@ func IsElementPreceded(currentWidget widget.WidgetInterface, item *CssRuleListIt
 func IsElementAndAttribute(currentWidget widget.WidgetInterface, item *CssRuleListItem) bool {
 	for attribute, _ := range currentWidget.GetAttributes() {
 		if item.Identifier2 == attribute {
+			return true
+		}
+	}
+	return false
+}
+
+func IsElementAndAttributeAndValue(currentWidget widget.WidgetInterface, item *CssRuleListItem) bool {
+	for attribute, value := range currentWidget.GetAttributes() {
+		if item.Identifier2 == attribute && value == item.Identifier3 {
+			return true
+		}
+	}
+	return false
+}
+
+func IsElementAndAttributeAndContainsValue(currentWidget widget.WidgetInterface, item *CssRuleListItem) bool {
+	for attribute, value := range currentWidget.GetAttributes() {
+		if item.Identifier2 == attribute && strings.Contains(value, item.Identifier3) {
 			return true
 		}
 	}
