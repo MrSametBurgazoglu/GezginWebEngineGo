@@ -18,3 +18,15 @@ func (receiver *CssRuleList) GetCssRulesByClass(class string) *CssRuleListItem.C
 	}
 	return nil
 }
+
+func (receiver *StyleEngine) GetCssRulesByClass(class string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
+	for _, sheet := range receiver.CssStyleSheetList {
+		if sheet.external == external {
+			rules := sheet.cssRuleList.GetCssRulesByClass(class)
+			if rules != nil {
+				ruleList = append(ruleList, rules)
+			}
+		}
+	}
+	return
+}

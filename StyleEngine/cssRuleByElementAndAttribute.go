@@ -11,3 +11,12 @@ func (receiver *CssRuleList) CreateNewCssPropertiesByElementAndAttribute(tag, at
 func (receiver *CssRuleList) GetCssRulesByElementAndAttribute(element, attribute string) *CssRuleListItem.CssRuleListItem {
 	return receiver.GenericSearch(receiver.CssPropertiesByElementAndAttribute, element, attribute, "")
 }
+
+func (receiver *StyleEngine) GetCssRulesByElementAndAttribute(element string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
+	for _, sheet := range receiver.CssStyleSheetList {
+		if sheet.external == external {
+			ruleList = append(ruleList, sheet.cssRuleList.GenericSearch(sheet.cssRuleList.CssPropertiesByElementAndAttribute, element, "", ""))
+		}
+	}
+	return
+}

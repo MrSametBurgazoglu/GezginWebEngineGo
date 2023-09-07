@@ -12,3 +12,15 @@ func (receiver *CssRuleList) CreateNewCssPropertiesByElement(tag string) (cssRul
 func (receiver *CssRuleList) GetCssRulesByElement(element string) *CssRuleListItem.CssRuleListItem {
 	return receiver.CssPropertiesByElementList[element]
 }
+
+func (receiver *StyleEngine) GetCssRulesByTag(htmlTag string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
+	for _, sheet := range receiver.CssStyleSheetList {
+		if sheet.external == external {
+			rules := sheet.cssRuleList.GetCssRulesByElement(htmlTag)
+			if rules != nil {
+				ruleList = append(ruleList, rules)
+			}
+		}
+	}
+	return
+}

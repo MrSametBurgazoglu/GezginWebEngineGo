@@ -71,42 +71,6 @@ func (receiver *StyleEngine) CreateStyleRules(styleSheet *StyleSheet, cssRules C
 	}
 }
 
-func (receiver *StyleEngine) GetCssRulesByClass(class string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
-	for _, sheet := range receiver.CssStyleSheetList {
-		if sheet.external == external {
-			rules := sheet.cssRuleList.GetCssRulesByClass(class)
-			if rules != nil {
-				ruleList = append(ruleList, rules)
-			}
-		}
-	}
-	return
-}
-
-func (receiver *StyleEngine) GetCssRulesByTag(htmlTag string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
-	for _, sheet := range receiver.CssStyleSheetList {
-		if sheet.external == external {
-			rules := sheet.cssRuleList.GetCssRulesByElement(htmlTag)
-			if rules != nil {
-				ruleList = append(ruleList, rules)
-			}
-		}
-	}
-	return
-}
-
-func (receiver *StyleEngine) GetCssRulesByID(id string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
-	for _, sheet := range receiver.CssStyleSheetList {
-		if sheet.external == external {
-			rules := sheet.cssRuleList.GetCssRulesByID(id)
-			if rules != nil {
-				ruleList = append(ruleList, rules)
-			}
-		}
-	}
-	return
-}
-
 // GetCssRuleListItems /* make this as one goroutine*/
 func (receiver *StyleSheet) GetCssRuleListItems(selectors []string) (cssRuleList []*CssRuleListItem.CssRuleListItem) {
 	for _, s := range selectors {
@@ -161,6 +125,18 @@ func (receiver *StyleSheet) GetCssRuleItem(selector string) *CssRuleListItem.Css
 		}
 	}
 	return cssRuleList
+}
+
+func (receiver *StyleEngine) GetAllCssRulesByElement(htmlName string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
+	rules := receiver.GetCssRulesByTag(htmlName, external)
+	rules = append(rules, receiver.GetCssRulesByElementAndAttribute(htmlName, external)...)
+	rules = append(rules, receiver.GetCssRulesByElementAndAttributeAndValue(htmlName, external)...)
+	rules = append(rules, receiver.GetCssRulesByElementAndAttributeAndBeginsValue(htmlName, external)...)
+	rules = append(rules, receiver.GetCssRulesByElementAndAttributeAndStartsValue(htmlName, external)...)
+	rules = append(rules, receiver.GetCssRulesByElementAndAttributeAndContainsSubstringsValue(htmlName, external)...)
+	rules = append(rules, receiver.GetCssRulesByElementAndAttributeAndEndsValue(htmlName, external)...)
+
+	return
 }
 
 /*TODO PROCESSES HERE WITH STYLE PROPERTY DONE IN STYLE_ENGINE NOT STYLE PROPERTY*/
