@@ -82,3 +82,43 @@ func IsElementAndAttributeAndContainsValue(currentWidget widget.WidgetInterface,
 	}
 	return false
 }
+
+func IsElementAndAttributeAndBeginsValue(currentWidget widget.WidgetInterface, item *CssRuleListItem) bool {
+	for attribute, value := range currentWidget.GetAttributes() {
+		if item.Identifier2 == attribute && item.Identifier3 == value || strings.HasPrefix(value, item.Identifier3+"-") {
+			return true
+		}
+	}
+	return false
+}
+
+func IsElementAndAttributeAndStartsValue(currentWidget widget.WidgetInterface, item *CssRuleListItem) bool {
+	for attribute, value := range currentWidget.GetAttributes() {
+		if item.Identifier2 == attribute && strings.HasPrefix(value, item.Identifier3) {
+			return true
+		}
+	}
+	return false
+}
+
+func IsElementAndAttributeAndEndsValue(currentWidget widget.WidgetInterface, item *CssRuleListItem) bool {
+	for attribute, value := range currentWidget.GetAttributes() {
+		if item.Identifier2 == attribute && strings.HasSuffix(value, item.Identifier3) {
+			return true
+		}
+	}
+	return false
+}
+
+func IsElementAndAttributeAndContainsSubstringValue(currentWidget widget.WidgetInterface, item *CssRuleListItem) bool {
+	for attribute, value := range currentWidget.GetAttributes() {
+		if item.Identifier2 == attribute {
+			for _, s := range strings.Fields(value) {
+				if s == item.Identifier3 {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
