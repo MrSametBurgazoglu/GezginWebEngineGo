@@ -2,6 +2,7 @@ package StyleEngine
 
 import (
 	"gezgin_web_engine/GlobalTypes"
+	"gezgin_web_engine/StyleEngine/CssRuleListItem"
 	"gezgin_web_engine/StyleProperty"
 	"gezgin_web_engine/widget"
 	"github.com/gammazero/workerpool"
@@ -70,7 +71,7 @@ func (receiver *StyleEngine) CreateStyleRules(styleSheet *StyleSheet, cssRules C
 	}
 }
 
-func (receiver *StyleEngine) GetCssRulesByClass(class string, external bool) (ruleList []*CssRuleListItem) {
+func (receiver *StyleEngine) GetCssRulesByClass(class string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
 	for _, sheet := range receiver.CssStyleSheetList {
 		if sheet.external == external {
 			rules := sheet.cssRuleList.GetCssRulesByClass(class)
@@ -82,7 +83,7 @@ func (receiver *StyleEngine) GetCssRulesByClass(class string, external bool) (ru
 	return
 }
 
-func (receiver *StyleEngine) GetCssRulesByTag(htmlTag string, external bool) (ruleList []*CssRuleListItem) {
+func (receiver *StyleEngine) GetCssRulesByTag(htmlTag string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
 	for _, sheet := range receiver.CssStyleSheetList {
 		if sheet.external == external {
 			rules := sheet.cssRuleList.GetCssRulesByElement(htmlTag)
@@ -94,7 +95,7 @@ func (receiver *StyleEngine) GetCssRulesByTag(htmlTag string, external bool) (ru
 	return
 }
 
-func (receiver *StyleEngine) GetCssRulesByID(id string, external bool) (ruleList []*CssRuleListItem) {
+func (receiver *StyleEngine) GetCssRulesByID(id string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
 	for _, sheet := range receiver.CssStyleSheetList {
 		if sheet.external == external {
 			rules := sheet.cssRuleList.GetCssRulesByID(id)
@@ -107,7 +108,7 @@ func (receiver *StyleEngine) GetCssRulesByID(id string, external bool) (ruleList
 }
 
 // GetCssRuleListItems /* make this as one goroutine*/
-func (receiver *StyleSheet) GetCssRuleListItems(selectors []string) (cssRuleList []*CssRuleListItem) {
+func (receiver *StyleSheet) GetCssRuleListItems(selectors []string) (cssRuleList []*CssRuleListItem.CssRuleListItem) {
 	for _, s := range selectors {
 		s = strings.TrimSpace(s)
 		cssRuleList = append(cssRuleList, receiver.GetCssRuleItem(s))
@@ -115,8 +116,8 @@ func (receiver *StyleSheet) GetCssRuleListItems(selectors []string) (cssRuleList
 	return
 }
 
-func (receiver *StyleSheet) GetCssRuleItem(selector string) *CssRuleListItem {
-	var cssRuleList *CssRuleListItem
+func (receiver *StyleSheet) GetCssRuleItem(selector string) *CssRuleListItem.CssRuleListItem {
+	var cssRuleList *CssRuleListItem.CssRuleListItem
 	switch selector[0] {
 	case '#':
 		cssRuleList = receiver.cssRuleList.GetCssRulesByID(selector[0:])
@@ -163,8 +164,8 @@ func (receiver *StyleSheet) GetCssRuleItem(selector string) *CssRuleListItem {
 }
 
 /*TODO PROCESSES HERE WITH STYLE PROPERTY DONE IN STYLE_ENGINE NOT STYLE PROPERTY*/
-func (receiver *StyleEngine) GetAllCssRules(id string, classes []string, htmlName string) []*CssRuleListItem {
-	var rules []*CssRuleListItem
+func (receiver *StyleEngine) GetAllCssRules(id string, classes []string, htmlName string) []*CssRuleListItem.CssRuleListItem {
+	var rules []*CssRuleListItem.CssRuleListItem
 	rules = append(rules, receiver.GetCssRulesByTag(htmlName, true)...)
 	rules = append(rules, receiver.GetCssRulesByTag(htmlName, false)...)
 	if classes != nil {
@@ -178,12 +179,12 @@ func (receiver *StyleEngine) GetAllCssRules(id string, classes []string, htmlNam
 		rules = append(rules, receiver.GetCssRulesByID(id, false)...)
 	}
 	for _, rule := range rules {
-		println(rule.function)
+		println(rule.Function)
 	}
 	return rules
 }
 
-func (receiver *StyleEngine) ApplyRules(styleProperty *StyleProperty.StyleProperty, rules []*CssRuleListItem) {
+func (receiver *StyleEngine) ApplyRules(styleProperty *StyleProperty.StyleProperty, rules []*CssRuleListItem.CssRuleListItem) {
 	for _, rule := range rules {
 		receiver.ApplyRule(styleProperty, rule)
 	}
@@ -194,7 +195,7 @@ func (receiver *StyleEngine) ApplyRules(styleProperty *StyleProperty.StyleProper
 func (receiver *StyleEngine) ApplyCssRules(currentWidget widget.WidgetInterface) {
 	rules := receiver.GetAllCssRules(currentWidget.GetID(), currentWidget.GetClasses(), currentWidget.GetHtmlName())
 	for _, rule := range rules {
-		if rule.function(currentWidget, rule) {
+		if rule.Function(currentWidget, rule) {
 			receiver.ApplyRule(currentWidget.GetStyleProperty(), rule)
 		}
 	}
@@ -202,7 +203,7 @@ func (receiver *StyleEngine) ApplyCssRules(currentWidget widget.WidgetInterface)
 	currentWidget.GetStyleProperty().ApplyInlineRules(currentWidget.GetStyleRules())
 }
 
-func (receiver *StyleEngine) ApplyRule(styleProperty *StyleProperty.StyleProperty, rule *CssRuleListItem) {
+func (receiver *StyleEngine) ApplyRule(styleProperty *StyleProperty.StyleProperty, rule *CssRuleListItem.CssRuleListItem) {
 	for property, value := range rule.Declarations {
 		styleProperty.ApplyDeclaration(property, value)
 	}

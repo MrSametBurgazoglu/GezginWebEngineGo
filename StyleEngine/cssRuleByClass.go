@@ -1,0 +1,20 @@
+package StyleEngine
+
+import "gezgin_web_engine/StyleEngine/CssRuleListItem"
+
+func (receiver *CssRuleList) CreateNewCssRulesByClass(class string) (cssRuleListItem *CssRuleListItem.CssRuleListItem) {
+	cssRuleListItem = &CssRuleListItem.CssRuleListItem{Identifier1: class}
+	cssRuleListItem.Initialize()
+	cssRuleListItem.Function = DefaultValidator
+	receiver.CssPropertiesByClassList = append(receiver.CssPropertiesByClassList, cssRuleListItem)
+	return
+}
+
+func (receiver *CssRuleList) GetCssRulesByClass(class string) *CssRuleListItem.CssRuleListItem {
+	for _, item := range receiver.CssPropertiesByClassList {
+		if item.Identifier1 == class {
+			return item
+		}
+	}
+	return nil
+}
