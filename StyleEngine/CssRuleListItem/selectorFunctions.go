@@ -23,6 +23,7 @@ func IsClassDescendant(currentWidget widget.WidgetInterface, item *CssRuleListIt
 				return true
 			}
 		}
+		currentWidget = currentWidget.GetParent()
 	}
 	return false
 }

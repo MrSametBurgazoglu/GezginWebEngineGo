@@ -134,7 +134,7 @@ func DefaultValidator(widget widget.WidgetInterface, item *CssRuleListItem.CssRu
 	return true
 }
 
-func (receiver *CssRuleList) GenericSearch(ruleList []*CssRuleListItem.CssRuleListItem, identifier1, identifier2, identifier3 string) *CssRuleListItem.CssRuleListItem {
+func (receiver *CssRuleList) GenericSearch3(ruleList []*CssRuleListItem.CssRuleListItem, identifier1, identifier2, identifier3 string) *CssRuleListItem.CssRuleListItem {
 	for _, item := range ruleList {
 		if item.Identifier1 == identifier1 && item.Identifier2 == identifier2 && item.Identifier3 == identifier3 {
 			return item
@@ -143,9 +143,27 @@ func (receiver *CssRuleList) GenericSearch(ruleList []*CssRuleListItem.CssRuleLi
 	return nil
 }
 
-func (receiver *CssRuleList) GenericCreate(ruleList []*CssRuleListItem.CssRuleListItem, identifier1, identifier2, identifier3 string) *CssRuleListItem.CssRuleListItem {
+func (receiver *CssRuleList) GenericSearch2(ruleList []*CssRuleListItem.CssRuleListItem, identifier1, identifier2 string) *CssRuleListItem.CssRuleListItem {
+	for _, item := range ruleList {
+		if item.Identifier1 == identifier1 && item.Identifier2 == identifier2 {
+			return item
+		}
+	}
+	return nil
+}
+
+func (receiver *CssRuleList) GenericSearch1(ruleList []*CssRuleListItem.CssRuleListItem, identifier1 string) *CssRuleListItem.CssRuleListItem {
+	for _, item := range ruleList {
+		if item.Identifier1 == identifier1 {
+			return item
+		}
+	}
+	return nil
+}
+
+func (receiver *CssRuleList) GenericCreate(ruleList *[]*CssRuleListItem.CssRuleListItem, identifier1, identifier2, identifier3 string) *CssRuleListItem.CssRuleListItem {
 	cssRuleListItem := &CssRuleListItem.CssRuleListItem{Identifier1: identifier1, Identifier2: identifier2, Identifier3: identifier3}
 	cssRuleListItem.Initialize()
-	ruleList = append(ruleList, cssRuleListItem)
+	*ruleList = append(*ruleList, cssRuleListItem)
 	return cssRuleListItem
 }
