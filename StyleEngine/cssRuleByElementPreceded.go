@@ -15,7 +15,10 @@ func (receiver *CssRuleList) GetCssRulesByElementPreceded(element, precededEleme
 func (receiver *StyleEngine) GetCssRulesByElementPreceded(element string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
 	for _, sheet := range receiver.CssStyleSheetList {
 		if sheet.external == external {
-			ruleList = append(ruleList, sheet.cssRuleList.GenericSearch(sheet.cssRuleList.CssPropertiesByElementPreceded, element, "", ""))
+			result := sheet.cssRuleList.GenericSearch(sheet.cssRuleList.CssPropertiesByElementPreceded, element, "", "")
+			if result != nil {
+				ruleList = append(ruleList, result)
+			}
 		}
 	}
 	return

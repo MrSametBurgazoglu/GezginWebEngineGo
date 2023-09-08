@@ -15,7 +15,10 @@ func (receiver *CssRuleList) GetCssRulesByElementAndAttributeAndStartsValue(elem
 func (receiver *StyleEngine) GetCssRulesByElementAndAttributeAndStartsValue(element string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
 	for _, sheet := range receiver.CssStyleSheetList {
 		if sheet.external == external {
-			ruleList = append(ruleList, sheet.cssRuleList.GenericSearch(sheet.cssRuleList.CssPropertiesByElementAndAttributeAndStartsValue, element, "", ""))
+			result := sheet.cssRuleList.GenericSearch(sheet.cssRuleList.CssPropertiesByElementAndAttributeAndStartsValue, element, "", "")
+			if result != nil {
+				ruleList = append(ruleList, result)
+			}
 		}
 	}
 	return

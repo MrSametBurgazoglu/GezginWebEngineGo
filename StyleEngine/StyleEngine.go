@@ -127,7 +127,7 @@ func (receiver *StyleSheet) GetCssRuleItem(selector string) *CssRuleListItem.Css
 	return cssRuleList
 }
 
-func (receiver *StyleEngine) GetAllCssRulesByElement(htmlName string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
+func (receiver *StyleEngine) GetAllCssRulesByElement(htmlName string, external bool) []*CssRuleListItem.CssRuleListItem {
 	rules := receiver.GetCssRulesByTag(htmlName, external)
 	rules = append(rules, receiver.GetCssRulesByElementAndAttribute(htmlName, external)...)
 	rules = append(rules, receiver.GetCssRulesByElementAndAttributeAndValue(htmlName, external)...)
@@ -141,12 +141,11 @@ func (receiver *StyleEngine) GetAllCssRulesByElement(htmlName string, external b
 	rules = append(rules, receiver.GetCssRulesByElementDescendant(htmlName, external)...)
 	rules = append(rules, receiver.GetCssRulesByElementParent(htmlName, external)...)
 	rules = append(rules, receiver.GetCssRulesByElementPreceded(htmlName, external)...)
-
-	return
+	return rules
 }
 
-func (receiver *StyleEngine) GetAllCssRulesByEveryElement(htmlName string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
-	rules := receiver.GetCssRulesByTag(htmlName, external)
+func (receiver *StyleEngine) GetAllCssRulesByEveryElement(external bool) []*CssRuleListItem.CssRuleListItem {
+	var rules []*CssRuleListItem.CssRuleListItem
 	rules = append(rules, receiver.GetCssRulesByEveryElementAndAttribute(external)...)
 	rules = append(rules, receiver.GetCssRulesByEveryElementAndAttributeAndValue(external)...)
 	rules = append(rules, receiver.GetCssRulesByEveryElementAndAttributeAndBeginsValue(external)...)
@@ -154,26 +153,27 @@ func (receiver *StyleEngine) GetAllCssRulesByEveryElement(htmlName string, exter
 	rules = append(rules, receiver.GetCssRulesByEveryElementAndAttributeAndContainsValue(external)...)
 	rules = append(rules, receiver.GetCssRulesByEveryElementAndAttributeAndContainsSubstringsValue(external)...)
 	rules = append(rules, receiver.GetCssRulesByEveryElementAndAttributeAndEndsValue(external)...)
-
-	return
+	return rules
 }
 
-func (receiver *StyleEngine) GetAllCssRulesByClass(class string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
+func (receiver *StyleEngine) GetAllCssRulesByClass(class string, external bool) []*CssRuleListItem.CssRuleListItem {
 	rules := receiver.GetCssRulesByClass(class, external)
 	rules = append(rules, receiver.GetCssRulesByClassBoth(class, external)...)
 	rules = append(rules, receiver.GetCssRulesByClassDescendant(class, external)...)
-	return
+	return rules
 }
 
 /*TODO PROCESSES HERE WITH STYLE PROPERTY DONE IN STYLE_ENGINE NOT STYLE PROPERTY*/
 func (receiver *StyleEngine) GetAllCssRules(id string, classes []string, htmlName string) []*CssRuleListItem.CssRuleListItem {
 	var rules []*CssRuleListItem.CssRuleListItem
-	rules = append(rules, receiver.GetCssRulesByTag(htmlName, true)...)
-	rules = append(rules, receiver.GetCssRulesByTag(htmlName, false)...)
+	rules = append(rules, receiver.GetAllCssRulesByEveryElement(true)...)
+	rules = append(rules, receiver.GetAllCssRulesByEveryElement(false)...)
+	rules = append(rules, receiver.GetAllCssRulesByElement(htmlName, true)...)
+	rules = append(rules, receiver.GetAllCssRulesByElement(htmlName, false)...)
 	if classes != nil {
 		for _, class := range classes {
-			rules = append(rules, receiver.GetCssRulesByClass(class, true)...)
-			rules = append(rules, receiver.GetCssRulesByClass(class, false)...)
+			rules = append(rules, receiver.GetAllCssRulesByClass(class, true)...)
+			rules = append(rules, receiver.GetAllCssRulesByClass(class, false)...)
 		}
 	}
 	if id != "" {

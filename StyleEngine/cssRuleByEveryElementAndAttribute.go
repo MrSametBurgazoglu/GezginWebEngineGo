@@ -4,7 +4,7 @@ import "gezgin_web_engine/StyleEngine/CssRuleListItem"
 
 func (receiver *CssRuleList) CreateNewCssPropertiesByEveryElementAndAttribute(attribute string) (cssRuleListItem *CssRuleListItem.CssRuleListItem) {
 	cssRuleListItem = receiver.GenericCreate(receiver.CssPropertiesByEveryElementAndAttribute, "", attribute, "")
-	cssRuleListItem.Function = CssRuleListItem.IsElementAndAttribute
+	cssRuleListItem.Function = CssRuleListItem.IsAttributeExist
 	return
 }
 

@@ -15,7 +15,10 @@ func (receiver *CssRuleList) GetCssRulesByElementAndAttributeAndContainsSubstrin
 func (receiver *StyleEngine) GetCssRulesByElementAndAttributeAndContainsSubstringsValue(element string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
 	for _, sheet := range receiver.CssStyleSheetList {
 		if sheet.external == external {
-			ruleList = append(ruleList, sheet.cssRuleList.GenericSearch(sheet.cssRuleList.CssPropertiesByElementAndAttributeAndContainsSubstringValue, element, "", ""))
+			result := sheet.cssRuleList.GenericSearch(sheet.cssRuleList.CssPropertiesByElementAndAttributeAndContainsSubstringValue, element, "", "")
+			if result != nil {
+				ruleList = append(ruleList, result)
+			}
 		}
 	}
 	return

@@ -15,7 +15,10 @@ func (receiver *CssRuleList) GetCssRulesByClassDescendant(class1, class2 string)
 func (receiver *StyleEngine) GetCssRulesByClassDescendant(class1 string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
 	for _, sheet := range receiver.CssStyleSheetList {
 		if sheet.external == external {
-			ruleList = append(ruleList, sheet.cssRuleList.GenericSearch(sheet.cssRuleList.CssPropertiesByClassDescendantList, class1, "", ""))
+			result := sheet.cssRuleList.GenericSearch(sheet.cssRuleList.CssPropertiesByClassDescendantList, class1, "", "")
+			if result != nil {
+				ruleList = append(ruleList, result)
+			}
 		}
 	}
 	return

@@ -5,6 +5,17 @@ import (
 	"strings"
 )
 
+func IsClassExist(currentWidget widget.WidgetInterface, item *CssRuleListItem) bool {
+	for currentWidget.GetParent() != nil {
+		for _, class := range currentWidget.GetClasses() {
+			if item.Identifier2 == class {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func IsClassDescendant(currentWidget widget.WidgetInterface, item *CssRuleListItem) bool {
 	for currentWidget.GetParent() != nil {
 		for _, class := range currentWidget.GetClasses() {
@@ -56,7 +67,7 @@ func IsElementPreceded(currentWidget widget.WidgetInterface, item *CssRuleListIt
 	}
 }
 
-func IsElementAndAttribute(currentWidget widget.WidgetInterface, item *CssRuleListItem) bool {
+func IsAttributeExist(currentWidget widget.WidgetInterface, item *CssRuleListItem) bool {
 	for attribute, _ := range currentWidget.GetAttributes() {
 		if item.Identifier2 == attribute {
 			return true
