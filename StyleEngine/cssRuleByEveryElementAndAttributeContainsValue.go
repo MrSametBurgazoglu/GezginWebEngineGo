@@ -8,6 +8,15 @@ func (receiver *CssRuleList) CreateNewCssPropertiesByEveryElementAndAttributeAnd
 	return
 }
 
-func (receiver *CssRuleList) GetCssRulesByElementEveryAndAttributeAndContainsValue(attribute, value string) *CssRuleListItem.CssRuleListItem {
+func (receiver *CssRuleList) GetCssRulesByEveryElementAndAttributeAndContainsValue(attribute, value string) *CssRuleListItem.CssRuleListItem {
 	return receiver.GenericSearch(receiver.CssPropertiesByEveryElementAndAttributeAndContainValue, "", attribute, value)
+}
+
+func (receiver *StyleEngine) GetCssRulesByEveryElementAndAttributeAndContainsValue(external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
+	for _, sheet := range receiver.CssStyleSheetList {
+		if sheet.external == external {
+			ruleList = append(ruleList, sheet.cssRuleList.CssPropertiesByEveryElementAndAttributeAndContainValue...)
+		}
+	}
+	return
 }

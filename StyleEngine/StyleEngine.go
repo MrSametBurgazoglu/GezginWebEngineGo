@@ -133,9 +133,35 @@ func (receiver *StyleEngine) GetAllCssRulesByElement(htmlName string, external b
 	rules = append(rules, receiver.GetCssRulesByElementAndAttributeAndValue(htmlName, external)...)
 	rules = append(rules, receiver.GetCssRulesByElementAndAttributeAndBeginsValue(htmlName, external)...)
 	rules = append(rules, receiver.GetCssRulesByElementAndAttributeAndStartsValue(htmlName, external)...)
+	rules = append(rules, receiver.GetCssRulesByElementAndAttributeAndContainsValue(htmlName, external)...)
 	rules = append(rules, receiver.GetCssRulesByElementAndAttributeAndContainsSubstringsValue(htmlName, external)...)
 	rules = append(rules, receiver.GetCssRulesByElementAndAttributeAndEndsValue(htmlName, external)...)
+	rules = append(rules, receiver.GetCssRulesByElementAndClass(htmlName, external)...)
+	rules = append(rules, receiver.GetCssRulesByElementBefore(htmlName, external)...)
+	rules = append(rules, receiver.GetCssRulesByElementDescendant(htmlName, external)...)
+	rules = append(rules, receiver.GetCssRulesByElementParent(htmlName, external)...)
+	rules = append(rules, receiver.GetCssRulesByElementPreceded(htmlName, external)...)
 
+	return
+}
+
+func (receiver *StyleEngine) GetAllCssRulesByEveryElement(htmlName string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
+	rules := receiver.GetCssRulesByTag(htmlName, external)
+	rules = append(rules, receiver.GetCssRulesByEveryElementAndAttribute(external)...)
+	rules = append(rules, receiver.GetCssRulesByEveryElementAndAttributeAndValue(external)...)
+	rules = append(rules, receiver.GetCssRulesByEveryElementAndAttributeAndBeginsValue(external)...)
+	rules = append(rules, receiver.GetCssRulesByEveryElementAndAttributeAndStartsValue(external)...)
+	rules = append(rules, receiver.GetCssRulesByEveryElementAndAttributeAndContainsValue(external)...)
+	rules = append(rules, receiver.GetCssRulesByEveryElementAndAttributeAndContainsSubstringsValue(external)...)
+	rules = append(rules, receiver.GetCssRulesByEveryElementAndAttributeAndEndsValue(external)...)
+
+	return
+}
+
+func (receiver *StyleEngine) GetAllCssRulesByClass(class string, external bool) (ruleList []*CssRuleListItem.CssRuleListItem) {
+	rules := receiver.GetCssRulesByClass(class, external)
+	rules = append(rules, receiver.GetCssRulesByClassBoth(class, external)...)
+	rules = append(rules, receiver.GetCssRulesByClassDescendant(class, external)...)
 	return
 }
 
