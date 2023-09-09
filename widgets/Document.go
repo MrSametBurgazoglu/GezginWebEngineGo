@@ -3,8 +3,8 @@ package widgets
 import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/LayoutEngine"
+	"gezgin_web_engine/LayoutProperty"
 	"gezgin_web_engine/ResourceManager"
-	"gezgin_web_engine/StyleProperty"
 	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"gezgin_web_engine/widget"
@@ -130,54 +130,49 @@ func (receiver *DocumentWidget) Draw(mainImage *image.RGBA) {
 
 func SetWidthForWidget(widget widget.WidgetInterface) {
 	layout := widget.GetLayout()
-	var layoutList []*LayoutEngine.LayoutProperty
+	var layoutList []*LayoutProperty.LayoutProperty
 	for _, widgetInterface := range widget.GetChildren() {
 		layoutList = append(layoutList, widgetInterface.GetLayout())
 	}
 
-	layout.SetWidth(widget.GetParent().GetLayout(), layoutList, widget.GetStyleProperty(), widget.GetParent().GetStyleProperty())
+	LayoutEngine.SetWidth(widget)
 	widget.GetLayout().Width = layout.Width
 }
 func SetHeightForWidget(widget widget.WidgetInterface) {
 	layout := widget.GetLayout()
-	var layoutList []*LayoutEngine.LayoutProperty
+	var layoutList []*LayoutProperty.LayoutProperty
 	for _, widgetInterface := range widget.GetChildren() {
 		layoutList = append(layoutList, widgetInterface.GetLayout())
 	}
 
-	layout.SetHeight(widget.GetParent().GetLayout(), layoutList, widget.GetStyleProperty())
+	LayoutEngine.SetHeight(widget)
 	widget.GetLayout().Height = layout.Height
 }
 
-func SetXYForWidget(widget widget.WidgetInterface) {
-	layout := widget.GetLayout()
-	var layoutList []*LayoutEngine.LayoutProperty
-	for _, widgetInterface := range widget.GetChildren() {
+func SetXYForWidget(currentWidget widget.WidgetInterface) {
+	layout := currentWidget.GetLayout()
+	var layoutList []*LayoutProperty.LayoutProperty
+	for _, widgetInterface := range currentWidget.GetChildren() {
 		layoutList = append(layoutList, widgetInterface.GetLayout())
 	}
 
-	parentLayout := widget.GetParent().GetLayout()
-	styleProperty := widget.GetStyleProperty()
-	var beforeCurrentWidget *LayoutEngine.LayoutProperty
-	var beforeCurrentWidgetStyle *StyleProperty.StyleProperty
-
-	if widget.GetChildrenIndex() > 0 {
-		beforeCurrentWidget = widget.GetParent().GetChildrenByIndex(widget.GetChildrenIndex() - 1).GetLayout()
-		beforeCurrentWidgetStyle = widget.GetParent().GetChildrenByIndex(widget.GetChildrenIndex() - 1).GetStyleProperty()
+	var beforeCurrentWidget widget.WidgetInterface
+	if currentWidget.GetChildrenIndex() > 0 {
+		beforeCurrentWidget = currentWidget.GetParent().GetChildrenByIndex(currentWidget.GetChildrenIndex() - 1)
 	}
 
-	x, y := layout.SetPosition(parentLayout, beforeCurrentWidget, styleProperty, beforeCurrentWidgetStyle)
+	x, y := LayoutEngine.SetPosition(currentWidget, currentWidget.GetParent(), beforeCurrentWidget)
 
-	if untaggedText, ok := widget.(*UntaggedText); ok {
+	if untaggedText, ok := currentWidget.(*UntaggedText); ok {
 		println("x:", x, "y:", y, "value:", untaggedText.Value, "w:", layout.Width, "h:", layout.Height)
 	}
 
-	if HtmlParser.HtmlTags(widget.GetHtmlTag()) == HtmlParser.HTML_PRE {
+	if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_PRE {
 		println("heyyo")
 	}
 
-	widget.GetLayout().XPosition = x
-	widget.GetLayout().YPosition = y
+	currentWidget.GetLayout().XPosition = x
+	currentWidget.GetLayout().YPosition = y
 }
 
 func (receiver *DocumentWidget) SetWidthForBlockElements() {

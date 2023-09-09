@@ -4,7 +4,7 @@ import (
 	"gezgin_web_engine/CssParser"
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/HtmlParser/htmlVariables/standardHtmlTagVariables"
-	"gezgin_web_engine/LayoutEngine"
+	"gezgin_web_engine/LayoutProperty"
 	"gezgin_web_engine/StyleProperty"
 	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/drawer/structs"
@@ -30,7 +30,7 @@ type Widget struct {
 	ChildrenIndex  int
 	HtmlElement    *HtmlParser.HtmlElement
 	StyleProperty  *StyleProperty.StyleProperty
-	LayoutProperty *LayoutEngine.LayoutProperty
+	LayoutProperty *LayoutProperty.LayoutProperty
 	standardHtmlTagVariables.StandardHtmlTagVariables
 	StyleRules     map[string]string
 	DrawProperties *structs.DrawProperties
@@ -47,7 +47,7 @@ func (receiver *Widget) Initialize() {
 	receiver.StyleProperty.Initialize()
 	receiver.DrawProperties = new(structs.DrawProperties)
 	receiver.DrawProperties.Initialize()
-	receiver.LayoutProperty = new(LayoutEngine.LayoutProperty)
+	receiver.LayoutProperty = new(LayoutProperty.LayoutProperty)
 	receiver.CopyFromHtmlElement(receiver.HtmlElement)
 }
 
@@ -164,7 +164,7 @@ func (receiver *Widget) GetDrawProperties() *structs.DrawProperties {
 	return receiver.DrawProperties
 }
 
-func (receiver *Widget) GetLayout() *LayoutEngine.LayoutProperty {
+func (receiver *Widget) GetLayout() *LayoutProperty.LayoutProperty {
 	return receiver.LayoutProperty
 }
 
@@ -177,5 +177,5 @@ func (receiver *Widget) IsPreSetWidth() bool {
 }
 
 func (receiver *Widget) IsSetWidthSelf() bool {
-	return receiver.StyleProperty != nil && receiver.StyleProperty.Display == enums.CSS_DISPLAY_TYPE_FLEX
+	return receiver.StyleProperty != nil && receiver.StyleProperty.Display == enums.CSS_DISPLAY_TYPE_FLEX || (receiver.StyleProperty.Float == enums.CSS_FLOAT_LEFT || receiver.StyleProperty.Float == enums.CSS_FLOAT_RIGHT)
 }

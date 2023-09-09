@@ -1,45 +1,25 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/StyleProperty"
 	"gezgin_web_engine/StyleProperty/enums"
+	"gezgin_web_engine/widget"
 )
 
-type LayoutProperty struct {
-	Parent           *LayoutProperty
-	Children         []*LayoutProperty
-	Position         string
-	XPosition        int
-	YPosition        int
-	ContentXPosition int
-	ContentYPosition int
-	Width            int
-	Height           int
-	ContentWidth     int
-	ContentHeight    int
-	PaddingLeft      int
-	PaddingRight     int
-	PaddingTop       int
-	PaddingBottom    int
-	MarginLeft       int
-	MarginRight      int
-	MarginTop        int
-	MarginBottom     int
-}
-
-func (receiver *LayoutProperty) SetPosition(parent, beforeCurrentWidget *LayoutProperty, styleProperty, beforeCurrentWidgetStyle *StyleProperty.StyleProperty) (int, int) {
-	if styleProperty == nil {
-		return receiver.InlineSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty, beforeCurrentWidgetStyle)
-	} else if styleProperty.Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX {
-		return receiver.SetPositionFlex(parent, beforeCurrentWidget, styleProperty)
+func SetPosition(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) (int, int) {
+	if currentWidget.GetStyleProperty() == nil {
+		return InlineSetPosition(currentWidget, parent, beforeCurrentWidget)
+	} else if currentWidget.GetStyleProperty().Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX {
+		return SetPositionFlex(currentWidget, parent, beforeCurrentWidget)
+	} else if currentWidget.GetStyleProperty().Float != enums.CSS_FLOAT_EMPTY && currentWidget.GetStyleProperty().Float != enums.CSS_FLOAT_NONE {
+		return SetPositionFloat(currentWidget, parent, beforeCurrentWidget)
 	}
-	switch styleProperty.Display {
+	switch currentWidget.GetStyleProperty().Display {
 	case enums.CSS_DISPLAY_TYPE_BLOCK:
-		return receiver.BlockSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty)
+		return BlockSetPosition(currentWidget, parent, beforeCurrentWidget)
 	case enums.CSS_DISPLAY_TYPE_INLINE:
-		return receiver.InlineSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty, beforeCurrentWidgetStyle)
+		return InlineSetPosition(currentWidget, parent, beforeCurrentWidget)
 	case enums.CSS_DISPLAY_TYPE_FLEX:
-		return receiver.BlockSetPosition(receiver.Parent, beforeCurrentWidget, styleProperty)
+		return BlockSetPosition(currentWidget, parent, beforeCurrentWidget)
 	}
 	return 0, 0
 }

@@ -1,13 +1,13 @@
 package drawerBackend
 
 import (
-	"gezgin_web_engine/LayoutEngine"
+	"gezgin_web_engine/LayoutProperty"
 	"golang.org/x/image/draw"
 	"image"
 	"image/color"
 )
 
-func DrawBackground(red uint8, green uint8, blue uint8, alpha uint8, texture *image.RGBA, layoutProperty *LayoutEngine.LayoutProperty) {
+func DrawBackground(red uint8, green uint8, blue uint8, alpha uint8, texture *image.RGBA, layoutProperty *LayoutProperty.LayoutProperty) {
 
 	bgColor := color.RGBA{R: red, G: green, B: blue, A: alpha}
 	//println(bgColor.A, " color")

@@ -1,24 +1,24 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/StyleProperty"
+	"gezgin_web_engine/widget"
 )
 
-func (receiver *LayoutProperty) SetHeight(parent *LayoutProperty, children []*LayoutProperty, styleProperty *StyleProperty.StyleProperty) int {
-	if children != nil {
+func SetHeight(currentWidget widget.WidgetInterface) int {
+	if len(currentWidget.GetChildren()) > 0 {
 		height := 0
-		for _, child := range children {
-			height += child.Height
+		for _, child := range currentWidget.GetChildren() {
+			height += child.GetLayout().Height
 		}
-		if styleProperty != nil && styleProperty.Margin != nil {
-			contentHeight := height - (styleProperty.Margin.MarginTop + styleProperty.Margin.MarginBottom)
-			receiver.ContentHeight = contentHeight
+		if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Margin != nil {
+			contentHeight := height - (currentWidget.GetStyleProperty().Margin.MarginTop + currentWidget.GetStyleProperty().Margin.MarginBottom)
+			currentWidget.GetLayout().ContentHeight = contentHeight
 		} else {
-			receiver.ContentHeight = height
+			currentWidget.GetLayout().ContentHeight = height
 		}
-		receiver.Height = height
-		return receiver.Height
+		currentWidget.GetLayout().Height = height
+		return currentWidget.GetLayout().Height
 	} else {
-		return receiver.Height
+		return currentWidget.GetLayout().Height
 	}
 }

@@ -5,7 +5,7 @@ import (
 	"gezgin_web_engine/FileManager"
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/JavascriptHandler"
-	"gezgin_web_engine/LayoutEngine"
+	"gezgin_web_engine/LayoutProperty"
 	"gezgin_web_engine/NetworkManager"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/StyleEngine"
@@ -155,7 +155,7 @@ func (receiver *TaskManager) CreateWidgetTree() {
 	element := receiver.FindBody()
 	receiver.DocumentWidget.HtmlElement = element
 	receiver.DocumentWidget.Initialize()
-	receiver.DocumentWidget.LayoutProperty = new(LayoutEngine.LayoutProperty)
+	receiver.DocumentWidget.LayoutProperty = new(LayoutProperty.LayoutProperty)
 	receiver.DocumentWidget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
 	receiver.DocumentWidget.ResourceManager = receiver.ResourceManager
 	receiver.DocumentWidget.StyleProperty.Color = new(structs.ColorRGBA)

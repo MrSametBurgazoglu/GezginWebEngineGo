@@ -1,6 +1,6 @@
 package StyleProperty
 
-const cssPropertyCount = 148
+const cssPropertyCount = 149
 
 var cssPropertiesNameList = []string{
 	"accent-color",
@@ -81,6 +81,7 @@ var cssPropertiesNameList = []string{
 	"flex-grow",
 	"flex-shrink",
 	"flex-wrap",
+	"float",
 	"font",
 	"font-family",
 	"font-kerning",
@@ -234,6 +235,7 @@ var functionList = []cssPropertyFunction{
 	nil,
 	nil,
 	nil,
+	FloatPropertySetValue,
 	nil,
 	nil,
 	nil,

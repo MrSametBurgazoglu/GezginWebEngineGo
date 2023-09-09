@@ -43,6 +43,7 @@ type StyleProperty struct {
 	ColumnWidthInherit        bool
 	FlexInherit               bool
 	FlexFlowInherit           bool
+	FloatInherit              bool
 	PositionInherit           bool
 	WidthInherit              bool
 	MinWidthInherit           bool
@@ -74,6 +75,7 @@ type StyleProperty struct {
 	Color              *structs2.ColorRGBA
 	Display            enums.CssDisplayType
 	Font               *structs2.Font
+	Float              enums.CssFloatType
 	Margin             *structs2.Margin
 	Padding            *structs2.Padding
 	TextAlign          enums.CssTextAlignType

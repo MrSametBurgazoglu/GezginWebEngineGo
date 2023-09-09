@@ -2,7 +2,7 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
-	"gezgin_web_engine/LayoutEngine"
+	"gezgin_web_engine/LayoutProperty"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/drawer/Fonts"
@@ -88,7 +88,7 @@ func SetWidgetPropertiesForUntaggedText(element *HtmlParser.HtmlElement, taskMan
 	widget := new(UntaggedText)
 	widget.HtmlElement = element
 	widget.DrawProperties = new(structs.DrawProperties)
-	widget.LayoutProperty = new(LayoutEngine.LayoutProperty)
+	widget.LayoutProperty = new(LayoutProperty.LayoutProperty)
 	widget.DrawProperties.Initialize()
 
 	widget.SetValue(element.Text)

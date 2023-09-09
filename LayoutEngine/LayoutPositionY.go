@@ -1,61 +1,61 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/StyleProperty"
 	"gezgin_web_engine/StyleProperty/enums"
+	"gezgin_web_engine/widget"
 )
 
-func (receiver *LayoutProperty) SetPositionY(parent, beforeCurrentWidget *LayoutProperty, styleProperty *StyleProperty.StyleProperty) int {
-	if styleProperty != nil {
-		switch styleProperty.Position {
+func SetPositionY(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
+	if currentWidget.GetStyleProperty() != nil {
+		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			return parent.XPosition
+			return parent.GetLayout().XPosition
 		case enums.CSS_POSITION_TYPE_EMPTY:
 			if beforeCurrentWidget != nil {
 				marginTop := 0
-				if styleProperty.Margin != nil {
-					marginTop = styleProperty.Margin.MarginTop
+				if currentWidget.GetStyleProperty().Margin != nil {
+					marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
 				}
-				return beforeCurrentWidget.YPosition + beforeCurrentWidget.Height + marginTop
+				return beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height + marginTop
 			} else {
 				marginTop := 0
-				if styleProperty.Margin != nil {
-					marginTop = styleProperty.Margin.MarginTop
+				if currentWidget.GetStyleProperty().Margin != nil {
+					marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
 				}
-				return parent.YPosition + marginTop
+				return parent.GetLayout().YPosition + marginTop
 			}
 		case enums.CSS_POSITION_TYPE_STATIC:
 			marginTop := 0
-			if styleProperty.Margin != nil {
-				marginTop = styleProperty.Margin.MarginTop
+			if currentWidget.GetStyleProperty().Margin != nil {
+				marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
 			}
 			if beforeCurrentWidget != nil {
-				return beforeCurrentWidget.YPosition + beforeCurrentWidget.Height + marginTop
+				return beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height + marginTop
 			} else {
-				return parent.YPosition + parent.Height + marginTop
+				return parent.GetLayout().YPosition + parent.GetLayout().Height + marginTop
 			}
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			if styleProperty.Top != 0 {
-				return parent.YPosition + int(styleProperty.Top)
-			} else if styleProperty.Bottom != 0 {
-				return parent.YPosition + parent.Height - int(styleProperty.Bottom)
+			if currentWidget.GetStyleProperty().Top != 0 {
+				return parent.GetLayout().YPosition + int(currentWidget.GetStyleProperty().Top)
+			} else if currentWidget.GetStyleProperty().Bottom != 0 {
+				return parent.GetLayout().YPosition + parent.GetLayout().Height - int(currentWidget.GetStyleProperty().Bottom)
 			} else {
-				return parent.YPosition + parent.Height
+				return parent.GetLayout().YPosition + parent.GetLayout().Height
 			}
 		case enums.CSS_POSITION_TYPE_FIXED:
 			break
 		case enums.CSS_POSITION_TYPE_RELATIVE:
 			if beforeCurrentWidget != nil {
-				return beforeCurrentWidget.YPosition + beforeCurrentWidget.Height + int(styleProperty.Top)
+				return beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height + int(currentWidget.GetStyleProperty().Top)
 			} else {
-				return parent.YPosition + int(styleProperty.Top)
+				return parent.GetLayout().YPosition + int(currentWidget.GetStyleProperty().Top)
 			}
 		}
 	} else {
 		if beforeCurrentWidget == nil {
-			return parent.YPosition
+			return parent.GetLayout().YPosition
 		} else {
-			return beforeCurrentWidget.Height
+			return beforeCurrentWidget.GetLayout().Height
 		}
 	}
 	return 0

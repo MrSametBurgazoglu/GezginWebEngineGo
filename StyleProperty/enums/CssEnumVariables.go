@@ -7,6 +7,7 @@ type CssAnimationPlayStateType uint8
 type CssFilterType uint8
 type CssAlignType uint8
 type CssTextAlignType uint8
+type CssFloatType uint8
 type CssVisibilityType uint8
 type CssBackgroundType uint8
 type CssBackgroundPositionType uint8
@@ -81,6 +82,13 @@ const (
 	CSS_TEXT_ALIGN_JUSTIFY
 	CSS_TEXT_ALIGN_LEFT
 	CSS_TEXT_ALIGN_RIGHT
+)
+
+const (
+	CSS_FLOAT_EMPTY CssFloatType = iota
+	CSS_FLOAT_LEFT
+	CSS_FLOAT_NONE
+	CSS_FLOAT_RIGHT
 )
 
 const (

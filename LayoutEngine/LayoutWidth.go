@@ -1,23 +1,25 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/StyleProperty"
 	"gezgin_web_engine/StyleProperty/enums"
+	"gezgin_web_engine/widget"
 )
 
-func (receiver *LayoutProperty) SetWidth(parent *LayoutProperty, children []*LayoutProperty, styleProperty, parentStyleProperty *StyleProperty.StyleProperty) int {
-	if styleProperty == nil {
-		receiver.SetWidthInline(children, styleProperty)
-	} else if styleProperty.Display == enums.CSS_DISPLAY_TYPE_FLEX {
-		receiver.SetFLexContainerWidth(styleProperty)
-	} else if styleProperty.Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX {
+func SetWidth(currentWidget widget.WidgetInterface) int {
+	if currentWidget.GetStyleProperty() == nil {
+		SetWidthInline(currentWidget, currentWidget.GetStyleProperty())
+	} else if currentWidget.GetStyleProperty().Float != enums.CSS_FLOAT_EMPTY && currentWidget.GetStyleProperty().Float != enums.CSS_FLOAT_NONE {
+		SetFloatWidth(currentWidget)
+	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_FLEX {
+		SetFLexContainerWidth(currentWidget)
+	} else if currentWidget.GetStyleProperty().Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX {
 		println("heyyo")
-	} else if styleProperty.Display == enums.CSS_DISPLAY_TYPE_BLOCK {
-		receiver.SetWidthBlock(parent, styleProperty)
-	} else if styleProperty.Display == enums.CSS_DISPLAY_TYPE_FLEX {
-		receiver.SetWidthBlock(parent, styleProperty)
+	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_BLOCK {
+		SetWidthBlock(currentWidget, currentWidget.GetParent())
+	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_FLEX {
+		SetWidthBlock(currentWidget, currentWidget.GetParent())
 	} else {
-		receiver.SetWidthInline(children, styleProperty)
+		SetWidthInline(currentWidget, currentWidget.GetStyleProperty())
 	}
-	return receiver.Width
+	return currentWidget.GetLayout().Width
 }
