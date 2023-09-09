@@ -162,6 +162,9 @@ func MarginBottomPropertySetValue(currentWidget *StyleProperty, value string) {
 }
 
 func MarginLeftPropertyValue(currentWidget *StyleProperty, value string) {
+	if strings.Contains(value, "!important") {
+		value = strings.ReplaceAll(value, "!important", "")
+	}
 	if value == "inherit" {
 		if !currentWidget.MarginInherit {
 			if currentWidget.Margin == nil {
@@ -189,6 +192,9 @@ func MarginLeftPropertyValue(currentWidget *StyleProperty, value string) {
 }
 
 func MarginRightPropertySetValue(currentWidget *StyleProperty, value string) {
+	if strings.Contains(value, "!important") {
+		value = strings.ReplaceAll(value, "!important", "")
+	}
 	if value == "inherit" {
 		if !currentWidget.MarginInherit {
 			if currentWidget.Margin == nil {

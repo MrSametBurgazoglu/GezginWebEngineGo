@@ -63,6 +63,13 @@ func SetMaxWidth(cssProperties *StyleProperty, value string) {
 		}
 		cssProperties.MaxWidth = uint(width)
 		cssProperties.MaxWidthValueType = enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE
+	} else if strings.HasSuffix(value, "em") {
+		width, err := strconv.Atoi(strings.TrimSuffix(value, "em"))
+		if err != nil {
+			// handle error
+		}
+		cssProperties.MaxWidth = uint(width) * 16
+		cssProperties.MaxWidthValueType = enums.CSS_PROPERTY_VALUE_TYPE_PIXEL
 	} else {
 		// DEFAULT VALUE
 		cssProperties.MaxWidthValueType = enums.CSS_PROPERTY_VALUE_TYPE_NONE

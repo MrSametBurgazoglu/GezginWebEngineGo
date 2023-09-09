@@ -101,7 +101,11 @@ func SetPositionXFlex(currentWidget, parent, beforeCurrentWidget widget.WidgetIn
 			if beforeCurrentWidget == nil {
 				x = parent.GetLayout().XPosition
 				if currentWidget.GetStyleProperty().Margin != nil {
-					x += currentWidget.GetLayout().MarginLeft
+					if currentWidget.GetStyleProperty().Margin.MarginLeftValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO && currentWidget.GetStyleProperty().Margin.MarginRightValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO {
+						x += (currentWidget.GetLayout().Parent.Width - currentWidget.GetLayout().Width) / 2
+					} else {
+						x += currentWidget.GetLayout().MarginLeft
+					}
 				}
 				if currentWidget.GetStyleProperty().Padding != nil {
 					x += currentWidget.GetLayout().PaddingLeft
