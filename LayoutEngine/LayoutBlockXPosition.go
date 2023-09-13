@@ -10,11 +10,11 @@ func BlockSetPositionXSticky(currentWidget, parent widget.WidgetInterface) int {
 }
 
 func BlockSetPositionXStatic(currentWidget, parent widget.WidgetInterface) int {
-	position := parent.GetLayout().XPosition
+	position := parent.GetLayout().ContentXPosition
 	if currentWidget.GetStyleProperty().Margin != nil {
-		if currentWidget.GetStyleProperty().Margin.MarginLeftValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO && currentWidget.GetStyleProperty().Margin.MarginRightValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO {
-			position += (currentWidget.GetLayout().Parent.Width - currentWidget.GetLayout().Width) / 2
-		}
+		CalculateLeftMargin(currentWidget, true)
+		CalculateRightMargin(currentWidget, true)
+		position += currentWidget.GetLayout().MarginLeft
 	}
 	return position
 }

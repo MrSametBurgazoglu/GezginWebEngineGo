@@ -10,18 +10,14 @@ func BlockSetPositionYSticky(currentWidget, parent, beforeCurrentWidget widget.W
 }
 
 func BlockSetPositionYStatic(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
+	if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Margin != nil {
+		CalculateTopMargin(currentWidget, false)
+		CalculateBottomMargin(currentWidget, false)
+	}
 	if beforeCurrentWidget != nil {
-		marginTop := 0
-		if currentWidget.GetStyleProperty().Margin != nil {
-			marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
-		}
-		return beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height + marginTop
+		return beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().GetTotalHeight() + currentWidget.GetLayout().MarginTop
 	} else {
-		marginTop := 0
-		if currentWidget.GetStyleProperty().Margin != nil {
-			marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
-		}
-		return parent.GetLayout().YPosition + marginTop
+		return parent.GetLayout().YPosition + currentWidget.GetLayout().MarginTop
 	}
 }
 
