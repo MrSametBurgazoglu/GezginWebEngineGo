@@ -49,6 +49,7 @@ func (receiver *Widget) Initialize() {
 	receiver.DrawProperties.Initialize()
 	receiver.LayoutProperty = new(LayoutProperty.LayoutProperty)
 	receiver.CopyFromHtmlElement(receiver.HtmlElement)
+	receiver.LayoutProperty.StyleProperty = receiver.StyleProperty
 }
 
 func (receiver *Widget) SetChildrenCount(count int) {

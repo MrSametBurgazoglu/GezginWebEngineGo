@@ -35,7 +35,7 @@ func (receiver *WebTab) SetRendered(rendered bool) {
 }
 
 func (receiver *WebTab) GetWebView() *image.RGBA {
-	return receiver.taskManager.WebView
+	return receiver.taskManager.WebView.Image
 }
 
 func NewTab() *WebTab {

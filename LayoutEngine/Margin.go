@@ -34,11 +34,11 @@ func GetVerticalMarginAutoCountAndRemainHeight(currentWidget widget.WidgetInterf
 	parentContentHeight := currentWidget.GetParent().GetLayout().ContentHeight
 	autoCount := 0
 	for _, childWidgetInterface := range widgetList {
-		parentContentHeight -= childWidgetInterface.GetLayout().GetTotalHeight()
-		if childWidgetInterface.GetStyleProperty().Margin.MarginTopValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO {
+		parentContentHeight -= childWidgetInterface.GetLayout().GetTotalContentHeight()
+		if childWidgetInterface.GetStyleProperty().Margin != nil && childWidgetInterface.GetStyleProperty().Margin.MarginTopValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO {
 			autoCount += 1
 		}
-		if childWidgetInterface.GetStyleProperty().Margin.MarginBottomValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO {
+		if childWidgetInterface.GetStyleProperty().Margin != nil && childWidgetInterface.GetStyleProperty().Margin.MarginBottomValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO {
 			autoCount += 1
 		}
 	}

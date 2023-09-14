@@ -90,110 +90,33 @@ func SetPositionFlex(currentWidget, parent, beforeCurrentWidget widget.WidgetInt
 	}
 }
 
-func SetPositionXFlex(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
+func SetPositionYFlex(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
 	position := 0
 	if currentWidget.GetStyleProperty() != nil {
 		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			position = parent.GetLayout().ContentXPosition
+			position = FlexSetPositionYSticky(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			x := 0
-			if beforeCurrentWidget == nil {
-				x = parent.GetLayout().XPosition
-				if currentWidget.GetStyleProperty().Margin != nil {
-					if currentWidget.GetStyleProperty().Margin.MarginLeftValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO && currentWidget.GetStyleProperty().Margin.MarginRightValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO {
-						x += (currentWidget.GetLayout().Parent.Width - currentWidget.GetLayout().Width) / 2
-					} else {
-						x += currentWidget.GetLayout().MarginLeft
-					}
-				}
-				if currentWidget.GetStyleProperty().Padding != nil {
-					x += currentWidget.GetLayout().PaddingLeft
-				}
-			} else {
-				x = beforeCurrentWidget.GetLayout().XPosition + beforeCurrentWidget.GetLayout().Width
-				if currentWidget.GetStyleProperty().Margin != nil {
-					x += currentWidget.GetLayout().MarginLeft
-				}
-				if currentWidget.GetStyleProperty().Padding != nil {
-					x += currentWidget.GetLayout().PaddingLeft
-				}
-			}
-			position = x
-
+			println("hello")
+			println(currentWidget.GetParent().GetStyleProperty().FlexDirection)
+			//position = FlexSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_STATIC:
-			position = parent.GetLayout().ContentXPosition
+			position = FlexSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			if currentWidget.GetStyleProperty().Left != 0 {
-				position = parent.GetLayout().ContentXPosition + int(currentWidget.GetStyleProperty().Left)
-			} else if currentWidget.GetStyleProperty().Right != 0 {
-				position = parent.GetLayout().ContentWidth - int(currentWidget.GetStyleProperty().Right)
-			} else {
-				position = parent.GetLayout().ContentXPosition
-			}
+			position = FlexSetPositionYAbsolute(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_FIXED:
-			break
+			position = FlexSetPositionYFixed(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			if currentWidget.GetStyleProperty().Left != 0 {
-				position = parent.GetLayout().ContentXPosition + int(currentWidget.GetStyleProperty().Left)
-			} else if currentWidget.GetStyleProperty().Right != 0 {
-				position = parent.GetLayout().ContentWidth - int(currentWidget.GetStyleProperty().Right)
-			} else {
-				position = parent.GetLayout().ContentXPosition
-			}
-		}
-	} else {
-		position = parent.GetLayout().ContentXPosition
-	}
-	currentWidget.GetLayout().ContentXPosition = position
-	currentWidget.GetLayout().XPosition = position
-	return currentWidget.GetLayout().ContentXPosition
-}
-
-func SetPositionYFlex(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
-	if currentWidget.GetStyleProperty() != nil {
-		switch currentWidget.GetStyleProperty().Position {
-		case enums.CSS_POSITION_TYPE_STICKY:
-			return parent.GetLayout().XPosition
-		case enums.CSS_POSITION_TYPE_EMPTY:
-			marginTop := 0
-			if currentWidget.GetStyleProperty().Margin != nil {
-				marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
-			}
-			return parent.GetLayout().YPosition + marginTop
-
-		case enums.CSS_POSITION_TYPE_STATIC:
-			marginTop := 0
-			if currentWidget.GetStyleProperty().Margin != nil {
-				marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
-			}
-			return parent.GetLayout().YPosition + marginTop
-
-		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			if currentWidget.GetStyleProperty().Top != 0 {
-				return parent.GetLayout().YPosition + int(currentWidget.GetStyleProperty().Top)
-			} else if currentWidget.GetStyleProperty().Bottom != 0 {
-				return parent.GetLayout().YPosition + parent.GetLayout().Height - int(currentWidget.GetStyleProperty().Bottom)
-			} else {
-				return parent.GetLayout().YPosition + parent.GetLayout().Height
-			}
-		case enums.CSS_POSITION_TYPE_FIXED:
-			break
-		case enums.CSS_POSITION_TYPE_RELATIVE:
-			if beforeCurrentWidget != nil {
-				return beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height + int(currentWidget.GetStyleProperty().Top)
-			} else {
-				return parent.GetLayout().YPosition + int(currentWidget.GetStyleProperty().Top)
-			}
+			position = FlexSetPositionYRelative(currentWidget, parent, beforeCurrentWidget)
 		}
 	} else {
 		if beforeCurrentWidget == nil {
-			return parent.GetLayout().YPosition
+			position = parent.GetLayout().YPosition
 		} else {
-			return beforeCurrentWidget.GetLayout().YPosition
+			position = beforeCurrentWidget.GetLayout().YPosition
 		}
 	}
-	return 0
+	return position
 }
 
 func SetWidthFlexChild(currentWidget widget.WidgetInterface, styleProperty *StyleProperty.StyleProperty) {

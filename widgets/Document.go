@@ -100,7 +100,7 @@ func (receiver *DocumentWidget) RenderDocument(mainImage *image.RGBA) {
 // This function and sub functions will be rewritten
 func (receiver *DocumentWidget) RenderPage(mainImage *image.RGBA) {
 	receiver.LayoutProperty.Width = ScreenProperties.WindowWidth
-	receiver.LayoutProperty.Height = ScreenProperties.WindowHeight
+	//receiver.LayoutProperty.Height = ScreenProperties.WindowHeight
 	//TODO FLEX ITEM MUST NEED TO CALCULATED WIDTH OF UNTAGGED TEXT BUT
 	receiver.RenderDocument(mainImage)
 	receiver.SetWidthForBlockElements()
@@ -139,14 +139,11 @@ func SetWidthForWidget(widget widget.WidgetInterface) {
 	widget.GetLayout().Width = layout.Width
 }
 func SetHeightForWidget(widget widget.WidgetInterface) {
-	layout := widget.GetLayout()
 	var layoutList []*LayoutProperty.LayoutProperty
 	for _, widgetInterface := range widget.GetChildren() {
 		layoutList = append(layoutList, widgetInterface.GetLayout())
 	}
-
 	LayoutEngine.SetHeight(widget)
-	widget.GetLayout().Height = layout.Height
 }
 
 func SetXYForWidget(currentWidget widget.WidgetInterface) {
@@ -277,6 +274,7 @@ func SetWidthForInlineElements(document widget.WidgetInterface) {
 	}
 }
 
+/*TODO SIZE AND POSITIONS SHOULDN'T BE SET THEY MUST BE GET AND ITS MUST CALCULATED WHEN GETTING*/
 func (receiver *DocumentWidget) SetHeightForElements() {
 	widgetList := []widget.WidgetInterface{receiver}
 	var edgeList []widget.WidgetInterface
@@ -321,6 +319,7 @@ func (receiver *DocumentWidget) SetHeightForElements() {
 			length = len(widgetList)
 		}
 	}
+	SetHeightForWidget(receiver)
 }
 
 func SetPositionOfElements(document widget.WidgetInterface) {

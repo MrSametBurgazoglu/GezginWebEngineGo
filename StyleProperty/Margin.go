@@ -8,6 +8,9 @@ import (
 )
 
 func setMarginTop(margin *structs.Margin, value string) {
+	if strings.Contains(value, "!important") {
+		value = strings.ReplaceAll(value, "!important", "")
+	}
 	if value == "auto" {
 		margin.MarginTopValueType = enums.CSS_PROPERTY_VALUE_TYPE_AUTO
 	} else {
@@ -26,6 +29,9 @@ func setMarginTop(margin *structs.Margin, value string) {
 }
 
 func setMarginBottom(margin *structs.Margin, value string) {
+	if strings.Contains(value, "!important") {
+		value = strings.ReplaceAll(value, "!important", "")
+	}
 	if value == "auto" {
 		margin.MarginBottomValueType = enums.CSS_PROPERTY_VALUE_TYPE_AUTO
 	} else {

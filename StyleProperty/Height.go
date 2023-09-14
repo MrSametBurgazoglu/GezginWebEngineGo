@@ -70,6 +70,9 @@ func SetMaxHeight(cssProperties *StyleProperty, value string) {
 }
 
 func HeightPropertySetValue(cssProperties *StyleProperty, value string) {
+	if strings.Contains(value, "!important") {
+		value = strings.ReplaceAll(value, "!important", "")
+	}
 	if value == "inherit" {
 		cssProperties.HeightInherit = true
 	} else {

@@ -28,6 +28,11 @@ type Task interface {
 	ExecuteTask()
 }
 
+type WebView struct {
+	Image          *image.RGBA
+	LayoutProperty *LayoutProperty.LayoutProperty
+}
+
 type TaskManager struct {
 	WorkerPool       *workerpool.WorkerPool
 	HtmlDocument     *HtmlParser.HtmlElement
@@ -39,7 +44,7 @@ type TaskManager struct {
 	DocumentWidget   *widgets.DocumentWidget
 	NetworkManager   *NetworkManager.NetworkManager
 	ResourceManager  *ResourceManager.ResourceManager
-	WebView          *image.RGBA
+	WebView          *WebView
 	HtmlWidget       widget.WidgetInterface
 	BodyWidget       widget.WidgetInterface
 }
@@ -56,8 +61,12 @@ func (receiver *TaskManager) Initialize() {
 	receiver.ResourceManager = new(ResourceManager.ResourceManager)
 	receiver.ResourceManager.Initialize()
 	receiver.ResourceManager.NetworkManager = receiver.NetworkManager
-	receiver.WebView = image.NewRGBA(image.Rect(0, 0, ScreenProperties.WindowWidth, ScreenProperties.WindowHeight))
-	draw.Draw(receiver.WebView, receiver.WebView.Bounds(), image.White, image.Point{Y: 0, X: 0}, draw.Src)
+	receiver.WebView = new(WebView)
+	receiver.WebView.LayoutProperty = new(LayoutProperty.LayoutProperty)
+	receiver.WebView.LayoutProperty.Width = ScreenProperties.WindowWidth
+	receiver.WebView.LayoutProperty.Height = ScreenProperties.WindowHeight
+	receiver.WebView.Image = image.NewRGBA(image.Rect(0, 0, ScreenProperties.WindowWidth, ScreenProperties.WindowHeight))
+	draw.Draw(receiver.WebView.Image, receiver.WebView.Image.Bounds(), image.White, image.Point{Y: 0, X: 0}, draw.Src)
 }
 
 func (receiver *TaskManager) CreateFromFile(fileUrl string) {
@@ -156,6 +165,8 @@ func (receiver *TaskManager) CreateWidgetTree() {
 	receiver.DocumentWidget.HtmlElement = element
 	receiver.DocumentWidget.Initialize()
 	receiver.DocumentWidget.LayoutProperty = new(LayoutProperty.LayoutProperty)
+	receiver.DocumentWidget.LayoutProperty.Parent = receiver.WebView.LayoutProperty
+	receiver.DocumentWidget.LayoutProperty.StyleProperty = receiver.DocumentWidget.StyleProperty
 	receiver.DocumentWidget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
 	receiver.DocumentWidget.ResourceManager = receiver.ResourceManager
 	receiver.DocumentWidget.StyleProperty.Color = new(structs.ColorRGBA)
@@ -258,12 +269,12 @@ func (receiver *TaskManager) SetInheritStylePropertiesOfWidget(widget widget.Wid
 }
 
 func (receiver *TaskManager) Draw() {
-	receiver.DocumentWidget.DrawPage(receiver.WebView)
+	receiver.DocumentWidget.DrawPage(receiver.WebView.Image)
 
 }
 
 func (receiver *TaskManager) Render() {
-	receiver.DocumentWidget.RenderPage(receiver.WebView)
+	receiver.DocumentWidget.RenderPage(receiver.WebView.Image)
 }
 
 func (receiver *TaskManager) IsRendered() bool {
