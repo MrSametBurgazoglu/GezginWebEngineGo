@@ -20,6 +20,8 @@ func SetPosition(currentWidget, parent, beforeCurrentWidget widget.WidgetInterfa
 		return InlineSetPosition(currentWidget, parent, beforeCurrentWidget)
 	case enums.CSS_DISPLAY_TYPE_FLEX:
 		return BlockSetPosition(currentWidget, parent, beforeCurrentWidget)
+	case enums.CSS_DISPLAY_TYPE_INLINE_BLOCK:
+		return InlineSetPosition(currentWidget, parent, beforeCurrentWidget)
 	}
 	return 0, 0
 }

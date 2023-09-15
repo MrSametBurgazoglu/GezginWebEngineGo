@@ -100,6 +100,7 @@ func (receiver *DocumentWidget) RenderDocument(mainImage *image.RGBA) {
 // This function and sub functions will be rewritten
 func (receiver *DocumentWidget) RenderPage(mainImage *image.RGBA) {
 	receiver.LayoutProperty.Width = ScreenProperties.WindowWidth
+	receiver.LayoutProperty.ContentWidth = ScreenProperties.WindowWidth
 	//receiver.LayoutProperty.Height = ScreenProperties.WindowHeight
 	//TODO FLEX ITEM MUST NEED TO CALCULATED WIDTH OF UNTAGGED TEXT BUT
 	receiver.RenderDocument(mainImage)

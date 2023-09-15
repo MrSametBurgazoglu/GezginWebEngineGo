@@ -10,6 +10,31 @@ func InlineSetPosition(currentWidget, parent, beforeCurrentWidget widget.WidgetI
 	return InlineSetPositionX(currentWidget, parent, beforeCurrentWidget), InlineSetPositionY(currentWidget, parent, beforeCurrentWidget)
 }
 
+func InlineSetPositionXStatic(currentWidget widget.WidgetInterface) int {
+	if currentWidget.GetParent().GetStyleProperty() != nil && currentWidget.GetParent().GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_BLOCK && currentWidget.GetParent().GetStyleProperty().TextAlign == enums.CSS_TEXT_ALIGN_CENTER {
+		childrenTotalWidth := 0
+		currentParent := currentWidget.GetParent()
+		for _, widgetInterface := range currentParent.GetChildren() {
+			if widgetInterface.GetStyleProperty() == nil || widgetInterface.GetStyleProperty().Display != enums.CSS_DISPLAY_TYPE_BLOCK {
+				childrenTotalWidth += widgetInterface.GetLayout().Width
+			} else {
+				childrenTotalWidth = 0
+			}
+		}
+		startPoint := currentParent.GetLayout().XPosition + currentParent.GetLayout().Width/2 + childrenTotalWidth/2
+		currentStartPoint := startPoint
+		for _, widgetInterface := range currentParent.GetChildren()[currentWidget.GetChildrenIndex():] {
+			if widgetInterface.GetStyleProperty() == nil || widgetInterface.GetStyleProperty().Display != enums.CSS_DISPLAY_TYPE_BLOCK {
+				currentStartPoint -= widgetInterface.GetLayout().Width
+			} else {
+				currentStartPoint = startPoint
+			}
+		}
+		return currentStartPoint
+	}
+	return currentWidget.GetParent().GetLayout().ContentXPosition
+}
+
 func InlineSetPositionX(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
 	position := 0
 	if currentWidget.GetStyleProperty() != nil {
@@ -20,13 +45,13 @@ func InlineSetPositionX(currentWidget, parent, beforeCurrentWidget widget.Widget
 			if beforeCurrentWidget != nil {
 				position = beforeCurrentWidget.GetLayout().XPosition + beforeCurrentWidget.GetLayout().Width
 			} else {
-				position = parent.GetLayout().ContentXPosition
+				position = InlineSetPositionXStatic(currentWidget)
 			}
 		case enums.CSS_POSITION_TYPE_STATIC:
 			if beforeCurrentWidget != nil {
 				position = beforeCurrentWidget.GetLayout().XPosition + beforeCurrentWidget.GetLayout().Width
 			} else {
-				position = parent.GetLayout().ContentXPosition
+				position = InlineSetPositionXStatic(currentWidget)
 			}
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
 			if currentWidget.GetStyleProperty().Left != 0 {
@@ -51,7 +76,7 @@ func InlineSetPositionX(currentWidget, parent, beforeCurrentWidget widget.Widget
 		if beforeCurrentWidget != nil {
 			position = beforeCurrentWidget.GetLayout().XPosition + beforeCurrentWidget.GetLayout().Width
 		} else {
-			position = parent.GetLayout().ContentXPosition
+			position = InlineSetPositionXStatic(currentWidget)
 		}
 	}
 	currentWidget.GetLayout().ContentXPosition = position

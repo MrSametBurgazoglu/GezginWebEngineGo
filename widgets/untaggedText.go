@@ -4,7 +4,6 @@ import (
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/LayoutProperty"
 	"gezgin_web_engine/ResourceManager"
-	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/drawer/Fonts"
 	"gezgin_web_engine/drawer/structs"
 	"gezgin_web_engine/widget"
@@ -19,30 +18,7 @@ type UntaggedText struct {
 }
 
 func (receiver *UntaggedText) Draw(mainImage *image.RGBA) {
-	if receiver.Parent.GetStyleProperty() != nil && receiver.Parent.GetStyleProperty().TextAlign == enums.CSS_TEXT_ALIGN_CENTER {
-		childrenTotalWidth := 0
-		currentParent := receiver.Parent
-		childrenIndex := receiver.ChildrenIndex
-		for currentParent.GetStyleProperty().Display != enums.CSS_DISPLAY_TYPE_BLOCK {
-			childrenIndex += currentParent.GetChildrenIndex()
-			println("children index", childrenIndex)
-			currentParent = currentParent.GetParent()
-		}
-		for _, widgetInterface := range currentParent.GetChildren() {
-			childrenTotalWidth += widgetInterface.GetLayout().Width
-		}
-		startPoint := currentParent.GetLayout().XPosition + currentParent.GetLayout().Width/2 + childrenTotalWidth/2
-		println("children index", receiver.ChildrenIndex)
-		println("current parent child count", currentParent.GetChildrenCount())
-		for _, widgetInterface := range currentParent.GetChildren()[childrenIndex:] {
-			startPoint -= widgetInterface.GetLayout().Width
-			println("- ", widgetInterface.GetLayout().Width)
-		}
-		println("start:", startPoint, "value", receiver.Value)
-		draw.Draw(mainImage, image.Rect(startPoint, receiver.LayoutProperty.YPosition, startPoint+receiver.LayoutProperty.Width, receiver.LayoutProperty.YPosition+receiver.LayoutProperty.Height), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
-	} else {
-		draw.Draw(mainImage, image.Rect(receiver.LayoutProperty.XPosition, receiver.LayoutProperty.YPosition, receiver.LayoutProperty.XPosition+receiver.LayoutProperty.Width, receiver.LayoutProperty.YPosition+receiver.LayoutProperty.Height), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
-	}
+	draw.Draw(mainImage, image.Rect(receiver.LayoutProperty.XPosition, receiver.LayoutProperty.YPosition, receiver.LayoutProperty.XPosition+receiver.LayoutProperty.Width, receiver.LayoutProperty.YPosition+receiver.LayoutProperty.Height), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
 }
 
 func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {

@@ -5,14 +5,16 @@ import (
 	"gezgin_web_engine/utils"
 )
 
-const DisplayStringCount = 5
+const DisplayStringCount = 7
 
 var displayStrings = []string{
 	"block",
-	"inline",
 	"contents",
 	"flex",
-	"hello",
+	"grid",
+	"inline",
+	"inline-block",
+	"inline-flex",
 }
 
 func setDisplayValue(cssProperties *StyleProperty, value string) {

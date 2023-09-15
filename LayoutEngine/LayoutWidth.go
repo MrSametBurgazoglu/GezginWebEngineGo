@@ -18,6 +18,8 @@ func SetWidth(currentWidget widget.WidgetInterface) int {
 		SetWidthBlock(currentWidget, currentWidget.GetParent())
 	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_FLEX {
 		SetWidthBlock(currentWidget, currentWidget.GetParent())
+	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE_BLOCK {
+		SetWidthInline(currentWidget, currentWidget.GetStyleProperty())
 	} else {
 		SetWidthInline(currentWidget, currentWidget.GetStyleProperty())
 	}
