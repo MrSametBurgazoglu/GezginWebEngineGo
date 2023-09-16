@@ -10,7 +10,6 @@ import (
 func setPaddingTop(padding *structs.Padding, value string) {
 	if value == "auto" {
 		padding.PaddingTopValueType = enums.CSS_PROPERTY_VALUE_TYPE_AUTO
-		padding.PaddingTopValueType = enums.CSS_PROPERTY_VALUE_TYPE_AUTO
 	} else {
 		intValue, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err == nil {

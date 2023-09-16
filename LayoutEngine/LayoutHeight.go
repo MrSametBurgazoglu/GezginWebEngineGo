@@ -6,7 +6,7 @@ import (
 )
 
 func GetTotalChildrenHeight(currentWidget widget.WidgetInterface) int {
-	if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_BLOCK ||
+	if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_BLOCK || currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE_BLOCK ||
 		(currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_FLEX && currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_COLUMN) {
 		height := 0
 		for _, child := range currentWidget.GetChildren() {

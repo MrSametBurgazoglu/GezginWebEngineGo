@@ -15,18 +15,31 @@ func FlexSetPositionXStatic(currentWidget, beforeCurrentWidget, parent widget.Wi
 	if beforeCurrentWidget == nil {
 		x = parent.GetLayout().XPosition
 		if currentWidget.GetStyleProperty().Margin != nil {
-			if currentWidget.GetStyleProperty().Margin.MarginLeftValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO && currentWidget.GetStyleProperty().Margin.MarginRightValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO {
-				x += (currentWidget.GetLayout().Parent.Width - currentWidget.GetLayout().Width) / 2
-			} else {
-				x += currentWidget.GetLayout().MarginLeft
-			}
+			CalculateLeftMargin(currentWidget, true)
+			CalculateRightMargin(currentWidget, true)
 		}
+		x += currentWidget.GetLayout().MarginLeft
+		println(currentWidget.GetLayout().MarginLeft)
+		/*
+			if currentWidget.GetStyleProperty().Margin != nil {
+				if currentWidget.GetStyleProperty().Margin.MarginLeftValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO && currentWidget.GetStyleProperty().Margin.MarginRightValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO {
+					marginLeft := (currentWidget.GetLayout().Parent.Width - currentWidget.GetLayout().Width) / 2
+					x += marginLeft
+					currentWidget.GetLayout().MarginLeft = marginLeft
+					currentWidget.GetLayout().MarginRight = marginLeft
+				} else {
+					x += currentWidget.GetLayout().MarginLeft
+				}
+			}
+		*/
 		if currentWidget.GetStyleProperty().Padding != nil {
 			x += currentWidget.GetLayout().PaddingLeft
 		}
 	} else {
 		x = beforeCurrentWidget.GetLayout().XPosition + beforeCurrentWidget.GetLayout().Width
 		if currentWidget.GetStyleProperty().Margin != nil {
+			CalculateLeftMargin(currentWidget, false)
+			CalculateRightMargin(currentWidget, false)
 			x += currentWidget.GetLayout().MarginLeft
 		}
 		if currentWidget.GetStyleProperty().Padding != nil {

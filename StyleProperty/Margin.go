@@ -15,15 +15,19 @@ func setMarginTop(margin *structs.Margin, value string) {
 		margin.MarginTopValueType = enums.CSS_PROPERTY_VALUE_TYPE_AUTO
 	} else {
 		intValue, err := strconv.Atoi(strings.TrimRight(value, "px"))
-		if err != nil {
-			return
-		}
-		if strings.HasSuffix(value, "px") {
+		if err == nil {
 			margin.MarginTopValueType = enums.CSS_PROPERTY_VALUE_TYPE_LENGTH
 			margin.MarginTop = intValue
-		} else if strings.HasSuffix(value, "%") {
+		}
+		percentValue, err := strconv.Atoi(strings.TrimRight(value, "%"))
+		if err == nil {
 			margin.MarginTopValueType = enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE
-			margin.MarginTop = intValue
+			margin.MarginTop = percentValue
+		}
+		remValue, err := strconv.Atoi(strings.TrimRight(value, "rem"))
+		if err == nil {
+			margin.MarginTopValueType = enums.CSS_PROPERTY_VALUE_TYPE_PIXEL
+			margin.MarginTop = remValue * 16
 		}
 	}
 }
@@ -36,15 +40,19 @@ func setMarginBottom(margin *structs.Margin, value string) {
 		margin.MarginBottomValueType = enums.CSS_PROPERTY_VALUE_TYPE_AUTO
 	} else {
 		intValue, err := strconv.Atoi(strings.TrimRight(value, "px"))
-		if err != nil {
-			return
-		}
-		if strings.HasSuffix(value, "px") {
+		if err == nil {
 			margin.MarginBottomValueType = enums.CSS_PROPERTY_VALUE_TYPE_LENGTH
 			margin.MarginBottom = intValue
-		} else if strings.HasSuffix(value, "%") {
+		}
+		percentValue, err := strconv.Atoi(strings.TrimRight(value, "%"))
+		if err == nil {
 			margin.MarginBottomValueType = enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE
-			margin.MarginBottom = intValue
+			margin.MarginBottom = percentValue
+		}
+		remValue, err := strconv.Atoi(strings.TrimRight(value, "rem"))
+		if err == nil {
+			margin.MarginBottomValueType = enums.CSS_PROPERTY_VALUE_TYPE_PIXEL
+			margin.MarginBottom = remValue * 16
 		}
 	}
 }
@@ -54,15 +62,19 @@ func setMarginLeft(margin *structs.Margin, value string) {
 		margin.MarginLeftValueType = enums.CSS_PROPERTY_VALUE_TYPE_AUTO
 	} else {
 		intValue, err := strconv.Atoi(strings.TrimRight(value, "px"))
-		if err != nil {
-			return
-		}
-		if strings.HasSuffix(value, "px") {
+		if err == nil {
 			margin.MarginLeftValueType = enums.CSS_PROPERTY_VALUE_TYPE_LENGTH
 			margin.MarginLeft = intValue
-		} else if strings.HasSuffix(value, "%") {
+		}
+		percentValue, err := strconv.Atoi(strings.TrimRight(value, "%"))
+		if err == nil {
 			margin.MarginLeftValueType = enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE
-			margin.MarginLeft = intValue
+			margin.MarginLeft = percentValue
+		}
+		remValue, err := strconv.Atoi(strings.TrimRight(value, "rem"))
+		if err == nil {
+			margin.MarginLeftValueType = enums.CSS_PROPERTY_VALUE_TYPE_PIXEL
+			margin.MarginLeft = remValue * 16
 		}
 	}
 }
@@ -72,15 +84,19 @@ func setMarginRight(margin *structs.Margin, value string) {
 		margin.MarginRightValueType = enums.CSS_PROPERTY_VALUE_TYPE_AUTO
 	} else {
 		intValue, err := strconv.Atoi(strings.TrimRight(value, "px"))
-		if err != nil {
-			return
-		}
-		if strings.HasSuffix(value, "px") {
+		if err == nil {
 			margin.MarginRightValueType = enums.CSS_PROPERTY_VALUE_TYPE_LENGTH
 			margin.MarginRight = intValue
-		} else if strings.HasSuffix(value, "%") {
+		}
+		percentValue, err := strconv.Atoi(strings.TrimRight(value, "%"))
+		if err == nil {
 			margin.MarginRightValueType = enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE
-			margin.MarginRight = intValue
+			margin.MarginRight = percentValue
+		}
+		remValue, err := strconv.Atoi(strings.TrimRight(value, "rem"))
+		if err == nil {
+			margin.MarginRightValueType = enums.CSS_PROPERTY_VALUE_TYPE_PIXEL
+			margin.MarginRight = remValue * 16
 		}
 	}
 }

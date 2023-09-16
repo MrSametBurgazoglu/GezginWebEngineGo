@@ -86,7 +86,7 @@ func DrawText(font *GezginFont, text []string, destination *image.RGBA, fontColo
 	}
 
 	// Draw the text.
-	pt := freetype.Pt(10, 10+int(context.PointToFixed(font.Size)>>6))
+	pt := freetype.Pt(0, 10+int(context.PointToFixed(font.Size)>>6))
 	var maxPt = fixed.Int26_6(0)
 	//font.Font.HMetric()
 	for _, s := range text {

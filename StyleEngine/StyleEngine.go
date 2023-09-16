@@ -80,6 +80,8 @@ func (receiver *StyleSheet) GetCssRuleListItems(selectors []string) (cssRuleList
 	return
 }
 
+/*TODO REWRITE THIS WITH A CONSUMER*/
+/*TODO CHECK STYLESHEET IS IN CORRECT ORDER*/
 func (receiver *StyleSheet) GetCssRuleItem(selector string) *CssRuleListItem.CssRuleListItem {
 	var cssRuleList *CssRuleListItem.CssRuleListItem
 	switch selector[0] {
@@ -98,10 +100,39 @@ func (receiver *StyleSheet) GetCssRuleItem(selector string) *CssRuleListItem.Css
 		} else {
 			if selector[secondDotIndex] == ' ' {
 				firstClass := selector[1:secondDotIndex]
-				secondClass := selector[secondDotIndex+2:]
-				cssRuleList = receiver.cssRuleList.GetCssRulesByClassDescendant(firstClass, secondClass)
-				if cssRuleList == nil {
-					cssRuleList = receiver.cssRuleList.CreateNewCssRulesByClassDescendant(firstClass, secondClass)
+				thirdDotIndex := strings.Index(selector[secondDotIndex+2:], ".")
+				if thirdDotIndex == -1 {
+					secondClass := selector[secondDotIndex+2:]
+					cssRuleList = receiver.cssRuleList.GetCssRulesByClassDescendant(firstClass, secondClass)
+					if cssRuleList == nil {
+						cssRuleList = receiver.cssRuleList.CreateNewCssRulesByClassDescendant(firstClass, secondClass)
+					}
+				} else {
+					plusIndex := strings.Index(selector[secondDotIndex+2:], "+")
+					if plusIndex != -1 {
+						secondClass := selector[secondDotIndex+2 : secondDotIndex+2+plusIndex]
+						thirdClass := selector[secondDotIndex+3+thirdDotIndex:]
+						secondClass = strings.TrimSpace(secondClass)
+						thirdClass = strings.TrimSpace(thirdClass)
+						cssRuleList = receiver.cssRuleList.GetCssRulesByClassDescendantAndFirst(firstClass, secondClass, thirdClass)
+						if cssRuleList == nil {
+							cssRuleList = receiver.cssRuleList.CreateNewCssRulesByClassDescendantAndFirst(firstClass, secondClass, thirdClass)
+						}
+					} else if selector[secondDotIndex+2+thirdDotIndex-1] == ' ' {
+						secondClass := selector[secondDotIndex+2 : secondDotIndex+2+thirdDotIndex]
+						thirdClass := selector[secondDotIndex+2+thirdDotIndex+2:]
+						cssRuleList = receiver.cssRuleList.GetCssRulesByClassDescendantAndFirst(firstClass, secondClass, thirdClass)
+						if cssRuleList == nil {
+							cssRuleList = receiver.cssRuleList.CreateNewCssRulesByClassDescendantAndFirst(firstClass, secondClass, thirdClass)
+						}
+					} else {
+						tag := selector[0:]
+						cssRuleList = receiver.cssRuleList.GetCssRulesByElement(tag)
+						if cssRuleList == nil {
+							cssRuleList = receiver.cssRuleList.CreateNewCssPropertiesByElement(tag)
+						}
+						//panic("heyy I didn't set this rule yet")
+					}
 				}
 			} else {
 				firstClass := selector[1:secondDotIndex]
@@ -160,6 +191,7 @@ func (receiver *StyleEngine) GetAllCssRulesByClass(class string, external bool) 
 	rules := receiver.GetCssRulesByClass(class, external)
 	rules = append(rules, receiver.GetCssRulesByClassBoth(class, external)...)
 	rules = append(rules, receiver.GetCssRulesByClassDescendant(class, external)...)
+	rules = append(rules, receiver.GetCssRulesByClassDescendantAndFirst(class, external)...)
 	return rules
 }
 
@@ -196,6 +228,7 @@ func (receiver *StyleEngine) ApplyRules(styleProperty *StyleProperty.StyleProper
 /*TODO MAKE STYLE PROPERTIES MAP FOR CSS VARIABLES AND GIVE HERE PARENT STYLE PROPERTY FOR APPLYING*/
 func (receiver *StyleEngine) ApplyCssRules(currentWidget widget.WidgetInterface) {
 	rules := receiver.GetAllCssRules(currentWidget.GetID(), currentWidget.GetClasses(), currentWidget.GetHtmlName())
+	/*BEFORE HERE WE MUST MAKE IT UNIQUE AND DECLARATIONS AS MAP*/
 	for _, rule := range rules {
 		if rule.Function(currentWidget, rule) {
 			receiver.ApplyRule(currentWidget.GetStyleProperty(), rule)

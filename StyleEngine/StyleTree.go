@@ -105,6 +105,7 @@ type CssRuleList struct {
 	CssPropertiesByElementList                                       map[string]*CssRuleListItem.CssRuleListItem //it can be only map
 	CssPropertiesByClassDescendantList                               []*CssRuleListItem.CssRuleListItem
 	CssPropertiesByClassBothList                                     []*CssRuleListItem.CssRuleListItem
+	CssPropertiesByClassDescendantAndFirstClassList                  []*CssRuleListItem.CssRuleListItem
 	CssPropertiesByElementAndClassList                               []*CssRuleListItem.CssRuleListItem
 	CssPropertiesByElementDescendant                                 []*CssRuleListItem.CssRuleListItem
 	CssPropertiesByElementParent                                     []*CssRuleListItem.CssRuleListItem
