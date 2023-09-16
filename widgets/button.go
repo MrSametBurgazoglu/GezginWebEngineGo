@@ -2,11 +2,14 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
-	"github.com/veandco/go-sdl2/sdl"
+	"gezgin_web_engine/ResourceManager"
+	"gezgin_web_engine/StyleProperty/enums"
+	"gezgin_web_engine/widget"
+	"image"
 )
 
 type HtmlTagButton struct {
-	Widget
+	widget.Widget
 	autoFocus      bool
 	disabled       bool
 	formNovalidate bool
@@ -54,16 +57,18 @@ func (receiver *HtmlTagButton) VarReaderFunc(variableName string, variableValue 
 	}
 }
 
-func (receiver *HtmlTagButton) Draw(renderer *sdl.Renderer) {
+func (receiver *HtmlTagButton) Draw(mainImage *image.RGBA) {
 
 }
 
-func (receiver *HtmlTagButton) Render(renderer *sdl.Renderer) {
+func (receiver *HtmlTagButton) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 
 }
 
-func SetWidgetPropertiesForButtonTag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForButtonTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagButton)
 	widget.HtmlElement = element
+	widget.Initialize()
+	widget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_INLINE
 	return widget
 }

@@ -1,7 +1,8 @@
 package widgets
 
 import (
-	"github.com/veandco/go-sdl2/sdl"
+	"gezgin_web_engine/ResourceManager"
+	"image"
 	"strconv"
 )
 
@@ -56,11 +57,11 @@ func (receiver *HtmlTagTextArea) VarReaderFunc(variableName string, variableValu
 	}
 }
 
-func (receiver *HtmlTagTextArea) Draw(renderer *sdl.Renderer) {
+func (receiver *HtmlTagTextArea) Draw(mainImage *image.RGBA) {
 
 }
 
-func (receiver *HtmlTagTextArea) Render(renderer *sdl.Renderer) {
+func (receiver *HtmlTagTextArea) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 
 }
 

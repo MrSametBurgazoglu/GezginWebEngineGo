@@ -1,5 +1,6 @@
 package main
 
+/*
 import (
 	"flag"
 	"fmt"
@@ -17,7 +18,7 @@ import (
 var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to `file`")
 var memprofile = flag.String("memprofile", "", "write memory profile to `file`")
 
-func main() {
+func main2() {
 	flag.Parse()
 	if *cpuprofile != "" {
 		f, err := os.Create(*cpuprofile)
@@ -31,7 +32,6 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 	var err error
-	var font *ttf.Font
 
 	if err = ttf.Init(); err != nil {
 		panic(err)
@@ -43,14 +43,10 @@ func main() {
 	}
 	defer sdl.Quit()
 
-	if font, err = ttf.OpenFont("fonts/Sans.ttf", 14); err != nil {
-		panic(err)
-	}
-	defer font.Close()
-
 	startTime := time.Now()
 	newTab := web_engine.NewTab()
-	newTab.OpenWebPageFromFile("exampleHtmlFiles/newExa.html")
+	//newTab.OpenWebPageFromFile("exampleHtmlFiles/newExa.html")
+	newTab.OpenWebPageFromWeb("http://127.0.0.1:8080")
 	fmt.Println("Total time taken ", time.Since(startTime).Milliseconds())
 
 	web_engine.InitDrawer(700, 1300)
@@ -70,7 +66,7 @@ func main() {
 				running = false
 				break
 			default:
-				eventSystem.TakeInputFromSdl(event)
+				eventSystem.TakeInput(event)
 			}
 		}
 		if newTab.IsRendered() == false {
@@ -95,3 +91,4 @@ func main() {
 		}
 	}
 }
+*/

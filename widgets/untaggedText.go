@@ -2,24 +2,26 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/LayoutProperty"
+	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/Fonts"
-	"gezgin_web_engine/drawer/drawerBackend"
 	"gezgin_web_engine/drawer/structs"
-	"github.com/veandco/go-sdl2/sdl"
-	"github.com/veandco/go-sdl2/ttf"
+	"gezgin_web_engine/widget"
+	"image"
+	"image/draw"
 	"strings"
 )
 
 type UntaggedText struct {
-	Widget
+	widget.Widget
 	Value string
 }
 
-func (receiver *UntaggedText) Draw(renderer *sdl.Renderer) {
-	renderer.Copy(receiver.DrawProperties.Texture, nil, &receiver.DrawProperties.Rect)
+func (receiver *UntaggedText) Draw(mainImage *image.RGBA) {
+	draw.Draw(mainImage, image.Rect(receiver.LayoutProperty.XPosition, receiver.LayoutProperty.YPosition, receiver.LayoutProperty.XPosition+receiver.LayoutProperty.Width, receiver.LayoutProperty.YPosition+receiver.LayoutProperty.Height), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
 }
 
-func (receiver *UntaggedText) Render(renderer *sdl.Renderer) {
+func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 	if receiver.GetParent().GetDrawProperties().Font == nil {
 		if receiver.GetParent().GetStyleProperty().Font != nil {
 			receiver.GetParent().GetDrawProperties().Font = Fonts.GetFont(receiver.GetParent().GetStyleProperty().Font.FontSizeValue)
@@ -27,40 +29,45 @@ func (receiver *UntaggedText) Render(renderer *sdl.Renderer) {
 			receiver.GetParent().GetDrawProperties().Font = Fonts.GetFont(14)
 		}
 	}
-	if currentWidth, _, _ := receiver.GetParent().GetDrawProperties().Font.SizeUTF8(receiver.Value); currentWidth > int(receiver.GetParent().GetDrawProperties().Rect.W) {
-		Lines := splitTextAndRenderByLines(receiver.Value, renderer, receiver.GetParent().GetDrawProperties().Font, int(receiver.GetParent().GetDrawProperties().Rect.W))
-		drawerBackend.GetTextTexture(
-			renderer,
-			Lines,
-			receiver.GetParent().GetStyleProperty().Color,
-			receiver.GetParent().GetDrawProperties().Font,
-			&receiver.GetDrawProperties().Texture,
-			&receiver.GetDrawProperties().Rect,
-		)
+	if currentWidth := int(receiver.GetParent().GetDrawProperties().Font.Size * float64(len(receiver.Value)) * 0.5); currentWidth > receiver.GetParent().GetLayout().Width {
+		Lines, maxTextWidth := splitTextAndRenderByLines(receiver.Value, receiver.GetParent().GetLayout().Width, receiver.GetParent().GetDrawProperties().Font.Size)
+		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, maxTextWidth*3, 500)) // change this later
+		height, width := Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, Lines, receiver.DrawProperties.Texture, receiver.GetParent().GetStyleProperty().Color)
+		receiver.LayoutProperty.Height, receiver.LayoutProperty.Width = int(height), int(width)
 	} else {
-		drawerBackend.GetTextTexture(
-			renderer,
-			receiver.Value,
-			receiver.GetParent().GetStyleProperty().Color,
-			receiver.GetParent().GetDrawProperties().Font,
-			&receiver.GetDrawProperties().Texture,
-			&receiver.GetDrawProperties().Rect,
-		)
-	}
-
-	if receiver.GetDrawProperties().Rect.W > receiver.GetParent().GetDrawProperties().Rect.W {
-		println("bigger than parent")
-		println(receiver.GetDrawProperties().Rect.W)
-		Lines := splitTextAndRenderByLines(receiver.Value, renderer, receiver.GetParent().GetDrawProperties().Font, int(receiver.GetParent().GetDrawProperties().Rect.W))
-		println(Lines)
+		//change this to calculated text
+		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, receiver.GetParent().GetLayout().Width, 500)) // change this later
+		height, width := Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, []string{receiver.Value}, receiver.DrawProperties.Texture, receiver.GetParent().GetStyleProperty().Color)
+		receiver.LayoutProperty.Height, receiver.LayoutProperty.Width = int(height), int(width)
 	}
 }
 
-func SetWidgetPropertiesForUntaggedText(element *HtmlParser.HtmlElement) WidgetInterface {
+func (receiver *UntaggedText) SetValue(text string) {
+	escapeCharacters := map[string]string{
+		"&lt;":   "<",
+		"&gt;":   ">",
+		"&quot;": "\"",
+		"&#39;":  "'",
+		"&amp;":  "&",
+	}
+	for key, value := range escapeCharacters {
+		text = strings.ReplaceAll(text, key, value)
+	}
+	if strings.Contains(text, "html") {
+		println("hey")
+	}
+	text = strings.Trim(text, "\n")
+	receiver.Value = text
+}
+
+func SetWidgetPropertiesForUntaggedText(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(UntaggedText)
 	widget.HtmlElement = element
 	widget.DrawProperties = new(structs.DrawProperties)
-	widget.Value = element.Text
+	widget.LayoutProperty = new(LayoutProperty.LayoutProperty)
+	widget.DrawProperties.Initialize()
+
+	widget.SetValue(element.Text)
 	return widget
 }
 
@@ -73,19 +80,30 @@ func findLastSpace(text string, last int) int {
 	return last
 }
 
-func splitTextAndRenderByLines(text string, renderer *sdl.Renderer, font *ttf.Font, maxWidth int) string {
-	println(text)
+func splitTextAndRenderByLines(text string, maxWidth int, size float64) ([]string, int) {
 	var Lines []string
 	var err error
 	var currentWidth, _, start, end int
+	calculatedMaxWidth := 0
 	length := len(text)
 	start = 0
 	end = length
+	currentWidth = int(size * float64(length) * 0.55)
+	if maxWidth <= 0 || !strings.Contains(text, " ") {
+		return append(Lines, text), currentWidth
+	}
 	for start < length {
-		currentWidth, _, err = font.SizeUTF8(text[start:end])
+		currentWidth = int(size * float64(len(text[start:end])) * 0.55)
 		for currentWidth > maxWidth {
 			end = findLastSpace(text, end)
-			currentWidth, _, err = font.SizeUTF8(text[start:end])
+			newCurrentWidth := int(size * float64(len(text[start:end])) * 0.55)
+			if newCurrentWidth > calculatedMaxWidth {
+				calculatedMaxWidth = newCurrentWidth
+			}
+			if newCurrentWidth == currentWidth {
+				break
+			}
+			currentWidth = newCurrentWidth
 			if err != nil {
 				panic(err)
 			}
@@ -94,5 +112,19 @@ func splitTextAndRenderByLines(text string, renderer *sdl.Renderer, font *ttf.Fo
 		start = end + 1
 		end = length
 	}
-	return strings.Join(Lines, "\n")
+	return Lines, calculatedMaxWidth
+}
+
+func (receiver *UntaggedText) IsPreSetWidth() bool {
+	return false
+}
+
+func (receiver *UntaggedText) IsSetWidthSelf() bool {
+	return false
+}
+
+func (receiver *UntaggedText) SetParent(parent widget.WidgetInterface) {
+	receiver.Parent = parent
+	receiver.LayoutProperty.Parent = parent.GetLayout()
+	receiver.Parent.GetLayout().Children = append(receiver.Parent.GetLayout().Children, receiver.LayoutProperty)
 }

@@ -2,11 +2,13 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
-	"github.com/veandco/go-sdl2/sdl"
+	"gezgin_web_engine/ResourceManager"
+	"gezgin_web_engine/widget"
+	"image"
 )
 
 type HtmlTagLabel struct {
-	Widget
+	widget.Widget
 	for_ string
 	form string
 }
@@ -20,15 +22,15 @@ func (receiver *HtmlTagLabel) VarReaderFunc(variableName string, variableValue s
 	}
 }
 
-func (receiver *HtmlTagLabel) Draw(renderer *sdl.Renderer) {
+func (receiver *HtmlTagLabel) Draw(mainImage *image.RGBA) {
 
 }
 
-func (receiver *HtmlTagLabel) Render(renderer *sdl.Renderer) {
+func (receiver *HtmlTagLabel) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 
 }
 
-func SetWidgetPropertiesForLabelTag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForLabelTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagLabel)
 	widget.HtmlElement = element
 	widget.Initialize()

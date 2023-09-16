@@ -2,12 +2,14 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
-	"github.com/veandco/go-sdl2/sdl"
+	"gezgin_web_engine/ResourceManager"
+	"gezgin_web_engine/widget"
+	"image"
 	"strconv"
 )
 
 type HtmlTagCanvas struct {
-	Widget
+	widget.Widget
 	width  int
 	height int
 }
@@ -22,15 +24,15 @@ func (receiver *HtmlTagCanvas) VarReaderFunc(variableName string, variableValue 
 	}
 }
 
-func (receiver *HtmlTagCanvas) Draw(renderer *sdl.Renderer) {
+func (receiver *HtmlTagCanvas) Draw(mainImage *image.RGBA) {
 
 }
 
-func (receiver *HtmlTagCanvas) Render(renderer *sdl.Renderer) {
+func (receiver *HtmlTagCanvas) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
 
 }
 
-func SetWidgetPropertiesForCanvasTag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForCanvasTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagCanvas)
 	widget.HtmlElement = element
 	return widget

@@ -116,12 +116,14 @@ const (
 	HTML_VIDEO
 	HTML_WBR
 	HTML_UNTAGGED_TEXT
+	HTML_CUSTOM_TAG
 )
 
 type HtmlTagVariables struct {
-	tag    HtmlTags
-	endTag bool
-	draw   bool
+	tag            HtmlTags
+	endTag         bool
+	draw           bool
+	notParseInside bool
 }
 
 var htmlTagList = []string{
@@ -309,14 +311,14 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_Q, draw: true},
 	{tag: HTML_S, draw: true},
 	{tag: HTML_SAMP, draw: true},
-	{tag: HTML_SCRIPT},
+	{tag: HTML_SCRIPT, notParseInside: true},
 	{tag: HTML_SECTION, draw: true},
 	{tag: HTML_SELECT},
 	{tag: HTML_SMALL, draw: true},
 	{tag: HTML_SOURCE, endTag: true},
 	{tag: HTML_SPAN},
 	{tag: HTML_STRONG, draw: true},
-	{tag: HTML_STYLE},
+	{tag: HTML_STYLE, notParseInside: true},
 	{tag: HTML_SUB, draw: true},
 	{tag: HTML_SUMMARY, draw: true},
 	{tag: HTML_SUP, draw: true},
@@ -345,12 +347,12 @@ func GetElementTag(tag string) HtmlTags {
 	return tagHtmlVariables[index].tag
 }
 
-func FindHtmlTag(tag string) (HtmlTags, bool) {
+func FindHtmlTag(tag string) (HtmlTags, bool, bool) {
 	index := utils.IndexFounder(htmlTagList, tag, HtmlTagCount)
 	if index != -1 {
-		return tagHtmlVariables[index].tag, tagHtmlVariables[index].endTag
+		return tagHtmlVariables[index].tag, tagHtmlVariables[index].endTag, tagHtmlVariables[index].notParseInside
 	}
-	return HTML_DOCUMENT, false //not document it must be unknown
+	return HTML_CUSTOM_TAG, false, false
 }
 
 func getString(htmlTag *HtmlTags) string {

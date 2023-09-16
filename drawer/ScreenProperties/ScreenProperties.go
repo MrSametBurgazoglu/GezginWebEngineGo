@@ -3,11 +3,11 @@ package ScreenProperties
 var WindowHeight int
 var WindowWidth int
 
-func SetWindowSize(height int, width int) {
+func SetWindowSize(width int, height int) {
 	WindowHeight = height
 	WindowWidth = width
 }
 
 func GetWindowSize() (int, int) {
-	return WindowHeight, WindowWidth
+	return WindowWidth, WindowHeight
 }

@@ -1,6 +1,7 @@
 package HtmlParser
 
 type HtmlElement struct {
+	Name          string
 	ChildrenCount int
 	ChildrenIndex int
 	HtmlTag       HtmlTags

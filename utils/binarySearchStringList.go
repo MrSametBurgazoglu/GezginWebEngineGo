@@ -2,6 +2,7 @@ package utils
 
 import "strings"
 
+/*TODO BUGFIX LAST STRING CAN'T BE FOUND*/
 func IndexFounder(stringList []string, string string, listCount int) int {
 	var m, result int
 	l := 0

@@ -15,6 +15,7 @@ func (receiver *CssRule) SetStyleSheet(styleSheet *CssStyleSheet) {
 	receiver.cssStyleSheet = styleSheet
 }
 
+/*TODO WE NEED BETTER CSS SELECTOR PARSER AND SEARCHER*/
 func (receiver *CssRule) SetCssSelectors(text string) {
 	selectorList := strings.Split(text, ",")
 	for _, s := range selectorList {
@@ -32,6 +33,7 @@ func (receiver *CssRule) GetSelectors() (list []string) {
 }
 
 func (receiver *CssRule) SetCssDeclarationBlock(text string) {
+	text = strings.ReplaceAll(text, " ", "")
 	cssDeclarations := strings.Split(text, ";")
 	for _, declaration := range cssDeclarations {
 		newCssDeclaration := new(CssDeclaration)

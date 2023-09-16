@@ -5,11 +5,19 @@ import (
 	"gezgin_web_engine/FileManager"
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/JavascriptHandler"
+	"gezgin_web_engine/LayoutProperty"
+	"gezgin_web_engine/NetworkManager"
+	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/StyleEngine"
+	"gezgin_web_engine/StyleProperty/enums"
+	"gezgin_web_engine/StyleProperty/structs"
+	"gezgin_web_engine/drawer/ScreenProperties"
 	"gezgin_web_engine/eventSystem"
+	"gezgin_web_engine/widget"
 	"gezgin_web_engine/widgets"
 	"github.com/gammazero/workerpool"
-	"github.com/veandco/go-sdl2/sdl"
+	"image"
+	"image/draw"
 	"runtime"
 	"sync"
 )
@@ -18,6 +26,11 @@ type TaskType uint8
 
 type Task interface {
 	ExecuteTask()
+}
+
+type WebView struct {
+	Image          *image.RGBA
+	LayoutProperty *LayoutProperty.LayoutProperty
 }
 
 type TaskManager struct {
@@ -29,6 +42,11 @@ type TaskManager struct {
 	styleEngine      *StyleEngine.StyleEngine
 	javascriptEngine *JavascriptHandler.JavascriptEngine
 	DocumentWidget   *widgets.DocumentWidget
+	NetworkManager   *NetworkManager.NetworkManager
+	ResourceManager  *ResourceManager.ResourceManager
+	WebView          *WebView
+	HtmlWidget       widget.WidgetInterface
+	BodyWidget       widget.WidgetInterface
 }
 
 func (receiver *TaskManager) Initialize() {
@@ -36,11 +54,23 @@ func (receiver *TaskManager) Initialize() {
 	receiver.htmlParser = new(HtmlParser.HtmlParser)
 	receiver.cssParser = new(CssParser.CssParser)
 	receiver.styleEngine = new(StyleEngine.StyleEngine)
-	receiver.styleEngine.WorkerPool = workerpool.New(runtime.NumCPU() - 1)
+	receiver.styleEngine.Initialize()
 	receiver.javascriptEngine = new(JavascriptHandler.JavascriptEngine)
+	receiver.NetworkManager = new(NetworkManager.NetworkManager)
+	receiver.NetworkManager.Initialize()
+	receiver.ResourceManager = new(ResourceManager.ResourceManager)
+	receiver.ResourceManager.Initialize()
+	receiver.ResourceManager.NetworkManager = receiver.NetworkManager
+	receiver.WebView = new(WebView)
+	receiver.WebView.LayoutProperty = new(LayoutProperty.LayoutProperty)
+	receiver.WebView.LayoutProperty.Width = ScreenProperties.WindowWidth
+	receiver.WebView.LayoutProperty.Height = ScreenProperties.WindowHeight
+	receiver.WebView.Image = image.NewRGBA(image.Rect(0, 0, ScreenProperties.WindowWidth, ScreenProperties.WindowHeight))
+	draw.Draw(receiver.WebView.Image, receiver.WebView.Image.Bounds(), image.White, image.Point{Y: 0, X: 0}, draw.Src)
 }
 
 func (receiver *TaskManager) CreateFromFile(fileUrl string) {
+	receiver.ResourceManager.Online = false
 	dat := FileManager.LoadFile(fileUrl)
 	receiver.HtmlDocument = HtmlParser.CreateDocumentElement()
 	nodes := make(chan *HtmlParser.HtmlElement)
@@ -60,6 +90,58 @@ func (receiver *TaskManager) CreateFromFile(fileUrl string) {
 	receiver.ExecuteScripts()
 }
 
+func (receiver *TaskManager) CreateFromWeb(webUrl string) {
+	receiver.ResourceManager.Online = true
+	dat := receiver.NetworkManager.GetPage(webUrl)
+	receiver.HtmlDocument = HtmlParser.CreateDocumentElement()
+	nodes := make(chan *HtmlParser.HtmlElement)
+	go receiver.htmlParser.ParseHtmlFromFile(receiver.HtmlDocument, dat, nodes)
+	count := 0
+	for node := range nodes {
+		count += 1
+		element := node
+
+		if node.HtmlTag == HtmlParser.HTML_SCRIPT {
+			//for now we will not use js-script
+			//receiver.HandleScriptTag(node)
+		} else if node.HtmlTag == HtmlParser.HTML_STYLE {
+			styleSheet := receiver.styleEngine.CreateCssSheet(false)
+			receiver.styleEngine.WorkerPool.Submit(func() { receiver.HandleStyleTag(element, styleSheet) }) //maybe worker pool
+		} else if node.HtmlTag == HtmlParser.HTML_IMG {
+			if src := node.Attributes["src"]; src != "" {
+				receiver.HandleWebImgResource(src)
+			}
+		} else if node.HtmlTag == HtmlParser.HTML_LINK {
+			if node.Attributes["rel"] != "" && node.Attributes["href"] != "" {
+				switch node.Attributes["rel"] {
+				case "stylesheet":
+					receiver.HandleWebLinkStyleSheet(node.Attributes["href"])
+				}
+			}
+		}
+	}
+	receiver.styleEngine.WorkerPool.StopWait()
+	receiver.CreateWidgetTree()
+	receiver.SetStylePropertiesOfDocument()
+	receiver.SetInheritStylePropertiesOfDocument()
+	receiver.ExecuteScripts()
+}
+
+func (receiver *TaskManager) HandleWebImgResource(url string) {
+	receiver.ResourceManager.CreateResourceFromWeb(url)
+}
+
+func (receiver *TaskManager) HandleWebLinkStyleSheet(url string) {
+	styleSheet := receiver.styleEngine.CreateCssSheet(true)
+	receiver.styleEngine.WorkerPool.Submit(func() {
+		dat := receiver.NetworkManager.Get(url)
+		styleTag := HtmlParser.HtmlElement{HtmlTag: HtmlParser.HTML_STYLE}
+		untaggedText := HtmlParser.HtmlElement{HtmlTag: HtmlParser.HTML_UNTAGGED_TEXT, Text: string(dat)}
+		styleTag.Children = append(styleTag.Children, &untaggedText)
+		receiver.HandleStyleTag(&styleTag, styleSheet)
+	})
+}
+
 func (receiver *TaskManager) HandleStyleTag(htmlElement *HtmlParser.HtmlElement, styleSheet *StyleEngine.StyleSheet) {
 	result := receiver.cssParser.ParseCssFromStyleTag(htmlElement, htmlElement.Children[0].GetText())
 	receiver.styleEngine.CreateStyleRules(styleSheet, result)
@@ -67,7 +149,9 @@ func (receiver *TaskManager) HandleStyleTag(htmlElement *HtmlParser.HtmlElement,
 
 func (receiver *TaskManager) HandleScriptTag(scriptElement *HtmlParser.HtmlElement) {
 	//give style element to v8 engine
-	receiver.javascriptEngine.AppendScript(scriptElement.Children[0].GetText())
+	if len(scriptElement.Children) == 1 {
+		receiver.javascriptEngine.AppendScript(scriptElement.Children[0].GetText())
+	}
 }
 
 func (receiver *TaskManager) ExecuteScripts() {
@@ -80,24 +164,43 @@ func (receiver *TaskManager) CreateWidgetTree() {
 	element := receiver.FindBody()
 	receiver.DocumentWidget.HtmlElement = element
 	receiver.DocumentWidget.Initialize()
+	receiver.DocumentWidget.LayoutProperty = new(LayoutProperty.LayoutProperty)
+	receiver.DocumentWidget.LayoutProperty.Parent = receiver.WebView.LayoutProperty
+	receiver.DocumentWidget.LayoutProperty.StyleProperty = receiver.DocumentWidget.StyleProperty
+	receiver.DocumentWidget.StyleProperty.Display = enums.CSS_DISPLAY_TYPE_BLOCK
+	receiver.DocumentWidget.ResourceManager = receiver.ResourceManager
+	receiver.DocumentWidget.StyleProperty.Color = new(structs.ColorRGBA)
+	receiver.DocumentWidget.StyleProperty.Color.SetColorByRGB(0, 0, 0)
 	var wg sync.WaitGroup
 	wg.Add(1)
 	receiver.CreateWidgetForTree(receiver.DocumentWidget, element, &wg)
 	wg.Wait()
 }
 
-func (receiver *TaskManager) CreateWidgetForTree(parentWidget widgets.WidgetInterface, parentHtmlElement *HtmlParser.HtmlElement, group *sync.WaitGroup) {
+func (receiver *TaskManager) CreateWidgetForTree(parentWidget widget.WidgetInterface, parentHtmlElement *HtmlParser.HtmlElement, group *sync.WaitGroup) {
 	for _, child := range parentHtmlElement.Children {
-		function := widgets.WidgetFunctions[child.HtmlTag]
-		newWidget := function(child)
-		newWidget.SetParent(parentWidget)
-		parentWidget.AppendChild(newWidget)
-		group.Add(1)
-		go receiver.CreateWidgetForTree(newWidget, child, group)
+		function := widgets.WidgetFunctions[child.HtmlTag-1] // if element will not draw then function is nil
+		if function != nil {
+			newWidget := function(child, receiver) // but function return value can be nil because not drawen html elements don't exist in widget tree
+			newWidget.SetParent(parentWidget)
+			parentWidget.AppendChild(newWidget)
+			group.Add(1)
+			go receiver.CreateWidgetForTree(newWidget, child, group)
+		} else if child.HtmlTag == HtmlParser.HTML_CUSTOM_TAG {
+			function = widgets.WidgetFunctions[len(widgets.WidgetFunctions)-1]
+			newWidget := function(child, receiver)
+			newWidget.SetParent(parentWidget)
+			parentWidget.AppendChild(newWidget)
+			group.Add(1)
+			go receiver.CreateWidgetForTree(newWidget, child, group)
+		} else {
+			println("HTML ELEMENT ", child.Name, " NOT DEFINED")
+		}
 	}
 	group.Done()
 }
 
+// we will not need this function because body widget can set now body of document
 func (receiver *TaskManager) FindBody() *HtmlParser.HtmlElement {
 	elementList := []*HtmlParser.HtmlElement{receiver.HtmlDocument}
 	length := len(elementList)
@@ -109,6 +212,9 @@ func (receiver *TaskManager) FindBody() *HtmlParser.HtmlElement {
 				return w
 			} else if w.ChildrenCount > 0 {
 				for _, child := range w.Children {
+					if child.HtmlTag == HtmlParser.HTML_IFRAME {
+						continue
+					}
 					elementList = append(elementList, child)
 					keepGo = true
 				}
@@ -123,17 +229,22 @@ func (receiver *TaskManager) FindBody() *HtmlParser.HtmlElement {
 }
 
 func (receiver *TaskManager) SetStylePropertiesOfDocument() {
+	receiver.styleEngine.InitializeRoot()
 	var wg sync.WaitGroup
 	wg.Add(1)
+	receiver.styleEngine.Root.InheritVariables(receiver.DocumentWidget.GetStyleProperty())
 	receiver.SetStylePropertiesOfWidget(receiver.DocumentWidget, &wg)
 	wg.Wait()
 }
 
-func (receiver *TaskManager) SetStylePropertiesOfWidget(widget widgets.WidgetInterface, group *sync.WaitGroup) {
-	widget.GetStyleProperty().ApplyCssRules(receiver.styleEngine, widget.GetID(), widget.GetClasses(), widget.GetHtmlTag(), widget.GetStyleRules())
+func (receiver *TaskManager) SetStylePropertiesOfWidget(widget widget.WidgetInterface, group *sync.WaitGroup) { //TODO html tag must be string and can be custom
+	receiver.styleEngine.ApplyCssRules(widget)
 	for _, child := range widget.GetChildren() {
-		group.Add(1)
-		go receiver.SetStylePropertiesOfWidget(child, group)
+		if child.GetHtmlTag() != 106 { //untagged text shouldn't have style property
+			group.Add(1)
+			widget.GetStyleProperty().InheritVariables(child.GetStyleProperty())
+			go receiver.SetStylePropertiesOfWidget(child, group)
+		}
 	}
 	group.Done()
 }
@@ -145,7 +256,7 @@ func (receiver *TaskManager) SetInheritStylePropertiesOfDocument() {
 	wg.Wait()
 }
 
-func (receiver *TaskManager) SetInheritStylePropertiesOfWidget(widget widgets.WidgetInterface, group *sync.WaitGroup) {
+func (receiver *TaskManager) SetInheritStylePropertiesOfWidget(widget widget.WidgetInterface, group *sync.WaitGroup) {
 	//widget.GetStyleProperty().ApplyCssRules(receiver.styleEngine, widget.GetID(), widget.GetClasses(), widget.GetHtmlTag(), widget.GetStyleRules())
 	for _, child := range widget.GetChildren() {
 		if child.GetStyleProperty() != nil {
@@ -157,13 +268,13 @@ func (receiver *TaskManager) SetInheritStylePropertiesOfWidget(widget widgets.Wi
 	group.Done()
 }
 
-func (receiver *TaskManager) Draw(renderer *sdl.Renderer) {
-	receiver.DocumentWidget.DrawPage(renderer)
+func (receiver *TaskManager) Draw() {
+	receiver.DocumentWidget.DrawPage(receiver.WebView.Image)
 
 }
 
-func (receiver *TaskManager) Render(renderer *sdl.Renderer) {
-	receiver.DocumentWidget.RenderPage(renderer)
+func (receiver *TaskManager) Render() {
+	receiver.DocumentWidget.RenderPage(receiver.WebView.Image)
 }
 
 func (receiver *TaskManager) IsRendered() bool {
@@ -172,4 +283,12 @@ func (receiver *TaskManager) IsRendered() bool {
 
 func (receiver *TaskManager) SetRendered(rendered bool) {
 	receiver.DocumentWidget.Rendered = rendered
+}
+
+func (receiver *TaskManager) SetHtmlElement(widget widget.WidgetInterface) {
+	receiver.HtmlWidget = widget
+}
+
+func (receiver *TaskManager) SetBodyElement(widget widget.WidgetInterface) {
+	receiver.BodyWidget = widget
 }

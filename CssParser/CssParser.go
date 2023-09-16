@@ -27,24 +27,64 @@ func (receiver *Result) GetRuleByIndex(index int) GlobalTypes.CssRuleInterface {
 type StyleElement interface {
 }
 
+/*SUPPORT MEDIA QUERIES*/ //we should rewrite css parser like a programming language
 func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, styleText string) (result *Result) {
 	result = new(Result)
 	newCssStyleSheet := new(CssStyleSheet)
 	styleText = utils.RemoveCharsFromString(styleText)
 	seek := 0
 	index := 0
+	commentStart := strings.Index(styleText[seek:], "/*")
 	index = strings.Index(styleText[seek:], "{")
+	if commentStart < index {
+		commentEnd := strings.LastIndex(styleText[seek:index], "*/")
+		seek += commentEnd + 2
+		index -= commentEnd + 2
+	}
+	frontRule := false
 	for index != -1 { //maybe go routine for every cssText
+		if styleText[seek] == '@' {
+			frontRule = true
+			firstSeek := seek
+			index = strings.Index(styleText[seek:], "{")
+			if strings.HasPrefix(styleText[firstSeek:], "@media") && IsMediaRuleCorrect(styleText[firstSeek:seek+index]) {
+				seek += index + 1
+				index = strings.Index(styleText[seek:], "{")
+				continue
+			} else {
+				endOfAllRule := strings.Index(styleText[seek+index:], "}}")
+				seek = seek + index + endOfAllRule + 2
+				frontRule = false
+				index = strings.Index(styleText[seek:], "{")
+				continue
+			}
+
+		} else if strings.HasPrefix(styleText[seek:], "/*") {
+			commentEnd := strings.Index(styleText[seek:], "*/")
+			seek += commentEnd + 2
+			index = strings.Index(styleText[seek:], "{")
+			continue
+		}
 		newCssRule := new(CssRule)
 		index2 := strings.Index(styleText[seek:], "}")
+		if index2 == -1 {
+			return
+		}
 		selectors := styleText[seek : seek+index]
 		cssText := styleText[seek+index+1 : seek+index2]
-		seek += index2 + 1
+		seek += index2
+		newCssRule.cssDeclarationBlock = new(CssDeclarationBlock)
 		newCssRule.SetStyleSheet(newCssStyleSheet)
 		newCssRule.SetCssSelectors(selectors)
 		newCssRule.SetCssDeclarationBlock(cssText)
 		result.CssStyleSheetRules = append(result.CssStyleSheetRules, newCssRule)
-		index = strings.Index(styleText[seek:], "{")
+		result.ruleCount += 1
+		if frontRule && styleText[seek+1] == '}' {
+			frontRule = false
+			seek += 1
+		}
+		index = strings.Index(styleText[seek+1:], "{")
+		seek += 1
 	}
 	return
 }
@@ -53,6 +93,9 @@ func ParseCssFromInlineStyle(cssText string) (m map[string]string) {
 	m = make(map[string]string)
 	declarations := strings.Split(cssText, ";")
 	for _, declaration := range declarations {
+		if declaration == "" { //TODO FIX HERE
+			break
+		}
 		list := strings.Split(declaration, ":")
 		m[list[0]] = list[1]
 	}

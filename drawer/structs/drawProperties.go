@@ -1,13 +1,19 @@
 package structs
 
 import (
-	"github.com/veandco/go-sdl2/sdl"
-	"github.com/veandco/go-sdl2/ttf"
+	"gezgin_web_engine/drawer/Fonts"
+	"image"
 )
 
 type DrawProperties struct {
-	Font              *ttf.Font
-	Rect              sdl.Rect
-	Texture           *sdl.Texture
-	BackgroundTexture *sdl.Texture
+	Font              *Fonts.GezginFont
+	Rect              *image.Rectangle
+	Texture           *image.RGBA
+	BackgroundTexture *image.RGBA
+}
+
+func (receiver *DrawProperties) Initialize() {
+	receiver.Rect = new(image.Rectangle)
+	receiver.Texture = new(image.RGBA)
+	receiver.BackgroundTexture = new(image.RGBA)
 }

@@ -1,23 +1,14 @@
 package drawerBackend
 
 import (
-	"github.com/veandco/go-sdl2/img"
-	"github.com/veandco/go-sdl2/sdl"
+	"gezgin_web_engine/LayoutProperty"
+	"image"
+	"image/draw"
+	_ "image/png"
 )
 
-func GetImageTexture(renderer *sdl.Renderer, imagePath string, texture **sdl.Texture, rect *sdl.Rect) {
-	image, err := img.LoadTexture(renderer, "exampleHtmlFiles/"+imagePath)
-	if err != nil {
-		println(err.Error())
-	}
-	_, _, w, h, imageQueryErr := image.Query()
-	if imageQueryErr != nil {
-		println(err.Error())
-	}
-	rect.X = 0
-	rect.Y = 0
-	rect.W = w
-	rect.H = h
-
-	*texture = image
+func GetImageTexture(imageSrc *image.Image, imageDest *image.RGBA, layoutProperty *LayoutProperty.LayoutProperty) {
+	draw.Draw(imageDest, imageDest.Bounds(), *imageSrc, image.Point{X: 0, Y: 0}, draw.Src)
+	layoutProperty.Width = imageDest.Rect.Max.X
+	layoutProperty.Height = imageDest.Rect.Max.Y
 }

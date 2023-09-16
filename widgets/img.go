@@ -2,13 +2,19 @@ package widgets
 
 import (
 	"gezgin_web_engine/HtmlParser"
+	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/drawerBackend"
-	"github.com/veandco/go-sdl2/sdl"
+	"gezgin_web_engine/widget"
+	"image"
+	"image/draw"
+	"image/png"
+	"os"
 	"strconv"
+	"time"
 )
 
 type HtmlTagImg struct {
-	Widget
+	widget.Widget
 	isMap          bool
 	alt            string
 	sizes          string
@@ -58,21 +64,45 @@ func (receiver *HtmlTagImg) VarReaderFunc(variableName string, variableValue str
 	}
 }
 
-func (receiver *HtmlTagImg) Draw(renderer *sdl.Renderer) {
-	renderer.Copy(receiver.DrawProperties.Texture, nil, &receiver.DrawProperties.Rect)
+func (receiver *HtmlTagImg) Draw(mainImage *image.RGBA) {
+	//file, err := os.Open("exampleHtmlFiles/browser-diagram.png")
+	//img, err2 := png.Decode(file)
+	//if err == nil && err2 == nil {
+	draw.Draw(mainImage,
+		image.Rect(receiver.LayoutProperty.XPosition,
+			receiver.LayoutProperty.YPosition,
+			receiver.LayoutProperty.Width+receiver.LayoutProperty.XPosition,
+			receiver.LayoutProperty.Height+receiver.LayoutProperty.YPosition),
+		receiver.DrawProperties.Texture,
+		image.Point{X: 0, Y: 0},
+		draw.Over)
+	//}
 }
 
-func (receiver *HtmlTagImg) Render(renderer *sdl.Renderer) {
-	drawerBackend.GetImageTexture(
-		renderer,
-		receiver.Src,
-		&receiver.DrawProperties.Texture,
-		&receiver.DrawProperties.Rect,
-	)
-
+func (receiver *HtmlTagImg) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
+	for !resourceManager.CheckResource(receiver.Src) {
+		time.Sleep(time.Millisecond)
+	}
+	//resource, err := resourceManager.GetResource(receiver.Src)
+	//img, format, err2 := image.Decode(bytes.NewReader(resource.GetData())) //TODO PERFORMANCE UPDATE
+	file, err := os.Open("exampleHtmlFiles/browser-diagram.png")
+	img, err2 := png.Decode(file)
+	//if err == nil && err2 == nil {
+	//	draw.Draw(mainImage, mainImage.Bounds(), img, image.Point{X: 0, Y: 0}, draw.Src)
+	//}
+	if img.Bounds().Size() != receiver.DrawProperties.Texture.Bounds().Size() {
+		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, img.Bounds().Size().X, img.Bounds().Size().Y))
+	}
+	if err == nil && err2 == nil {
+		drawerBackend.GetImageTexture(
+			&img,
+			receiver.DrawProperties.Texture,
+			receiver.LayoutProperty,
+		)
+	}
 }
 
-func SetWidgetPropertiesForImgTag(element *HtmlParser.HtmlElement) WidgetInterface {
+func SetWidgetPropertiesForImgTag(element *HtmlParser.HtmlElement, taskManager TaskManagerInterface) widget.WidgetInterface {
 	widget := new(HtmlTagImg)
 	widget.HtmlElement = element
 	widget.Initialize()
