@@ -3,7 +3,7 @@ Gezgin Web Engine written in Go Completely From Scratch
 
 # It's an Experimental Browser Engine
 
-![Screenshot from 2023-09-13 19-33-11](https://github.com/MrSametBurgazoglu/GezginWebEngineGo/assets/16630690/965a7872-dd3c-4243-bd81-b2155c04d09c)
+![Screenshot from 2023-09-16 10-05-54](https://github.com/MrSametBurgazoglu/GezginWebEngineGo/assets/16630690/608afbd7-599e-4c45-98f1-ba751424ebaf)
 
 https://getbootstrap.com/docs/5.0/examples/cover/ Web Adress Showed Above As Screenshot
 
