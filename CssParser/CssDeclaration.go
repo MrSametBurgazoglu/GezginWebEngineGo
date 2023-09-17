@@ -10,6 +10,8 @@ type CssDeclaration struct {
 func (receiver *CssDeclaration) Set(text string) {
 	property, value, found := strings.Cut(text, ":")
 	if found {
+		property = strings.ReplaceAll(property, " ", "")
+		value = strings.TrimSpace(value)
 		receiver.cssProperty.Set(property)
 		receiver.cssValue.Set(value)
 	}

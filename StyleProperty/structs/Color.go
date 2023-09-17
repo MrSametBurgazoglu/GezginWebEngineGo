@@ -88,7 +88,6 @@ func (receiver *ColorRGBA) SetColorByHex(value string) bool {
 			value = newValue
 		}
 		values, err := strconv.ParseUint(value[1:], 16, 32)
-		//n, err := fmt.Sscanf(value, "#%02x%02x%02x", &r, &g, &b)
 		if err != nil {
 			return true
 		}
@@ -101,8 +100,6 @@ func (receiver *ColorRGBA) SetColorByHex(value string) bool {
 			receiver.red = uint8(values >> 4)
 			receiver.green = uint8((values >> 2) & 0xff)
 			receiver.blue = uint8(values & 0xFF)
-		} else {
-			println("heyy")
 		}
 	}
 	return false
@@ -188,6 +185,7 @@ func (receiver *ColorRGBA) SetColorByFunction(value string) bool {
 					value4 = 0
 				}
 				receiver.SetColorByRGBA(uint8(value1), uint8(value2), uint8(value3), uint8(value4))
+				return true
 			case "hsla":
 				value1, err := strconv.ParseFloat(functionParameters[0], 32)
 				if err != nil {
@@ -206,6 +204,7 @@ func (receiver *ColorRGBA) SetColorByFunction(value string) bool {
 					value4 = 0
 				}
 				receiver.SetColorByHSLA(float32(value1), float32(value2), float32(value3), uint8(value4))
+				return true
 			}
 		}
 	}

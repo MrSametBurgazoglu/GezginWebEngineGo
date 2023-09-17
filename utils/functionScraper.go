@@ -3,7 +3,7 @@ package utils
 import "strings"
 
 func ParseFunction(value string) (functionName string, functionParameters []string, ok bool) {
-	cleanString := strings.TrimSpace(value)
+	cleanString := strings.ReplaceAll(value, " ", "")
 	index1 := strings.Index(cleanString, "(")
 	if index1 != -1 {
 		index2 := strings.Index(cleanString, ")")

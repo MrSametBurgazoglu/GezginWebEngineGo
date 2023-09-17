@@ -108,6 +108,9 @@ func setPaddingRight(padding *structs.Padding, value string) {
 }
 
 func setPadding(padding *structs.Padding, value string) {
+	if strings.Contains(value, "!important") {
+		value = strings.ReplaceAll(value, "!important", "")
+	}
 	values := strings.Split(value, " ")
 	switch len(values) {
 	case 1:

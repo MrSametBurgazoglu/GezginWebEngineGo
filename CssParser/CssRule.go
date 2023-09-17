@@ -33,7 +33,6 @@ func (receiver *CssRule) GetSelectors() (list []string) {
 }
 
 func (receiver *CssRule) SetCssDeclarationBlock(text string) {
-	text = strings.ReplaceAll(text, " ", "")
 	cssDeclarations := strings.Split(text, ";")
 	for _, declaration := range cssDeclarations {
 		newCssDeclaration := new(CssDeclaration)

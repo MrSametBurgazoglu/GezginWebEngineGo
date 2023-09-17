@@ -20,6 +20,9 @@ func GetHorizontalMarginAutoCountAndRemainWidth(currentWidget widget.WidgetInter
 	autoCount := 0
 	for _, childWidgetInterface := range widgetList {
 		parentContentWidth -= childWidgetInterface.GetLayout().GetTotalWidth()
+		if childWidgetInterface.GetStyleProperty() == nil || childWidgetInterface.GetStyleProperty().Margin == nil {
+			continue
+		}
 		if childWidgetInterface.GetStyleProperty().Margin.MarginLeftValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO {
 			autoCount += 1
 		}
