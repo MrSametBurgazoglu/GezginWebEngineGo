@@ -5,18 +5,23 @@ import (
 	"gezgin_web_engine/widget"
 )
 
-func BlockSetPositionXSticky(currentWidget, parent widget.WidgetInterface) int {
-	return parent.GetLayout().ContentXPosition
+func BlockSetPositionXSticky(currentWidget, parent widget.WidgetInterface) {
 }
 
-func BlockSetPositionXStatic(currentWidget, parent widget.WidgetInterface) int {
+func BlockSetPositionXStatic(currentWidget, parent widget.WidgetInterface) {
 	position := parent.GetLayout().ContentXPosition
 	if currentWidget.GetStyleProperty().Margin != nil {
 		CalculateLeftMargin(currentWidget, true)
 		CalculateRightMargin(currentWidget, true)
 		position += currentWidget.GetLayout().MarginLeft
 	}
-	return position
+	currentWidget.GetLayout().XPosition = position
+	if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Padding != nil {
+		currentWidget.GetLayout().PaddingLeft = int(currentWidget.GetStyleProperty().Padding.PaddingLeft)
+		currentWidget.GetLayout().PaddingRight = int(currentWidget.GetStyleProperty().Padding.PaddingRight)
+		position += currentWidget.GetLayout().PaddingLeft
+	}
+	currentWidget.GetLayout().ContentXPosition = position
 }
 
 func BlockSetPositionXAbsolute(currentWidget, parent widget.WidgetInterface) int {
@@ -47,27 +52,21 @@ func BlockSetPositionXRelative(currentWidget, parent widget.WidgetInterface) int
 	return position
 }
 
-func BlockSetPositionX(currentWidget, parent widget.WidgetInterface) int {
-	position := 0
+func BlockSetPositionX(currentWidget, parent widget.WidgetInterface) {
 	if currentWidget.GetStyleProperty() != nil {
 		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			position = BlockSetPositionXSticky(currentWidget, parent)
+			BlockSetPositionXSticky(currentWidget, parent)
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			position = BlockSetPositionXStatic(currentWidget, parent)
+			BlockSetPositionXStatic(currentWidget, parent)
 		case enums.CSS_POSITION_TYPE_STATIC:
-			position = BlockSetPositionXStatic(currentWidget, parent)
+			BlockSetPositionXStatic(currentWidget, parent)
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			position = BlockSetPositionXAbsolute(currentWidget, parent)
+			BlockSetPositionXAbsolute(currentWidget, parent)
 		case enums.CSS_POSITION_TYPE_FIXED:
-			position = BlockSetPositionXFixed(currentWidget, parent)
+			BlockSetPositionXFixed(currentWidget, parent)
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			position = BlockSetPositionXRelative(currentWidget, parent)
+			BlockSetPositionXRelative(currentWidget, parent)
 		}
-	} else {
-		position = parent.GetLayout().ContentXPosition
 	}
-	currentWidget.GetLayout().ContentXPosition = position
-	currentWidget.GetLayout().XPosition = position
-	return currentWidget.GetLayout().ContentXPosition
 }

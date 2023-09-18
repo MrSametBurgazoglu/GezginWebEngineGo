@@ -9,15 +9,17 @@ func BlockSetPositionYSticky(currentWidget, parent, beforeCurrentWidget widget.W
 	return parent.GetLayout().ContentYPosition
 }
 
-func BlockSetPositionYStatic(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
+func BlockSetPositionYStatic(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
 	if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Margin != nil {
 		CalculateTopMargin(currentWidget, false)
 		CalculateBottomMargin(currentWidget, false)
 	}
 	if beforeCurrentWidget != nil {
-		return beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().GetTotalHeight() + currentWidget.GetLayout().MarginTop
+		currentWidget.GetLayout().YPosition = beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().GetTotalHeight() + currentWidget.GetLayout().MarginTop
+		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 	} else {
-		return parent.GetLayout().YPosition + currentWidget.GetLayout().MarginTop
+		currentWidget.GetLayout().YPosition = parent.GetLayout().YPosition + currentWidget.GetLayout().MarginTop
+		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 	}
 }
 
@@ -47,30 +49,27 @@ func BlockSetPositionYRelative(currentWidget, parent, beforeCurrentWidget widget
 	return position
 }
 
-func BlockSetPositionY(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
-	position := 0
+func BlockSetPositionY(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
 	if currentWidget.GetStyleProperty() != nil {
 		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			position = BlockSetPositionYSticky(currentWidget, parent, beforeCurrentWidget)
+			BlockSetPositionYSticky(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			position = BlockSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
+			BlockSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_STATIC:
-			position = BlockSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
+			BlockSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			position = BlockSetPositionYAbsolute(currentWidget, parent, beforeCurrentWidget)
+			BlockSetPositionYAbsolute(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_FIXED:
-			position = BlockSetPositionYFixed(currentWidget, parent, beforeCurrentWidget)
+			BlockSetPositionYFixed(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			position = BlockSetPositionYRelative(currentWidget, parent, beforeCurrentWidget)
+			BlockSetPositionYRelative(currentWidget, parent, beforeCurrentWidget)
 		}
 	} else {
 		if beforeCurrentWidget == nil {
-			position = parent.GetLayout().YPosition
+			currentWidget.GetLayout().YPosition = parent.GetLayout().ContentYPosition
 		} else {
-			position = beforeCurrentWidget.GetLayout().Height
+			currentWidget.GetLayout().YPosition = beforeCurrentWidget.GetLayout().ContentYPosition + beforeCurrentWidget.GetLayout().Height
 		}
 	}
-	currentWidget.GetLayout().YPosition = position
-	return position
 }

@@ -43,6 +43,10 @@ func (receiver *LayoutProperty) GetTotalWidth() int {
 	return receiver.MarginLeft + receiver.PaddingLeft + receiver.ContentWidth + receiver.PaddingRight + receiver.MarginRight
 }
 
+func (receiver *LayoutProperty) GetTotalContentWidth() int {
+	return receiver.PaddingLeft + receiver.ContentWidth + receiver.PaddingRight
+}
+
 func (receiver *LayoutProperty) GetTotalHeight() int {
 	return receiver.MarginTop + receiver.PaddingTop + receiver.ContentHeight + receiver.PaddingBottom + receiver.MarginBottom
 }

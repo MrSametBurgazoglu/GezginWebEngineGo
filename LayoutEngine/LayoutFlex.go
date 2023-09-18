@@ -42,7 +42,6 @@ func SetFLexContainerWidthRow(currentWidget widget.WidgetInterface) {
 			case enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE:
 				width = int(float64(currentWidget.GetLayout().Width) * (float64(currentWidget.GetStyleProperty().Children[i].Width) / 100.0))
 			}
-			//look width here
 			if currentWidget.GetStyleProperty().Children[i].MaxWidth != 0 && width > int(currentWidget.GetStyleProperty().Children[i].MaxWidth) {
 				width = int(currentWidget.GetStyleProperty().Children[i].MaxWidth)
 			}
@@ -51,6 +50,7 @@ func SetFLexContainerWidthRow(currentWidget widget.WidgetInterface) {
 			}
 		}
 		child.GetLayout().Width = width
+		child.GetLayout().ContentWidth = width
 		totalWidth += width
 	}
 	if totalWidth > currentWidget.GetLayout().Width {
@@ -79,44 +79,45 @@ func SetFLexContainerWidthColumn(currentWidget widget.WidgetInterface) {
 			width = int(currentWidget.GetStyleProperty().Children[i].MinWidth)
 		}
 		child.GetLayout().Width = width
+		child.GetLayout().ContentWidth = width
 	}
 }
 
-func SetPositionFlex(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) (int, int) {
+func SetPositionFlex(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
 	if currentWidget.GetStyleProperty().Parent.FlexDirection == enums.CSS_FLEX_DIRECTION_EMPTY || currentWidget.GetStyleProperty().Parent.FlexDirection == enums.CSS_FLEX_DIRECTION_ROW {
-		return SetPositionXFlex(currentWidget, parent, beforeCurrentWidget), SetPositionYFlex(currentWidget, parent, beforeCurrentWidget)
+		SetPositionXFlex(currentWidget, parent, beforeCurrentWidget)
+		SetPositionYFlex(currentWidget, parent, beforeCurrentWidget)
 	} else {
-		return BlockSetPositionX(currentWidget, parent), BlockSetPositionY(currentWidget, parent, beforeCurrentWidget)
+		BlockSetPositionX(currentWidget, parent)
+		BlockSetPositionY(currentWidget, parent, beforeCurrentWidget)
 	}
 }
 
-func SetPositionYFlex(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
-	position := 0
+func SetPositionYFlex(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
 	if currentWidget.GetStyleProperty() != nil {
 		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			position = FlexSetPositionYSticky(currentWidget, parent, beforeCurrentWidget)
+			FlexSetPositionYSticky(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			println("hello")
-			println(currentWidget.GetParent().GetStyleProperty().FlexDirection)
-			//position = FlexSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
+			FlexSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_STATIC:
-			position = FlexSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
+			FlexSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			position = FlexSetPositionYAbsolute(currentWidget, parent, beforeCurrentWidget)
+			FlexSetPositionYAbsolute(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_FIXED:
-			position = FlexSetPositionYFixed(currentWidget, parent, beforeCurrentWidget)
+			FlexSetPositionYFixed(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			position = FlexSetPositionYRelative(currentWidget, parent, beforeCurrentWidget)
+			FlexSetPositionYRelative(currentWidget, parent, beforeCurrentWidget)
 		}
 	} else {
 		if beforeCurrentWidget == nil {
-			position = parent.GetLayout().YPosition
+			currentWidget.GetLayout().YPosition = parent.GetLayout().ContentYPosition
+			currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 		} else {
-			position = beforeCurrentWidget.GetLayout().YPosition
+			currentWidget.GetLayout().YPosition = beforeCurrentWidget.GetLayout().ContentYPosition
+			currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 		}
 	}
-	return position
 }
 
 func SetWidthFlexChild(currentWidget widget.WidgetInterface, styleProperty *StyleProperty.StyleProperty) {

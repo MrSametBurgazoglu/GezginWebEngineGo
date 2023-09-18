@@ -5,7 +5,7 @@ import (
 	"gezgin_web_engine/widget"
 )
 
-func SetWidth(currentWidget widget.WidgetInterface) int {
+func SetWidth(currentWidget widget.WidgetInterface) {
 	if currentWidget.GetStyleProperty() == nil {
 		SetWidthInline(currentWidget, currentWidget.GetStyleProperty())
 	} else if currentWidget.GetStyleProperty().Float != enums.CSS_FLOAT_EMPTY && currentWidget.GetStyleProperty().Float != enums.CSS_FLOAT_NONE {
@@ -23,5 +23,4 @@ func SetWidth(currentWidget widget.WidgetInterface) int {
 	} else {
 		SetWidthInline(currentWidget, currentWidget.GetStyleProperty())
 	}
-	return currentWidget.GetLayout().Width
 }

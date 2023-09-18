@@ -101,15 +101,11 @@ func (receiver *DocumentWidget) RenderDocument(mainImage *image.RGBA) {
 func (receiver *DocumentWidget) RenderPage(mainImage *image.RGBA) {
 	receiver.LayoutProperty.Width = ScreenProperties.WindowWidth
 	receiver.LayoutProperty.ContentWidth = ScreenProperties.WindowWidth
-	//receiver.LayoutProperty.Height = ScreenProperties.WindowHeight
-	//TODO FLEX ITEM MUST NEED TO CALCULATED WIDTH OF UNTAGGED TEXT BUT
 	receiver.RenderDocument(mainImage)
 	receiver.SetWidthForBlockElements()
 	receiver.RenderDocument(mainImage)
 	SetWidthForInlineElements(receiver)
 	receiver.SetHeightForElements()
-	//SetHeightForInlineElements(receiver)
-	//SetHeightForBlockElements(receiver)
 	SetPositionOfElements(receiver)
 }
 
@@ -130,14 +126,11 @@ func (receiver *DocumentWidget) Draw(mainImage *image.RGBA) {
 }
 
 func SetWidthForWidget(widget widget.WidgetInterface) {
-	layout := widget.GetLayout()
 	var layoutList []*LayoutProperty.LayoutProperty
 	for _, widgetInterface := range widget.GetChildren() {
 		layoutList = append(layoutList, widgetInterface.GetLayout())
 	}
-
 	LayoutEngine.SetWidth(widget)
-	widget.GetLayout().Width = layout.Width
 }
 func SetHeightForWidget(widget widget.WidgetInterface) {
 	var layoutList []*LayoutProperty.LayoutProperty
@@ -148,7 +141,6 @@ func SetHeightForWidget(widget widget.WidgetInterface) {
 }
 
 func SetXYForWidget(currentWidget widget.WidgetInterface) {
-	layout := currentWidget.GetLayout()
 	var layoutList []*LayoutProperty.LayoutProperty
 	for _, widgetInterface := range currentWidget.GetChildren() {
 		layoutList = append(layoutList, widgetInterface.GetLayout())
@@ -159,18 +151,7 @@ func SetXYForWidget(currentWidget widget.WidgetInterface) {
 		beforeCurrentWidget = currentWidget.GetParent().GetChildrenByIndex(currentWidget.GetChildrenIndex() - 1)
 	}
 
-	x, y := LayoutEngine.SetPosition(currentWidget, currentWidget.GetParent(), beforeCurrentWidget)
-
-	if untaggedText, ok := currentWidget.(*UntaggedText); ok {
-		println("x:", x, "y:", y, "value:", untaggedText.Value, "w:", layout.Width, "h:", layout.Height)
-	}
-
-	if HtmlParser.HtmlTags(currentWidget.GetHtmlTag()) == HtmlParser.HTML_PRE {
-		println("heyyo")
-	}
-
-	currentWidget.GetLayout().XPosition = x
-	currentWidget.GetLayout().YPosition = y
+	LayoutEngine.SetPosition(currentWidget, currentWidget.GetParent(), beforeCurrentWidget)
 }
 
 func (receiver *DocumentWidget) SetWidthForBlockElements() {

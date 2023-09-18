@@ -1,7 +1,6 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/widget"
 )
 
@@ -9,42 +8,13 @@ func FlexSetPositionYSticky(currentWidget, parent, beforeCurrentWidget widget.Wi
 	return parent.GetLayout().ContentYPosition
 }
 
-func FlexSetPositionYStatic(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
-	x := 0
-	if beforeCurrentWidget == nil {
-		x = parent.GetLayout().XPosition
-		if currentWidget.GetStyleProperty().Margin != nil {
-			if currentWidget.GetStyleProperty().Margin.MarginLeftValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO && currentWidget.GetStyleProperty().Margin.MarginRightValueType == enums.CSS_PROPERTY_VALUE_TYPE_AUTO {
-				x += (currentWidget.GetLayout().Parent.Width - currentWidget.GetLayout().Width) / 2
-			} else {
-				x += currentWidget.GetLayout().MarginLeft
-			}
-		}
-		if currentWidget.GetStyleProperty().Padding != nil {
-			x += currentWidget.GetLayout().PaddingLeft
-		}
-	} else {
-		x = beforeCurrentWidget.GetLayout().XPosition + beforeCurrentWidget.GetLayout().Width
-		if currentWidget.GetStyleProperty().Margin != nil {
-			x += currentWidget.GetLayout().MarginLeft
-		}
-		if currentWidget.GetStyleProperty().Padding != nil {
-			x += currentWidget.GetLayout().PaddingLeft
-		}
+func FlexSetPositionYStatic(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
+	if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Margin != nil {
+		CalculateTopMargin(currentWidget, false)
+		CalculateBottomMargin(currentWidget, false)
 	}
-	return x
-	/*
-		if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Margin != nil {
-			CalculateTopMargin(currentWidget, false)
-			CalculateBottomMargin(currentWidget, false)
-		}
-		if beforeCurrentWidget != nil {
-			return beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().GetTotalHeight() + currentWidget.GetLayout().MarginTop
-		} else {
-			return parent.GetLayout().YPosition + currentWidget.GetLayout().MarginTop
-		}
-
-	*/
+	currentWidget.GetLayout().YPosition = parent.GetLayout().ContentYPosition + currentWidget.GetLayout().MarginTop
+	currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 }
 
 func FlexSetPositionYAbsolute(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {

@@ -6,161 +6,155 @@ import (
 	"gezgin_web_engine/widget"
 )
 
-func InlineSetPosition(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) (int, int) {
-	return InlineSetPositionX(currentWidget, parent, beforeCurrentWidget), InlineSetPositionY(currentWidget, parent, beforeCurrentWidget)
+func InlineSetPosition(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
+	InlineSetPositionX(currentWidget, parent, beforeCurrentWidget)
+	InlineSetPositionY(currentWidget, parent, beforeCurrentWidget)
 }
 
-func InlineSetPositionXStatic(currentWidget widget.WidgetInterface) int {
+func InlineSetPositionXStatic(currentWidget widget.WidgetInterface) {
 	if currentWidget.GetParent().GetStyleProperty() != nil && currentWidget.GetParent().GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_BLOCK && currentWidget.GetParent().GetStyleProperty().TextAlign == enums.CSS_TEXT_ALIGN_CENTER {
 		childrenTotalWidth := 0
 		currentParent := currentWidget.GetParent()
 		for _, widgetInterface := range currentParent.GetChildren() {
 			if widgetInterface.GetStyleProperty() == nil || widgetInterface.GetStyleProperty().Display != enums.CSS_DISPLAY_TYPE_BLOCK {
-				childrenTotalWidth += widgetInterface.GetLayout().Width
+				childrenTotalWidth += widgetInterface.GetLayout().GetTotalWidth()
 			} else {
 				childrenTotalWidth = 0
 			}
 		}
-		startPoint := currentParent.GetLayout().XPosition + currentParent.GetLayout().Width/2 + childrenTotalWidth/2
+		startPoint := currentParent.GetLayout().ContentXPosition + currentParent.GetLayout().ContentWidth/2 + childrenTotalWidth/2
 		currentStartPoint := startPoint
 		for _, widgetInterface := range currentParent.GetChildren()[currentWidget.GetChildrenIndex():] {
 			if widgetInterface.GetStyleProperty() == nil || widgetInterface.GetStyleProperty().Display != enums.CSS_DISPLAY_TYPE_BLOCK {
-				currentStartPoint -= widgetInterface.GetLayout().Width
+				currentStartPoint -= widgetInterface.GetLayout().GetTotalWidth()
 			} else {
 				currentStartPoint = startPoint
 			}
 		}
-		return currentStartPoint
+		currentWidget.GetLayout().XPosition = currentStartPoint
+		currentWidget.GetLayout().ContentXPosition = currentWidget.GetLayout().XPosition + currentWidget.GetLayout().PaddingLeft
+	} else {
+		if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Margin != nil {
+			CalculateLeftMargin(currentWidget, true)
+			CalculateRightMargin(currentWidget, true)
+		}
+		if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Padding != nil {
+			currentWidget.GetLayout().PaddingLeft = int(currentWidget.GetStyleProperty().Padding.PaddingLeft)
+			currentWidget.GetLayout().PaddingRight = int(currentWidget.GetStyleProperty().Padding.PaddingRight)
+			currentWidget.GetLayout().PaddingTop = int(currentWidget.GetStyleProperty().Padding.PaddingTop)
+			currentWidget.GetLayout().PaddingBottom = int(currentWidget.GetStyleProperty().Padding.PaddingBottom)
+		}
+		currentWidget.GetLayout().XPosition = currentWidget.GetParent().GetLayout().ContentXPosition + currentWidget.GetLayout().MarginLeft
+		currentWidget.GetLayout().ContentXPosition = currentWidget.GetParent().GetLayout().XPosition + currentWidget.GetLayout().PaddingLeft
 	}
-	return currentWidget.GetParent().GetLayout().ContentXPosition
 }
 
-func InlineSetPositionX(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
-	position := 0
+func InlineSetPositionYStatic(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
+	if beforeCurrentWidget == nil || beforeCurrentWidget.GetStyleProperty() == nil {
+		marginTop := 0
+		if currentWidget.GetStyleProperty().Margin != nil {
+			marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
+		}
+		currentWidget.GetLayout().YPosition = parent.GetLayout().YPosition + marginTop
+		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
+	} else if beforeCurrentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE {
+		marginTop := 0
+		if currentWidget.GetStyleProperty().Margin != nil {
+			marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
+		}
+		currentWidget.GetLayout().YPosition = parent.GetLayout().YPosition + marginTop
+		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
+	} else if beforeCurrentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_BLOCK {
+		marginTop := 0
+		if currentWidget.GetStyleProperty().Margin != nil {
+			marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
+		}
+		currentWidget.GetLayout().YPosition = beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height + marginTop
+		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
+	}
+}
+
+func InlineSetPositionX(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
 	if currentWidget.GetStyleProperty() != nil {
 		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			position = parent.GetLayout().ContentXPosition
+			currentWidget.GetLayout().XPosition = parent.GetLayout().ContentXPosition
+			currentWidget.GetLayout().ContentXPosition = parent.GetLayout().ContentXPosition
 		case enums.CSS_POSITION_TYPE_EMPTY:
 			if beforeCurrentWidget != nil {
-				position = beforeCurrentWidget.GetLayout().XPosition + beforeCurrentWidget.GetLayout().Width
+				currentWidget.GetLayout().XPosition = beforeCurrentWidget.GetLayout().XPosition + beforeCurrentWidget.GetLayout().Width
+				currentWidget.GetLayout().ContentXPosition = currentWidget.GetLayout().XPosition
 			} else {
-				position = InlineSetPositionXStatic(currentWidget)
+				InlineSetPositionXStatic(currentWidget)
 			}
 		case enums.CSS_POSITION_TYPE_STATIC:
 			if beforeCurrentWidget != nil {
-				position = beforeCurrentWidget.GetLayout().XPosition + beforeCurrentWidget.GetLayout().Width
+				currentWidget.GetLayout().XPosition = beforeCurrentWidget.GetLayout().XPosition + beforeCurrentWidget.GetLayout().Width
+				currentWidget.GetLayout().ContentXPosition = currentWidget.GetLayout().XPosition
 			} else {
-				position = InlineSetPositionXStatic(currentWidget)
+				InlineSetPositionXStatic(currentWidget)
 			}
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			if currentWidget.GetStyleProperty().Left != 0 {
-				position = parent.GetLayout().ContentXPosition + int(currentWidget.GetStyleProperty().Left)
-			} else if currentWidget.GetStyleProperty().Right != 0 {
-				position = parent.GetLayout().ContentWidth - int(currentWidget.GetStyleProperty().Right)
-			} else {
-				position = parent.GetLayout().ContentXPosition
-			}
+			break
 		case enums.CSS_POSITION_TYPE_FIXED:
 			break
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			if currentWidget.GetStyleProperty().Left != 0 {
-				position = parent.GetLayout().ContentXPosition + int(currentWidget.GetStyleProperty().Left)
-			} else if currentWidget.GetStyleProperty().Right != 0 {
-				position = parent.GetLayout().ContentWidth - int(currentWidget.GetStyleProperty().Right)
-			} else {
-				position = parent.GetLayout().ContentXPosition
-			}
+			break
 		}
 	} else {
 		if beforeCurrentWidget != nil {
-			position = beforeCurrentWidget.GetLayout().XPosition + beforeCurrentWidget.GetLayout().Width
+			currentWidget.GetLayout().XPosition = beforeCurrentWidget.GetLayout().XPosition + beforeCurrentWidget.GetLayout().Width
+			currentWidget.GetLayout().ContentXPosition = currentWidget.GetLayout().XPosition
 		} else {
-			position = InlineSetPositionXStatic(currentWidget)
+			InlineSetPositionXStatic(currentWidget)
 		}
 	}
-	currentWidget.GetLayout().ContentXPosition = position
-	currentWidget.GetLayout().XPosition = position
-	return currentWidget.GetLayout().ContentXPosition
 }
 
-func InlineSetPositionY(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
+func InlineSetPositionY(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
 	if currentWidget.GetStyleProperty() != nil {
 		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			return parent.GetLayout().XPosition
+			println("not implemented yet")
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			if beforeCurrentWidget == nil || beforeCurrentWidget.GetStyleProperty() == nil {
-				marginTop := 0
-				if currentWidget.GetStyleProperty().Margin != nil {
-					marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
-				}
-				return parent.GetLayout().YPosition + marginTop
-			} else if beforeCurrentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE {
-				marginTop := 0
-				if currentWidget.GetStyleProperty().Margin != nil {
-					marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
-				}
-				return parent.GetLayout().YPosition + marginTop
-			} else if beforeCurrentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_BLOCK {
-				marginTop := 0
-				if currentWidget.GetStyleProperty().Margin != nil {
-					marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
-				}
-				return beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height + marginTop
-			}
+			InlineSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_STATIC:
-			marginTop := 0
-			if currentWidget.GetStyleProperty().Margin != nil {
-				marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
-			}
-			if beforeCurrentWidget != nil {
-				return beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height + marginTop
-			} else {
-				return parent.GetLayout().YPosition + parent.GetLayout().Height + marginTop
-			}
+			InlineSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			if currentWidget.GetStyleProperty().Top != 0 {
-				return parent.GetLayout().YPosition + int(currentWidget.GetStyleProperty().Top)
-			} else if currentWidget.GetStyleProperty().Bottom != 0 {
-				return parent.GetLayout().YPosition + parent.GetLayout().Height - int(currentWidget.GetStyleProperty().Bottom)
-			} else {
-				return parent.GetLayout().YPosition + parent.GetLayout().Height
-			}
+			println("not implemented yet")
 		case enums.CSS_POSITION_TYPE_FIXED:
 			break
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			if beforeCurrentWidget != nil {
-				return beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height + int(currentWidget.GetStyleProperty().Top)
-			} else {
-				return parent.GetLayout().YPosition + int(currentWidget.GetStyleProperty().Top)
-			}
+			println("not implemented yet")
 		}
 	} else {
 		if beforeCurrentWidget == nil {
-			return parent.GetLayout().YPosition
-		} else { //TODO look before current widget if it is block then before height + y
+			currentWidget.GetLayout().YPosition = parent.GetLayout().ContentYPosition
+			currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
+		} else {
 			if beforeCurrentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE {
-				return parent.GetLayout().YPosition
+				currentWidget.GetLayout().YPosition = parent.GetLayout().YPosition
+				currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 			} else {
-				return beforeCurrentWidget.GetLayout().Height + beforeCurrentWidget.GetLayout().YPosition
+				currentWidget.GetLayout().YPosition = beforeCurrentWidget.GetLayout().Height + beforeCurrentWidget.GetLayout().YPosition
+				currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 			}
 		}
 	}
-	return 0
 }
 
 func SetWidthInline(currentWidget widget.WidgetInterface, styleProperty *StyleProperty.StyleProperty) {
 	if len(currentWidget.GetChildren()) > 0 {
 		width := 0
 		for _, child := range currentWidget.GetChildren() {
-			width += child.GetLayout().Width
+			width += child.GetLayout().GetTotalWidth()
+		}
+		if styleProperty != nil && styleProperty.Padding != nil {
+			currentWidget.GetLayout().PaddingLeft = int(styleProperty.Padding.PaddingLeft)
+			currentWidget.GetLayout().PaddingRight = int(styleProperty.Padding.PaddingRight)
+			width += currentWidget.GetLayout().PaddingLeft + currentWidget.GetLayout().PaddingRight
 		}
 		currentWidget.GetLayout().Width = width
 		currentWidget.GetLayout().ContentWidth = width
-		if styleProperty != nil && styleProperty.Margin != nil {
-			contentWidth := width - (styleProperty.Margin.MarginLeft + styleProperty.Margin.MarginRight)
-			currentWidget.GetLayout().ContentWidth = contentWidth
-		}
 	}
 }

@@ -34,11 +34,13 @@ func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *Res
 		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, maxTextWidth*3, 500)) // change this later
 		height, width := Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, Lines, receiver.DrawProperties.Texture, receiver.GetParent().GetStyleProperty().Color)
 		receiver.LayoutProperty.Height, receiver.LayoutProperty.Width = int(height), int(width)
+		receiver.LayoutProperty.ContentHeight, receiver.LayoutProperty.ContentWidth = receiver.LayoutProperty.Height, receiver.LayoutProperty.Width
 	} else {
 		//change this to calculated text
 		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, receiver.GetParent().GetLayout().Width, 500)) // change this later
 		height, width := Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, []string{receiver.Value}, receiver.DrawProperties.Texture, receiver.GetParent().GetStyleProperty().Color)
 		receiver.LayoutProperty.Height, receiver.LayoutProperty.Width = int(height), int(width)
+		receiver.LayoutProperty.ContentHeight, receiver.LayoutProperty.ContentWidth = receiver.LayoutProperty.Height, receiver.LayoutProperty.Width
 	}
 }
 

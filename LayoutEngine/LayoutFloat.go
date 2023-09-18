@@ -1,7 +1,6 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/StyleProperty"
 	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/widget"
 )
@@ -17,7 +16,6 @@ func SetFloatWidth(currentWidget widget.WidgetInterface) {
 			case enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE:
 				width = int(float64(currentWidget.GetLayout().Width) * (float64(currentWidget.GetStyleProperty().Children[i].Width) / 100.0))
 			}
-			//look width here
 			if currentWidget.GetStyleProperty().Children[i].MaxWidth != 0 && width > int(currentWidget.GetStyleProperty().Children[i].MaxWidth) {
 				width = int(currentWidget.GetStyleProperty().Children[i].MaxWidth)
 			}
@@ -26,6 +24,7 @@ func SetFloatWidth(currentWidget widget.WidgetInterface) {
 			}
 		}
 		child.GetLayout().Width = width
+		child.GetLayout().ContentWidth = width
 		totalWidth += width
 	}
 	if totalWidth > currentWidget.GetLayout().Width {
@@ -34,16 +33,17 @@ func SetFloatWidth(currentWidget widget.WidgetInterface) {
 	}
 }
 
-func SetPositionFloat(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) (int, int) {
-	return SetPositionXFloat(currentWidget, parent, beforeCurrentWidget), SetPositionYFloat(currentWidget, parent, beforeCurrentWidget)
+func SetPositionFloat(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
+	SetPositionXFloat(currentWidget, parent, beforeCurrentWidget)
+	SetPositionYFloat(currentWidget, parent, beforeCurrentWidget)
 }
 
-func SetPositionXFloat(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
-	position := 0
+func SetPositionXFloat(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
 	if currentWidget.GetStyleProperty() != nil {
 		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			position = parent.GetLayout().ContentXPosition
+			currentWidget.GetLayout().XPosition = parent.GetLayout().ContentXPosition
+			currentWidget.GetLayout().ContentXPosition = currentWidget.GetLayout().XPosition
 		case enums.CSS_POSITION_TYPE_EMPTY:
 			x := 0
 			if beforeCurrentWidget == nil {
@@ -82,95 +82,58 @@ func SetPositionXFloat(currentWidget, parent, beforeCurrentWidget widget.WidgetI
 					}
 				}
 			}
-			position = x
-
+			currentWidget.GetLayout().XPosition = x
+			currentWidget.GetLayout().ContentXPosition = currentWidget.GetLayout().XPosition
 		case enums.CSS_POSITION_TYPE_STATIC:
-			position = parent.GetLayout().ContentXPosition
+			currentWidget.GetLayout().XPosition = parent.GetLayout().ContentXPosition
+			currentWidget.GetLayout().ContentXPosition = currentWidget.GetLayout().XPosition
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			if currentWidget.GetStyleProperty().Left != 0 {
-				position = parent.GetLayout().ContentXPosition + int(currentWidget.GetStyleProperty().Left)
-			} else if currentWidget.GetStyleProperty().Right != 0 {
-				position = parent.GetLayout().ContentWidth - int(currentWidget.GetStyleProperty().Right)
-			} else {
-				position = parent.GetLayout().ContentXPosition
-			}
+			println("not implemented yet")
 		case enums.CSS_POSITION_TYPE_FIXED:
 			break
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			if currentWidget.GetStyleProperty().Left != 0 {
-				position = parent.GetLayout().ContentXPosition + int(currentWidget.GetStyleProperty().Left)
-			} else if currentWidget.GetStyleProperty().Right != 0 {
-				position = parent.GetLayout().ContentWidth - int(currentWidget.GetStyleProperty().Right)
-			} else {
-				position = parent.GetLayout().ContentXPosition
-			}
+			println("not implemented yet")
 		}
 	} else {
-		position = parent.GetLayout().ContentXPosition
+		currentWidget.GetLayout().XPosition = parent.GetLayout().ContentXPosition
+		currentWidget.GetLayout().ContentXPosition = currentWidget.GetLayout().XPosition
 	}
-	currentWidget.GetLayout().ContentXPosition = position
-	currentWidget.GetLayout().XPosition = position
-	return currentWidget.GetLayout().ContentXPosition
 }
 
-func SetPositionYFloat(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
+func SetPositionYFloat(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
 	if currentWidget.GetStyleProperty() != nil {
 		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			return parent.GetLayout().XPosition
+			currentWidget.GetLayout().YPosition = parent.GetLayout().ContentYPosition
+			currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 		case enums.CSS_POSITION_TYPE_EMPTY:
 			marginTop := 0
 			if currentWidget.GetStyleProperty().Margin != nil {
 				marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
 			}
-			return parent.GetLayout().YPosition + marginTop
-
+			currentWidget.GetLayout().YPosition = parent.GetLayout().YPosition + marginTop
+			currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 		case enums.CSS_POSITION_TYPE_STATIC:
 			marginTop := 0
 			if currentWidget.GetStyleProperty().Margin != nil {
 				marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
 			}
-			return parent.GetLayout().YPosition + marginTop
-
+			currentWidget.GetLayout().YPosition = parent.GetLayout().YPosition + marginTop
+			currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			if currentWidget.GetStyleProperty().Top != 0 {
-				return parent.GetLayout().YPosition + int(currentWidget.GetStyleProperty().Top)
-			} else if currentWidget.GetStyleProperty().Bottom != 0 {
-				return parent.GetLayout().YPosition + parent.GetLayout().Height - int(currentWidget.GetStyleProperty().Bottom)
-			} else {
-				return parent.GetLayout().YPosition + parent.GetLayout().Height
-			}
+			println("implemented yet")
 		case enums.CSS_POSITION_TYPE_FIXED:
 			break
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			if beforeCurrentWidget != nil {
-				return beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height + int(currentWidget.GetStyleProperty().Top)
-			} else {
-				return parent.GetLayout().YPosition + int(currentWidget.GetStyleProperty().Top)
-			}
+			println("implemented yet")
 		}
 	} else {
 		if beforeCurrentWidget == nil {
-			return parent.GetLayout().YPosition
+			currentWidget.GetLayout().YPosition = parent.GetLayout().ContentYPosition
+			currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 		} else {
-			return beforeCurrentWidget.GetLayout().YPosition
+			currentWidget.GetLayout().YPosition = beforeCurrentWidget.GetLayout().YPosition
+			currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 		}
-	}
-	return 0
-}
-
-func SetWidthFloatChild(currentWidget widget.WidgetInterface, styleProperty *StyleProperty.StyleProperty) {
-	//you must set childrens width first
-	if len(currentWidget.GetChildren()) > 0 {
-		width := 0
-		for _, child := range currentWidget.GetChildren() {
-			width += child.GetLayout().Width
-		}
-		contentWidth := width
-		if styleProperty != nil && styleProperty.Margin != nil {
-			contentWidth = width - (styleProperty.Margin.MarginLeft + styleProperty.Margin.MarginRight)
-		}
-		currentWidget.GetLayout().Width = width
-		currentWidget.GetLayout().ContentWidth = contentWidth
 	}
 }

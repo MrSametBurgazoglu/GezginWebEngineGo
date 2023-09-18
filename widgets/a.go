@@ -30,7 +30,6 @@ func (receiver *HtmlTagA) VarReaderFunc(variableName string, variableValue strin
 
 func (receiver *HtmlTagA) Draw(mainImage *image.RGBA) {
 	if receiver.GetStyleProperty().Background != nil {
-		/*TODO WHY WE DRAW BACKGROUND IF IT SAME COLOR WITH PARENT*/
 		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
 		drawerBackend.DrawBackground(red, green, blue, alpha, mainImage, receiver.LayoutProperty)
 	}

@@ -8,6 +8,9 @@ import (
 )
 
 func DrawBackground(red uint8, green uint8, blue uint8, alpha uint8, texture *image.RGBA, layoutProperty *LayoutProperty.LayoutProperty) {
+	if alpha == 0 {
+		return
+	}
 	bgColor := color.RGBA{R: red, G: green, B: blue, A: alpha}
 	//println(bgColor.A, " color")
 	println("color:", red, green, blue, "pos", layoutProperty.XPosition)
