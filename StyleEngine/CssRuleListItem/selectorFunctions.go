@@ -28,6 +28,15 @@ func IsClassDescendant(currentWidget widget.WidgetInterface, item *CssRuleListIt
 	return false
 }
 
+func IsClassNot(currentWidget widget.WidgetInterface, item *CssRuleListItem) bool {
+	for _, class := range currentWidget.GetClasses() {
+		if item.Identifier2 == class {
+			return false
+		}
+	}
+	return true
+}
+
 func IsClassDescendantAndFirst(currentWidget widget.WidgetInterface, item *CssRuleListItem) bool {
 	if currentWidget.GetChildrenIndex() == 0 || currentWidget.GetParent() == nil {
 		return false

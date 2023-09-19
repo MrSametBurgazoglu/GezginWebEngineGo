@@ -103,7 +103,11 @@ func (receiver *Widget) GetRect() *image.Rectangle {
 }
 
 func (receiver *Widget) IsDraw() bool {
-	return receiver.Draw
+	if receiver.GetStyleProperty() != nil && receiver.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_NONE {
+		return false
+	} else {
+		return true
+	}
 }
 
 func (receiver *Widget) SetDraw(draw bool) {

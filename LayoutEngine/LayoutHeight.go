@@ -56,7 +56,10 @@ func GetTotalChildrenHeight(currentWidget widget.WidgetInterface) int {
 
 /*TODO ADD STYLE PROPERTY HEIGHT VALUE TO CALCULATE HEIGHT*/
 func SetHeight(currentWidget widget.WidgetInterface) {
-	if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Height != 0 {
+	if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_NONE {
+		currentWidget.GetLayout().Height = 0
+		currentWidget.GetLayout().ContentHeight = 0
+	} else if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Height != 0 {
 		height := 0
 		switch currentWidget.GetStyleProperty().HeightValueType {
 		case enums.CSS_PROPERTY_VALUE_TYPE_PIXEL:

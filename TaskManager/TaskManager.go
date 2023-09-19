@@ -269,7 +269,7 @@ func (receiver *TaskManager) SetInheritStylePropertiesOfWidget(widget widget.Wid
 }
 
 func (receiver *TaskManager) Draw() {
-	receiver.DocumentWidget.DrawPage(receiver.WebView.Image)
+	receiver.DocumentWidget.DrawAllPage(receiver.WebView.Image)
 
 }
 

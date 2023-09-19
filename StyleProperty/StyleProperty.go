@@ -42,6 +42,8 @@ type StyleProperty struct {
 	ColumnSpanInherit         bool
 	ColumnWidthInherit        bool
 	FlexInherit               bool
+	FlexDirectionInherit      bool
+	FlexWrapInherit           bool
 	FlexFlowInherit           bool
 	FloatInherit              bool
 	PositionInherit           bool
@@ -80,6 +82,7 @@ type StyleProperty struct {
 	Padding            *structs2.Padding
 	TextAlign          enums.CssTextAlignType
 	FlexDirection      enums.CssFlexDirectionType
+	FlexWrap           enums.CssFlexWrapType
 	Height             uint
 	Width              uint
 	MinHeight          uint

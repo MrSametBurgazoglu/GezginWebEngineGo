@@ -106,6 +106,7 @@ type CssRuleList struct {
 	CssPropertiesByClassDescendantList                               []*CssRuleListItem.CssRuleListItem
 	CssPropertiesByClassBothList                                     []*CssRuleListItem.CssRuleListItem
 	CssPropertiesByClassDescendantAndFirstClassList                  []*CssRuleListItem.CssRuleListItem
+	CssPropertiesByClassNotList                                      []*CssRuleListItem.CssRuleListItem
 	CssPropertiesByElementAndClassList                               []*CssRuleListItem.CssRuleListItem
 	CssPropertiesByElementDescendant                                 []*CssRuleListItem.CssRuleListItem
 	CssPropertiesByElementParent                                     []*CssRuleListItem.CssRuleListItem

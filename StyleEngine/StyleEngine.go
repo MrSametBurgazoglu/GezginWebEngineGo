@@ -91,6 +91,13 @@ func (receiver *StyleSheet) GetCssRuleItem(selector string) *CssRuleListItem.Css
 			cssRuleList = receiver.cssRuleList.CreateNewCssRulesByID(selector[0:])
 		}
 	case '.':
+		if strings.HasPrefix(selector, ".collapse:not(.show)") {
+			cssRuleList = receiver.cssRuleList.GetCssRulesByClassNot("collapse", "show")
+			if cssRuleList == nil {
+				cssRuleList = receiver.cssRuleList.CreateNewCssRulesByClassNot("collapse", "show")
+			}
+			break
+		}
 		secondDotIndex := strings.Index(selector[1:], ".")
 		if secondDotIndex == -1 {
 			cssRuleList = receiver.cssRuleList.GetCssRulesByClass(selector[1:])
@@ -192,6 +199,7 @@ func (receiver *StyleEngine) GetAllCssRulesByClass(class string, external bool) 
 	rules = append(rules, receiver.GetCssRulesByClassBoth(class, external)...)
 	rules = append(rules, receiver.GetCssRulesByClassDescendant(class, external)...)
 	rules = append(rules, receiver.GetCssRulesByClassDescendantAndFirst(class, external)...)
+	rules = append(rules, receiver.GetCssRulesByClassNot(class, external)...)
 	return rules
 }
 
