@@ -7,9 +7,9 @@ import (
 
 func SetInlineFLexContainerWidth(currentWidget widget.WidgetInterface) {
 	if currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_EMPTY || currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_ROW {
-		SetFlexRowContainerChildrenSizeAndPosition(currentWidget)
+		SetFlexRowContainerChildrenWidth(currentWidget)
 	} else {
-		SetFlexColumnContainerChildrenSizeAndPosition(currentWidget)
+		SetFlexColumnContainerChildrenWidth(currentWidget)
 	}
 	SetWidthInline(currentWidget, currentWidget.GetStyleProperty())
 }

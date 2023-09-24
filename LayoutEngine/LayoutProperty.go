@@ -9,7 +9,7 @@ func SetPosition(currentWidget, parent, beforeCurrentWidget widget.WidgetInterfa
 	if currentWidget.GetStyleProperty() == nil {
 		InlineSetPosition(currentWidget, parent, beforeCurrentWidget)
 	} else if currentWidget.GetStyleProperty().Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX || currentWidget.GetStyleProperty().Parent.Display == enums.CSS_DISPLAY_TYPE_INLINE_FLEX {
-		SetPositionFlex(currentWidget, parent, beforeCurrentWidget)
+		return
 	} else if currentWidget.GetStyleProperty().Float != enums.CSS_FLOAT_EMPTY && currentWidget.GetStyleProperty().Float != enums.CSS_FLOAT_NONE {
 		SetPositionFloat(currentWidget, parent, beforeCurrentWidget)
 	} else {
@@ -19,7 +19,7 @@ func SetPosition(currentWidget, parent, beforeCurrentWidget widget.WidgetInterfa
 		case enums.CSS_DISPLAY_TYPE_INLINE:
 			InlineSetPosition(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_DISPLAY_TYPE_FLEX:
-			BlockSetPosition(currentWidget, parent, beforeCurrentWidget)
+			SetPositionFlex(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_DISPLAY_TYPE_INLINE_BLOCK:
 			InlineSetPosition(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_DISPLAY_TYPE_INLINE_FLEX:

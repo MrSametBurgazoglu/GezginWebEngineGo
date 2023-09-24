@@ -40,9 +40,9 @@ func LookForHeight(layoutProperty *LayoutProperty.LayoutProperty) int {
 func SetFLexContainerWidth(currentWidget widget.WidgetInterface) {
 	SetWidthBlock(currentWidget, currentWidget.GetParent())
 	if currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_EMPTY || currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_ROW {
-		SetFlexRowContainerChildrenSizeAndPosition(currentWidget)
+		SetFlexRowContainerChildrenWidth(currentWidget)
 	} else {
-		SetFlexColumnContainerChildrenSizeAndPosition(currentWidget)
+		SetFlexColumnContainerChildrenWidth(currentWidget)
 	}
 }
 
@@ -91,13 +91,7 @@ func SetFlexContainerHeight(currentWidget widget.WidgetInterface) {
 }
 
 func SetPositionFlex(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
-	if currentWidget.GetStyleProperty().Parent.FlexDirection == enums.CSS_FLEX_DIRECTION_EMPTY || currentWidget.GetStyleProperty().Parent.FlexDirection == enums.CSS_FLEX_DIRECTION_ROW {
-		SetPositionXFlex(currentWidget, parent, beforeCurrentWidget)
-		SetPositionYFlex(currentWidget, parent, beforeCurrentWidget)
-	} else {
-		BlockSetPositionX(currentWidget, parent)
-		BlockSetPositionY(currentWidget, parent, beforeCurrentWidget)
-	}
+	BlockSetPosition(currentWidget, parent, beforeCurrentWidget)
 	SetFlexContainerChildrenPosition(currentWidget)
 }
 
