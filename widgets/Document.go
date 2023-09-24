@@ -37,7 +37,7 @@ func DrawChildren(mainImage *image.RGBA, widget widget.WidgetInterface) {
 
 func (receiver *DocumentWidget) DrawAllPage(mainImage *image.RGBA) {
 	receiver.Draw(mainImage)
-	DrawChildren(mainImage, receiver.Children[1].GetChildrenByIndex(0))
+	DrawChildren(mainImage, receiver.Children[1].GetChildrenByIndex(0).GetChildrenByIndex(0).GetChildrenByIndex(0).GetChildrenByIndex(0).GetChildrenByIndex(0).GetChildrenByIndex(1).GetChildrenByIndex(1))
 	/*
 		for _, child := range receiver.GetChildren() {
 			if child.IsDraw() {

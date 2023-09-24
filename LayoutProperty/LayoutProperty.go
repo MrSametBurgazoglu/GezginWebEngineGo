@@ -54,3 +54,19 @@ func (receiver *LayoutProperty) GetTotalHeight() int {
 func (receiver *LayoutProperty) GetTotalContentHeight() int {
 	return receiver.PaddingTop + receiver.ContentHeight + receiver.PaddingBottom
 }
+
+func (receiver *LayoutProperty) GetWidthFromStyleProperty() (width int) {
+	switch receiver.StyleProperty.WidthValueType {
+	case enums.CSS_PROPERTY_VALUE_TYPE_PIXEL:
+		width = int(receiver.StyleProperty.Width)
+	case enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE:
+		width = int(float64(receiver.Parent.Width) * (float64(receiver.StyleProperty.Width) / 100.0))
+	}
+	if receiver.StyleProperty.MaxWidth != 0 && width > int(receiver.StyleProperty.MaxWidth) {
+		width = int(receiver.StyleProperty.MaxWidth)
+	}
+	if width < int(receiver.StyleProperty.MinWidth) {
+		width = int(receiver.StyleProperty.MinWidth)
+	}
+	return
+}

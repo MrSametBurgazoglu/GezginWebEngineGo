@@ -6,6 +6,9 @@ import (
 )
 
 func SetWidth(currentWidget widget.WidgetInterface) {
+	if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE_FLEX {
+		println("inline flex")
+	}
 	if currentWidget.GetStyleProperty() == nil {
 		SetWidthInline(currentWidget, currentWidget.GetStyleProperty())
 	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_NONE {
@@ -15,14 +18,16 @@ func SetWidth(currentWidget widget.WidgetInterface) {
 		SetFloatWidth(currentWidget)
 	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_FLEX {
 		SetFLexContainerWidth(currentWidget)
-	} else if currentWidget.GetStyleProperty().Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX {
+	} else if currentWidget.GetStyleProperty().Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX && currentWidget.GetStyleProperty().Display != enums.CSS_DISPLAY_TYPE_FLEX && currentWidget.GetStyleProperty().Display != enums.CSS_DISPLAY_TYPE_INLINE_FLEX {
 		println("heyyo")
 	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_BLOCK {
 		SetWidthBlock(currentWidget, currentWidget.GetParent())
 	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_FLEX {
 		SetWidthBlock(currentWidget, currentWidget.GetParent())
 	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE_BLOCK {
-		SetWidthInline(currentWidget, currentWidget.GetStyleProperty())
+		SetWidthInlineBlock(currentWidget, currentWidget.GetStyleProperty())
+	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE_FLEX {
+		SetInlineFLexContainerWidth(currentWidget)
 	} else {
 		SetWidthInline(currentWidget, currentWidget.GetStyleProperty())
 	}

@@ -33,12 +33,8 @@ func FlexSetPositionYFixed(currentWidget, parent, beforeCurrentWidget widget.Wid
 	return 0
 }
 
-func FlexSetPositionYRelative(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
-	position := 0
-	if beforeCurrentWidget != nil {
-		position = beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height + int(currentWidget.GetStyleProperty().Top)
-	} else {
-		position = parent.GetLayout().YPosition + int(currentWidget.GetStyleProperty().Top)
-	}
-	return position
+func FlexSetPositionYRelative(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
+	FlexSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
+	currentWidget.GetLayout().YPosition += int(currentWidget.GetStyleProperty().Top)
+	currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 }

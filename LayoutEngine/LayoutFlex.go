@@ -22,41 +22,33 @@ func LookForWidth(layoutProperty *LayoutProperty.LayoutProperty) int {
 	}
 }
 
-func SetFLexContainerWidth(currentWidget widget.WidgetInterface) {
-	if currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_EMPTY || currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_ROW {
-		SetFLexContainerWidthRow(currentWidget)
+func LookForHeight(layoutProperty *LayoutProperty.LayoutProperty) int {
+	if len(layoutProperty.Children) == 0 {
+		return layoutProperty.Height
 	} else {
-		SetFLexContainerWidthColumn(currentWidget)
-	}
-}
-
-func SetFLexContainerWidthRowNoWrap(currentWidget widget.WidgetInterface) {
-	totalWidth := currentWidget.GetLayout().ContentWidth
-	childWidth := totalWidth / currentWidget.GetChildrenCount()
-	for _, child := range currentWidget.GetChildren() {
-		/*
-			width := LookForWidth(child.GetLayout())
-			if currentWidget.GetStyleProperty().Children != nil && currentWidget.GetStyleProperty().Children[i].Width != 0 {
-				switch currentWidget.GetStyleProperty().Children[i].WidthValueType {
-				case enums.CSS_PROPERTY_VALUE_TYPE_PIXEL:
-					width = int(currentWidget.GetStyleProperty().Children[i].Width)
-				case enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE:
-					width = int(float64(currentWidget.GetLayout().Width) * (float64(currentWidget.GetStyleProperty().Children[i].Width) / 100.0))
-				}
-				if currentWidget.GetStyleProperty().Children[i].MaxWidth != 0 && width > int(currentWidget.GetStyleProperty().Children[i].MaxWidth) {
-					width = int(currentWidget.GetStyleProperty().Children[i].MaxWidth)
-				}
-				if width < int(currentWidget.GetStyleProperty().Children[i].MinWidth) {
-					width = int(currentWidget.GetStyleProperty().Children[i].MinWidth)
-				}
+		maxHeight := 0
+		for _, child := range layoutProperty.Children {
+			currentHeight := LookForHeight(child)
+			if currentHeight > maxHeight {
+				maxHeight = currentHeight
 			}
-		*/
-		child.GetLayout().Width = childWidth
-		child.GetLayout().ContentWidth = childWidth
+		}
+		return maxHeight
 	}
 }
 
-func SetFLexContainerWidthRowWrap(currentWidget widget.WidgetInterface) {
+func SetFLexContainerWidth(currentWidget widget.WidgetInterface) {
+	SetWidthBlock(currentWidget, currentWidget.GetParent())
+	if currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_EMPTY || currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_ROW {
+		SetFlexRowContainerChildrenSizeAndPosition(currentWidget)
+	} else {
+		SetFlexColumnContainerChildrenSizeAndPosition(currentWidget)
+	}
+}
+
+func GetTotalWidthOfChildren(currentWidget widget.WidgetInterface) (int, []int) {
+	totalChildrenWidth := 0
+	var widths []int
 	for i, child := range currentWidget.GetChildren() {
 		width := LookForWidth(child.GetLayout())
 		if currentWidget.GetStyleProperty().Children != nil && currentWidget.GetStyleProperty().Children[i].Width != 0 {
@@ -73,68 +65,28 @@ func SetFLexContainerWidthRowWrap(currentWidget widget.WidgetInterface) {
 				width = int(currentWidget.GetStyleProperty().Children[i].MinWidth)
 			}
 		}
-		child.GetLayout().Width = width
-		child.GetLayout().ContentWidth = width
+		widths = append(widths, width)
+		totalChildrenWidth += width
+		//child.GetLayout().Width = childWidth
+		//child.GetLayout().ContentWidth = childWidth
 	}
+	return totalChildrenWidth, widths
 }
 
-func SetFLexContainerWidthRow(currentWidget widget.WidgetInterface) {
-	SetWidthBlock(currentWidget, currentWidget.GetParent())
-	switch currentWidget.GetStyleProperty().FlexWrap {
-	case enums.CSS_FLEX_WRAP_NOWRAP:
-		SetFLexContainerWidthRowNoWrap(currentWidget)
-	case enums.CSS_FLEX_WRAP_WRAP:
-		SetFLexContainerWidthRowWrap(currentWidget)
-	case enums.CSS_FLEX_WRAP_EMPTY:
-		SetFLexContainerWidthRowNoWrap(currentWidget)
-	}
-	/*
-		for i, child := range currentWidget.GetChildren() {
-			width := LookForWidth(child.GetLayout())
-			if currentWidget.GetStyleProperty().Children != nil && currentWidget.GetStyleProperty().Children[i].Width != 0 {
-				switch currentWidget.GetStyleProperty().Children[i].WidthValueType {
-				case enums.CSS_PROPERTY_VALUE_TYPE_PIXEL:
-					width = int(currentWidget.GetStyleProperty().Children[i].Width)
-				case enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE:
-					width = int(float64(currentWidget.GetLayout().Width) * (float64(currentWidget.GetStyleProperty().Children[i].Width) / 100.0))
-				}
-				if currentWidget.GetStyleProperty().Children[i].MaxWidth != 0 && width > int(currentWidget.GetStyleProperty().Children[i].MaxWidth) {
-					width = int(currentWidget.GetStyleProperty().Children[i].MaxWidth)
-				}
-				if width < int(currentWidget.GetStyleProperty().Children[i].MinWidth) {
-					width = int(currentWidget.GetStyleProperty().Children[i].MinWidth)
-				}
-			}
-			child.GetLayout().Width = width
-			child.GetLayout().ContentWidth = width
-			totalWidth += width
+func SetFlexContainerHeight(currentWidget widget.WidgetInterface) {
+	parentWidth := currentWidget.GetLayout().ContentWidth
+	currentWidth := 0
+	maxHeight := 0
+	totalHeight := 0
+	for _, child := range currentWidget.GetLayout().Children {
+		if child.Height > maxHeight {
+			maxHeight = child.Height
 		}
-
-	*/
-}
-
-/*TOOO IF WRAP THEN ITS MEANS WE DON'T FIT THEM INTO ONE LINE WE USE THEIR WIDTHS*/
-func SetFLexContainerWidthColumn(currentWidget widget.WidgetInterface) {
-	SetWidthBlock(currentWidget, currentWidget.GetParent())
-	for i, child := range currentWidget.GetChildren() {
-		width := currentWidget.GetLayout().Width
-		if currentWidget.GetStyleProperty().Children[i].Width != 0 {
-			switch currentWidget.GetStyleProperty().Children[i].WidthValueType {
-			case enums.CSS_PROPERTY_VALUE_TYPE_PIXEL:
-				width = int(currentWidget.GetStyleProperty().Children[i].Width)
-			case enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE:
-				width = int(float64(currentWidget.GetLayout().Width) * (float64(currentWidget.GetStyleProperty().Children[i].Width) / 100.0))
-			}
+		if currentWidth > parentWidth {
+			totalHeight += maxHeight
+			currentWidth = 0
+			maxHeight = 0
 		}
-		//look width here
-		if currentWidget.GetStyleProperty().Children[i].MaxWidth != 0 && width > int(currentWidget.GetStyleProperty().Children[i].MaxWidth) {
-			width = int(currentWidget.GetStyleProperty().Children[i].MaxWidth)
-		}
-		if width < int(currentWidget.GetStyleProperty().Children[i].MinWidth) {
-			width = int(currentWidget.GetStyleProperty().Children[i].MinWidth)
-		}
-		child.GetLayout().Width = width
-		child.GetLayout().ContentWidth = width
 	}
 }
 
@@ -146,6 +98,7 @@ func SetPositionFlex(currentWidget, parent, beforeCurrentWidget widget.WidgetInt
 		BlockSetPositionX(currentWidget, parent)
 		BlockSetPositionY(currentWidget, parent, beforeCurrentWidget)
 	}
+	SetFlexContainerChildrenPosition(currentWidget)
 }
 
 func SetPositionYFlex(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
