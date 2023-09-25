@@ -20,6 +20,26 @@ func LookForWidth(layoutProperty *LayoutProperty.LayoutProperty) int {
 	}
 }
 
+func LookForTotalHeight(currentWidget widget.WidgetInterface) int {
+	if len(currentWidget.GetLayout().Children) == 0 {
+		return currentWidget.GetLayout().Height
+	} else {
+		totalHeight := 0
+		for _, child := range currentWidget.GetChildren() {
+			currentHeight := child.GetLayout().GetPresetHeight()
+			if currentHeight == 0 {
+				currentHeight = LookForTotalHeight(child)
+			}
+			if child.GetStyleProperty() != nil && child.GetStyleProperty().Margin != nil {
+				CalculateTopMargin(child, true)
+				CalculateBottomMargin(child, true)
+			}
+			totalHeight += currentHeight + child.GetLayout().MarginTop + currentWidget.GetLayout().MarginBottom
+		}
+		return totalHeight
+	}
+}
+
 func LookForHeight(layoutProperty *LayoutProperty.LayoutProperty) int {
 	if len(layoutProperty.Children) == 0 {
 		return layoutProperty.Height
