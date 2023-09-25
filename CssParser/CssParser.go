@@ -36,7 +36,7 @@ func (receiver *CssParser) ParseCssFromStyleTag(styleElement StyleElement, style
 	index := 0
 	commentStart := strings.Index(styleText[seek:], "/*")
 	index = strings.Index(styleText[seek:], "{")
-	if commentStart < index {
+	if commentStart != -1 && commentStart < index {
 		commentEnd := strings.LastIndex(styleText[seek:index], "*/")
 		seek += commentEnd + 2
 		index -= commentEnd + 2

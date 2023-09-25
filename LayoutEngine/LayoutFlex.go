@@ -11,14 +11,12 @@ func LookForWidth(layoutProperty *LayoutProperty.LayoutProperty) int {
 	if len(layoutProperty.Children) == 0 {
 		return layoutProperty.Width
 	} else {
-		maxWidth := 0
+		totalWidth := 0
 		for _, child := range layoutProperty.Children {
 			currentWidth := LookForWidth(child)
-			if currentWidth > maxWidth {
-				maxWidth = currentWidth
-			}
+			totalWidth += currentWidth
 		}
-		return maxWidth
+		return totalWidth
 	}
 }
 
@@ -65,6 +63,9 @@ func GetTotalWidthOfChildren(currentWidget widget.WidgetInterface) (int, []int) 
 				width = int(currentWidget.GetStyleProperty().Children[i].MinWidth)
 			}
 		}
+		CalculateLeftMargin(child, true)
+		CalculateRightMargin(child, true)
+		width += currentWidget.GetLayout().MarginLeft + currentWidget.GetLayout().MarginRight
 		widths = append(widths, width)
 		totalChildrenWidth += width
 		//child.GetLayout().Width = childWidth

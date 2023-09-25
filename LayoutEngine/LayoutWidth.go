@@ -9,6 +9,9 @@ func SetWidth(currentWidget widget.WidgetInterface) {
 	if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE_FLEX {
 		println("inline flex")
 	}
+	if len(currentWidget.GetClasses()) == 1 {
+		println("hey")
+	}
 	if currentWidget.GetStyleProperty() == nil {
 		SetWidthInline(currentWidget, currentWidget.GetStyleProperty())
 	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_NONE {
@@ -21,8 +24,6 @@ func SetWidth(currentWidget widget.WidgetInterface) {
 	} else if currentWidget.GetStyleProperty().Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX && currentWidget.GetStyleProperty().Display != enums.CSS_DISPLAY_TYPE_FLEX && currentWidget.GetStyleProperty().Display != enums.CSS_DISPLAY_TYPE_INLINE_FLEX {
 		println("heyyo")
 	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_BLOCK {
-		SetWidthBlock(currentWidget, currentWidget.GetParent())
-	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_FLEX {
 		SetWidthBlock(currentWidget, currentWidget.GetParent())
 	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE_BLOCK {
 		SetWidthInlineBlock(currentWidget, currentWidget.GetStyleProperty())

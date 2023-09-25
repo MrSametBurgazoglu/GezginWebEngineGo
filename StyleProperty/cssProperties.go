@@ -234,7 +234,7 @@ var functionList = []cssPropertyFunction{
 	nil,
 	nil,
 	nil,
-	nil,
+	FlexWrapPropertySetValue,
 	FloatPropertySetValue,
 	nil,
 	nil,

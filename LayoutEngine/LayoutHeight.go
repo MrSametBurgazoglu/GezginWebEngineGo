@@ -7,7 +7,7 @@ import (
 
 func GetTotalChildrenHeight(currentWidget widget.WidgetInterface) int {
 	if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE ||
-		(currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_FLEX && (currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_ROW || currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_EMPTY)) {
+		(currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_FLEX && (currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_ROW || currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_EMPTY && currentWidget.GetStyleProperty().FlexWrap != enums.CSS_FLEX_WRAP_WRAP)) {
 		currentHeight := 0
 		for _, child := range currentWidget.GetChildren() {
 			if child.GetLayout().Height > currentHeight {
@@ -15,8 +15,26 @@ func GetTotalChildrenHeight(currentWidget widget.WidgetInterface) int {
 			}
 		}
 		return currentHeight
+	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_FLEX && currentWidget.GetStyleProperty().FlexWrap == enums.CSS_FLEX_WRAP_WRAP && (currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_ROW || currentWidget.GetStyleProperty().FlexDirection == enums.CSS_FLEX_DIRECTION_EMPTY) {
+		parentWidth := currentWidget.GetLayout().ContentWidth
+		currentWidth := 0
+		maxHeight := 0
+		currentHeight := 0
+		for _, widgetInterface := range currentWidget.GetChildren() {
+			currentWidth += widgetInterface.GetLayout().Width
+			if currentWidth >= parentWidth {
+				currentHeight += maxHeight
+				maxHeight = 0
+				currentWidth = 0
+			}
+			if widgetInterface.GetLayout().Height > maxHeight {
+				maxHeight = widgetInterface.GetLayout().Height
+			}
+		}
+		currentHeight += maxHeight
+		return currentHeight
 	} else {
-		lastChild := currentWidget.GetChildrenByIndex(0)
+		lastChild := currentWidget.GetChildrenByIndex(currentWidget.GetChildrenCount() - 1)
 		height := lastChild.GetLayout().Height
 		for _, widgetInterface := range currentWidget.GetChildren()[1:] {
 			if lastChild.GetStyleProperty() != nil && (lastChild.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_BLOCK || lastChild.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE_BLOCK) {
@@ -56,6 +74,9 @@ func GetTotalChildrenHeight(currentWidget widget.WidgetInterface) int {
 
 /*TODO ADD STYLE PROPERTY HEIGHT VALUE TO CALCULATE HEIGHT*/
 func SetHeight(currentWidget widget.WidgetInterface) {
+	if classes := currentWidget.GetClasses(); len(classes) == 2 && classes[1] == "shadow-sm" {
+		println("hey")
+	}
 	if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_NONE {
 		currentWidget.GetLayout().Height = 0
 		currentWidget.GetLayout().ContentHeight = 0

@@ -11,6 +11,9 @@ func BlockSetPosition(currentWidget, parent, beforeCurrentWidget widget.WidgetIn
 
 func SetWidthBlock(currentWidget, parent widget.WidgetInterface) {
 	width := parent.GetLayout().ContentWidth
+	if currentWidget.GetStyleProperty().Width != 0 {
+		width = currentWidget.GetLayout().GetWidthFromStyleProperty()
+	}
 	if currentWidget.GetStyleProperty().MaxWidth > 0 && uint(width) > currentWidget.GetStyleProperty().MaxWidth {
 		width = int(currentWidget.GetStyleProperty().MaxWidth)
 	}
