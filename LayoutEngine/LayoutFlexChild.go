@@ -161,6 +161,17 @@ func SetFlexContainerColumnChildrenPositionNoWrap(currentWidget widget.WidgetInt
 	parentHeight := currentWidget.GetLayout().ContentHeight
 	totalChildrenHeight := GetTotalChildrenHeight(currentWidget)
 
+	if totalChildrenHeight > parentHeight {
+		childHeightRatio := float64(parentHeight) / float64(totalChildrenHeight)
+		for _, widgetInterface := range currentWidget.GetChildren() {
+			widgetInterface.GetLayout().MarginBottom = int(float64(widgetInterface.GetLayout().MarginBottom) * childHeightRatio)
+			widgetInterface.GetLayout().MarginTop = int(float64(widgetInterface.GetLayout().MarginTop) * childHeightRatio)
+			widgetInterface.GetLayout().ContentHeight = int(float64(widgetInterface.GetLayout().ContentHeight) * childHeightRatio)
+			widgetInterface.GetLayout().Height = int(float64(widgetInterface.GetLayout().Height) * childHeightRatio)
+		}
+	}
+
+	totalChildrenHeight = GetTotalChildrenHeight(currentWidget)
 	startPos, spaceBetweenItems := JustifyContent(parentHeight, totalChildrenHeight, len(currentWidget.GetLayout().Children), 1)
 	currentPos := currentWidget.GetLayout().ContentYPosition + startPos
 	for _, widgetInterface := range currentWidget.GetLayout().Children {
@@ -173,8 +184,8 @@ func SetFlexContainerColumnChildrenPositionNoWrap(currentWidget widget.WidgetInt
 
 	for _, widgetInterface := range currentWidget.GetChildren() {
 		xPosition := AlignItems(parentWidth, widgetInterface.GetLayout().Width, 0)
-		widgetInterface.GetLayout().XPosition += currentWidget.GetLayout().ContentXPosition + xPosition
-		widgetInterface.GetLayout().ContentXPosition += currentWidget.GetLayout().ContentXPosition + xPosition
+		widgetInterface.GetLayout().XPosition += currentWidget.GetLayout().ContentXPosition + xPosition + widgetInterface.GetLayout().MarginLeft
+		widgetInterface.GetLayout().ContentXPosition += currentWidget.GetLayout().ContentXPosition + xPosition + widgetInterface.GetLayout().MarginLeft
 	}
 
 }
@@ -276,6 +287,8 @@ func SetFlexColumnContainerChildrenWidthNoWrap(currentWidget widget.WidgetInterf
 		if currentWidget.GetStyleProperty().Children[i].Width != 0 {
 			width = currentWidget.GetLayout().Children[i].GetWidthFromStyleProperty()
 		}
+		CalculateLeftMargin(child, true)
+		CalculateRightMargin(child, true)
 		child.GetLayout().Width = width
 		child.GetLayout().ContentWidth = width
 	}
