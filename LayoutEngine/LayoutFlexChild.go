@@ -132,7 +132,7 @@ func SetFlexContainerRowChildrenPositionWrap(currentWidget widget.WidgetInterfac
 	for i, container := range currentSubContainers {
 		totalWidthOfChildren := GetTotalWidthOfWidgets(container)
 		startPos, spaceBetweenItems := JustifyContent(parentWidth, totalWidthOfChildren, len(container), 1)
-		currentPos := currentWidget.GetLayout().ContentXPosition + startPos
+		currentPos := currentWidget.GetLayout().ContentXPosition + startPos + container[0].GetLayout().MarginLeft
 		for _, widgetInterface := range container {
 			widgetInterface.GetLayout().XPosition = currentPos
 			widgetInterface.GetLayout().ContentXPosition = currentPos
