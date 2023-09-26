@@ -117,7 +117,7 @@ func SetFlexContainerRowChildrenPositionWrap(currentWidget widget.WidgetInterfac
 
 	for _, widgetInterface := range currentWidget.GetChildren() {
 		currentWidth += widgetInterface.GetLayout().Width
-		if currentWidth >= parentWidth {
+		if currentWidth > parentWidth {
 			copyChildren := currentChildren
 			currentSubContainers = append(currentSubContainers, copyChildren)
 			currentChildren = nil
