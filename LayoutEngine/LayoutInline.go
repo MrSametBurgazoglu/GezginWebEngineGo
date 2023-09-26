@@ -45,7 +45,7 @@ func InlineSetPositionXStatic(currentWidget widget.WidgetInterface) {
 			currentWidget.GetLayout().PaddingBottom = int(currentWidget.GetStyleProperty().Padding.PaddingBottom)
 		}
 		currentWidget.GetLayout().XPosition = currentWidget.GetParent().GetLayout().ContentXPosition + currentWidget.GetLayout().MarginLeft
-		currentWidget.GetLayout().ContentXPosition = currentWidget.GetParent().GetLayout().XPosition + currentWidget.GetLayout().PaddingLeft
+		currentWidget.GetLayout().ContentXPosition = currentWidget.GetLayout().XPosition
 	}
 }
 
@@ -57,13 +57,13 @@ func InlineSetPositionYStatic(currentWidget, parent, beforeCurrentWidget widget.
 		}
 		currentWidget.GetLayout().YPosition = parent.GetLayout().YPosition + marginTop
 		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
-	} else if beforeCurrentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE {
+	} else if beforeCurrentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE || beforeCurrentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE_FLEX {
 		marginTop := 0
 		if currentWidget.GetStyleProperty().Margin != nil {
 			marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
 		}
-		currentWidget.GetLayout().YPosition = parent.GetLayout().YPosition + marginTop
-		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
+		currentWidget.GetLayout().YPosition = beforeCurrentWidget.GetLayout().YPosition + marginTop
+		currentWidget.GetLayout().ContentYPosition = beforeCurrentWidget.GetLayout().YPosition
 	} else if beforeCurrentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_BLOCK {
 		marginTop := 0
 		if currentWidget.GetStyleProperty().Margin != nil {
@@ -81,7 +81,7 @@ func InlineSetPositionX(currentWidget, parent, beforeCurrentWidget widget.Widget
 			currentWidget.GetLayout().XPosition = parent.GetLayout().ContentXPosition
 			currentWidget.GetLayout().ContentXPosition = parent.GetLayout().ContentXPosition
 		case enums.CSS_POSITION_TYPE_EMPTY:
-			if beforeCurrentWidget != nil {
+			if beforeCurrentWidget != nil && beforeCurrentWidget.GetStyleProperty() != nil && beforeCurrentWidget.GetStyleProperty().Display != enums.CSS_DISPLAY_TYPE_BLOCK {
 				currentWidget.GetLayout().XPosition = beforeCurrentWidget.GetLayout().XPosition + beforeCurrentWidget.GetLayout().Width
 				currentWidget.GetLayout().ContentXPosition = currentWidget.GetLayout().XPosition
 			} else {

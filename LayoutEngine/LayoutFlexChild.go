@@ -81,13 +81,13 @@ func SetFlexContainerRowChildrenPositionNoWrap(currentWidget widget.WidgetInterf
 	}
 
 	for _, widgetInterface := range currentWidget.GetChildren() {
-		widgetInterface.GetLayout().YPosition = 0
-		widgetInterface.GetLayout().ContentYPosition = 0
+		widgetInterface.GetLayout().YPosition = currentWidget.GetLayout().ContentYPosition
+		widgetInterface.GetLayout().ContentYPosition = currentWidget.GetLayout().ContentYPosition
 	}
 
 	parentHeight := currentWidget.GetLayout().Height
 	totalChildrenHeight := LookForHeight(currentWidget.GetLayout())
-	if parentHeight > totalChildrenHeight {
+	if parentHeight >= totalChildrenHeight {
 		for _, widgetInterface := range currentWidget.GetChildren() {
 			childHeight := widgetInterface.GetLayout().Height
 			yPosition := AlignItems(parentHeight, childHeight, 0)
@@ -95,8 +95,8 @@ func SetFlexContainerRowChildrenPositionNoWrap(currentWidget widget.WidgetInterf
 				CalculateTopMargin(widgetInterface, false)
 				CalculateBottomMargin(widgetInterface, false)
 			}
-			widgetInterface.GetLayout().YPosition += currentWidget.GetLayout().ContentYPosition + yPosition + widgetInterface.GetLayout().MarginTop
-			widgetInterface.GetLayout().ContentYPosition += currentWidget.GetLayout().ContentYPosition + yPosition + widgetInterface.GetLayout().MarginTop
+			widgetInterface.GetLayout().YPosition += yPosition + widgetInterface.GetLayout().MarginTop
+			widgetInterface.GetLayout().ContentYPosition += yPosition + widgetInterface.GetLayout().MarginTop
 		}
 	}
 }

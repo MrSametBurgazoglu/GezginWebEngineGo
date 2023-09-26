@@ -1,44 +1,23 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
 <head>
-    <style>
-        .flex-container {
-            display: flex;
-            flex-wrap: nowrap;
-            width: 500px;
-            height: 500px;
-            background-color: blue;
-            flex-direction: column;
-        }
-        .flex-container-child {
-            background-color: #f1f1f1;
-            width: 100px;
-            height: 80px;
-            margin: 10px;
-            text-align: center;
-            line-height: 75px;
-            font-size: 30px;
-        }
-    </style>
-    <title>heyyo</title>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 </head>
 <body>
-<h1>Flexible Boxes</h1>
 
-<div class="flex-container">
-    <div class="flex-container-child">1</div>
-    <div class="flex-container-child">2</div>
-    <div class="flex-container-child">3</div>
-    <div class="flex-container-child">4</div>
-    <div class="flex-container-child">5</div>
-    <div class="flex-container-child">6</div>
-    <div class="flex-container-child">7</div>
-    <div class="flex-container-child">8</div>
+<div class="container mt-3">
+    <h2>Inline Flex</h2>
+    <p>To create an inline flexbox container, add the d-inline-flex class. Use any of the d-*-inline-flex classes to control WHEN the element should be a flex element on a specific screen width.</p>
+    <p>Resize the browser window to see the effect.</p>
+    <div class="d-inline-flex">d-flex</div>
+    <div class="d-sm-inline-flex">d-sm-flex</div>
+    <div class="d-md-inline-flex">d-md-flex</div>
+    <div class="d-lg-inline-flex">d-lg-flex</div>
+    <div class="d-xl-inline-flex">d-xl-flex</div>
 </div>
-
-<p>Try to resize the browser window.</p>
-<p>A container with "flex-wrap: nowrap;" will never wrap its items.</p>
-<p><strong>Note:</strong> Flexbox is not supported in Internet Explorer 10 or earlier versions.</p>
 
 </body>
 </html>
