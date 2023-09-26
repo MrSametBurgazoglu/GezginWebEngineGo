@@ -91,8 +91,10 @@ func SetFlexContainerRowChildrenPositionNoWrap(currentWidget widget.WidgetInterf
 		for _, widgetInterface := range currentWidget.GetChildren() {
 			childHeight := widgetInterface.GetLayout().Height
 			yPosition := AlignItems(parentHeight, childHeight, 0)
-			CalculateTopMargin(widgetInterface, false)
-			CalculateBottomMargin(widgetInterface, false)
+			if widgetInterface.GetStyleProperty() != nil && widgetInterface.GetStyleProperty().Margin != nil {
+				CalculateTopMargin(widgetInterface, false)
+				CalculateBottomMargin(widgetInterface, false)
+			}
 			widgetInterface.GetLayout().YPosition += currentWidget.GetLayout().ContentYPosition + yPosition + widgetInterface.GetLayout().MarginTop
 			widgetInterface.GetLayout().ContentYPosition += currentWidget.GetLayout().ContentYPosition + yPosition + widgetInterface.GetLayout().MarginTop
 		}
@@ -140,8 +142,10 @@ func SetFlexContainerRowChildrenPositionWrap(currentWidget widget.WidgetInterfac
 		containerHeight := parentHeight / len(currentSubContainers)
 		currentYPosition := currentWidget.GetLayout().ContentYPosition + containerHeight*i
 		for _, widgetInterface := range container {
-			CalculateTopMargin(widgetInterface, true)
-			CalculateBottomMargin(widgetInterface, true)
+			if widgetInterface.GetStyleProperty() != nil && widgetInterface.GetStyleProperty().Margin != nil {
+				CalculateTopMargin(widgetInterface, true)
+				CalculateBottomMargin(widgetInterface, true)
+			}
 			yPosition := AlignItems(containerHeight, widgetInterface.GetLayout().Height, 0)
 			widgetInterface.GetLayout().YPosition = currentYPosition + yPosition + widgetInterface.GetLayout().MarginTop
 			widgetInterface.GetLayout().ContentYPosition = currentYPosition + yPosition + widgetInterface.GetLayout().MarginTop
@@ -230,8 +234,10 @@ func SetFlexContainerColumnChildrenPositionWrap(currentWidget widget.WidgetInter
 		containerWidth := parentWidth / len(currentSubContainers)
 		currentXPosition := containerWidth * i
 		for _, widgetInterface := range container {
-			CalculateLeftMargin(widgetInterface, true)
-			CalculateRightMargin(widgetInterface, true)
+			if widgetInterface.GetStyleProperty() != nil && widgetInterface.GetStyleProperty().Margin != nil {
+				CalculateLeftMargin(widgetInterface, true)
+				CalculateRightMargin(widgetInterface, true)
+			}
 			xPosition := AlignItems(containerWidth, widgetInterface.GetLayout().Width, 0)
 			widgetInterface.GetLayout().XPosition = currentWidget.GetLayout().ContentXPosition + currentXPosition + xPosition + widgetInterface.GetLayout().MarginLeft
 			widgetInterface.GetLayout().ContentXPosition = currentWidget.GetLayout().ContentXPosition + currentXPosition + xPosition + widgetInterface.GetLayout().MarginLeft
@@ -287,8 +293,10 @@ func SetFlexColumnContainerChildrenWidthNoWrap(currentWidget widget.WidgetInterf
 		if currentWidget.GetStyleProperty().Children[i].Width != 0 {
 			width = currentWidget.GetLayout().Children[i].GetWidthFromStyleProperty()
 		}
-		CalculateLeftMargin(child, true)
-		CalculateRightMargin(child, true)
+		if child.GetStyleProperty() != nil && child.GetStyleProperty().Margin != nil {
+			CalculateLeftMargin(child, true)
+			CalculateRightMargin(child, true)
+		}
 		child.GetLayout().Width = width
 		child.GetLayout().ContentWidth = width
 	}

@@ -83,8 +83,10 @@ func GetTotalWidthOfChildren(currentWidget widget.WidgetInterface) (int, []int) 
 				width = int(currentWidget.GetStyleProperty().Children[i].MinWidth)
 			}
 		}
-		CalculateLeftMargin(child, true)
-		CalculateRightMargin(child, true)
+		if child.GetStyleProperty() != nil && child.GetStyleProperty().Margin != nil {
+			CalculateLeftMargin(child, true)
+			CalculateRightMargin(child, true)
+		}
 		width += child.GetLayout().MarginLeft + child.GetLayout().MarginRight
 		widths = append(widths, width)
 		totalChildrenWidth += width
