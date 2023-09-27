@@ -332,7 +332,7 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_TH, draw: true},
 	{tag: HTML_THEAD, draw: true},
 	{tag: HTML_TIME},
-	{tag: HTML_TITLE},
+	{tag: HTML_TITLE, notParseInside: true},
 	{tag: HTML_TR, draw: true},
 	{tag: HTML_TRACK, endTag: true},
 	{tag: HTML_U, draw: true},

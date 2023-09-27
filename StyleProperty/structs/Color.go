@@ -118,11 +118,12 @@ func (receiver *ColorRGBA) SetColor(value string) bool {
 }
 
 func (receiver *ColorRGBA) SetColorByName(value string) bool {
-	if index := utils.IndexFounder(CssColorStrings, value, CssColorStringsCount); index != -1 {
+	r, g, b, ok := GetColorByName(value)
+	if ok {
 		receiver.alpha = 255
-		receiver.red = CssColorRGB[index][0]
-		receiver.green = CssColorRGB[index][1]
-		receiver.blue = CssColorRGB[index][2]
+		receiver.red = r
+		receiver.green = g
+		receiver.blue = b
 		return true
 	}
 	return false
