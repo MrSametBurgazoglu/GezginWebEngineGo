@@ -1,6 +1,6 @@
 package StyleProperty
 
-const cssPropertyCount = 149
+const cssPropertyCount = 152
 
 var cssPropertiesNameList = []string{
 	"accent-color",
@@ -109,6 +109,9 @@ var cssPropertiesNameList = []string{
 	"grid-template-columns",
 	"grid-template-rows",
 	"height",
+	"justify-content",
+	"justify-items",
+	"justify-self",
 	"left",
 	"margin",
 	"margin-bottom",
@@ -159,7 +162,7 @@ type cssPropertyFunction func(styleProperty *StyleProperty, value string)
 var functionList = []cssPropertyFunction{
 	nil,
 	nil,
-	nil,
+	AlignItemsPropertySetValue,
 	nil,
 	nil,
 	nil,
@@ -263,6 +266,9 @@ var functionList = []cssPropertyFunction{
 	nil,
 	nil,
 	HeightPropertySetValue,
+	JustifyContentPropertySetValue,
+	nil,
+	nil,
 	LeftPropertySetValue,
 	MarginPropertySetValue,
 	MarginBottomPropertySetValue,

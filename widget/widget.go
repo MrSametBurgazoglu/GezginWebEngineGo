@@ -32,14 +32,15 @@ type Widget struct {
 	StyleProperty  *StyleProperty.StyleProperty
 	LayoutProperty *LayoutProperty.LayoutProperty
 	standardHtmlTagVariables.StandardHtmlTagVariables
-	StyleRules     map[string]string
-	DrawProperties *structs.DrawProperties
-	RenderWidget   func(*Widget, *image.RGBA)
-	DrawWidget     func(*Widget, *image.RGBA)
-	Children       []WidgetInterface
-	Parent         WidgetInterface
-	Draw           bool
-	Rendered       bool
+	StyleRules        map[string]string
+	DrawProperties    *structs.DrawProperties
+	RenderWidget      func(*Widget, *image.RGBA)
+	DrawWidget        func(*Widget, *image.RGBA)
+	Children          []WidgetInterface
+	Parent            WidgetInterface
+	Draw              bool
+	Rendered          bool
+	IsNotDrawChildren bool
 }
 
 func (receiver *Widget) Initialize() {
@@ -54,6 +55,10 @@ func (receiver *Widget) Initialize() {
 
 func (receiver *Widget) SetChildrenCount(count int) {
 	receiver.ChildrenCount = count
+}
+
+func (receiver *Widget) GetIsNotDrawChildren() bool {
+	return receiver.IsNotDrawChildren
 }
 
 func (receiver *Widget) GetChildrenCount() int {

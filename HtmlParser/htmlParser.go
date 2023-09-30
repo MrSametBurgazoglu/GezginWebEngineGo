@@ -77,7 +77,15 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 				newElement.Attributes = make(map[string]string)
 				currentElement = &newElement
 				if data[seek+start+end-1] == '/' {
-					end -= 2
+					end -= 1
+					cur := seek + start + end
+					for i := cur; i > 0; i-- {
+						if data[i] == ' ' {
+							end -= 1
+						} else {
+							break
+						}
+					}
 					endTag, notParseInside, tagName = ParseInsideOfTag(currentElement, data[seek+start+1:seek+start+end])
 					newElement.Name = tagName
 					nodes <- currentElement

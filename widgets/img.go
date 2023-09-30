@@ -1,15 +1,16 @@
 package widgets
 
 import (
+	"bytes"
 	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/ResourceManager"
 	"gezgin_web_engine/drawer/drawerBackend"
 	"gezgin_web_engine/widget"
+	"github.com/nfnt/resize"
 	"image"
 	"image/draw"
-	"image/png"
-	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -22,8 +23,8 @@ type HtmlTagImg struct {
 	srcSet         string
 	useMap         string
 	longDesc       string
-	height         int
-	width          int
+	height         uint
+	width          uint
 	crossOrigin    CrossOriginType
 	loading        LoadingType
 	referrerPolicy ReferrerPolicyType
@@ -44,9 +45,11 @@ func (receiver *HtmlTagImg) VarReaderFunc(variableName string, variableValue str
 	case "crossorgin":
 		receiver.crossOrigin.Set(variableValue)
 	case "height":
-		receiver.height, _ = strconv.Atoi(variableValue)
+		value, _ := strconv.Atoi(variableValue)
+		receiver.height = uint(value)
 	case "width":
-		receiver.width, _ = strconv.Atoi(variableValue)
+		value, _ := strconv.Atoi(variableValue)
+		receiver.width = uint(value)
 	case "loading":
 		receiver.loading.Set(variableValue)
 	case "longdesc":
@@ -83,19 +86,32 @@ func (receiver *HtmlTagImg) Render(mainImage *image.RGBA, resourceManager *Resou
 	for !resourceManager.CheckResource(receiver.Src) {
 		time.Sleep(time.Millisecond)
 	}
-	//resource, err := resourceManager.GetResource(receiver.Src)
-	//img, format, err2 := image.Decode(bytes.NewReader(resource.GetData())) //TODO PERFORMANCE UPDATE
-	file, err := os.Open("exampleHtmlFiles/browser-diagram.png")
-	img, err2 := png.Decode(file)
-	//if err == nil && err2 == nil {
-	//	draw.Draw(mainImage, mainImage.Bounds(), img, image.Point{X: 0, Y: 0}, draw.Src)
-	//}
-	if img.Bounds().Size() != receiver.DrawProperties.Texture.Bounds().Size() {
-		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, img.Bounds().Size().X, img.Bounds().Size().Y))
+	resource, err := resourceManager.GetResource(receiver.Src)
+	imgTemp := image.NewRGBA(image.Rect(0, 0, int(receiver.width), int(receiver.height)))
+	img, _, err2 := image.Decode(bytes.NewReader(resource.GetData())) //TODO PERFORMANCE UPDATE
+	if err2 != nil {
+		if strings.HasSuffix(receiver.Src, ".svg") {
+			drawerBackend.DrawSvg(imgTemp, bytes.NewReader(resource.GetData()), receiver.LayoutProperty)
+		}
+	} else {
+		if receiver.width != 0 && receiver.LayoutProperty.Height != 0 {
+			img = resize.Resize(receiver.width, receiver.height, imgTemp, resize.Lanczos2)
+		}
+		draw.Draw(imgTemp, mainImage.Bounds(), img, image.Point{X: 0, Y: 0}, draw.Src)
 	}
+
+	//file, err := os.Open("exampleHtmlFiles/browser-diagram.png")
+	//img, err2 := png.Decode(file)
+	//if err == nil && err2 == nil {
+	//draw.Draw(mainImage, mainImage.Bounds(), img, image.Point{X: 0, Y: 0}, draw.Src)
+	//}
+	if imgTemp.Bounds().Size() != receiver.DrawProperties.Texture.Bounds().Size() {
+		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, imgTemp.Bounds().Size().X, imgTemp.Bounds().Size().Y))
+	}
+	var imgText image.Image = imgTemp
 	if err == nil && err2 == nil {
 		drawerBackend.GetImageTexture(
-			&img,
+			&imgText,
 			receiver.DrawProperties.Texture,
 			receiver.LayoutProperty,
 		)
@@ -107,5 +123,13 @@ func SetWidgetPropertiesForImgTag(element *HtmlParser.HtmlElement, taskManager T
 	widget.HtmlElement = element
 	widget.Initialize()
 	widget.Src = widget.HtmlElement.Attributes["src"]
+	if width := element.Attributes["width"]; width != "" {
+		value, _ := strconv.Atoi(width)
+		widget.width = uint(value)
+	}
+	if height := element.Attributes["height"]; height != "" {
+		value, _ := strconv.Atoi(height)
+		widget.height = uint(value)
+	}
 	return widget
 }

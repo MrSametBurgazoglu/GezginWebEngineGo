@@ -19,6 +19,9 @@ type UntaggedText struct {
 
 func (receiver *UntaggedText) Draw(mainImage *image.RGBA) {
 	draw.Draw(mainImage, image.Rect(receiver.LayoutProperty.XPosition, receiver.LayoutProperty.YPosition, receiver.LayoutProperty.XPosition+receiver.LayoutProperty.Width, receiver.LayoutProperty.YPosition+receiver.LayoutProperty.Height), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
+	println(receiver.Value, receiver.LayoutProperty.XPosition, receiver.LayoutProperty.YPosition, receiver.LayoutProperty.Width, receiver.LayoutProperty.Height)
+	println("parent", receiver.LayoutProperty.Parent.Width, receiver.LayoutProperty.Parent.Height)
+	println("parent", receiver.LayoutProperty.Parent.Parent.Width, receiver.LayoutProperty.Parent.Parent.Height)
 }
 
 func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {
@@ -54,9 +57,6 @@ func (receiver *UntaggedText) SetValue(text string) {
 	}
 	for key, value := range escapeCharacters {
 		text = strings.ReplaceAll(text, key, value)
-	}
-	if strings.Contains(text, "html") {
-		println("hey")
 	}
 	text = strings.Trim(text, "\n")
 	receiver.Value = text

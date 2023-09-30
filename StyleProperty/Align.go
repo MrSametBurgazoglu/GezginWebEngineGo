@@ -3,6 +3,7 @@ package StyleProperty
 import (
 	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/utils"
+	"strings"
 )
 
 const AlignStringCount = 8
@@ -21,9 +22,18 @@ var alignStrings = []string{
 func setAlignContent(cssProperties *StyleProperty, value string) {
 	index := utils.IndexFounder(alignStrings, value, AlignStringCount)
 	if index != -1 {
-		cssProperties.AlignContent = enums.CssAlignType(index)
+		cssProperties.AlignContent = enums.CssAlignType(index + 1)
 	} else {
 		cssProperties.AlignContent = enums.CSS_ALIGN_STRETCH
+	}
+}
+
+func setJustifyContent(cssProperties *StyleProperty, value string) {
+	index := utils.IndexFounder(alignStrings, value, AlignStringCount)
+	if index != -1 {
+		cssProperties.JustifyContent = enums.CssAlignType(index + 1)
+	} else {
+		cssProperties.JustifyContent = enums.CSS_ALIGN_STRETCH
 	}
 }
 
@@ -55,7 +65,23 @@ func AlignContentPropertySetValue(cssProperties *StyleProperty, value string) {
 	}
 }
 
+func JustifyContentPropertySetValue(cssProperties *StyleProperty, value string) {
+	if strings.Contains(value, "!important") {
+		value = strings.ReplaceAll(value, "!important", "")
+	}
+	if value == "inherit" {
+		cssProperties.JustifyContentInherit = true
+	} else if value == "initial" {
+		cssProperties.JustifyContent = enums.CSS_ALIGN_STRETCH
+	} else {
+		setJustifyContent(cssProperties, value)
+	}
+}
+
 func AlignItemsPropertySetValue(cssProperties *StyleProperty, value string) {
+	if strings.Contains(value, "!important") {
+		value = strings.ReplaceAll(value, "!important", "")
+	}
 	if value == "inherit" {
 		cssProperties.AlignItemsInherit = true
 	} else if value == "initial" {

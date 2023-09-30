@@ -8,19 +8,26 @@ import (
 
 func SetHeight(cssProperties *StyleProperty, value string) {
 	if strings.HasSuffix(value, "px") {
-		width, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
+		height, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err != nil {
 			// handle error
 		}
-		cssProperties.Height = uint(width)
+		cssProperties.Height = uint(height)
 		cssProperties.HeightValueType = enums.CSS_PROPERTY_VALUE_TYPE_PIXEL
 	} else if strings.HasSuffix(value, "%") {
-		width, err := strconv.Atoi(strings.TrimSuffix(value, "%"))
+		height, err := strconv.Atoi(strings.TrimSuffix(value, "%"))
 		if err != nil {
 			// handle error
 		}
-		cssProperties.Height = uint(width)
+		cssProperties.Height = uint(height)
 		cssProperties.HeightValueType = enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE
+	} else if strings.HasSuffix(value, "rem") {
+		height, err := strconv.Atoi(strings.TrimSuffix(value, "rem"))
+		if err != nil {
+			// handle error
+		}
+		cssProperties.Height = uint(height) * 16
+		cssProperties.HeightValueType = enums.CSS_PROPERTY_VALUE_TYPE_PIXEL
 	} else {
 		// DEFAULT VALUE
 		cssProperties.HeightValueType = enums.CSS_PROPERTY_VALUE_TYPE_AUTO
@@ -29,18 +36,18 @@ func SetHeight(cssProperties *StyleProperty, value string) {
 
 func SetMinHeight(cssProperties *StyleProperty, value string) {
 	if strings.HasSuffix(value, "px") {
-		width, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
+		height, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err != nil {
 			// handle error
 		}
-		cssProperties.MinHeight = uint(width)
+		cssProperties.MinHeight = uint(height)
 		cssProperties.MinHeightValueType = enums.CSS_PROPERTY_VALUE_TYPE_PIXEL
 	} else if strings.HasSuffix(value, "%") {
-		width, err := strconv.Atoi(strings.TrimSuffix(value, "%"))
+		height, err := strconv.Atoi(strings.TrimSuffix(value, "%"))
 		if err != nil {
 			// handle error
 		}
-		cssProperties.MinHeight = uint(width)
+		cssProperties.MinHeight = uint(height)
 		cssProperties.MinHeightValueType = enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE
 	} else {
 		// DEFAULT VALUE
@@ -50,18 +57,18 @@ func SetMinHeight(cssProperties *StyleProperty, value string) {
 
 func SetMaxHeight(cssProperties *StyleProperty, value string) {
 	if strings.HasSuffix(value, "px") {
-		width, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
+		height, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err != nil {
 			// handle error
 		}
-		cssProperties.MaxHeight = uint(width)
+		cssProperties.MaxHeight = uint(height)
 		cssProperties.MaxHeightValueType = enums.CSS_PROPERTY_VALUE_TYPE_PIXEL
 	} else if strings.HasSuffix(value, "%") {
-		width, err := strconv.Atoi(strings.TrimSuffix(value, "%"))
+		height, err := strconv.Atoi(strings.TrimSuffix(value, "%"))
 		if err != nil {
 			// handle error
 		}
-		cssProperties.MaxHeight = uint(width)
+		cssProperties.MaxHeight = uint(height)
 		cssProperties.MaxHeightValueType = enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE
 	} else {
 		// DEFAULT VALUE

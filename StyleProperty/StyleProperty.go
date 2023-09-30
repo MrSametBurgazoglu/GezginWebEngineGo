@@ -16,6 +16,7 @@ type StyleProperty struct {
 	AlignContentInherit       bool
 	AlignItemsInherit         bool
 	AlignSelfInherit          bool
+	JustifyContentInherit     bool
 	AnimationInherit          bool
 	BackdropFilterInherit     bool
 	BackfaceVisibilityInherit bool
@@ -67,6 +68,7 @@ type StyleProperty struct {
 
 	AccentColor        *structs2.ColorRGBA
 	AlignContent       enums.CssAlignType
+	JustifyContent     enums.CssAlignType
 	AlignItems         enums.CssAlignType
 	AlignSelf          enums.CssAlignType
 	Animation          *structs2.Animation
@@ -128,7 +130,6 @@ func (receiver *StyleProperty) ApplyDeclaration(property string, value string) {
 		if property == "display" {
 			value = strings.ReplaceAll(value, "!important", "")
 		}
-		println(value)
 	}
 	index := utils.IndexFounder(cssPropertiesNameList, property, cssPropertyCount)
 	if index != -1 {

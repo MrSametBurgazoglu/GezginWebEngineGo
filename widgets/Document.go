@@ -30,13 +30,17 @@ func DrawChildren(mainImage *image.RGBA, widget widget.WidgetInterface) {
 	for _, child := range widget.GetChildren() {
 		if child.IsDraw() {
 			child.Draw(mainImage)
-			DrawChildren(mainImage, child)
+			if !child.GetIsNotDrawChildren() {
+				DrawChildren(mainImage, child)
+			}
 		}
 	}
 }
 
 func (receiver *DocumentWidget) DrawAllPage(mainImage *image.RGBA) {
+	*mainImage = *image.NewRGBA(image.Rect(0, 0, ScreenProperties.WindowWidth, receiver.LayoutProperty.Height))
 	receiver.Draw(mainImage)
+	//testWidget := receiver.GetChildrenByIndex(1).GetChildrenByIndex(1).GetChildrenByIndex(0).GetChildrenByIndex(0).GetChildrenByIndex(0)
 	DrawChildren(mainImage, receiver)
 	/*
 		for _, child := range receiver.GetChildren() {
@@ -44,45 +48,8 @@ func (receiver *DocumentWidget) DrawAllPage(mainImage *image.RGBA) {
 				DrawChildren(mainImage, child)
 			}
 		}
-
 	*/
 }
-
-/*
-func (receiver *DocumentWidget) DrawPage(mainImage *image.RGBA) {
-	receiver.Draw(mainImage)
-	widgetList := []widget.WidgetInterface{receiver.Children[0]}
-	widgetIndexList := []int{0}
-	currentIndex := 0
-	currentChildIndex := 0
-	for widgetIndexList[0] != widgetList[0].GetChildrenCount() {
-		if widgetIndexList[currentIndex] == widgetList[currentIndex].GetChildrenCount() {
-			currentIndex--
-			currentChildIndex--
-			widgetIndexList = widgetIndexList[:len(widgetIndexList)-1]
-			widgetList = widgetList[:len(widgetList)-1]
-			widgetIndexList[currentIndex]++
-		} else {
-			if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).GetChildrenCount() > 0 {
-				if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).IsDraw() {
-					widgetList = append(widgetList, widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]))
-					widgetIndexList = append(widgetIndexList, 0)
-					widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).Draw(mainImage)
-					currentIndex++
-				} else {
-					currentChildIndex++
-				}
-			} else {
-				if widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).IsDraw() {
-					widgetList[currentIndex].GetChildrenByIndex(widgetIndexList[currentIndex]).Draw(mainImage)
-				}
-				widgetIndexList[currentIndex]++
-			}
-		}
-	}
-}
-
-*/
 
 func (receiver *DocumentWidget) RenderDocument(mainImage *image.RGBA) {
 	widgetList := []widget.WidgetInterface{receiver}
@@ -92,7 +59,7 @@ func (receiver *DocumentWidget) RenderDocument(mainImage *image.RGBA) {
 	for keepGo {
 		keepGo = false
 		for _, w := range widgetList {
-			if w.GetChildrenCount() > 0 {
+			if w.GetChildrenCount() > 0 && !w.GetIsNotDrawChildren() {
 				for _, child := range w.GetChildren() {
 					widgetList = append(widgetList, child)
 					child.SetRender(false)

@@ -39,14 +39,15 @@ func BlockSetPositionYFixed(currentWidget, parent, beforeCurrentWidget widget.Wi
 	return 0
 }
 
-func BlockSetPositionYRelative(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) int {
+func BlockSetPositionYRelative(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
 	position := 0
 	if beforeCurrentWidget != nil {
 		position = beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height + int(currentWidget.GetStyleProperty().Top)
 	} else {
 		position = parent.GetLayout().YPosition + int(currentWidget.GetStyleProperty().Top)
 	}
-	return position
+	currentWidget.GetLayout().YPosition = position
+	currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 }
 
 func BlockSetPositionY(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {

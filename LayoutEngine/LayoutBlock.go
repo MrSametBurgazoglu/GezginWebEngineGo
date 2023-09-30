@@ -5,6 +5,9 @@ import (
 )
 
 func BlockSetPosition(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
+	if currentWidget.GetID() == "featured-3" {
+		//println("hey")
+	}
 	BlockSetPositionX(currentWidget, parent)
 	BlockSetPositionY(currentWidget, parent, beforeCurrentWidget)
 }

@@ -6,23 +6,30 @@ import (
 	"math"
 )
 
-func JustifyContent(parentSize, childrenTotalSize, childrenCount, CType int) (int, int) {
+func JustifyContent(parentSize, childrenTotalSize, childrenCount int, CType enums.CssAlignType) (int, int) {
 	if parentSize == childrenTotalSize {
 		return 0, 0
 	}
 	switch CType {
-	case 0: //flex-start
+	case enums.CSS_ALIGN_EMPTY: //flex-start
 		return 0, 0
-	case 1: //center
+	case enums.CSS_ALIGN_BASELINE:
+		return 0, 0
+	case enums.CSS_ALIGN_CENTER:
 		return (parentSize - childrenTotalSize) / 2, 0
-	case 2: //flex-end
+	case enums.CSS_ALIGN_FLEX_END:
 		return parentSize - childrenTotalSize, 0
-	case 3: //space-between
-		return 0, (parentSize - childrenTotalSize) / childrenCount
-	case 4: //space-around
+	case enums.CSS_ALIGN_FLEX_START:
+		return 0, 0
+	case enums.CSS_ALIGN_SPACE_AROUND:
 		space := (parentSize - childrenTotalSize) / (childrenCount * 2)
 		return space, space * 2
-	case 5:
+	case enums.CSS_ALIGN_SPACE_BETWEEN:
+		if childrenCount <= 1 {
+			return 0, 0
+		}
+		return 0, (parentSize - childrenTotalSize) / (childrenCount - 1)
+	case enums.CSS_ALIGN_SPACE_EVENLY:
 		space := (parentSize - childrenTotalSize) / (childrenCount + 1)
 		return space, space
 	default:
@@ -30,13 +37,13 @@ func JustifyContent(parentSize, childrenTotalSize, childrenCount, CType int) (in
 	}
 }
 
-func AlignItems(parentSize, childrenSize, CType int) int {
+func AlignItems(parentSize, childrenSize int, CType enums.CssAlignType) int {
 	switch CType {
-	case 0: //flex-start
+	case enums.CSS_ALIGN_FLEX_START: //flex-start
 		return 0
-	case 1: //center
+	case enums.CSS_ALIGN_CENTER: //center
 		return (parentSize - childrenSize) / 2
-	case 2: //flex-end
+	case enums.CSS_ALIGN_FLEX_END: //flex-end
 		return parentSize - childrenSize
 	default:
 		return 0
@@ -49,8 +56,10 @@ func SetFlexContainerRowChildrenWidthNoWrap(currentWidget widget.WidgetInterface
 	if totalChildrenWidth > parentWidth {
 		childWidthRatio := float64(parentWidth) / float64(totalChildrenWidth)
 		for i, widgetInterface := range currentWidget.GetChildren() {
-			CalculateLeftMargin(widgetInterface, false)
-			CalculateRightMargin(widgetInterface, false)
+			if widgetInterface.GetStyleProperty() != nil && widgetInterface.GetStyleProperty().Margin != nil {
+				CalculateLeftMargin(widgetInterface, false)
+				CalculateRightMargin(widgetInterface, false)
+			}
 			widgetInterface.GetLayout().ContentWidth = childrenWidths[i] - widgetInterface.GetLayout().MarginLeft - widgetInterface.GetLayout().MarginRight
 			widgetInterface.GetLayout().Width = childrenWidths[i]
 		}
@@ -72,7 +81,7 @@ func SetFlexContainerRowChildrenPositionNoWrap(currentWidget widget.WidgetInterf
 	parentWidth := currentWidget.GetLayout().ContentWidth
 	totalChildrenWidth := GetTotalWidthOfWidgets(currentWidget.GetChildren())
 
-	startPos, spaceBetweenItems := JustifyContent(parentWidth, totalChildrenWidth, currentWidget.GetChildrenCount(), 1)
+	startPos, spaceBetweenItems := JustifyContent(parentWidth, totalChildrenWidth, currentWidget.GetChildrenCount(), currentWidget.GetStyleProperty().JustifyContent)
 	currentPos := currentWidget.GetLayout().ContentXPosition + startPos + currentWidget.GetChildrenByIndex(0).GetLayout().MarginLeft
 	for _, widgetInterface := range currentWidget.GetLayout().Children {
 		widgetInterface.XPosition = currentPos
@@ -90,7 +99,7 @@ func SetFlexContainerRowChildrenPositionNoWrap(currentWidget widget.WidgetInterf
 	if parentHeight >= totalChildrenHeight {
 		for _, widgetInterface := range currentWidget.GetChildren() {
 			childHeight := widgetInterface.GetLayout().Height
-			yPosition := AlignItems(parentHeight, childHeight, 0)
+			yPosition := AlignItems(parentHeight, childHeight, currentWidget.GetStyleProperty().AlignItems)
 			if widgetInterface.GetStyleProperty() != nil && widgetInterface.GetStyleProperty().Margin != nil {
 				CalculateTopMargin(widgetInterface, false)
 				CalculateBottomMargin(widgetInterface, false)
@@ -121,7 +130,7 @@ func SetFlexContainerRowChildrenPositionWrap(currentWidget widget.WidgetInterfac
 			copyChildren := currentChildren
 			currentSubContainers = append(currentSubContainers, copyChildren)
 			currentChildren = nil
-			currentWidth = 0
+			currentWidth = widgetInterface.GetLayout().Width
 		}
 		currentChildren = append(currentChildren, widgetInterface)
 	}
@@ -130,8 +139,11 @@ func SetFlexContainerRowChildrenPositionWrap(currentWidget widget.WidgetInterfac
 
 	parentHeight := currentWidget.GetLayout().ContentHeight
 	for i, container := range currentSubContainers {
+		if len(container) == 0 { //TODO FIX HERE
+			continue
+		}
 		totalWidthOfChildren := GetTotalWidthOfWidgets(container)
-		startPos, spaceBetweenItems := JustifyContent(parentWidth, totalWidthOfChildren, len(container), 1)
+		startPos, spaceBetweenItems := JustifyContent(parentWidth, totalWidthOfChildren, len(container), currentWidget.GetStyleProperty().JustifyContent)
 		currentPos := currentWidget.GetLayout().ContentXPosition + startPos + container[0].GetLayout().MarginLeft
 		for _, widgetInterface := range container {
 			widgetInterface.GetLayout().XPosition = currentPos
@@ -146,7 +158,7 @@ func SetFlexContainerRowChildrenPositionWrap(currentWidget widget.WidgetInterfac
 				CalculateTopMargin(widgetInterface, true)
 				CalculateBottomMargin(widgetInterface, true)
 			}
-			yPosition := AlignItems(containerHeight, widgetInterface.GetLayout().Height, 0)
+			yPosition := AlignItems(containerHeight, widgetInterface.GetLayout().Height, currentWidget.GetStyleProperty().AlignItems)
 			widgetInterface.GetLayout().YPosition = currentYPosition + yPosition + widgetInterface.GetLayout().MarginTop
 			widgetInterface.GetLayout().ContentYPosition = currentYPosition + yPosition + widgetInterface.GetLayout().MarginTop
 		}
@@ -163,7 +175,7 @@ func SetFlexContainerRowChildrenPosition(currentWidget widget.WidgetInterface) {
 
 func SetFlexContainerColumnChildrenPositionNoWrap(currentWidget widget.WidgetInterface) {
 	parentHeight := currentWidget.GetLayout().ContentHeight
-	totalChildrenHeight := GetTotalChildrenHeight(currentWidget)
+	totalChildrenHeight := GetTotalHeightOfWidgets(currentWidget.GetChildren())
 
 	if totalChildrenHeight > parentHeight {
 		childHeightRatio := float64(parentHeight) / float64(totalChildrenHeight)
@@ -175,8 +187,8 @@ func SetFlexContainerColumnChildrenPositionNoWrap(currentWidget widget.WidgetInt
 		}
 	}
 
-	totalChildrenHeight = GetTotalChildrenHeight(currentWidget)
-	startPos, spaceBetweenItems := JustifyContent(parentHeight, totalChildrenHeight, len(currentWidget.GetLayout().Children), 1)
+	totalChildrenHeight = GetTotalHeightOfWidgets(currentWidget.GetChildren())
+	startPos, spaceBetweenItems := JustifyContent(parentHeight, totalChildrenHeight, len(currentWidget.GetLayout().Children), currentWidget.GetStyleProperty().JustifyContent)
 	currentPos := currentWidget.GetLayout().ContentYPosition + startPos
 	for _, widgetInterface := range currentWidget.GetLayout().Children {
 		widgetInterface.YPosition = currentPos
@@ -187,7 +199,7 @@ func SetFlexContainerColumnChildrenPositionNoWrap(currentWidget widget.WidgetInt
 	parentWidth := currentWidget.GetLayout().ContentWidth
 
 	for _, widgetInterface := range currentWidget.GetChildren() {
-		xPosition := AlignItems(parentWidth, widgetInterface.GetLayout().Width, 0)
+		xPosition := AlignItems(parentWidth, widgetInterface.GetLayout().Width, currentWidget.GetStyleProperty().AlignItems)
 		widgetInterface.GetLayout().XPosition += currentWidget.GetLayout().ContentXPosition + xPosition + widgetInterface.GetLayout().MarginLeft
 		widgetInterface.GetLayout().ContentXPosition += currentWidget.GetLayout().ContentXPosition + xPosition + widgetInterface.GetLayout().MarginLeft
 	}
@@ -223,7 +235,7 @@ func SetFlexContainerColumnChildrenPositionWrap(currentWidget widget.WidgetInter
 	parentWidth := currentWidget.GetLayout().ContentWidth
 	for i, container := range currentSubContainers {
 		totalHeightOfChildren := GetTotalHeightOfWidgets(container)
-		startPos, spaceBetweenItems := JustifyContent(parentHeight, totalHeightOfChildren, len(container), 1)
+		startPos, spaceBetweenItems := JustifyContent(parentHeight, totalHeightOfChildren, len(container), currentWidget.GetStyleProperty().JustifyContent)
 		currentPos := currentWidget.GetLayout().ContentYPosition + startPos + container[0].GetLayout().MarginTop
 		for _, widgetInterface := range container {
 			widgetInterface.GetLayout().YPosition = currentPos
@@ -238,7 +250,7 @@ func SetFlexContainerColumnChildrenPositionWrap(currentWidget widget.WidgetInter
 				CalculateLeftMargin(widgetInterface, true)
 				CalculateRightMargin(widgetInterface, true)
 			}
-			xPosition := AlignItems(containerWidth, widgetInterface.GetLayout().Width, 0)
+			xPosition := AlignItems(containerWidth, widgetInterface.GetLayout().Width, currentWidget.GetStyleProperty().AlignItems)
 			widgetInterface.GetLayout().XPosition = currentWidget.GetLayout().ContentXPosition + currentXPosition + xPosition + widgetInterface.GetLayout().MarginLeft
 			widgetInterface.GetLayout().ContentXPosition = currentWidget.GetLayout().ContentXPosition + currentXPosition + xPosition + widgetInterface.GetLayout().MarginLeft
 		}
@@ -246,10 +258,10 @@ func SetFlexContainerColumnChildrenPositionWrap(currentWidget widget.WidgetInter
 }
 
 func SetFlexContainerColumnChildrenPosition(currentWidget widget.WidgetInterface) {
-	if currentWidget.GetStyleProperty().FlexWrap == enums.CSS_FLEX_WRAP_NOWRAP {
-		SetFlexContainerColumnChildrenPositionNoWrap(currentWidget)
-	} else {
+	if currentWidget.GetStyleProperty().FlexWrap == enums.CSS_FLEX_WRAP_WRAP {
 		SetFlexContainerColumnChildrenPositionWrap(currentWidget)
+	} else {
+		SetFlexContainerColumnChildrenPositionNoWrap(currentWidget)
 	}
 }
 

@@ -37,4 +37,5 @@ type WidgetInterface interface {
 	Render(rgba *image.RGBA, resourceManager *ResourceManager.ResourceManager)
 	IsPreSetWidth() bool
 	IsSetWidthSelf() bool
+	GetIsNotDrawChildren() bool
 }

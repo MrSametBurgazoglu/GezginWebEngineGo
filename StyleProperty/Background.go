@@ -97,6 +97,12 @@ func setBackgroundColor(background *structs.Background, value string) {
 	background.BackgroundColor.SetColor(value)
 }
 
+func setBackgroundImage(background *structs.Background, value string) {
+	if strings.HasPrefix(value, "url(") {
+		background.ImageList = append(background.ImageList, value)
+	}
+}
+
 func BackgroundColorPropertySetValue(properties *StyleProperty, value string) {
 	if strings.Contains(value, "!important") {
 		value = strings.ReplaceAll(value, "!important", "")
@@ -147,6 +153,35 @@ func BackgroundPropertySetValue(properties *StyleProperty, value string) {
 		} else {
 			setBackgroundColor(properties.Background, value)
 		}
+	}
+}
+
+func BackgroundImagePropertySetValue(properties *StyleProperty, value string) {
+	if strings.Contains(value, "!important") {
+		value = strings.ReplaceAll(value, "!important", "")
+	}
+	if value == "inherit" {
+		if !properties.BackgroundInherit {
+			if properties.Background == nil {
+				properties.Background = new(structs.Background)
+			}
+			properties.Background.BackgroundImageInherit = true
+		}
+	} else {
+		if properties.Background == nil {
+			properties.Background = new(structs.Background)
+		}
+		if properties.BackgroundInherit {
+			properties.Background.BackgroundSizeInherit = true
+			properties.Background.BackgroundPositionInherit = true
+			properties.Background.BackgroundOriginInherit = true
+			properties.Background.BackgroundColorInherit = true
+			properties.Background.BackgroundClipInherit = true
+			properties.Background.BackgroundAttachmentInherit = true
+			properties.Background.BackgroundRepeatInherit = true
+		}
+		properties.Background.BackgroundImageInherit = false
+		setBackgroundImage(properties.Background, value)
 	}
 }
 

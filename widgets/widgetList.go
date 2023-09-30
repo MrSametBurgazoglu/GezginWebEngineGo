@@ -90,7 +90,7 @@ var WidgetFunctions = []func(element *HtmlParser.HtmlElement, taskManager TaskMa
 	nil,
 	nil,
 	nil,
-	nil,
+	SetWidgetPropertiesForSectionTag,
 	nil,
 	SetWidgetPropertiesForSmallTag,
 	nil,

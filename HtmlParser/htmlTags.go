@@ -322,7 +322,7 @@ var tagHtmlVariables = []HtmlTagVariables{
 	{tag: HTML_SUB, draw: true},
 	{tag: HTML_SUMMARY, draw: true},
 	{tag: HTML_SUP, draw: true},
-	{tag: HTML_SVG},
+	{tag: HTML_SVG, draw: true, notParseInside: true},
 	{tag: HTML_TABLE, draw: true},
 	{tag: HTML_TBODY, draw: true},
 	{tag: HTML_TD, draw: true},

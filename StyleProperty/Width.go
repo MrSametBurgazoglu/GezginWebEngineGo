@@ -21,6 +21,13 @@ func SetWidth(cssProperties *StyleProperty, value string) {
 		}
 		cssProperties.Width = uint(width)
 		cssProperties.WidthValueType = enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE
+	} else if strings.HasSuffix(value, "rem") {
+		width, err := strconv.Atoi(strings.TrimSuffix(value, "rem"))
+		if err != nil {
+			// handle error
+		}
+		cssProperties.Width = uint(width) * 16
+		cssProperties.WidthValueType = enums.CSS_PROPERTY_VALUE_TYPE_PIXEL
 	} else {
 		// DEFAULT VALUE
 		cssProperties.WidthValueType = enums.CSS_PROPERTY_VALUE_TYPE_AUTO

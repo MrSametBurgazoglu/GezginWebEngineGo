@@ -40,7 +40,7 @@ func BlockSetPositionXFixed(currentWidget, parent widget.WidgetInterface) int {
 	return 0
 }
 
-func BlockSetPositionXRelative(currentWidget, parent widget.WidgetInterface) int {
+func BlockSetPositionXRelative(currentWidget, parent widget.WidgetInterface) {
 	position := 0
 	if currentWidget.GetStyleProperty().Left != 0 {
 		position = parent.GetLayout().ContentXPosition + int(currentWidget.GetStyleProperty().Left)
@@ -49,7 +49,8 @@ func BlockSetPositionXRelative(currentWidget, parent widget.WidgetInterface) int
 	} else {
 		position = parent.GetLayout().ContentXPosition
 	}
-	return position
+	currentWidget.GetLayout().XPosition = position
+	currentWidget.GetLayout().ContentXPosition = currentWidget.GetLayout().XPosition
 }
 
 func BlockSetPositionX(currentWidget, parent widget.WidgetInterface) {
