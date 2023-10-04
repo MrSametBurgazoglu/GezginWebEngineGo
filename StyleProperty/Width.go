@@ -7,6 +7,9 @@ import (
 )
 
 func SetWidth(cssProperties *StyleProperty, value string) {
+	if strings.Contains(value, "!important") {
+		value = strings.ReplaceAll(value, "!important", "")
+	}
 	if strings.HasSuffix(value, "px") {
 		width, err := strconv.Atoi(strings.TrimSuffix(value, "px"))
 		if err != nil {

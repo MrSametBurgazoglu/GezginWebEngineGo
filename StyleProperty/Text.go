@@ -16,8 +16,8 @@ var textAlignStrings = []string{
 }
 
 func setTextAlignValue(cssProperties *StyleProperty, value string) {
-	if strings.Contains(value, "!") { //TEMPORARY SOLUTION TO PASS IMPORTANT
-		value = value[:strings.Index(value, "!")]
+	if strings.Contains(value, "!important") {
+		value = strings.ReplaceAll(value, "!important", "")
 	}
 	index := utils.IndexFounder(textAlignStrings, value, TextAlignStringCount)
 	if index != -1 {

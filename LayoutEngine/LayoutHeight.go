@@ -1,19 +1,20 @@
 package LayoutEngine
 
 import (
+	"gezgin_web_engine/StyleProperty"
 	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/widget"
 )
 
-func IsInline(currentWidget widget.WidgetInterface) bool {
-	if currentWidget.GetStyleProperty() == nil || currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE || currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE_BLOCK || currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE_FLEX {
+func IsInline(styleProperty *StyleProperty.StyleProperty) bool {
+	if styleProperty == nil || styleProperty.Display == enums.CSS_DISPLAY_TYPE_INLINE || styleProperty.Display == enums.CSS_DISPLAY_TYPE_INLINE_BLOCK || styleProperty.Display == enums.CSS_DISPLAY_TYPE_INLINE_FLEX {
 		return true
 	}
 	return false
 }
 
 func CanInline(prevWidget, currentWidget widget.WidgetInterface) bool {
-	if !IsInline(prevWidget) || !IsInline(currentWidget) {
+	if !IsInline(prevWidget.GetStyleProperty()) || !IsInline(currentWidget.GetStyleProperty()) {
 		return false
 	}
 	return true

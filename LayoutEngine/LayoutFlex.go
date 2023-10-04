@@ -11,12 +11,26 @@ func LookForWidth(layoutProperty *LayoutProperty.LayoutProperty) int {
 	if len(layoutProperty.Children) == 0 {
 		return layoutProperty.Width
 	} else {
+		maxWidth := 0
 		totalWidth := 0
 		for _, child := range layoutProperty.Children {
 			currentWidth := LookForWidth(child)
-			totalWidth += currentWidth
+			if IsInline(child.StyleProperty) {
+				totalWidth += currentWidth
+			} else {
+				if totalWidth > maxWidth {
+					maxWidth = totalWidth
+				}
+				if currentWidth > maxWidth {
+					maxWidth = currentWidth
+				}
+				totalWidth = 0
+			}
 		}
-		return totalWidth
+		if totalWidth > maxWidth {
+			maxWidth = totalWidth
+		}
+		return maxWidth
 	}
 }
 

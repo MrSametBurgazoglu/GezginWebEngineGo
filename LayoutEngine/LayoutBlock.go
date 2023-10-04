@@ -1,12 +1,13 @@
 package LayoutEngine
 
 import (
+	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/widget"
 )
 
 func BlockSetPosition(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
-	if currentWidget.GetID() == "featured-3" {
-		//println("hey")
+	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_UL) {
+		println("hey")
 	}
 	BlockSetPositionX(currentWidget, parent)
 	BlockSetPositionY(currentWidget, parent, beforeCurrentWidget)

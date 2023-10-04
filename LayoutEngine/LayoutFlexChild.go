@@ -279,12 +279,12 @@ func SetFlexContainerRowChildrenWidthWrap(currentWidget widget.WidgetInterface) 
 		if currentWidget.GetStyleProperty().Children != nil && currentWidget.GetStyleProperty().Children[i].Width != 0 {
 			width = currentWidget.GetLayout().Children[i].GetWidthFromStyleProperty()
 		}
-		child.GetLayout().ContentWidth = width
+		child.GetLayout().Width = width
 		if child.GetStyleProperty() != nil && child.GetStyleProperty().Margin != nil {
 			CalculateLeftMargin(child, true)
 			CalculateRightMargin(child, true)
 		}
-		child.GetLayout().Width = width + child.GetLayout().MarginLeft + child.GetLayout().MarginRight
+		child.GetLayout().ContentWidth = width - child.GetLayout().MarginLeft - child.GetLayout().MarginRight
 	}
 }
 

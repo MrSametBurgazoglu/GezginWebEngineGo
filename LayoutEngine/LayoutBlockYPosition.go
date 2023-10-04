@@ -15,11 +15,11 @@ func BlockSetPositionYStatic(currentWidget, parent, beforeCurrentWidget widget.W
 		CalculateBottomMargin(currentWidget, false)
 	}
 	if beforeCurrentWidget != nil {
-		currentWidget.GetLayout().YPosition = beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().GetTotalHeight() + currentWidget.GetLayout().MarginTop
-		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
+		currentWidget.GetLayout().YPosition = beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().GetTotalHeight()
+		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition + currentWidget.GetLayout().MarginTop
 	} else {
-		currentWidget.GetLayout().YPosition = parent.GetLayout().YPosition + currentWidget.GetLayout().MarginTop
-		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
+		currentWidget.GetLayout().YPosition = parent.GetLayout().YPosition
+		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition + currentWidget.GetLayout().MarginTop
 	}
 }
 

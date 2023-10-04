@@ -1,6 +1,7 @@
 package LayoutEngine
 
 import (
+	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/StyleProperty"
 	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/widget"
@@ -75,6 +76,9 @@ func InlineSetPositionYStatic(currentWidget, parent, beforeCurrentWidget widget.
 }
 
 func InlineSetPositionX(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
+	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_BUTTON) {
+		print("hey")
+	}
 	if currentWidget.GetStyleProperty() != nil {
 		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
