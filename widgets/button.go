@@ -58,7 +58,7 @@ func (receiver *HtmlTagButton) VarReaderFunc(variableName string, variableValue 
 }
 
 func (receiver *HtmlTagButton) Draw(mainImage *image.RGBA) {
-
+	receiver.DrawBackground(mainImage)
 }
 
 func (receiver *HtmlTagButton) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {

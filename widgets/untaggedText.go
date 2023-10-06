@@ -98,6 +98,10 @@ func splitTextAndRenderByLines(text string, maxWidth int, size float64) ([]strin
 		currentWidth = int(size * float64(len(text[start:end])) * 0.55)
 		for currentWidth > maxWidth {
 			end = findLastSpace(text, end)
+			if end == -1 || start >= end {
+				Lines = append(Lines, text[start:])
+				return Lines, calculatedMaxWidth
+			}
 			newCurrentWidth := int(size * float64(len(text[start:end])) * 0.55)
 			if newCurrentWidth > calculatedMaxWidth {
 				calculatedMaxWidth = newCurrentWidth

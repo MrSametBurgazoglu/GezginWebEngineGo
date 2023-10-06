@@ -7,6 +7,7 @@ import (
 	"gezgin_web_engine/LayoutProperty"
 	"gezgin_web_engine/StyleProperty"
 	"gezgin_web_engine/StyleProperty/enums"
+	"gezgin_web_engine/drawer/drawerBackend"
 	"gezgin_web_engine/drawer/structs"
 	"image"
 	"strings"
@@ -188,4 +189,11 @@ func (receiver *Widget) IsPreSetWidth() bool {
 
 func (receiver *Widget) IsSetWidthSelf() bool {
 	return receiver.StyleProperty != nil && receiver.StyleProperty.Display == enums.CSS_DISPLAY_TYPE_FLEX || (receiver.StyleProperty.Float == enums.CSS_FLOAT_LEFT || receiver.StyleProperty.Float == enums.CSS_FLOAT_RIGHT)
+}
+
+func (receiver *Widget) DrawBackground(mainImage *image.RGBA) {
+	if receiver.GetStyleProperty().Background != nil {
+		alpha, red, green, blue := receiver.StyleProperty.Background.BackgroundColor.GetColorByRGBA()
+		drawerBackend.DrawBackground(red, green, blue, alpha, mainImage, receiver.LayoutProperty)
+	}
 }

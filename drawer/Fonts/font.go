@@ -42,7 +42,7 @@ func InitFont(size int) (*GezginFont, error) {
 	newFont.Font = f
 	fg := image.Black
 	c := freetype.NewContext()
-	c.SetDPI(72)
+	c.SetDPI(96)
 	c.SetFont(newFont.Font)
 	c.SetFontSize(newFont.Size)
 	c.SetSrc(fg)
@@ -72,7 +72,7 @@ func DrawText(font *GezginFont, text []string, destination *image.RGBA, fontColo
 	rgba := image.NewRGBA(image.Rect(0, 0, 1500, 800))
 	alpha, red, green, blue := fontColor.GetColorByRGBA()
 	fg := image.NewUniform(color.NRGBA{R: red, G: green, B: blue, A: alpha})
-	draw.Draw(rgba, rgba.Bounds(), fg, image.Point{X: 0, Y: 0}, draw.Over)
+	draw.Draw(rgba, rgba.Bounds(), fg, image.Point{X: 0, Y: 0}, draw.Src)
 	var context = font.Context
 	context.SetDst(destination)
 	context.SetSrc(fg)
