@@ -32,15 +32,15 @@ func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *Res
 			receiver.GetParent().GetDrawProperties().Font = Fonts.GetFont(14)
 		}
 	}
-	if currentWidth := int(receiver.GetParent().GetDrawProperties().Font.Size * float64(len(receiver.Value)) * 0.5); currentWidth > receiver.GetParent().GetLayout().Width {
-		Lines, maxTextWidth := splitTextAndRenderByLines(receiver.Value, receiver.GetParent().GetLayout().Width, receiver.GetParent().GetDrawProperties().Font.Size)
+	if currentWidth := int(receiver.GetParent().GetDrawProperties().Font.Size * float64(len(receiver.Value)) * 0.58); currentWidth > receiver.GetParent().GetLayout().ContentWidth {
+		Lines, maxTextWidth := splitTextAndRenderByLines(receiver.Value, receiver.GetParent().GetLayout().ContentWidth, receiver.GetParent().GetDrawProperties().Font.Size)
 		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, maxTextWidth*3, 500)) // change this later
 		height, width := Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, Lines, receiver.DrawProperties.Texture, receiver.GetParent().GetStyleProperty().Color)
 		receiver.LayoutProperty.Height, receiver.LayoutProperty.Width = int(height), int(width)
 		receiver.LayoutProperty.ContentHeight, receiver.LayoutProperty.ContentWidth = receiver.LayoutProperty.Height, receiver.LayoutProperty.Width
 	} else {
 		//change this to calculated text
-		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, receiver.GetParent().GetLayout().Width, 500)) // change this later
+		receiver.DrawProperties.Texture = image.NewRGBA(image.Rect(0, 0, receiver.GetParent().GetLayout().ContentWidth, 500)) // change this later
 		height, width := Fonts.DrawText(receiver.GetParent().GetDrawProperties().Font, []string{receiver.Value}, receiver.DrawProperties.Texture, receiver.GetParent().GetStyleProperty().Color)
 		receiver.LayoutProperty.Height, receiver.LayoutProperty.Width = int(height), int(width)
 		receiver.LayoutProperty.ContentHeight, receiver.LayoutProperty.ContentWidth = receiver.LayoutProperty.Height, receiver.LayoutProperty.Width
@@ -90,19 +90,19 @@ func splitTextAndRenderByLines(text string, maxWidth int, size float64) ([]strin
 	length := len(text)
 	start = 0
 	end = length
-	currentWidth = int(size * float64(length) * 0.55)
+	currentWidth = int(size * float64(length) * 0.65)
 	if maxWidth <= 0 || !strings.Contains(text, " ") {
 		return append(Lines, text), currentWidth
 	}
 	for start < length {
-		currentWidth = int(size * float64(len(text[start:end])) * 0.55)
+		currentWidth = int(size * float64(len(text[start:end])) * 0.65)
 		for currentWidth > maxWidth {
 			end = findLastSpace(text, end)
 			if end == -1 || start >= end {
 				Lines = append(Lines, text[start:])
 				return Lines, calculatedMaxWidth
 			}
-			newCurrentWidth := int(size * float64(len(text[start:end])) * 0.55)
+			newCurrentWidth := int(size * float64(len(text[start:end])) * 0.65)
 			if newCurrentWidth > calculatedMaxWidth {
 				calculatedMaxWidth = newCurrentWidth
 			}

@@ -96,10 +96,16 @@ func (receiver *HtmlTagImg) Render(mainImage *image.RGBA, resourceManager *Resou
 			drawerBackend.DrawSvg(imgTemp, bytes.NewReader(resource.GetData()), receiver.LayoutProperty)
 		}
 	} else {
-		imgTemp = image.NewRGBA(img.Bounds())
 		if receiver.LayoutProperty.ContentWidth != 0 && receiver.LayoutProperty.ContentHeight != 0 {
 			img = resize.Resize(uint(receiver.LayoutProperty.ContentWidth), uint(receiver.LayoutProperty.ContentHeight), img, resize.Lanczos2)
+		} else if receiver.LayoutProperty.ContentWidth != 0 {
+			height := img.Bounds().Size().Y * receiver.LayoutProperty.ContentWidth / img.Bounds().Size().X
+			img = resize.Resize(uint(receiver.LayoutProperty.ContentWidth), uint(height), img, resize.Lanczos2)
+		} else if receiver.LayoutProperty.ContentHeight != 0 {
+			width := img.Bounds().Size().X * receiver.LayoutProperty.ContentHeight / img.Bounds().Size().Y
+			img = resize.Resize(uint(width), uint(receiver.LayoutProperty.ContentHeight), img, resize.Lanczos2)
 		}
+		imgTemp = image.NewRGBA(img.Bounds())
 		draw.Draw(imgTemp, img.Bounds(), img, image.Point{X: 0, Y: 0}, draw.Src)
 	}
 

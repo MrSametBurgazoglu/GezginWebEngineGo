@@ -40,7 +40,7 @@ func DrawChildren(mainImage *image.RGBA, widget widget.WidgetInterface) {
 func (receiver *DocumentWidget) DrawAllPage(mainImage *image.RGBA) {
 	*mainImage = *image.NewRGBA(image.Rect(0, 0, ScreenProperties.WindowWidth, receiver.LayoutProperty.Height))
 	receiver.Draw(mainImage)
-	//testWidget := receiver.GetChildrenByIndex(1).GetChildrenByIndex(1).GetChildrenByIndex(0)
+	//testWidget := receiver.GetChildrenByIndex(0).GetChildrenByIndex(9).GetChildrenByIndex(0)
 	//secondWidget := testWidget.GetChildrenByIndex(0).GetChildrenByIndex(0).GetChildrenByIndex(1).GetChildrenByIndex(2)
 	//print(secondWidget.GetHtmlName())
 	DrawChildren(mainImage, receiver)
@@ -177,6 +177,9 @@ func (receiver *DocumentWidget) SetWidthForBlockElements() {
 func (receiver *DocumentWidget) SetWidthOfWidget(widget widget.WidgetInterface, group *sync.WaitGroup) { //TODO html tag must be string and can be custom
 	SetWidthForWidget(widget)
 	for _, child := range widget.GetChildren() {
+		if classes := child.GetClasses(); len(classes) > 0 && classes[0] == "row" {
+			print("hey")
+		}
 		if (child.IsPreSetWidth() || child.IsSetWidthSelf()) && child.IsDraw() {
 			group.Add(1)
 			go receiver.SetWidthOfWidget(child, group)

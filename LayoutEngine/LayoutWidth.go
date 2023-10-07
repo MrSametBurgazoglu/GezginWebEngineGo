@@ -7,6 +7,9 @@ import (
 )
 
 func SetWidth(currentWidget widget.WidgetInterface) {
+	if classes := currentWidget.GetClasses(); len(classes) > 0 && classes[0] == "row" {
+		print("hey")
+	}
 	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_IMG) {
 		println("hey")
 	}
