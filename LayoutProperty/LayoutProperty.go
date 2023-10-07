@@ -62,8 +62,15 @@ func (receiver *LayoutProperty) GetWidthFromStyleProperty() (width int) {
 	case enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE:
 		width = int(float64(receiver.Parent.Width) * (float64(receiver.StyleProperty.Width) / 100.0))
 	}
-	if receiver.StyleProperty.MaxWidth != 0 && width > int(receiver.StyleProperty.MaxWidth) {
-		width = int(receiver.StyleProperty.MaxWidth)
+	maxWidth := 0
+	switch receiver.StyleProperty.MaxWidthValueType {
+	case enums.CSS_PROPERTY_VALUE_TYPE_PIXEL:
+		maxWidth = int(receiver.StyleProperty.MaxWidth)
+	case enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE:
+		maxWidth = int(float64(receiver.Parent.Width) * (float64(receiver.StyleProperty.MaxWidth) / 100.0))
+	}
+	if maxWidth != 0 && width > maxWidth {
+		width = maxWidth
 	}
 	if width < int(receiver.StyleProperty.MinWidth) {
 		width = int(receiver.StyleProperty.MinWidth)

@@ -18,12 +18,6 @@ func SetWidthBlock(currentWidget, parent widget.WidgetInterface) {
 	if currentWidget.GetStyleProperty().Width != 0 {
 		width = currentWidget.GetLayout().GetWidthFromStyleProperty()
 	}
-	if currentWidget.GetStyleProperty().MaxWidth > 0 && uint(width) > currentWidget.GetStyleProperty().MaxWidth {
-		width = int(currentWidget.GetStyleProperty().MaxWidth)
-	}
-	if currentWidget.GetStyleProperty().MinWidth > 0 && uint(width) < currentWidget.GetStyleProperty().MinWidth {
-		width = int(currentWidget.GetStyleProperty().MinWidth)
-	}
 	currentWidget.GetLayout().Width = width
 	contentWidth := width
 	if currentWidget.GetStyleProperty() != nil {

@@ -97,7 +97,7 @@ func (receiver *HtmlTagImg) Render(mainImage *image.RGBA, resourceManager *Resou
 		}
 	} else {
 		imgTemp = image.NewRGBA(img.Bounds())
-		if receiver.LayoutProperty.ContentWidth != 0 && receiver.LayoutProperty.Height != 0 {
+		if receiver.LayoutProperty.ContentWidth != 0 && receiver.LayoutProperty.ContentHeight != 0 {
 			img = resize.Resize(uint(receiver.LayoutProperty.ContentWidth), uint(receiver.LayoutProperty.ContentHeight), img, resize.Lanczos2)
 		}
 		draw.Draw(imgTemp, img.Bounds(), img, image.Point{X: 0, Y: 0}, draw.Src)

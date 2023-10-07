@@ -115,8 +115,8 @@ func GetTotalChildrenHeight(currentWidget widget.WidgetInterface) int {
 
 /*TODO ADD STYLE PROPERTY HEIGHT VALUE TO CALCULATE HEIGHT*/
 func SetHeight(currentWidget widget.WidgetInterface) {
-	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_H1) {
-		print("heyy")
+	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_IMG) {
+		println("hey")
 	}
 	if currentWidget.GetLayout().MarginTop == -1 {
 		print("heyy")
@@ -131,6 +131,8 @@ func SetHeight(currentWidget widget.WidgetInterface) {
 			height = int(currentWidget.GetStyleProperty().Height)
 		case enums.CSS_PROPERTY_VALUE_TYPE_PERCENTAGE:
 			height = currentWidget.GetLayout().Parent.GetPresetHeight() * int(currentWidget.GetStyleProperty().Height) / 100
+		case enums.CSS_PROPERTY_VALUE_TYPE_AUTO:
+			height = currentWidget.GetLayout().ContentHeight
 		}
 		currentWidget.GetLayout().ContentHeight = height
 		if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Margin != nil {

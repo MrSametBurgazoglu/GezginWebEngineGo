@@ -1,11 +1,15 @@
 package LayoutEngine
 
 import (
+	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/widget"
 )
 
 func SetWidth(currentWidget widget.WidgetInterface) {
+	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_IMG) {
+		println("hey")
+	}
 	if currentWidget.GetStyleProperty() == nil {
 		SetWidthInline(currentWidget, currentWidget.GetStyleProperty())
 	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_NONE {
