@@ -20,10 +20,10 @@ func BlockSetPositionYStatic(currentWidget, parent, beforeCurrentWidget widget.W
 			totalHeight = 0
 		}
 		currentWidget.GetLayout().YPosition = beforeCurrentWidget.GetLayout().YPosition + totalHeight
-		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition + currentWidget.GetLayout().MarginTop
+		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition + currentWidget.GetLayout().MarginTop + currentWidget.GetLayout().PaddingTop
 	} else {
-		currentWidget.GetLayout().YPosition = parent.GetLayout().YPosition
-		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition + currentWidget.GetLayout().MarginTop
+		currentWidget.GetLayout().YPosition = parent.GetLayout().ContentYPosition
+		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition + currentWidget.GetLayout().MarginTop + currentWidget.GetLayout().PaddingTop
 	}
 }
 
@@ -44,14 +44,9 @@ func BlockSetPositionYFixed(currentWidget, parent, beforeCurrentWidget widget.Wi
 }
 
 func BlockSetPositionYRelative(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
-	position := 0
-	if beforeCurrentWidget != nil {
-		position = beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height + int(currentWidget.GetStyleProperty().Top)
-	} else {
-		position = parent.GetLayout().YPosition + int(currentWidget.GetStyleProperty().Top)
-	}
-	currentWidget.GetLayout().YPosition = position
-	currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
+	BlockSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
+	currentWidget.GetLayout().YPosition += int(currentWidget.GetStyleProperty().Top)
+	currentWidget.GetLayout().ContentYPosition += int(currentWidget.GetStyleProperty().Top)
 }
 
 func BlockSetPositionY(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {

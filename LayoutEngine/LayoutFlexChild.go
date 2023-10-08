@@ -104,8 +104,8 @@ func SetFlexContainerRowChildrenPositionNoWrap(currentWidget widget.WidgetInterf
 				CalculateTopMargin(widgetInterface, false)
 				CalculateBottomMargin(widgetInterface, false)
 			}
-			widgetInterface.GetLayout().YPosition += yPosition + widgetInterface.GetLayout().MarginTop
-			widgetInterface.GetLayout().ContentYPosition += yPosition + widgetInterface.GetLayout().MarginTop
+			widgetInterface.GetLayout().YPosition += yPosition
+			widgetInterface.GetLayout().ContentYPosition += yPosition + widgetInterface.GetLayout().MarginTop + widgetInterface.GetLayout().PaddingTop
 		}
 	}
 }
@@ -279,12 +279,14 @@ func SetFlexContainerRowChildrenWidthWrap(currentWidget widget.WidgetInterface) 
 		if currentWidget.GetStyleProperty().Children != nil && currentWidget.GetStyleProperty().Children[i].Width != 0 {
 			width = currentWidget.GetLayout().Children[i].GetWidthFromStyleProperty()
 		}
-		child.GetLayout().Width = width
+		child.GetLayout().ContentWidth = width
+	}
+	for _, child := range currentWidget.GetChildren() {
 		if child.GetStyleProperty() != nil && child.GetStyleProperty().Margin != nil {
-			CalculateLeftMargin(child, true)
-			CalculateRightMargin(child, true)
+			CalculateLeftMargin(child, false)
+			CalculateRightMargin(child, false)
 		}
-		child.GetLayout().ContentWidth = width - child.GetLayout().MarginLeft - child.GetLayout().MarginRight
+		child.GetLayout().Width = child.GetLayout().ContentWidth + child.GetLayout().MarginLeft + child.GetLayout().MarginRight
 	}
 }
 

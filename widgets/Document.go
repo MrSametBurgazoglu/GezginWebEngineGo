@@ -40,7 +40,7 @@ func DrawChildren(mainImage *image.RGBA, widget widget.WidgetInterface) {
 func (receiver *DocumentWidget) DrawAllPage(mainImage *image.RGBA) {
 	*mainImage = *image.NewRGBA(image.Rect(0, 0, ScreenProperties.WindowWidth, receiver.LayoutProperty.Height))
 	receiver.Draw(mainImage)
-	//testWidget := receiver.GetChildrenByIndex(0).GetChildrenByIndex(9).GetChildrenByIndex(0)
+	//testWidget := receiver.GetChildrenByIndex(0).GetChildrenByIndex(9).GetChildrenByIndex(0).GetChildrenByIndex(0)
 	//secondWidget := testWidget.GetChildrenByIndex(0).GetChildrenByIndex(0).GetChildrenByIndex(1).GetChildrenByIndex(2)
 	//print(secondWidget.GetHtmlName())
 	DrawChildren(mainImage, receiver)

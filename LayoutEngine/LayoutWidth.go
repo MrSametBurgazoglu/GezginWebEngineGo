@@ -10,7 +10,10 @@ func SetWidth(currentWidget widget.WidgetInterface) {
 	if classes := currentWidget.GetClasses(); len(classes) > 0 && classes[0] == "row" {
 		print("hey")
 	}
-	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_IMG) {
+	if classes := currentWidget.GetClasses(); len(classes) == 4 && classes[2] == "g-lg-5" {
+		print("hey")
+	}
+	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_FORM) {
 		println("hey")
 	}
 	if currentWidget.GetStyleProperty() == nil {
@@ -23,7 +26,7 @@ func SetWidth(currentWidget widget.WidgetInterface) {
 	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_FLEX {
 		SetFLexContainerWidth(currentWidget)
 	} else if currentWidget.GetStyleProperty().Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX && currentWidget.GetStyleProperty().Display != enums.CSS_DISPLAY_TYPE_FLEX && currentWidget.GetStyleProperty().Display != enums.CSS_DISPLAY_TYPE_INLINE_FLEX {
-		//println("heyyo")
+		println("heyyo")
 	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_BLOCK {
 		SetWidthBlock(currentWidget, currentWidget.GetParent())
 	} else if currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE_BLOCK {

@@ -64,7 +64,7 @@ var WidgetFunctions = []func(element *HtmlParser.HtmlElement, taskManager TaskMa
 	nil,
 	nil,
 	SetWidgetPropertiesForImgTag,
-	nil,
+	SetWidgetPropertiesForInputTag,
 	SetWidgetPropertiesForLabelTag,
 	nil,
 	nil,

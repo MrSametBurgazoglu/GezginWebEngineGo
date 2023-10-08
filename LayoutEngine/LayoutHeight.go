@@ -115,7 +115,7 @@ func GetTotalChildrenHeight(currentWidget widget.WidgetInterface) int {
 
 /*TODO ADD STYLE PROPERTY HEIGHT VALUE TO CALCULATE HEIGHT*/
 func SetHeight(currentWidget widget.WidgetInterface) {
-	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_IMG) {
+	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_FORM) {
 		println("hey")
 	}
 	if currentWidget.GetLayout().MarginTop == -1 {
@@ -146,6 +146,11 @@ func SetHeight(currentWidget widget.WidgetInterface) {
 		}
 	} else if len(currentWidget.GetChildren()) > 0 {
 		height := GetTotalChildrenHeight(currentWidget)
+		if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Padding != nil {
+			currentWidget.GetLayout().PaddingTop = int(currentWidget.GetStyleProperty().Padding.PaddingTop)
+			currentWidget.GetLayout().PaddingBottom = int(currentWidget.GetStyleProperty().Padding.PaddingBottom)
+			height += currentWidget.GetLayout().PaddingTop + currentWidget.GetLayout().PaddingBottom
+		}
 		currentWidget.GetLayout().ContentHeight = height
 		if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Margin != nil {
 			totalHeight := height + (currentWidget.GetStyleProperty().Margin.MarginTop + currentWidget.GetStyleProperty().Margin.MarginBottom)

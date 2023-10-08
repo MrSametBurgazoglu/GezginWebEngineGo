@@ -66,12 +66,8 @@ func InlineSetPositionYStatic(currentWidget, parent, beforeCurrentWidget widget.
 		currentWidget.GetLayout().YPosition = beforeCurrentWidget.GetLayout().YPosition + marginTop
 		currentWidget.GetLayout().ContentYPosition = beforeCurrentWidget.GetLayout().YPosition
 	} else if beforeCurrentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_BLOCK {
-		marginTop := 0
-		if currentWidget.GetStyleProperty().Margin != nil {
-			marginTop = currentWidget.GetStyleProperty().Margin.MarginTop
-		}
-		currentWidget.GetLayout().YPosition = beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height + marginTop
-		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
+		currentWidget.GetLayout().YPosition = beforeCurrentWidget.GetLayout().YPosition + beforeCurrentWidget.GetLayout().Height
+		currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition + currentWidget.GetLayout().MarginTop + currentWidget.GetLayout().PaddingTop
 	}
 }
 
@@ -116,6 +112,9 @@ func InlineSetPositionX(currentWidget, parent, beforeCurrentWidget widget.Widget
 }
 
 func InlineSetPositionY(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
+	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_BUTTON) {
+		println("hey")
+	}
 	if currentWidget.GetStyleProperty() != nil {
 		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
