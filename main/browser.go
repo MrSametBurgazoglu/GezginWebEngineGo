@@ -66,19 +66,28 @@ func activate(app *gtk.Application) {
 		drawArea.QueueDraw()
 	})
 	drawArea.AddController(motionCtrl)
+	/*
+		gesture := gtk.NewGestureClick()
+		gesture.Connect("pressed", func(count int, x, y float64, data ...any) {
+			println("hey", x, y, count)
+		})
+		drawArea.AddController(gesture)
+
+	*/
 
 	scrolledWindow.SetChild(drawArea)
 
 	window := gtk.NewApplicationWindow(app)
 	window.SetTitle("drawingarea - gotk4 Example")
 	window.SetChild(scrolledWindow)
-	window.SetSizeRequest(1366, 700)
+	window.SetSizeRequest(1900, 1000)
+	window.SetResizable(true)
 
 	startTime := time.Now()
-	web_engine.InitDrawer(1360, 700)
+	web_engine.InitDrawer(1900, 1000)
 	newTab := web_engine.NewTab()
 	//newTab.OpenWebPageFromFile("exampleHtmlFiles/newExa.html")
-	newTab.OpenWebPageFromWeb("https://getbootstrap.com/docs/5.0/examples/heroes/")
+	newTab.OpenWebPageFromWeb("https://getbootstrap.com/docs/5.0/examples/pricing/")
 	currentTab = newTab
 	fmt.Println("Total time taken ", time.Since(startTime).Milliseconds())
 

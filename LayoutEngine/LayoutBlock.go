@@ -14,16 +14,24 @@ func BlockSetPosition(currentWidget, parent, beforeCurrentWidget widget.WidgetIn
 }
 
 func SetWidthBlock(currentWidget, parent widget.WidgetInterface) {
+	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_INPUT) || currentWidget.GetHtmlTag() == int(HtmlParser.HTML_SVG) {
+		println("hey")
+	}
 	width := parent.GetLayout().ContentWidth
 	if currentWidget.GetStyleProperty().Width != 0 {
 		width = currentWidget.GetLayout().GetWidthFromStyleProperty()
 	}
-	currentWidget.GetLayout().Width = width
-	contentWidth := width
+	currentWidget.GetLayout().ContentWidth = width
 	if currentWidget.GetStyleProperty() != nil {
 		if currentWidget.GetStyleProperty().Margin != nil {
-			contentWidth -= currentWidget.GetLayout().MarginLeft + currentWidget.GetLayout().MarginRight
+			CalculateLeftMargin(currentWidget, true)
+			CalculateRightMargin(currentWidget, true)
+			width += currentWidget.GetLayout().MarginLeft + currentWidget.GetLayout().MarginRight
+		}
+		if currentWidget.GetStyleProperty().Padding != nil {
+			width += int(currentWidget.GetStyleProperty().Padding.PaddingLeft + currentWidget.GetStyleProperty().Padding.PaddingRight)
+			currentWidget.GetLayout().ContentWidth -= int(currentWidget.GetStyleProperty().Padding.PaddingLeft + currentWidget.GetStyleProperty().Padding.PaddingRight)
 		}
 	}
-	currentWidget.GetLayout().ContentWidth = contentWidth
+	currentWidget.GetLayout().Width = width
 }

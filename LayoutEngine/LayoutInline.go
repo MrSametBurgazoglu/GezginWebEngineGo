@@ -45,8 +45,8 @@ func InlineSetPositionXStatic(currentWidget widget.WidgetInterface) {
 			currentWidget.GetLayout().PaddingTop = int(currentWidget.GetStyleProperty().Padding.PaddingTop)
 			currentWidget.GetLayout().PaddingBottom = int(currentWidget.GetStyleProperty().Padding.PaddingBottom)
 		}
-		currentWidget.GetLayout().XPosition = currentWidget.GetParent().GetLayout().ContentXPosition + currentWidget.GetLayout().MarginLeft
-		currentWidget.GetLayout().ContentXPosition = currentWidget.GetLayout().XPosition
+		currentWidget.GetLayout().XPosition = currentWidget.GetParent().GetLayout().ContentXPosition
+		currentWidget.GetLayout().ContentXPosition = currentWidget.GetLayout().XPosition + currentWidget.GetLayout().MarginLeft + currentWidget.GetLayout().PaddingLeft
 	}
 }
 
@@ -152,12 +152,12 @@ func SetWidthInline(currentWidget widget.WidgetInterface, styleProperty *StylePr
 		for _, child := range currentWidget.GetChildren() {
 			width += child.GetLayout().GetTotalWidth()
 		}
+		currentWidget.GetLayout().ContentWidth = width
 		if styleProperty != nil && styleProperty.Padding != nil {
 			currentWidget.GetLayout().PaddingLeft = int(styleProperty.Padding.PaddingLeft)
 			currentWidget.GetLayout().PaddingRight = int(styleProperty.Padding.PaddingRight)
 			width += currentWidget.GetLayout().PaddingLeft + currentWidget.GetLayout().PaddingRight
 		}
 		currentWidget.GetLayout().Width = width
-		currentWidget.GetLayout().ContentWidth = width
 	}
 }

@@ -7,13 +7,13 @@ import (
 )
 
 func SetWidth(currentWidget widget.WidgetInterface) {
-	if classes := currentWidget.GetClasses(); len(classes) > 0 && classes[0] == "row" {
+	if classes := currentWidget.GetClasses(); len(classes) > 0 && classes[0] == "p-4" {
 		print("hey")
 	}
 	if classes := currentWidget.GetClasses(); len(classes) == 4 && classes[2] == "g-lg-5" {
 		print("hey")
 	}
-	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_FORM) {
+	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_FORM) || currentWidget.GetHtmlTag() == int(HtmlParser.HTML_IMG) {
 		println("hey")
 	}
 	if currentWidget.GetStyleProperty() == nil {
