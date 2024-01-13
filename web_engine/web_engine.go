@@ -10,6 +10,10 @@ type WebTab struct {
 	taskManager *TaskManager.TaskManager
 }
 
+func (receiver *WebTab) GetTaskManager() *TaskManager.TaskManager {
+	return receiver.taskManager
+}
+
 func (receiver *WebTab) OpenWebPageFromFile(fileUrl string) {
 	receiver.taskManager.CreateFromFile(fileUrl)
 }
