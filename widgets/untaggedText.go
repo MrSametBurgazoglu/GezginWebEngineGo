@@ -19,9 +19,9 @@ type UntaggedText struct {
 
 func (receiver *UntaggedText) Draw(mainImage *image.RGBA) {
 	draw.Draw(mainImage, image.Rect(receiver.LayoutProperty.XPosition, receiver.LayoutProperty.YPosition, receiver.LayoutProperty.XPosition+receiver.LayoutProperty.Width, receiver.LayoutProperty.YPosition+receiver.LayoutProperty.Height), receiver.DrawProperties.Texture, image.Point{X: 0, Y: 0}, draw.Over)
-	println(receiver.Value, receiver.LayoutProperty.XPosition, receiver.LayoutProperty.YPosition, receiver.LayoutProperty.Width, receiver.LayoutProperty.Height)
-	println("parent", receiver.LayoutProperty.Parent.Width, receiver.LayoutProperty.Parent.Height)
-	println("parent", receiver.LayoutProperty.Parent.Parent.Width, receiver.LayoutProperty.Parent.Parent.Height)
+	//println(receiver.Value, receiver.LayoutProperty.XPosition, receiver.LayoutProperty.YPosition, receiver.LayoutProperty.Width, receiver.LayoutProperty.Height)
+	//println("parent", receiver.LayoutProperty.Parent.Width, receiver.LayoutProperty.Parent.Height)
+	//println("parent", receiver.LayoutProperty.Parent.Parent.Width, receiver.LayoutProperty.Parent.Parent.Height)
 }
 
 func (receiver *UntaggedText) Render(mainImage *image.RGBA, resourceManager *ResourceManager.ResourceManager) {

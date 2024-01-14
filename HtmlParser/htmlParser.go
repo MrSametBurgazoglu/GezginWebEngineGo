@@ -57,14 +57,11 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 			if data[seek+start+1] == '/' {
 				nodes <- currentElement
 				if currentElement.Name != data[seek+start+2:seek+start+end] {
-					println("something wrong")
 					for currentElement.Name != data[seek+start+2:seek+start+end] {
-						println(currentElement.Name, " -> ", currentElement.Parent.Name)
 						currentElement = currentElement.Parent
 						nodes <- currentElement
 					}
 				}
-				println(currentElement.Name, " -> ", currentElement.Parent.Name)
 				currentElement = currentElement.Parent
 			} else {
 				newElement := HtmlElement{
@@ -90,13 +87,13 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 					newElement.Name = tagName
 					nodes <- currentElement
 					currentElement = currentElement.Parent
-					println(currentElement.Name, " -> ", currentElement.Parent.Name)
+					//println(currentElement.Name, " -> ", currentElement.Parent.Name)
 				} else {
 					endTag, notParseInside, tagName = ParseInsideOfTag(currentElement, data[seek+start+1:seek+start+end])
 					newElement.Name = tagName
 					if endTag {
 						if currentElement.Parent != nil {
-							println(currentElement.Name, " -> ", currentElement.Parent.Name)
+							//println(currentElement.Name, " -> ", currentElement.Parent.Name)
 						}
 						nodes <- currentElement
 						currentElement = currentElement.Parent
@@ -109,7 +106,6 @@ func (receiver *HtmlParser) ParseHtmlFromFile(document *HtmlElement, dat []byte,
 		}
 	}
 	wg.Wait()
-	println("waited")
 	close(nodes)
 }
 

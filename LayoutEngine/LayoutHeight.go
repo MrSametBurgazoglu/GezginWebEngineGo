@@ -1,7 +1,6 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/StyleProperty"
 	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/widget"
@@ -115,12 +114,15 @@ func GetTotalChildrenHeight(currentWidget widget.WidgetInterface) int {
 
 /*TODO ADD STYLE PROPERTY HEIGHT VALUE TO CALCULATE HEIGHT*/
 func SetHeight(currentWidget widget.WidgetInterface) {
-	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_FORM) {
-		println("hey")
-	}
-	if currentWidget.GetLayout().MarginTop == -1 {
-		print("heyy")
-	}
+	/*
+		if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_FORM) {
+			println("hey")
+		}
+		if currentWidget.GetLayout().MarginTop == -1 {
+			print("heyy")
+		}
+
+	*/
 	if currentWidget.GetStyleProperty() != nil && currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_NONE {
 		currentWidget.GetLayout().Height = 0
 		currentWidget.GetLayout().ContentHeight = 0

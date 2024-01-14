@@ -112,23 +112,25 @@ func InlineSetPositionX(currentWidget, parent, beforeCurrentWidget widget.Widget
 }
 
 func InlineSetPositionY(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
-	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_BUTTON) {
-		println("hey")
-	}
+	/*
+		if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_BUTTON) {
+			println("hey")
+		}
+	*/
 	if currentWidget.GetStyleProperty() != nil {
 		switch currentWidget.GetStyleProperty().Position {
 		case enums.CSS_POSITION_TYPE_STICKY:
-			println("not implemented yet")
+			//println("not implemented yet")
 		case enums.CSS_POSITION_TYPE_EMPTY:
 			InlineSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_STATIC:
 			InlineSetPositionYStatic(currentWidget, parent, beforeCurrentWidget)
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			println("not implemented yet")
+			//println("not implemented yet")
 		case enums.CSS_POSITION_TYPE_FIXED:
 			break
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			println("not implemented yet")
+			//println("not implemented yet")
 		}
 	} else {
 		if beforeCurrentWidget == nil {

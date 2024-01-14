@@ -220,9 +220,6 @@ func (receiver *StyleEngine) GetAllCssRules(id string, classes []string, htmlNam
 		rules = append(rules, receiver.GetCssRulesByID(id, true)...)
 		rules = append(rules, receiver.GetCssRulesByID(id, false)...)
 	}
-	for _, rule := range rules {
-		println(rule.Function)
-	}
 	return rules
 }
 

@@ -1,15 +1,14 @@
 package LayoutEngine
 
 import (
-	"gezgin_web_engine/HtmlParser"
 	"gezgin_web_engine/StyleProperty/enums"
 	"gezgin_web_engine/widget"
 )
 
 func SetPosition(currentWidget, parent, beforeCurrentWidget widget.WidgetInterface) {
-	if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_FORM) {
-		println("hey")
-	}
+	//if currentWidget.GetHtmlTag() == int(HtmlParser.HTML_FORM) {
+	//	println("hey")
+	//}
 	if currentWidget.GetStyleProperty() == nil {
 		InlineSetPosition(currentWidget, parent, beforeCurrentWidget)
 	} else if (currentWidget.GetStyleProperty().Parent.Display == enums.CSS_DISPLAY_TYPE_FLEX || currentWidget.GetStyleProperty().Parent.Display == enums.CSS_DISPLAY_TYPE_INLINE_FLEX) && !(currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_FLEX || currentWidget.GetStyleProperty().Display == enums.CSS_DISPLAY_TYPE_INLINE_FLEX) {

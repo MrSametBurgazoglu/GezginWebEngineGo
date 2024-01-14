@@ -18,11 +18,10 @@ func IsMediaRuleCorrect(rule string) bool {
 		splittedValue := strings.Split(parameter, ":")
 		value := splittedValue[1]
 		var intValue int
-		scanf, err := fmt.Sscanf(value, "%dpx", &intValue)
+		_, err := fmt.Sscanf(value, "%dpx", &intValue)
 		if err != nil {
 			return false
 		}
-		println(scanf)
 		if intValue <= currentWidth {
 			return true
 		}

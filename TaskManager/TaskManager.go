@@ -194,7 +194,7 @@ func (receiver *TaskManager) CreateWidgetForTree(parentWidget widget.WidgetInter
 			group.Add(1)
 			go receiver.CreateWidgetForTree(newWidget, child, group)
 		} else {
-			println("HTML ELEMENT ", child.Name, " NOT DEFINED")
+			//println("HTML ELEMENT ", child.Name, " NOT DEFINED")
 		}
 	}
 	group.Done()

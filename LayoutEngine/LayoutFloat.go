@@ -88,11 +88,11 @@ func SetPositionXFloat(currentWidget, parent, beforeCurrentWidget widget.WidgetI
 			currentWidget.GetLayout().XPosition = parent.GetLayout().ContentXPosition
 			currentWidget.GetLayout().ContentXPosition = currentWidget.GetLayout().XPosition
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			println("not implemented yet")
+			//println("not implemented yet")
 		case enums.CSS_POSITION_TYPE_FIXED:
 			break
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			println("not implemented yet")
+			//println("not implemented yet")
 		}
 	} else {
 		currentWidget.GetLayout().XPosition = parent.GetLayout().ContentXPosition
@@ -121,11 +121,11 @@ func SetPositionYFloat(currentWidget, parent, beforeCurrentWidget widget.WidgetI
 			currentWidget.GetLayout().YPosition = parent.GetLayout().YPosition + marginTop
 			currentWidget.GetLayout().ContentYPosition = currentWidget.GetLayout().YPosition
 		case enums.CSS_POSITION_TYPE_ABSOLUTE:
-			println("implemented yet")
+			//println("implemented yet")
 		case enums.CSS_POSITION_TYPE_FIXED:
 			break
 		case enums.CSS_POSITION_TYPE_RELATIVE:
-			println("implemented yet")
+			//println("implemented yet")
 		}
 	} else {
 		if beforeCurrentWidget == nil {

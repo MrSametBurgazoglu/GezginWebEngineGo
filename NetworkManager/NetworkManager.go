@@ -78,7 +78,6 @@ func (receiver *NetworkManager) Get(url string) []byte {
 			targetUrl = receiver.CurrentUrl[:index] + url
 		}
 	}
-	println(targetUrl, "target url")
 	req, err := http.NewRequest("GET", targetUrl, nil)
 	if err != nil {
 		log.Fatalln(err)
